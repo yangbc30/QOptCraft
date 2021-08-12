@@ -29,7 +29,7 @@ More info on the remaining parameters by reading QOptCraft's user guide.
 
 
 
-LICENSE NOTICE (for the software package only)
+LICENSE NOTICE (SOFTWARE PACKAGE QOptCraft-1.0.tar.gz)
 ==============
 
    QOptCraft
