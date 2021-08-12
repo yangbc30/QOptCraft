@@ -29,7 +29,7 @@ More info on the remaining parameters by reading QOptCraft's user guide.
 
 
 
-LICENSE NOTICE
+LICENSE NOTICE (for the software package only)
 ==============
 
    QOptCraft
@@ -49,4 +49,6 @@ LICENSE NOTICE
    limitations under the License.
 
 
+
+The user guide (QOptCraft_user_guide.pdf) is under no license.
 
