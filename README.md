@@ -1,6 +1,6 @@
-==================
-   DESCRIPTION
-==================
+DESCRIPTION
+==============
+
 
 Author: Daniel Gómez Aguado
 e-mail: gomezaguado99@gmail.com
@@ -29,9 +29,8 @@ More info on the remaining parameters by reading QOptCraft's user guide.
 
 
 
-==================
-  LICENSE NOTICE
-==================
+LICENSE NOTICE
+==============
 
    QOptCraft
 
