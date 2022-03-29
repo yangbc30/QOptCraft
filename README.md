@@ -17,7 +17,7 @@ A matrix generator, a test of some algorithms and every logarithm developed are 
 
 "QOptCraft()" is the main function, making full use of all the algorithms available. 
 Its standalone subfunctions or blocks (read user guide) can be deployed on their own as well.
-Use the module parameter (1-9) for picking which subfunction to use: 
+Use the module parameter (1-10) for picking which subfunction to use: 
 > Selements (module=1)
 > StoU (module=2)
 > SfromU (module=3)
