@@ -12,6 +12,7 @@ Divided in nine functions (ver 1.0). It navigates through the subalgebras of mai
 3) The reverse operation: giving a desired evolution for finding the original matrix, is also true (SfromU()).
 4) For unavailable implementations, the option to obtain its closest, possible evolution matrix is also given via Toponogov().
 5) Systems with loss are treated by the fifth function QuasiU().
+6) Measurement via computing the Schmidt rank of Fock states vectors after passing a quantum through a given linear optics circuit.
 A matrix generator, a test of some algorithms and every logarithm developed are also included as individual functions.
 
 "QOptCraft()" is the main function, making full use of all the algorithms available. 
@@ -22,14 +23,14 @@ Use the module parameter (1-9) for picking which subfunction to use:
 > SfromU (module=3)
 > Toponogov (module=4)
 > QuasiU (module=5)
-> QuasiHStoU (module=6)
+> StateSchmidt (module=6)
 > iHStoiHU (module=7).
 > Use the choice parameter for subsubfunctions in QOCGen (module=8, choice=1-7), QOCTest (module=9, choice=1-3) or QOCLog (module=10, choice=1-5).
 More info on the remaining parameters by reading QOptCraft's user guide.
 
 
 
-LICENSE NOTICE (SOFTWARE PACKAGE QOptCraft-1.0.tar.gz)
+LICENSE NOTICE (SOFTWARE PACKAGE QOptCraft-1.1.tar.gz)
 ==============
 
    QOptCraft
