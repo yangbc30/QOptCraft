@@ -6,7 +6,7 @@ Author: Daniel Gómez Aguado
 e-mail: gomezaguado99@gmail.com
 
 QOprCraft is a software package or library developed in Python 3, designed for quantum experiments building via linear optics instruments. 
-Divided in nine functions (ver 1.0). It navigates through the subalgebras of mainly unitary matrices.
+Divided in nine functions (ver 1.1). It navigates through the subalgebras of mainly unitary matrices.
 1) Via decomposing files into beam splitters and shifters, theoretically desired matrices can be implemented (Selements()), 
 2) as well as their quantum evolution (read: influence) given a number of photons (StoU()).
 3) The reverse operation: giving a desired evolution for finding the original matrix, is also true (SfromU()).
