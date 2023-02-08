@@ -1,0 +1,16 @@
+Metadata-Version: 1.0
+Name: QOptCraft
+Version: 1.1
+Summary: Software package designed for quantum experiments via linear optics instruments. Divided in ten functions (ver 1.1).
+Home-page: UNKNOWN
+Author: Daniel Gómez Aguado
+Author-email: gomezaguado99@gmail.com
+License: Copyright 2021 Daniel Gómez Aguado SPDX-License-Identifier: Apache-2.0
+Description: QOprCraft navigates through the subalgebras of mainly unitary matrices.
+        Via decomposing files into beam splitters and shifters, theoretically desired matrices can be implemented (Selements()), as well as their quantum evolution (read: influence) given a number of photons (StoU()).
+        The reverse operation: giving a desired evolution for finding the original matrix, is also true (SfromU()).
+        For unavailable implementations, the option to obtain its closest, possible evolution matrix is also given via Toponogov().
+        Systems with loss are treated by the fifth function QuasiU().
+        A matrix generator, a test of some algorithms and every logarithm developed are also included as individual functions.
+Platform: Developed in Python 3 v3.9.5:0a7dcbd
+Platform: May 3 2021 17:27:52 for the software Windows-10-10.0.19041-SP0
