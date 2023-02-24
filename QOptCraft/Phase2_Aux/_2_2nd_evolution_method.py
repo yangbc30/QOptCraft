@@ -1,4 +1,4 @@
-'''Copyright 2021 Daniel Gómez Aguado
+"""Copyright 2021 Daniel Gómez Aguado
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -10,10 +10,10 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.'''
+limitations under the License."""
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#													LIBRARIES REQUIRED
+# 													LIBRARIES REQUIRED
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
@@ -34,12 +34,11 @@ import numba
 from ..recur_factorial import fact_array
 
 
-
 # ----------PERMUTATIONS:----------
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#										N-PHOTON OPTICAL SYSTEM EVOLUTION: SECOND METHOD
+# 										N-PHOTON OPTICAL SYSTEM EVOLUTION: SECOND METHOD
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
@@ -96,7 +95,9 @@ def permanent_ryser(matrix: np.ndarray) -> float or complex:
         grey_diff_index = binary_power_list.index(grey_diff)
 
         new_vector = matrix[grey_diff_index]
-        direction = (old_grey > new_grey) - (old_grey < new_grey)  # same as cmp() in python 2
+        direction = (old_grey > new_grey) - (
+            old_grey < new_grey
+        )  # same as cmp() in python 2
 
         for i in range(dim):
             row_comb[i] += new_vector[i] * direction
@@ -159,7 +160,9 @@ def permanent(matrix: np.ndarray) -> float or complex:
         grey_diff_index = binary_power_list.index(grey_diff)
 
         new_vector = matrix[grey_diff_index]
-        direction = 2 * (old_grey > new_grey) - 2 * (old_grey < new_grey)  # same as cmp() in python 2
+        direction = 2 * (old_grey > new_grey) - 2 * (
+            old_grey < new_grey
+        )  # same as cmp() in python 2
 
         for i in range(dim):
             row_comb[i] += new_vector[i] * direction
@@ -172,146 +175,152 @@ def permanent(matrix: np.ndarray) -> float or complex:
     return (-1) ** dim * permanent / num_loops
 
 
-
-
 # Submatrices
-def sub_matrix(M,perm1,perm2):
+def sub_matrix(M, perm1, perm2):
 
-	N=len(perm2)
+    N = len(perm2)
 
-	M_sub=np.zeros((N,N),dtype=complex)
+    M_sub = np.zeros((N, N), dtype=complex)
 
-	for i in range(N):
+    for i in range(N):
 
-		for j in range(N):
+        for j in range(N):
 
-			M_sub[i,j]=M[perm1[i],perm2[j]]
+            M_sub[i, j] = M[perm1[i], perm2[j]]
 
-	return M_sub
+    return M_sub
 
 
 # Multiplicity m() (another way of finding the number of photons for each mode)
-def m_(array,N):
+def m_(array, N):
 
-	num_photons=len(array)
+    num_photons = len(array)
 
-	m_array=np.zeros(N,dtype=int)
+    m_array = np.zeros(N, dtype=int)
 
-	cont=0
+    cont = 0
 
-	for i in range(N):
+    for i in range(N):
 
-		suma=0
+        suma = 0
 
-		# We explore the array, each time comparing it with a different value
-		for j in range(num_photons):
+        # We explore the array, each time comparing it with a different value
+        for j in range(num_photons):
 
-			if array[j]==cont:
+            if array[j] == cont:
 
-				suma+=1
+                suma += 1
 
-		m_array[i]=suma
+        m_array[i] = suma
 
-		cont+=1
+        cont += 1
 
-	return m_array
+    return m_array
 
 
 # Last function's inverse. NOTE: the elements's order may differ from that of the original array,
 # through it is not a problem in this algorithm, as both are perceived as identical
 def m_inverse(array):
 
-	num_photons=int(np.sum(np.real(array)))
+    num_photons = int(np.sum(np.real(array)))
 
-	N=len(array)
+    N = len(array)
 
-	m_array_inv=np.zeros(num_photons,dtype=int)
+    m_array_inv = np.zeros(num_photons, dtype=int)
 
-	cont=0
+    cont = 0
 
-	for i in range(N):
+    for i in range(N):
 
-		suma=0
+        suma = 0
 
-		# We explore the array, each time comparing it with a different value
-		for j in range(int(np.real(array)[i])):
+        # We explore the array, each time comparing it with a different value
+        for j in range(int(np.real(array)[i])):
 
-			m_array_inv[cont]=i
+            m_array_inv[cont] = i
 
-			cont+=1
+            cont += 1
 
-	return m_array_inv
-
-
-# Here, we will perform the second evolution of the system method's operations. Main function to inherit in other algorithms
-def evolution_2(S,photons,vec_base):
-
-	# Initial time
-	t=time.process_time_ns()
-
-	m=len(S)
-	num_photons=int(np.sum(photons))
-
-	# Number of vectors in the basis
-	num_lines=len(vec_base[:,0]) 
-
-	# Array 2 required for submatrices computations:
-	perm_2=m_inverse(photons)
-
-	# All terms will begin multiplied by this factor
-	mult=complex(np.prod(fact_array(photons)))**(-1/2)
-
-	# Here each basis vector's coeficients upon |ket> are storaged:
-	U_ket=np.zeros(num_lines,dtype=complex) 
-
-	for i in range(num_lines):
-
-		# Array 1 required for submatrices computations:
-		perm_1=m_inverse(vec_base[i])
-
-		m_array=m_(perm_1,m)
-
-		# U·|ket> coeficients' computation by using permaments
-		U_ket[i]=mult*permanent(sub_matrix(S,perm_1,perm_2))*complex(np.prod(fact_array(m_array)))**(-1/2)
-
-	# Computation time
-	t_inc=time.process_time_ns()-t
-
-	return U_ket, t_inc
+    return m_array_inv
 
 
 # Here, we will perform the second evolution of the system method's operations. Main function to inherit in other algorithms
-def evolution_2_ryser(S,photons,vec_base):
+def evolution_2(S, photons, vec_base):
 
-	# Initial time
-	t=time.process_time_ns()
+    # Initial time
+    t = time.process_time_ns()
 
-	m=len(S)
-	num_photons=int(np.sum(photons))
+    m = len(S)
+    num_photons = int(np.sum(photons))
 
-	# Number of vectors in the basis
-	num_lines=len(vec_base[:,0]) 
+    # Number of vectors in the basis
+    num_lines = len(vec_base[:, 0])
 
-	# Array 2 required for submatrices computations:
-	perm_2=m_inverse(photons)
+    # Array 2 required for submatrices computations:
+    perm_2 = m_inverse(photons)
 
-	# All terms will begin multiplied by this factor
-	mult=complex(np.prod(fact_array(photons)))**(-1/2)
+    # All terms will begin multiplied by this factor
+    mult = complex(np.prod(fact_array(photons))) ** (-1 / 2)
 
-	# Here each basis vector's coeficients upon |ket> are storaged:
-	U_ket=np.zeros(num_lines,dtype=complex) 
+    # Here each basis vector's coeficients upon |ket> are storaged:
+    U_ket = np.zeros(num_lines, dtype=complex)
 
-	for i in range(num_lines):
+    for i in range(num_lines):
 
-		# Array 1 required for submatrices computations:
-		perm_1=m_inverse(vec_base[i])
+        # Array 1 required for submatrices computations:
+        perm_1 = m_inverse(vec_base[i])
 
-		m_array=m_(perm_1,m)
+        m_array = m_(perm_1, m)
 
-		# U·|ket> coeficients' computation by using permaments
-		U_ket[i]=mult*permanent_ryser(sub_matrix(S,perm_1,perm_2))*complex(np.prod(fact_array(m_array)))**(-1/2)
+        # U·|ket> coeficients' computation by using permaments
+        U_ket[i] = (
+            mult
+            * permanent(sub_matrix(S, perm_1, perm_2))
+            * complex(np.prod(fact_array(m_array))) ** (-1 / 2)
+        )
 
-	# Computation time
-	t_inc=time.process_time_ns()-t
+    # Computation time
+    t_inc = time.process_time_ns() - t
 
-	return U_ket, t_inc
+    return U_ket, t_inc
+
+
+# Here, we will perform the second evolution of the system method's operations. Main function to inherit in other algorithms
+def evolution_2_ryser(S, photons, vec_base):
+
+    # Initial time
+    t = time.process_time_ns()
+
+    m = len(S)
+    num_photons = int(np.sum(photons))
+
+    # Number of vectors in the basis
+    num_lines = len(vec_base[:, 0])
+
+    # Array 2 required for submatrices computations:
+    perm_2 = m_inverse(photons)
+
+    # All terms will begin multiplied by this factor
+    mult = complex(np.prod(fact_array(photons))) ** (-1 / 2)
+
+    # Here each basis vector's coeficients upon |ket> are storaged:
+    U_ket = np.zeros(num_lines, dtype=complex)
+
+    for i in range(num_lines):
+
+        # Array 1 required for submatrices computations:
+        perm_1 = m_inverse(vec_base[i])
+
+        m_array = m_(perm_1, m)
+
+        # U·|ket> coeficients' computation by using permaments
+        U_ket[i] = (
+            mult
+            * permanent_ryser(sub_matrix(S, perm_1, perm_2))
+            * complex(np.prod(fact_array(m_array))) ** (-1 / 2)
+        )
+
+    # Computation time
+    t_inc = time.process_time_ns() - t
+
+    return U_ket, t_inc
