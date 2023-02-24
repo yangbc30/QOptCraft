@@ -43,7 +43,7 @@ from ..recur_factorial import fact_array
 
 
 @numba.jit(nopython=True)
-def permanent_ryser(matrix: np.ndarray) -> float or complex:
+def ryser_permanent(matrix: np.ndarray) -> float or complex:
     """
     Returns the permanent of a matrix using the Ryser formula in Gray ordering.
 
@@ -316,7 +316,7 @@ def evolution_2_ryser(S, photons, vec_base):
         # U·|ket> coeficients' computation by using permaments
         U_ket[i] = (
             mult
-            * permanent_ryser(sub_matrix(S, perm_1, perm_2))
+            * ryser_permanent(sub_matrix(S, perm_1, perm_2))
             * complex(np.prod(fact_array(m_array))) ** (-1 / 2)
         )
 

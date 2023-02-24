@@ -67,10 +67,7 @@ def e_jk(j, k, base):
 
     k_array = np.array([base[k]])
 
-    ejk = 0.5j * (
-        np.transpose(j_array).dot(np.conj(k_array))
-        + np.transpose(k_array).dot(np.conj(j_array))
-    )
+    ejk = 0.5j * (np.transpose(j_array).dot(np.conj(k_array)) + np.transpose(k_array).dot(np.conj(j_array)))
 
     return ejk
 
@@ -81,10 +78,7 @@ def f_jk(j, k, base):
 
     k_array = np.array([base[k]])
 
-    fjk = 0.5 * (
-        np.transpose(j_array).dot(np.conj(k_array))
-        - np.transpose(k_array).dot(np.conj(j_array))
-    )
+    fjk = 0.5 * (np.transpose(j_array).dot(np.conj(k_array)) - np.transpose(k_array).dot(np.conj(j_array)))
 
     return fjk
 
@@ -257,9 +251,7 @@ def matrix_u_basis_generator_sparse(m, M, photons, base_input):
             base_u_m_e[m * j + k].append(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)))
             if k <= j:
                 base_u_m.append(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)))
-                base_u_M.append(
-                    sp.sparse.csr_matrix(d_phi(base_u_m[cont], photons, base_input))
-                )
+                base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
                 cont += 1
     # The separator's functions indicate the switch from e_jk to f_jk,
     # after the m*m combinations have been already computed in the former
@@ -269,9 +261,7 @@ def matrix_u_basis_generator_sparse(m, M, photons, base_input):
             base_u_m_f.append(sp.sparse.csr_matrix(f_jk(j, k, base_U_m)))
             if k < j:
                 base_u_m.append(sp.sparse.csr_matrix(f_jk(j, k, base_U_m)))
-                base_u_M.append(
-                    sp.sparse.csr_matrix(d_phi(base_u_m[cont], photons, base_input))
-                )
+                base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
                 cont += 1
     return base_u_m, base_u_M, base_u_m_e, base_u_m_f, separator_e_f, base_U_m, base_U_M
 
@@ -313,46 +303,55 @@ def matrix_u_basis_generator_sparse(m, M, photons, base_input):
     return base_u_m, base_u_M, base_u_m_e, base_u_m_f, separator_e_f, base_U_m, base_U_M"""
 
 
-def write_algebra_basis(dim: int, photons: int, base_input):
+def write_algebra_basis(dim: int, photons: int, base_input) -> None:
 
-    # We initialise the basis for each space
-    base_U_m = np.identity(dim, dtype=complex)
-    base_u_m = []
     # Here we will storage correlations with e_jk and f_jk, for a better organisation
+    base_u_m = []
+    base_u_M = []
+
+    # Here we will storage correlations with e_jk and f_jk, for a better organisation
+    # base_u_m_sym = []
+    # base_u_m_antisym = []
 
     cont = 0
-    with open("save_basis/u_m_sym.pkl", "w+") as u_m_e_file, open(
-        "save_basis/u_m.pkl", "w+"
-    ) as u_m_file, open("save_basis/u_M.pkl", "w+") as u_M_file:
-        for j in range(dim):
-            for k in range(dim):
-                pickle.dump(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)), u_m_e_file)
-                if k <= j:
-                    base_u_m.append(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)))
-                    pickle.dump(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)), u_m_file)
-                    pickle.dump(
-                        sp.sparse.csr_matrix(
-                            d_phi(base_u_m[cont], photons, base_input)
-                        ),
-                        u_M_file,
-                    )
-                    cont += 1
+    for j in range(dim):
+        for k in range(dim):
+            # base_u_m_sym.append(sp.sparse.csr_matrix(sym_algebra_basis(j, k, dim)))
+            if k <= j:
+                base_u_m.append(sp.sparse.csr_matrix(sym_algebra_basis(j, k, dim)))
+                base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
+                cont += 1
 
     # The separator's functions indicate the switch from e_jk to f_jk,
     # after the m*m combinations have been already computed in the former
-    with open("save_basis/u_m_antisym.pkl", "w+") as u_m_f_file, open(
-        "save_basis/u_m.pkl", "w+"
-    ) as u_m_file, open("save_basis/u_M.pkl", "w+") as u_M_file:
-        for j in range(dim):
-            for k in range(dim):
-                pickle.dump(sp.sparse.csr_matrix(f_jk(j, k, base_U_m)), u_m_f_file)
-                if k < j:
-                    base_u_m.append(sp.sparse.csr_matrix(f_jk(j, k, base_U_m)))
-                    pickle.dump(sp.sparse.csr_matrix(f_jk(j, k, base_U_m)), u_m_file)
-                    pickle.dump(
-                        sp.sparse.csr_matrix(
-                            d_phi(base_u_m[cont], photons, base_input)
-                        ),
-                        u_M_file,
-                    )
-                    cont += 1
+    for j in range(dim):
+        for k in range(dim):
+            # base_u_m_antisym.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
+            if k < j:
+                base_u_m.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
+                base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
+                cont += 1
+
+    with open("save_basis/u_m.pkl", "wb") as f:
+        pickle.dump(base_u_m, f)
+
+    with open("save_basis/u_M.pkl", "wb") as f:
+        pickle.dump(base_u_M, f)
+
+
+def sym_algebra_basis(index_1: int, index_2: int, dim: int) -> np.ndarray:
+    """Create the element of the algebra i/2(|j><k| + |k><j|)."""
+    basis_matrix = sp.sparse.csr_matrix((dim, dim), dtype="complex64")
+    basis_matrix[index_1, index_2] = 0.5j
+    basis_matrix[index_2, index_1] = 0.5j
+
+    return basis_matrix
+
+
+def antisym_algebra_basis(index_1: int, index_2: int, dim: int) -> np.ndarray:
+    """Create the element of the algebra 1/2(|j><k| - |k><j|)."""
+    basis_matrix = sp.sparse.csr_matrix((dim, dim), dtype="complex64")
+    basis_matrix[index_1, index_2] = 0.5
+    basis_matrix[index_2, index_1] = -0.5
+
+    return basis_matrix
