@@ -54,6 +54,8 @@ from ..photon_comb_basis import photon_combs_generator
 import scipy as sp
 
 import pickle
+from typing import Sequence
+import os
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # 									MATRIX BASIS COMPUTATION IN SUBSPACES u(m) AND u(M)
@@ -303,7 +305,25 @@ def matrix_u_basis_generator_sparse(m, M, photons, base_input):
     return base_u_m, base_u_M, base_u_m_e, base_u_m_f, separator_e_f, base_U_m, base_U_M"""
 
 
-def write_algebra_basis(dim: int, photons: int, base_input) -> None:
+def write_algebra_basis(dim: int, photons: Sequence, base_input: bool) -> None:
+
+    num_photons = sum(photons)
+
+    folder_path = os.path.join("save_basis", f"m={dim} n={num_photons}")
+    try:
+        os.makedirs(folder_path)
+    except FileExistsError:
+        print("This basis has already been computed, do you want to overwrite it?")
+        while True:
+            user_input = input("Press y/n: ")
+
+            if user_input.lower() in ["yes", "y"]:
+                break
+            elif user_input.lower() in ["no", "n"]:
+                print("Program finished")
+                return
+            else:
+                continue
 
     # Here we will storage correlations with e_jk and f_jk, for a better organisation
     base_u_m = []
@@ -315,28 +335,31 @@ def write_algebra_basis(dim: int, photons: int, base_input) -> None:
 
     cont = 0
     for j in range(dim):
-        for k in range(dim):
+        for k in range(j + 1):
             # base_u_m_sym.append(sp.sparse.csr_matrix(sym_algebra_basis(j, k, dim)))
-            if k <= j:
-                base_u_m.append(sp.sparse.csr_matrix(sym_algebra_basis(j, k, dim)))
-                base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
-                cont += 1
+            base_u_m.append(sp.sparse.csr_matrix(sym_algebra_basis(j, k, dim)))
+            base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
+            cont += 1
 
     # The separator's functions indicate the switch from e_jk to f_jk,
     # after the m*m combinations have been already computed in the former
-    for j in range(dim):
-        for k in range(dim):
-            # base_u_m_antisym.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
-            if k < j:
-                base_u_m.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
-                base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
-                cont += 1
+    separator_sym_antisym = cont
 
-    with open("save_basis/u_m.pkl", "wb") as f:
+    for j in range(dim):
+        for k in range(j):
+            # base_u_m_antisym.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
+            base_u_m.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
+            base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
+            cont += 1
+
+    with open(os.path.join(folder_path, "algebra.pkl"), "wb") as f:
         pickle.dump(base_u_m, f)
 
-    with open("save_basis/u_M.pkl", "wb") as f:
+    with open(os.path.join(folder_path, "phi_algebra.pkl"), "wb") as f:
         pickle.dump(base_u_M, f)
+
+    with open(os.path.join(folder_path, "separator.txt"), "w") as f:
+        f.write(f"separator_sym_antisym = {separator_sym_antisym}")
 
 
 def sym_algebra_basis(index_1: int, index_2: int, dim: int) -> np.ndarray:
