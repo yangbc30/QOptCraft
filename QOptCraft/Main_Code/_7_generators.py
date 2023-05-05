@@ -1,8 +1,8 @@
 # ---------------------------------------------------------------------------------------------------------------------------
-#													AVAILABLE GENERATORS
+# 													AVAILABLE GENERATORS
 # ---------------------------------------------------------------------------------------------------------------------------
 
-'''Copyright 2021 Daniel Gómez Aguado
+"""Copyright 2021 Daniel Gómez Aguado
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.'''
+limitations under the License."""
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#													LIBRARIES REQUIRED
+# 													LIBRARIES REQUIRED
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
@@ -36,7 +36,7 @@ import scipy as sp
 # ----------FILE MANAGEMENT:----------
 
 # File opening
-from io import open 
+from io import open
 
 from ..read_matrix import read_matrix_from_txt
 
@@ -72,326 +72,278 @@ from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_gene
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#														MAIN CODE
+# 														MAIN CODE
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
 # Creates Fock states basis of n photons for m modes
-def Fock(file_output=True,m=False,n=False):
+def Fock(file_output=True, m=False, n=False):
+    # Initial input control
+    m = input_control_intsDim(m, "m", 2)
 
-	# Initial input control
-	m=input_control_intsDim(m,"m",2)
+    n = input_control_ints(n, "n", 1)
 
-	n=input_control_ints(n,"n",1)
+    # Main
+    photons = np.zeros(m)
 
-	# Main
-	photons=np.zeros(m)
+    photons[0] = n
 
-	photons[0]=n
+    vec_base = photon_combs_generator(m, photons)
 
-	vec_base=photon_combs_generator(m,photons)
+    if file_output == True:
+        # We save the vector basis
+        vec_base_file = open(f"m_{m}_n_{n}_vec_base.txt", "w")
 
-	if file_output==True:
+        np.savetxt(vec_base_file, vec_base, fmt="(%e)", delimiter=",")
 
-		# We save the vector basis
-		vec_base_file=open(f"m_{m}_n_{n}_vec_base.txt","w")
+        vec_base_file.close()
 
-		np.savetxt(vec_base_file,vec_base,fmt="(%e)",delimiter=",")
+        print(
+            f"\nThe Fock states vector basis has been generated. It is found in the file 'm_{m}_n_{n}_vec_base.txt'.\n"
+        )
 
-		vec_base_file.close()
-
-		print(f"\nThe Fock states vector basis has been generated. It is found in the file 'm_{m}_n_{n}_vec_base.txt'.\n")
-
-	return vec_base
+    return vec_base
 
 
-def AlgBasis(file_output=True,m=False,n=False,M=False):
+def AlgBasis(file_output=True, m=False, n=False, M=False):
+    # Initial input control
+    m = input_control_intsDim(m, "m", 2)
 
-	# Initial input control
-	m=input_control_intsDim(m,"m",2)
-	
-	n=input_control_ints(n,"n",1)
+    n = input_control_ints(n, "n", 1)
 
-	M=input_control_intsDim(M,"n",2)
+    M = input_control_intsDim(M, "n", 2)
 
-	# We can rebuild m mode-dimensional matrices S given a n-photon matrix U (M-dimensional). The code only admits
-	# plausible combinations, that is, that verify comb_evol(n,m)=comb(m+n-1,n)=M
+    # We can rebuild m mode-dimensional matrices S given a n-photon matrix U (M-dimensional). The code only admits
+    # plausible combinations, that is, that verify comb_evol(n,m)=comb(m+n-1,n)=M
 
-	while comb_evol(n,m)!=M: # in the function version, n and m are properly declared since launch
+    while comb_evol(n, m) != M:  # in the function version, n and m are properly declared since launch
+        print("\nThe given photon number n and modes m do not satisfy the equation M=comb_evol(n,m)=comb(m+n-1,n).\n")
 
-		print("\nThe given photon number n and modes m do not satisfy the equation M=comb_evol(n,m)=comb(m+n-1,n).\n")
+        try:
+            m = int(input("\nNumber of modes? "))
 
-		try:
+            n = int(input("\nNumber of photons? "))
 
-			m=int(input("\nNumber of modes? "))
+        except ValueError:
+            print("The given value is not valid.\n")
 
-			n=int(input("\nNumber of photons? "))
+    photons = np.zeros(m)
 
-		except ValueError:
+    photons[0] = n
 
-			print("The given value is not valid.\n")
+    base_u_m, base_u_M = matrix_u_basis_generator(m, M, photons, False)[:2]
 
-	photons=np.zeros(m)
+    if file_output == True:
+        # Saving both basis of the u(m) and u(M) subspaces
+        base_u_m_file = open(f"base_u_m_{m}.txt", "w+")
 
-	photons[0]=n
+        base_u_M_file = open(f"base_u__M_{M}.txt", "w+")
 
-	base_u_m, base_u_M = matrix_u_basis_generator(m,M,photons,False)[:2]
+        for i in range(m * m):
+            np.savetxt(base_u_m_file, base_u_m[i], delimiter=",")
 
-	if file_output==True:
+            np.savetxt(base_u_M_file, base_u_M[i], delimiter=",")
 
-		# Saving both basis of the u(m) and u(M) subspaces
-		base_u_m_file=open(f"base_u_m_{m}.txt","w+")
+        base_u_m_file.close()
 
-		base_u_M_file=open(f"base_u__M_{M}.txt","w+")
+        base_u_M_file.close()
 
-		for i in range(m*m):
+        print(
+            f"\nThe bases for the subalgebras u({m}) and u({M}) have been generated. They are found in the files 'base_u_m_{m}.txt' and 'base_u_M__{M}.txt' respectively.\n"
+        )
 
-			np.savetxt(base_u_m_file,base_u_m[i],delimiter=",")
-
-			np.savetxt(base_u_M_file,base_u_M[i],delimiter=",")
-
-		base_u_m_file.close()
-
-		base_u_M_file.close()
-
-		print(f"\nThe bases for the subalgebras u({m}) and u({M}) have been generated. They are found in the files 'base_u_m_{m}.txt' and 'base_u_M__{M}.txt' respectively.\n")
-
-	return base_u_m, base_u_M
+    return base_u_m, base_u_M
 
 
 # This function deploys haar_measure(N), N-dimensional unitary random matrix generator,
 # also allowing an N input for support and file printing
-def RandU(file_output=True,filename=False,N=False,txt=False):
+def RandU(file_output=True, filename=False, N=False, txt=False):
+    if txt == True:
+        print("\n\nRANDOM UNITARY MATRIX GENERATOR (dim N x N):\n")
 
-	if txt==True:
+    while file_output == True and filename == False:
+        print(f"\nWARNING: a new filename is required.")
 
-		print("\n\nRANDOM UNITARY MATRIX GENERATOR (dim N x N):\n")
+        try:
+            filename = input("Write the name of the file (without .txt extension): ")
 
-	while file_output==True and filename==False:
+        except ValueError:
+            print("The given value is not valid.\n")
 
-		print(f"\nWARNING: a new filename is required.")
+    N = input_control_intsDim(N, "N", 2)
 
-		try:
+    U = haar_measure(N)
 
-			filename=input("Write the name of the file (without .txt extension): ")
-	
-		except ValueError:
+    if txt == True:
+        print(f"\nA new {N} x {N} random unitary matrix has been generated.")
 
-			print("The given value is not valid.\n")
+    if file_output == True:
+        matrix_file = open(filename + ".txt", "w+")
 
-	N=input_control_intsDim(N,"N",2)
+        np.savetxt(matrix_file, U, delimiter=",")
 
-	U=haar_measure(N)
+        print("\nThe new matrix is found in the file '" + filename + ".txt'.\n")
 
-	if txt==True:
+        matrix_file.close()
 
-		print(f"\nA new {N} x {N} random unitary matrix has been generated.")
-
-	if file_output==True:
-
-		matrix_file=open(filename+".txt","w+")
-
-		np.savetxt(matrix_file,U,delimiter=",")
-
-		print("\nThe new matrix is found in the file '"+filename+".txt'.\n")
-
-		matrix_file.close()
-
-	return U
+    return U
 
 
-# This function below generates random non-unitary matrices. It is useful in the design of 
+# This function below generates random non-unitary matrices. It is useful in the design of
 # quasiunitary S matrices with loss
-def RandM(file_output=True,filename=False,N1=False,N2=False,txt=False):
+def RandM(file_output=True, filename=False, N1=False, N2=False, txt=False):
+    if txt == True:
+        print("\n\nRANDOM NON-UNITARY MATRIX GENERATOR (dim n x m):\n")
 
-	if txt==True:
+    while file_output == True and filename == False:
+        print(f"\nWARNING: a new filename is required.")
 
-		print("\n\nRANDOM NON-UNITARY MATRIX GENERATOR (dim n x m):\n")
+        try:
+            filename = input("Write the name of the file (without .txt extension): ")
 
-	while file_output==True and filename==False:
+        except ValueError:
+            print("The given value is not valid.\n")
 
-		print(f"\nWARNING: a new filename is required.")
+    N1 = input_control_ints(N1, "N1", 1)
 
-		try:
+    N2 = input_control_ints(N2, "N2", 1)
 
-			filename=input("Write the name of the file (without .txt extension): ")
-	
-		except ValueError:
+    U = matrix_generation_general_auto(N1, N2)
 
-			print("The given value is not valid.\n")
+    if txt == True:
+        print(f"\nA new {N1} x {N2} random matrix has been generated.")
 
-	N1=input_control_ints(N1,"N1",1)
+    if file_output == True:
+        matrix_file = open(filename + ".txt", "w+")
 
-	N2=input_control_ints(N2,"N2",1)
+        np.savetxt(matrix_file, U, delimiter=",")
 
-	U=matrix_generation_general_auto(N1,N2)
+        print("\nThe new matrix is found in the file '" + filename + ".txt'.\n")
 
-	if txt==True:
+        matrix_file.close()
 
-		print(f"\nA new {N1} x {N2} random matrix has been generated.")
-
-	if file_output==True:
-
-		matrix_file=open(filename+".txt","w+")
-
-		np.savetxt(matrix_file,U,delimiter=",")
-
-		print("\nThe new matrix is found in the file '"+filename+".txt'.\n")
-
-		matrix_file.close()
-
-	return U
+    return U
 
 
 # Creation of discrete Fourier transformation matrices
-def DFT(file_output=True,filename=False,N=False,txt=False):
+def DFT(file_output=True, filename=False, N=False, txt=False):
+    if txt == True:
+        print("\n\nDFT MATRIX GENERATOR (dim N x N):\n")
 
-	if txt==True:
+    while file_output == True and filename == False:
+        print(f"\nWARNING: a new filename is required.")
 
-		print("\n\nDFT MATRIX GENERATOR (dim N x N):\n")
+        try:
+            filename = input("Write the name of the file (without .txt extension): ")
 
-	while file_output==True and filename==False:
+        except ValueError:
+            print("The given value is not valid.\n")
 
-		print(f"\nWARNING: a new filename is required.")
+    N = input_control_intsDim(N, "N", 2)
 
-		try:
+    omega = np.exp(-2.0 * math.pi * 1j / float(N))
 
-			filename=input("Write the name of the file (without .txt extension): ")
-	
-		except ValueError:
+    A = np.zeros((N, N), dtype=complex)
 
-			print("The given value is not valid.\n")
+    for i in range(N):
+        for j in range(N):
+            A[i, j] = omega ** (i * j)
 
-	N=input_control_intsDim(N,"N",2)
+    if txt == True:
+        print(f"\nA new {N} x {N} DFT matrix has been generated.")
 
-	omega=np.exp(-2.0*math.pi*1j/float(N))
+    if file_output == True:
+        matrix_file = open(filename + ".txt", "w+")
 
-	A=np.zeros((N,N),dtype=complex)
+        np.savetxt(matrix_file, A, delimiter=",")
 
-	for i in range(N):
+        print("\nThe new matrix is found in the file 'dft_matrix.txt'.\n")
 
-		for j in range(N):
+        matrix_file.close()
 
-			A[i,j]=omega**(i*j)
-
-	if txt==True:
-
-		print(f"\nA new {N} x {N} DFT matrix has been generated.")
-
-	if file_output==True:
-
-		matrix_file=open(filename+".txt","w+")
-
-		np.savetxt(matrix_file,A,delimiter=",")
-
-		print("\nThe new matrix is found in the file 'dft_matrix.txt'.\n")
-
-		matrix_file.close()
-
-	return A
+    return A
 
 
 # Creation of Quantum Fourier transformation matrices
-def QFT(file_output=True,filename=False,N=False,inverse=False,txt=False):
+def QFT(file_output=True, filename=False, N=False, inverse=False, txt=False):
+    if txt == True:
+        print("\n\nQFT MATRIX GENERATOR (dim N x N):\n")
 
-	if txt==True:
+    while file_output == True and filename == False:
+        print(f"\nWARNING: a new filename is required.")
 
-		print("\n\nQFT MATRIX GENERATOR (dim N x N):\n")
+        try:
+            filename = input("Write the name of the file (without .txt extension): ")
 
-	while file_output==True and filename==False:
+        except ValueError:
+            print("The given value is not valid.\n")
 
-		print(f"\nWARNING: a new filename is required.")
+    N = input_control_intsDim(N, "N", 2)
 
-		try:
+    A = np.zeros((N, N), dtype=complex)
 
-			filename=input("Write the name of the file (without .txt extension): ")
-	
-		except ValueError:
+    if inverse == True:
+        for i in range(N):
+            for j in range(N):
+                A[i, j] = np.exp(-2.0 * math.pi * 1j / float(N) * i * j)
 
-			print("The given value is not valid.\n")
+        if txt == True:
+            print(f"\nA new {N} x {N} inverse QFT matrix has been generated.")
 
-	N=input_control_intsDim(N,"N",2)
+    else:
+        for i in range(N):
+            for j in range(N):
+                A[i, j] = np.exp(2.0 * math.pi * 1j / float(N) * i * j)
 
-	A=np.zeros((N,N),dtype=complex)
+        if txt == True:
+            print(f"\nA new {N} x {N} QFT matrix has been generated.")
 
-	if inverse==True:
+    if file_output == True:
+        matrix_file = open(filename + ".txt", "w+")
 
-		for i in range(N):
+        np.savetxt(matrix_file, A / np.sqrt(N), delimiter=",")
 
-			for j in range(N):
+        print("\nThe new matrix is found in the file '" + filename + ".txt'.\n")
 
-				A[i,j]=np.exp(-2.0*math.pi*1j/float(N)*i*j)
+        matrix_file.close()
 
-		if txt==True:
-
-			print(f"\nA new {N} x {N} inverse QFT matrix has been generated.")
-
-	else:
-
-		for i in range(N):
-
-			for j in range(N):
-
-				A[i,j]=np.exp(2.0*math.pi*1j/float(N)*i*j)
-
-		if txt==True:
-	
-			print(f"\nA new {N} x {N} QFT matrix has been generated.")
-
-	if file_output==True:
-
-		matrix_file=open(filename+".txt","w+")
-
-		np.savetxt(matrix_file,A/np.sqrt(N),delimiter=",")
-
-		print("\nThe new matrix is found in the file '"+filename+".txt'.\n")
-
-		matrix_file.close()
-
-	return A/np.sqrt(N)
+    return A / np.sqrt(N)
 
 
-def RandImU(file_output=True,filename=False,m=False,n=False,txt=False):
+def RandImU(file_output=True, filename=False, m=False, n=False, txt=False):
+    if txt == True:
+        print("\n\nImU MATRIX GENERATOR (dim M x M):\n")
 
-	if txt==True:
+    while file_output == True and filename == False:
+        print(f"\nWARNING: a new filename is required.")
 
-		print("\n\nImU MATRIX GENERATOR (dim M x M):\n")
+        try:
+            filename = input("Write the name of the file (without .txt extension): ")
 
-	while file_output==True and filename==False:
+        except ValueError:
+            print("The given value is not valid.\n")
 
-		print(f"\nWARNING: a new filename is required.")
+    # Initial input control
+    m = input_control_intsDim(m, "m", 2)
 
-		try:
+    n = input_control_ints(n, "n", 1)
 
-			filename=input("Write the name of the file (without .txt extension): ")
-	
-		except ValueError:
+    M = comb_evol(n, m)
 
-			print("The given value is not valid.\n")
+    S = RandU(file_output=False, filename=False, N=m, txt=False)
 
-	# Initial input control
-	m=input_control_intsDim(m,"m",2)
-	
-	n=input_control_ints(n,"n",1)
+    ImU = StoU(file_input=False, S=S, file_output=False, filename=False, method=2, n=n, txt=False)[0]
 
-	M=comb_evol(n,m)
+    if txt == True:
+        print(f"\nA new {M} x {M} ImU matrix has been generated.")
 
-	S=RandU(file_output=False,filename=False,N=m,txt=False)
+    if file_output == True:
+        matrix_file = open(filename + ".txt", "w+")
 
-	ImU=StoU(file_input=False,S=S,file_output=False,filename=False,method=2,n=n,txt=False)[0]
+        np.savetxt(matrix_file, ImU, delimiter=",")
 
-	if txt==True:
-	
-		print(f"\nA new {M} x {M} ImU matrix has been generated.")
+        print("\nThe new matrix is found in the file '" + filename + ".txt'.\n")
 
-	if file_output==True:
+        matrix_file.close()
 
-		matrix_file=open(filename+".txt","w+")
-
-		np.savetxt(matrix_file,ImU,delimiter=",")
-
-		print("\nThe new matrix is found in the file '"+filename+".txt'.\n")
-
-		matrix_file.close()
-
-	return ImU
+    return ImU

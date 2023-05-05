@@ -16,14 +16,13 @@ limitations under the License."""
 import numpy as np
 
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 											N-PHOTONS VECTOR BASIS GENERATOR
-# ---------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------
+# 									N-PHOTONS VECTOR BASIS GENERATOR
+# --------------------------------------------------------------------------------------------------------
 
 
 # Main function to inherit in other algorithms
 def photon_combs_generator(m, photons):
-
     global photons_aux
     global vec_base
     global check
@@ -44,7 +43,6 @@ def photon_combs_generator(m, photons):
 
 # Loop whose amount of callings depend on the number of photons in each mode
 def photon_combs_generator_loop(photons, num_photons, m, sum_, k):
-
     global photons_aux
     global vec_base
     global check
@@ -70,7 +68,6 @@ def photon_combs_generator_loop(photons, num_photons, m, sum_, k):
 
 # Required vector basis creator
 def photon_comb_basis(array, vec_base):
-
     num_lines = len(vec_base[:, 0])  # Reads all lines
     check = 0
 
@@ -90,7 +87,6 @@ def photon_comb_basis(array, vec_base):
 # used an already existent one for extracting which index within it corresponds to a
 # chosen array. It is used in the system's first evolution method (main algorithm 2)
 def photon_comb_index(array, vec_base):
-
     num_lines = len(vec_base[:, 0])  # Reads all lines
     index = 0
 
@@ -106,13 +102,14 @@ def photon_comb_index(array, vec_base):
 
 # A more optimal and N-dimensional version of the former, allowing for
 # probabilities (pamplitudes) per state considered in the linear combination
-def state_in_basis(arrays, pamplitudes, vec_base):
+def state_in_basis(basis, pamplitudes, vec_base) -> np.ndarray:
+    """Given a vector in terms of elements of a basis and amplitudes, output the state vector."""
     state = np.zeros(len(vec_base), dtype=complex)
     k = 0
-    for element in arrays:
-        # print(element, type(element))
+    for vector in basis:
+        # print(vector, type(vector))
         for ind in range(len(vec_base)):
-            if (element == vec_base[ind]).all():
+            if (vector == vec_base[ind]).all():
                 basis_state = np.zeros_like(state)
                 basis_state[ind] = pamplitudes[k]
                 state = state + basis_state
@@ -123,7 +120,6 @@ def state_in_basis(arrays, pamplitudes, vec_base):
 
 # Extracts a particular subspace from the Fock states basis space
 def subspace_basis(m, photons, subspace):
-
     vec_base_orig = photon_combs_generator(m, photons)
     vec_base = subspace
     for state in vec_base_orig:

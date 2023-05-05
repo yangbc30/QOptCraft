@@ -91,16 +91,9 @@ def StoUEvolComp(
     """
 
     if txt == True:
-
-        print(
-            "=============================================================================="
-        )
-        print(
-            "||| COMPUTATION TIME OF ALGORITHM 2 METHODS OF SYSTEM EVOLUTION COMPARISON |||"
-        )
-        print(
-            "==============================================================================\n\n"
-        )
+        print("==============================================================================")
+        print("||| COMPUTATION TIME OF ALGORITHM 2 METHODS OF SYSTEM EVOLUTION COMPARISON |||")
+        print("==============================================================================\n\n")
 
         # ----------INPUT OF DIMENSIONS AND NUMBER OF PHOTONS INTERVALS:----------
 
@@ -109,54 +102,31 @@ def StoUEvolComp(
         )
 
     if (type(m1) is not int) or (type(m2) is not int):
-
         print(f"\nWARNING: invalid m1 or m2 input (both need to be int).")
 
         # We input the interval of dimensions to be computed by the algorithm
         while True:
-
             try:
+                m1 = int(input("\nInitial dimension of the loop? (it cannot be lower than 2): "))
 
-                m1 = int(
-                    input(
-                        "\nInitial dimension of the loop? (it cannot be lower than 2): "
-                    )
-                )
-
-                m2 = int(
-                    input(
-                        "\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "
-                    )
-                )
+                m2 = int(input("\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "))
 
                 if m1 < 2 or m2 < m1:
-
-                    print(
-                        "\nThere is at least a given value not included in the possible domain.\n"
-                    )
+                    print("\nThere is at least a given value not included in the possible domain.\n")
 
                 else:
-
                     break
 
             except ValueError:
-
                 print("\nThe given value is not valid.\n")
 
     if (type(n1) is not int) or (type(n2) is not int):
-
         print(f"\nWARNING: invalid n1 or n2 input (both need to be int).")
 
         # We input the interval of number of photons to be computed by the algorithm
         while True:
-
             try:
-
-                n1 = int(
-                    input(
-                        "\nInitial number of photons of the loop? (it cannot be lower than 1): "
-                    )
-                )
+                n1 = int(input("\nInitial number of photons of the loop? (it cannot be lower than 1): "))
 
                 n2 = int(
                     input(
@@ -165,25 +135,17 @@ def StoUEvolComp(
                 )
 
                 if n1 < 1 or n2 < n1:
-
-                    print(
-                        "\nThere is at least a given value not included in the possible domain.\n"
-                    )
+                    print("\nThere is at least a given value not included in the possible domain.\n")
 
                 else:
-
                     break
 
             except ValueError:
-
                 print("\nThe given value is not valid.\n")
 
     if txt == True:
-
         print("\nNow, we will generate random unitary matrices S for each dimension.\n")
-        print(
-            "Per S, the evolution of the system matrix will be computed for each number of photons.\n"
-        )
+        print("Per S, the evolution of the system matrix will be computed for each number of photons.\n")
 
         # ----------COMPARISON BETWEEN COMPUTATION TIMES FOR THE THREE EVOLUTION METHODS:----------
 
@@ -192,39 +154,20 @@ def StoUEvolComp(
         print(f"\nPhotons n range: [{n1}, {n2}]")
 
     if file_output == True:
-
         # MICROSOFT EXCEL INITIALIZATION
         workbook = xlsxwriter.Workbook(
             f"computation_comparisons_m_{m1}to{m2}_n_{n1}to{n2}_{comparison_matrix}.xlsx"
         )  # create the workbook
 
         cell_format = workbook.add_format(
-            {
-                "center_across": True,
-                "border": True,
-                "align": "center",
-                "valign": "vcenter",
-            }
+            {"center_across": True, "border": True, "align": "center", "valign": "vcenter"}
         )
         # cell_format.set_border() (another way to assign classes)
         cell_format_number = workbook.add_format(
-            {
-                "center_across": True,
-                "left": True,
-                "right": True,
-                "align": "center",
-                "valign": "vcenter",
-            }
+            {"center_across": True, "left": True, "right": True, "align": "center", "valign": "vcenter"}
         )
         cell_format_number_end = workbook.add_format(
-            {
-                "center_across": True,
-                "left": True,
-                "right": True,
-                "bottom": True,
-                "align": "center",
-                "valign": "vcenter",
-            }
+            {"center_across": True, "left": True, "right": True, "bottom": True, "align": "center", "valign": "vcenter"}
         )
 
     tries = input_control_ints(tries, "tries", 1)
@@ -233,15 +176,12 @@ def StoUEvolComp(
     t = time.process_time_ns()
 
     for cont in range(tries):
-
         if file_output == True:
-
             worksheet = workbook.add_worksheet(f"Attempt {cont+1}")  # add a sheet
 
         col = 1
 
         for k in range(m1, m2 + 1):
-
             # New initial matrix
             if comparison_matrix is "haar":
                 S = haar_measure(k)
@@ -258,7 +198,6 @@ def StoUEvolComp(
                         S[i, j] = np.exp(factor * 2.0 * math.pi * 1j / float(k) * i * j)
 
             while comparison_matrix is not "haar" and comparison_matrix is not "qft":
-
                 print("\nThe chosen matrix for comparison is not available.")
 
                 comparison_matrix == input(
@@ -278,28 +217,22 @@ def StoUEvolComp(
 
                     for i in range(k):
                         for j in range(k):
-                            S[i, j] = np.exp(
-                                factor * 2.0 * math.pi * 1j / float(k) * i * j
-                            )
+                            S[i, j] = np.exp(factor * 2.0 * math.pi * 1j / float(k) * i * j)
 
             photons = np.zeros(k, dtype=float)
 
             for j in range(n1, n2 + 1):
-
                 if txt == True:
-
                     print(f"\n\nDimensions m = {k}, photons n = {j}")
 
                 photons[0] = j
 
                 # We load the combinations with the same amount of photons in order to create the vector basis
                 if np.array(vec_base)[0, 0] and k == m1 and j == n1:
-
                     if txt:
                         print("\nLoaded an external array for the Fock basis.")
 
                 else:
-
                     vec_base = photon_combs_generator(k, photons)
 
                 M = len(vec_base)
@@ -309,7 +242,6 @@ def StoUEvolComp(
                 t_inc_1 = 0
 
                 for i in range(M):
-
                     U[i], t_inc_aux = evolution(S, vec_base[i], vec_base)
 
                     t_inc_1 += t_inc_aux
@@ -319,7 +251,6 @@ def StoUEvolComp(
                 t_inc_2 = 0
 
                 for i in range(M):
-
                     U[i], t_inc_aux = evolution_2(S, vec_base[i], vec_base)
 
                     t_inc_2 += t_inc_aux
@@ -329,7 +260,6 @@ def StoUEvolComp(
                 t_inc_2b = 0
 
                 for i in range(M):
-
                     U[i], t_inc_aux = evolution_2_ryser(S, vec_base[i], vec_base)
 
                     t_inc_2b += t_inc_aux
@@ -339,13 +269,11 @@ def StoUEvolComp(
                 U, t_inc_3 = evolution_3(S, photons, vec_base)
 
                 if txt == True:
-
                     print(
                         f"\nMethod 1): {float(t_inc_1/(10**9))}         Method 2): {float(t_inc_2/(10**9))}         Method 2b): {float(t_inc_2b/(10**9))}         Method 3): {float(t_inc_3/(10**9))}\n\n"
                     )
 
                 if file_output == True:
-
                     # MICROSOFT EXCEL COMPATIBILITY
                     scores = {
                         "m": f"{k}",
@@ -359,21 +287,13 @@ def StoUEvolComp(
                     i = 0
                     # line index
                     for name in scores:
-
                         if col == 1:  # the loop
-
-                            worksheet.write(
-                                0, i, name, cell_format
-                            )  # write name at row i and column 0
+                            worksheet.write(0, i, name, cell_format)  # write name at row i and column 0
 
                         if k == m2 and j == n2:
-
-                            worksheet.write(
-                                col, i, scores[name], cell_format_number_end
-                            )  # write score at last column
+                            worksheet.write(col, i, scores[name], cell_format_number_end)  # write score at last column
 
                         else:
-
                             worksheet.write(
                                 col, i, scores[name], cell_format_number
                             )  # write score at row i and column col
@@ -383,10 +303,7 @@ def StoUEvolComp(
                     col += 1
 
     if file_output == True:
-
-        print(
-            f"\nResults have been saved on a Workbook 'computation_comparisons_m_{m1}to{m2}_n_{n1}to{n2}.xlsx' file."
-        )
+        print(f"\nResults have been saved on a Workbook 'computation_comparisons_m_{m1}to{m2}_n_{n1}to{n2}.xlsx' file.")
 
         workbook.close()  # close the workbook
 

@@ -1,4 +1,4 @@
-'''Copyright 2021 Daniel Gómez Aguado
+"""Copyright 2021 Daniel Gómez Aguado
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -10,10 +10,10 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.'''
+limitations under the License."""
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#													LIBRARIES REQUIRED
+# 													LIBRARIES REQUIRED
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
@@ -26,44 +26,38 @@ import numpy as np
 # ----------FILE MANAGEMENT:----------
 
 # File opening
-from io import open 
+from io import open
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#											DECOMPOSITION OF MATRIX D FUNCTIONS
+# 											DECOMPOSITION OF MATRIX D FUNCTIONS
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
-def D_decomposition(M,maxDim,filename,file_output,txt=False):
+def D_decomposition(M, maxDim, filename, file_output, txt=False):
+    if file_output == True:
+        DList_file = open(filename + "_DList.txt", "w")
 
-	if file_output==True:
+    DList = np.zeros((maxDim, maxDim, maxDim), dtype=complex)
 
-		DList_file=open(filename+"_DList.txt","w")
+    for i in range(0, maxDim):
+        I = np.identity(maxDim, dtype=complex)
 
-	DList=np.zeros((maxDim,maxDim,maxDim), dtype=complex)
+        # Matrix D_i creation consists on replacing the identity
+        # matrix element [i,i] for D_i of the original matrix D (here, M)
+        I[i, i] = M[i, i]
 
-	for i in range(0,maxDim):
+        DList[i, :, :] = I
 
-		I=np.identity(maxDim,dtype=complex)
+        if file_output == True:
+            np.savetxt(DList_file, DList[i, :, :], delimiter=",")
 
-		# Matrix D_i creation consists on replacing the identity
-		# matrix element [i,i] for D_i of the original matrix D (here, M) 
-		I[i,i]=M[i,i]
+            DList_file.write("\n")
 
-		DList[i,:,:]=I
+    if file_output == True:
+        DList_file.close()
 
-		if file_output==True:
+        if txt == True:
+            print(f"\nThe list of matrices DList has been storaged in the file '" + filename + "_DList.txt'.")
 
-			np.savetxt(DList_file,DList[i,:,:],delimiter=",")
-		
-			DList_file.write("\n")
-
-	if file_output==True:
-
-		DList_file.close()
-
-		if txt==True:
-
-			print(f"\nThe list of matrices DList has been storaged in the file '"+filename+"_DList.txt'.")
-
-	return DList
+    return DList

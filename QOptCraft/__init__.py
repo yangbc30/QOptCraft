@@ -12,12 +12,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-from .input_control import *
-from .mat_inner_product import *
-from .optic_devices import *
-from .read_matrix import *
-from .recur_factorial import *
-from .unitary import *
-from .write_initial_matrix import *
-from .photon_comb_basis import *
-from .Phase3_Aux._3_u_m_algebra_and_image_subalgebra import write_algebra_basis
+from QOptCraft.Main_Code import *
+from QOptCraft.input_control import *
+from QOptCraft.mat_inner_product import *
+# from QOptCraft.optic_devices import *
+from QOptCraft.read_matrix import *
+from QOptCraft.recur_factorial import *
+from QOptCraft.unitary import *
+from QOptCraft.write_initial_matrix import *
+from QOptCraft.photon_comb_basis import *
+from QOptCraft.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import write_algebra_basis
+from QOptCraft.Phase3_Aux import *
+from QOptCraft.Phase3_Aux import matrix_u_basis_generator_sparse
+from QOptCraft.Phase4_Aux import gram_schmidt_modified_2dmatrices

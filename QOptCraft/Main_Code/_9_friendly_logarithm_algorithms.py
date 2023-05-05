@@ -1,8 +1,8 @@
 # ---------------------------------------------------------------------------------------------------------------------------
-#									ALGORITHM 9: LOGARITHM OF A MATRIX FUNCTIONS
+# 									ALGORITHM 9: LOGARITHM OF A MATRIX FUNCTIONS
 # ---------------------------------------------------------------------------------------------------------------------------
 
-'''Copyright 2021 Daniel Gómez Aguado
+"""Copyright 2021 Daniel Gómez Aguado
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.'''
+limitations under the License."""
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#													LIBRARIES REQUIRED
+# 													LIBRARIES REQUIRED
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
@@ -31,12 +31,12 @@ import time
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
-from numpy.linalg import eig,det,inv
+from numpy.linalg import eig, det, inv
 
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import schur,logm,sqrtm
+from scipy.linalg import schur, logm, sqrtm
 
-from sympy import * 
+from sympy import *
 
 # Matrix comparisons by their inner product
 from ..mat_inner_product import comparison_noprint
@@ -45,7 +45,7 @@ from ..mat_inner_product import comparison_noprint
 # ----------FILE MANAGEMENT:----------
 
 # File opening
-from io import open 
+from io import open
 
 from ..read_matrix import read_matrix_from_txt
 
@@ -56,378 +56,329 @@ from ..input_control import input_control
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#														MAIN CODE
+# 														MAIN CODE
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
-def Logm1M(file_input=True,A=False,file_output=True,filename=False,txt=False,acc_d=3):
+def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
+    file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
 
-	file_input, filename, filler, acc_d=input_control(10,file_input,A,file_output,filename,txt,acc_d,False)
+    if txt == True:
+        print("\n\nMATRIX LOGARTHM 1\n")
 
-	if txt==True:
+    while file_input == True and filename == False:
+        print(f"\nWARNING: a new filename is required.")
 
-		print("\n\nMATRIX LOGARTHM 1\n")
+        try:
+            filename = input("Write the name of the file (without .txt extension): ")
 
-	while file_input==True and filename==False:
+        except ValueError:
+            print("The given value is not valid.\n")
 
-		print(f"\nWARNING: a new filename is required.")
+    if file_input == True:
+        A = read_matrix_from_txt(filename)
 
-		try:
+    if txt == True:
+        print(f"\nInput matrix:")
 
-			filename=input("Write the name of the file (without .txt extension): ")
-	
-		except ValueError:
+        print(np.round(A, acc_d))
 
-			print("The given value is not valid.\n")
+        # Beginning of time measurement
+        t = time.process_time_ns()
 
-	if file_input==True:
+    # Schur decomposition
+    W, T = Matrix(A).diagonalize()
+    W = np.array(W, dtype=complex)
+    T = np.array(T, dtype=complex)
 
-		A=read_matrix_from_txt(filename)
+    N = len(A)
 
-	if txt==True:
+    # D diagonal matrix initialization
+    D = np.zeros((N, N), dtype=complex)
 
-		print(f"\nInput matrix:")
+    # No-null values computation
+    for i in range(N):
+        D[i, i] = T[i, i] / abs(T[i, i])
 
-		print(np.round(A,acc_d))
+    # Matrix logarithm computation
+    H = W.dot(logm(D).dot(np.linalg.inv(W)))
+    logm_1A = 0.5 * (H + np.transpose(np.conj(H)))
 
-		# Beginning of time measurement
-		t=time.process_time_ns()
+    if file_output == True:
+        matrix_file = open(filename + "_Logm1.txt", "w+")
 
-	# Schur decomposition
-	W, T = Matrix(A).diagonalize()
-	W=np.array(W,dtype=complex)
-	T=np.array(T,dtype=complex)
+        np.savetxt(matrix_file, logm_1A, delimiter=",")
 
-	N=len(A)
+        print("\nThe new matrix is found in the file '" + filename + "_Logm1.txt'.\n")
 
-	# D diagonal matrix initialization
-	D=np.zeros((N,N),dtype=complex)
+        matrix_file.close()
 
-	# No-null values computation
-	for i in range(N):
+    if txt == True:
+        print(f"\nThe logarithm Logm1({filename}) has been computed.")
 
-		D[i,i]=T[i,i]/abs(T[i,i])
+        print(f"\nOutput matrix:")
 
-	# Matrix logarithm computation
-	H=W.dot(logm(D).dot(np.linalg.inv(W)))
-	logm_1A=0.5*(H+np.transpose(np.conj(H)))
+        print(np.round(logm_1A, acc_d))
 
-	if file_output==True:
+        # Total time of execution
+        t_inc = time.process_time_ns() - t
 
-		matrix_file=open(filename+"_Logm1.txt","w+")
+        print(f"\nLogm1M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
 
-		np.savetxt(matrix_file,logm_1A,delimiter=",")
+    return logm_1A
 
-		print("\nThe new matrix is found in the file '"+filename+"_Logm1.txt'.\n")
 
-		matrix_file.close()
+def Logm2M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
+    file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
 
-	if txt==True:
+    if txt == True:
+        print("\n\nMATRIX LOGARTHM 2\n")
 
-		print(f"\nThe logarithm Logm1({filename}) has been computed.")
+    while file_input == True and filename == False:
+        print(f"\nWARNING: a new filename is required.")
 
-		print(f"\nOutput matrix:")
+        try:
+            filename = input("Write the name of the file (without .txt extension): ")
 
-		print(np.round(logm_1A,acc_d))
+        except ValueError:
+            print("The given value is not valid.\n")
 
-		# Total time of execution
-		t_inc=time.process_time_ns()-t
+    if file_input == True:
+        A = read_matrix_from_txt(filename)
 
-		print(f"\nLogm1M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+    if txt == True:
+        print(f"\nInput matrix:")
 
-	return logm_1A
+        print(np.round(A, acc_d))
 
+        # Beginning of time measurement
+        t = time.process_time_ns()
 
-def Logm2M(file_input=True,A=False,file_output=True,filename=False,txt=False,acc_d=3):
+    # Matrix logarithm computation
+    logm_2A = 0.5 * (logm(A) + np.transpose(np.conj(logm(A))))
 
-	file_input, filename, filler, acc_d=input_control(10,file_input,A,file_output,filename,txt,acc_d,False)
+    if file_output == True:
+        matrix_file = open(filename + "_Logm2.txt", "w+")
 
-	if txt==True:
+        np.savetxt(matrix_file, logm_2A, delimiter=",")
 
-		print("\n\nMATRIX LOGARTHM 2\n")
+        print("\nThe new matrix is found in the file '" + filename + "_Logm2.txt'.\n")
 
-	while file_input==True and filename==False:
+        matrix_file.close()
 
-		print(f"\nWARNING: a new filename is required.")
+    if txt == True:
+        print(f"\nThe logarithm Logm2({filename}) has been computed.")
 
-		try:
+        print(f"\nOutput matrix:")
 
-			filename=input("Write the name of the file (without .txt extension): ")
-	
-		except ValueError:
+        print(np.round(logm_2A, acc_d))
 
-			print("The given value is not valid.\n")
+        # Total time of execution
+        t_inc = time.process_time_ns() - t
 
-	if file_input==True:
+        print(f"\nLogm2M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
 
-		A=read_matrix_from_txt(filename)
+    return logm_2A
 
-	if txt==True:
 
-		print(f"\nInput matrix:")
+def Logm3M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
+    file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
 
-		print(np.round(A,acc_d))
+    if txt == True:
+        print("\n\nMATRIX LOGARTHM 3\n")
 
-		# Beginning of time measurement
-		t=time.process_time_ns()
+    while file_input == True and filename == False:
+        print(f"\nWARNING: a new filename is required.")
 
-	# Matrix logarithm computation
-	logm_2A=0.5*(logm(A)+np.transpose(np.conj(logm(A))))
+        try:
+            filename = input("Write the name of the file (without .txt extension): ")
 
-	if file_output==True:
+        except ValueError:
+            print("The given value is not valid.\n")
 
-		matrix_file=open(filename+"_Logm2.txt","w+")
+    if file_input == True:
+        A = read_matrix_from_txt(filename)
 
-		np.savetxt(matrix_file,logm_2A,delimiter=",")
+    if txt == True:
+        print(f"\nInput matrix:")
 
-		print("\nThe new matrix is found in the file '"+filename+"_Logm2.txt'.\n")
+        print(np.round(A, acc_d))
 
-		matrix_file.close()
+        # Beginning of time measurement
+        t = time.process_time_ns()
 
-	if txt==True:
+    # Schur decomposition
+    U, Q = schur(A)
 
-		print(f"\nThe logarithm Logm2({filename}) has been computed.")
+    N = len(A)
 
-		print(f"\nOutput matrix:")
+    # D diagonal matrix initialization
+    D = np.zeros((N, N), dtype=complex)
 
-		print(np.round(logm_2A,acc_d))
+    # No-null values computation
+    for i in range(N):
+        D[i, i] = U[i, i] / abs(U[i, i])
 
-		# Total time of execution
-		t_inc=time.process_time_ns()-t
+    # Matrix logarithm computation
+    logm_3A = Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
 
-		print(f"\nLogm2M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+    if file_output == True:
+        matrix_file = open(filename + "_Logm3.txt", "w+")
 
-	return logm_2A
+        np.savetxt(matrix_file, logm_3A, delimiter=",")
 
+        print("\nThe new matrix is found in the file '" + filename + "_Logm3.txt'.\n")
 
-def Logm3M(file_input=True,A=False,file_output=True,filename=False,txt=False,acc_d=3):
+        matrix_file.close()
 
-	file_input, filename, filler, acc_d=input_control(10,file_input,A,file_output,filename,txt,acc_d,False)
+    if txt == True:
+        print(f"\nThe logarithm Logm3({filename}) has been computed.")
 
-	if txt==True:
+        print(f"\nOutput matrix:")
 
-		print("\n\nMATRIX LOGARTHM 3\n")
+        print(np.round(logm_3A, acc_d))
 
-	while file_input==True and filename==False:
+        # Total time of execution
+        t_inc = time.process_time_ns() - t
 
-		print(f"\nWARNING: a new filename is required.")
+        print(f"\nLogm3M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
 
-		try:
+    return logm_3A
 
-			filename=input("Write the name of the file (without .txt extension): ")
-	
-		except ValueError:
 
-			print("The given value is not valid.\n")
+def Logm4M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
+    file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
 
-	if file_input==True:
+    if txt == True:
+        print("\n\nMATRIX LOGARTHM 4\n")
 
-		A=read_matrix_from_txt(filename)
+    while file_input == True and filename == False:
+        print(f"\nWARNING: a new filename is required.")
 
-	if txt==True:
+        try:
+            filename = input("Write the name of the file (without .txt extension): ")
 
-		print(f"\nInput matrix:")
+        except ValueError:
+            print("The given value is not valid.\n")
 
-		print(np.round(A,acc_d))
+    if file_input == True:
+        A = read_matrix_from_txt(filename)
 
-		# Beginning of time measurement
-		t=time.process_time_ns()
+    if txt == True:
+        print(f"\nInput matrix:")
 
-	# Schur decomposition
-	U, Q = schur(A)
+        print(np.round(A, acc_d))
 
-	N=len(A)
+        # Beginning of time measurement
+        t = time.process_time_ns()
 
-	# D diagonal matrix initialization
-	D=np.zeros((N,N),dtype=complex)
+    # Defining formula of this logarithm algorithm
+    V = A.dot(inv(sqrtm(np.transpose(np.conj(A)).dot(A))))
 
-	# No-null values computation
-	for i in range(N):
+    # Schur decomposition
+    U, Q = schur(V)
 
-		D[i,i]=U[i,i]/abs(U[i,i])
+    N = len(A)
 
-	# Matrix logarithm computation
-	logm_3A=Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
+    # D diagonal matrix initialization
+    D = np.zeros((N, N), dtype=complex)
 
-	if file_output==True:
+    # No-null values computation
+    for i in range(N):
+        D[i, i] = U[i, i] / abs(U[i, i])
 
-		matrix_file=open(filename+"_Logm3.txt","w+")
+    # Matrix logarithm computation
+    logm_4A = Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
 
-		np.savetxt(matrix_file,logm_3A,delimiter=",")
+    if file_output == True:
+        matrix_file = open(filename + "_Logm4.txt", "w+")
 
-		print("\nThe new matrix is found in the file '"+filename+"_Logm3.txt'.\n")
+        np.savetxt(matrix_file, logm_4A, delimiter=",")
 
-		matrix_file.close()
+        print("\nThe new matrix is found in the file '" + filename + "_Logm4.txt'.\n")
 
-	if txt==True:
+        matrix_file.close()
 
-		print(f"\nThe logarithm Logm3({filename}) has been computed.")
+    if txt == True:
+        print(f"\nThe logarithm Logm4({filename}) has been computed.")
 
-		print(f"\nOutput matrix:")
+        print(f"\nOutput matrix:")
 
-		print(np.round(logm_3A,acc_d))
+        print(np.round(logm_4A, acc_d))
 
-		# Total time of execution
-		t_inc=time.process_time_ns()-t
+        # Total time of execution
+        t_inc = time.process_time_ns() - t
 
-		print(f"\nLogm3M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+        print(f"\nLogm4M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
 
-	return logm_3A
+    return logm_4A
 
 
-def Logm4M(file_input=True,A=False,file_output=True,filename=False,txt=False,acc_d=3):
+def Logm5M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
+    file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
 
-	file_input, filename, filler, acc_d=input_control(10,file_input,A,file_output,filename,txt,acc_d,False)
+    if txt == True:
+        print("\n\nMATRIX LOGARTHM 5\n")
 
-	if txt==True:
+    while file_input == True and filename == False:
+        print(f"\nWARNING: a new filename is required.")
 
-		print("\n\nMATRIX LOGARTHM 4\n")
+        try:
+            filename = input("Write the name of the file (without .txt extension): ")
 
-	while file_input==True and filename==False:
+        except ValueError:
+            print("The given value is not valid.\n")
 
-		print(f"\nWARNING: a new filename is required.")
+    if file_input == True:
+        A = read_matrix_from_txt(filename)
 
-		try:
+    if txt == True:
+        print(f"\nInput matrix:")
 
-			filename=input("Write the name of the file (without .txt extension): ")
-	
-		except ValueError:
+        print(np.round(A, acc_d))
 
-			print("The given value is not valid.\n")
+        # Beginning of time measurement
+        t = time.process_time_ns()
 
-	if file_input==True:
+    # Defining formula of this logarithm algorithm
+    V1 = (A + np.transpose(np.conj(inv(A)))) / 2.0
 
-		A=read_matrix_from_txt(filename)
+    V = (V1 + np.transpose(np.conj(inv(V1)))) / 2.0
 
-	if txt==True:
+    # Schur decomposition
+    U, Q = schur(V)
 
-		print(f"\nInput matrix:")
+    N = len(A)
 
-		print(np.round(A,acc_d))
+    # D diagonal matrix initialization
+    D = np.zeros((N, N), dtype=complex)
 
-		# Beginning of time measurement
-		t=time.process_time_ns()
+    # No-null values computation
+    for i in range(N):
+        D[i, i] = U[i, i] / abs(U[i, i])
 
-	# Defining formula of this logarithm algorithm
-	V=A.dot(inv(sqrtm(np.transpose(np.conj(A)).dot(A))))
+    # Matrix logarithm computation
+    logm_5A = Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
 
-	# Schur decomposition
-	U, Q = schur(V)
+    if file_output == True:
+        matrix_file = open(filename + "_Logm5.txt", "w+")
 
-	N=len(A)
+        np.savetxt(matrix_file, logm_5A, delimiter=",")
 
-	# D diagonal matrix initialization
-	D=np.zeros((N,N),dtype=complex)
+        print("\nThe new matrix is found in the file '" + filename + "_Logm5.txt'.\n")
 
-	# No-null values computation
-	for i in range(N):
+        matrix_file.close()
 
-		D[i,i]=U[i,i]/abs(U[i,i])
+    if txt == True:
+        print(f"\nThe logarithm Logm5({filename}) has been computed.")
 
-	# Matrix logarithm computation
-	logm_4A=Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
+        print(f"\nOutput matrix:")
 
-	if file_output==True:
+        print(np.round(logm_5A, acc_d))
 
-		matrix_file=open(filename+"_Logm4.txt","w+")
+        # Total time of execution
+        t_inc = time.process_time_ns() - t
 
-		np.savetxt(matrix_file,logm_4A,delimiter=",")
+        print(f"\nLogm5M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
 
-		print("\nThe new matrix is found in the file '"+filename+"_Logm4.txt'.\n")
-
-		matrix_file.close()
-
-	if txt==True:
-
-		print(f"\nThe logarithm Logm4({filename}) has been computed.")
-
-		print(f"\nOutput matrix:")
-
-		print(np.round(logm_4A,acc_d))
-
-		# Total time of execution
-		t_inc=time.process_time_ns()-t
-
-		print(f"\nLogm4M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
-
-	return logm_4A
-
-
-def Logm5M(file_input=True,A=False,file_output=True,filename=False,txt=False,acc_d=3):
-
-	file_input, filename, filler, acc_d=input_control(10,file_input,A,file_output,filename,txt,acc_d,False)
-
-	if txt==True:
-
-		print("\n\nMATRIX LOGARTHM 5\n")
-
-	while file_input==True and filename==False:
-
-		print(f"\nWARNING: a new filename is required.")
-
-		try:
-
-			filename=input("Write the name of the file (without .txt extension): ")
-	
-		except ValueError:
-
-			print("The given value is not valid.\n")
-
-	if file_input==True:
-
-		A=read_matrix_from_txt(filename)
-
-	if txt==True:
-
-		print(f"\nInput matrix:")
-
-		print(np.round(A,acc_d))
-
-		# Beginning of time measurement
-		t=time.process_time_ns()
-
-	# Defining formula of this logarithm algorithm
-	V1=(A+np.transpose(np.conj(inv(A))))/2.0
-
-	V=(V1+np.transpose(np.conj(inv(V1))))/2.0
-
-	# Schur decomposition
-	U, Q = schur(V)
-
-	N=len(A)
-
-	# D diagonal matrix initialization
-	D=np.zeros((N,N),dtype=complex)
-
-	# No-null values computation
-	for i in range(N):
-
-		D[i,i]=U[i,i]/abs(U[i,i])
-
-	# Matrix logarithm computation
-	logm_5A=Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
-
-	if file_output==True:
-
-		matrix_file=open(filename+"_Logm5.txt","w+")
-
-		np.savetxt(matrix_file,logm_5A,delimiter=",")
-
-		print("\nThe new matrix is found in the file '"+filename+"_Logm5.txt'.\n")
-
-		matrix_file.close()
-
-	if txt==True:
-
-		print(f"\nThe logarithm Logm5({filename}) has been computed.")
-
-		print(f"\nOutput matrix:")
-
-		print(np.round(logm_5A,acc_d))
-
-		# Total time of execution
-		t_inc=time.process_time_ns()-t
-
-		print(f"\nLogm5M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
-
-	return logm_5A
+    return logm_5A

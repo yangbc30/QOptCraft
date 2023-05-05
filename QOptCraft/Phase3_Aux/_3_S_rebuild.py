@@ -1,4 +1,4 @@
-'''Copyright 2021 Daniel Gómez Aguado
+"""Copyright 2021 Daniel Gómez Aguado
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -10,10 +10,10 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.'''
+limitations under the License."""
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#													LIBRARIES REQUIRED
+# 													LIBRARIES REQUIRED
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
@@ -32,74 +32,71 @@ import sympy
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#											SCATTERING MATRIX S RECONSTRUCTION
+# 											SCATTERING MATRIX S RECONSTRUCTION
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
 # Adjoint representation for a S matrix
-def adjoint_S(index,base_u_m,sol):
+def adjoint_S(index, base_u_m, sol):
+    m = len(base_u_m[0])
 
-	m=len(base_u_m[0])
+    suma = np.zeros((m, m), dtype=complex)
 
-	suma=np.zeros((m,m),dtype=complex)
+    for j in range(m * m):
+        suma += sol[index, j] * base_u_m[j]
 
-	for j in range(m*m):
-
-		suma+=sol[index,j]*base_u_m[j]
-
-	return suma
+    return suma
 
 
 # Main function of S rebuilding
-def S_output(base_u_m,base_U_m,sol_e,sol_f):
+def S_output(base_u_m, base_U_m, sol_e, sol_f):
+    m = len(base_u_m[0])
 
-	m=len(base_u_m[0])
+    S = np.zeros((m, m), dtype=complex)
 
-	S=np.zeros((m,m),dtype=complex)
+    # First of all, we obtain a no-null value of S for using it as a base for the rest computations
+    for l in range(m):
+        end = False
 
-	# First of all, we obtain a no-null value of S for using it as a base for the rest computations
-	for l in range(m):
+        for j in range(m):
+            l_array = np.array([base_U_m[l]])
 
-		end=False
+            absS = -1j * np.conj(l_array).dot(adjoint_S(m * j + j, base_u_m, sol_e).dot(np.transpose(l_array)))
 
-		for j in range(m):
+            # 8 decimal accuracy, it can be modified
+            if np.round(absS, 8) == 0:
+                S[l, j] = 0
 
-			l_array=np.array([base_U_m[l]])
+            else:
+                # We ignore the offset (for now...)
 
-			absS=-1j*np.conj(l_array).dot(adjoint_S(m*j+j,base_u_m,sol_e).dot(np.transpose(l_array)))
+                l0 = l
+                j0 = j
 
-			# 8 decimal accuracy, it can be modified
-			if np.round(absS,8)==0:
+                end = True
 
-				S[l,j]=0
+                break
 
-			else:
+        if end:
+            break
 
-				# We ignore the offset (for now...)
+    # Later, we compute the total matrix. l0 y j0 serve as a support
+    for l in range(m):
+        for j in range(m):
+            l0_array = np.array([base_U_m[l0]])
 
-				l0=l
-				j0=j
+            l_array = np.array([base_U_m[l]])
 
-				end=True
+            j_array = np.array([base_U_m[j]])
 
-				break
+            # Storage of the sum in S
+            S += (
+                (
+                    np.conj(l_array).dot(adjoint_S(m * j + j0, base_u_m, sol_f).dot(np.transpose(l0_array)))
+                    - 1j * np.conj(l_array).dot(adjoint_S(m * j + j0, base_u_m, sol_e).dot(np.transpose(l0_array)))
+                )
+                / sqrt(-1j * np.conj(l0_array).dot(adjoint_S(m * j0 + j0, base_u_m, sol_e).dot(np.transpose(l0_array))))
+                * (np.transpose(l_array).dot(np.conj(j_array)))
+            )
 
-		if end:
-
-			break
-
-	# Later, we compute the total matrix. l0 y j0 serve as a support
-	for l in range(m):
-
-		for j in range(m):
-
-			l0_array=np.array([base_U_m[l0]])
-
-			l_array=np.array([base_U_m[l]])
-
-			j_array=np.array([base_U_m[j]])
-
-			# Storage of the sum in S
-			S+=(np.conj(l_array).dot(adjoint_S(m*j+j0,base_u_m,sol_f).dot(np.transpose(l0_array)))-1j*np.conj(l_array).dot(adjoint_S(m*j+j0,base_u_m,sol_e).dot(np.transpose(l0_array))))/sqrt(-1j*np.conj(l0_array).dot(adjoint_S(m*j0+j0,base_u_m,sol_e).dot(np.transpose(l0_array))))*(np.transpose(l_array).dot(np.conj(j_array)))
-
-	return S
+    return S

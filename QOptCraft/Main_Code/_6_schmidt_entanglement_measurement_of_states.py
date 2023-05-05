@@ -97,11 +97,7 @@ from ..Phase4_Aux._4_Logarithms_required import *
 # ----------ALGORITHM 6: AUXILIAR FUNCTIONS:----------
 
 from ..Phase6_Aux._6_schmidt import schmidt_rank_vector
-from ..Phase6_Aux._6_basis_manipulations import (
-    leading_terms,
-    state_leading_terms,
-    state_leading_fidelity,
-)
+from ..Phase6_Aux._6_basis_manipulations import leading_terms, state_leading_terms, state_leading_fidelity
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
@@ -157,18 +153,14 @@ def StateSchmidt(
 
     # Loading U from the file name.txt
     if file_input_state == True:
-
         arrays, array_sep = read_matrix_from_txt_general(filename_state)
 
         # we separate each element
         state_basis_vectors = np.array(arrays[: array_sep[0]], dtype=int)
         state_prob_amplitudes = arrays[array_sep[0] : array_sep[1]]
-        modes_per_partition = np.array(arrays[array_sep[1] : array_sep[2]], dtype=int)[
-            0
-        ]
+        modes_per_partition = np.array(arrays[array_sep[1] : array_sep[2]], dtype=int)[0]
 
     if txt == True:
-
         # introduce the three elements (basis, weights and modes per partition) FROM THE SAME FILE
         print("\nOur state's basis vectors:")
         print(np.round(state_basis_vectors, acc_d))
@@ -188,11 +180,9 @@ def StateSchmidt(
 
     # Loading U from the file name.txt
     if file_input_matrix == True:
-
         U_input = read_matrix_from_txt(filename_matrix)
 
     if txt == True:
-
         print("\nU_input:")
         print(np.round(U_input, acc_d))
 
@@ -202,7 +192,6 @@ def StateSchmidt(
 
     # We load the combinations with the same amount of photons in order to create the vector basis
     if str(np.array(vec_base)[0, 0]) == str(False):
-
         vec_base = photon_combs_generator(m, photons)
 
     elif txt == True:
@@ -214,19 +203,13 @@ def StateSchmidt(
     # ---------MAIN PROCESS:----------
 
     if file_output == True:
-
-        schmidt_leading_file = open(
-            f"{filename_state}_{filename_matrix}_schmidt_leading.txt", "w+"
-        )
-        schmidt_fidelity_file = open(
-            f"{filename_state}_{filename_matrix}_schmidt_fidelity_{fidelity}.txt", "w+"
-        )
+        schmidt_leading_file = open(f"{filename_state}_{filename_matrix}_schmidt_leading.txt", "w+")
+        schmidt_fidelity_file = open(f"{filename_state}_{filename_matrix}_schmidt_fidelity_{fidelity}.txt", "w+")
 
     # Beginning of time measurement
     t = time.process_time_ns()
     # print(len(state_basis_vectors))
     for i in range(len(state_basis_vectors)):
-
         if len(state_basis_vectors[i].shape) < 2:
             basis_vectors = np.array([state_basis_vectors[i]])
             prob_amplitudes = np.array([state_prob_amplitudes[i]])
@@ -236,27 +219,17 @@ def StateSchmidt(
 
         input_state = state_in_basis(basis_vectors, prob_amplitudes, vec_base)
         output_state = np.matmul(U_input, input_state.T)
-        pre_entanglement = schmidt_rank_vector(
-            input_state, vec_base, list(modes_per_partition)
-        )
-        post_entanglement = schmidt_rank_vector(
-            output_state, vec_base, list(modes_per_partition)
-        )
+        pre_entanglement = schmidt_rank_vector(input_state, vec_base, list(modes_per_partition))
+        post_entanglement = schmidt_rank_vector(output_state, vec_base, list(modes_per_partition))
 
-        vec_base_leading, output_state_leading = state_leading_terms(
-            output_state, vec_base
-        )
-        vec_base_fidelity, output_state_fidelity = state_leading_fidelity(
-            output_state, vec_base, fidelity
-        )
+        vec_base_leading, output_state_leading = state_leading_terms(output_state, vec_base)
+        vec_base_fidelity, output_state_fidelity = state_leading_fidelity(output_state, vec_base, fidelity)
         short = state_in_basis(vec_base_fidelity, output_state_fidelity, vec_base)
 
         post_entanglement_leading = schmidt_rank_vector(
             output_state_leading, vec_base_leading, list(modes_per_partition)
         )
-        post_entanglement_fidelity = schmidt_rank_vector(
-            short, vec_base_fidelity, list(modes_per_partition)
-        )
+        post_entanglement_fidelity = schmidt_rank_vector(short, vec_base_fidelity, list(modes_per_partition))
 
         # these are generated without the need for a function, but the current way it is better organised
         # vec_base_fidelity=vec_base[np.argsort(np.abs(output_state)**2)[-leading_terms(output_state,fidelity):]] # se ordenan los pesos de mayor a menor
@@ -269,27 +242,20 @@ def StateSchmidt(
         balance_f = min(weights_f) / max(weights_f)
 
         if file_output == True:
-
             # Leading states (no fidelity applied)
-            schmidt_leading_file.write(
-                f"\nIteration {i}\nFor the input state (basis and probabilities for each):\n"
-            )
+            schmidt_leading_file.write(f"\nIteration {i}\nFor the input state (basis and probabilities for each):\n")
             np.savetxt(schmidt_leading_file, basis_vectors, delimiter=",")
             np.savetxt(schmidt_leading_file, prob_amplitudes, delimiter=",")
             schmidt_leading_file.write(
                 f"\nSchmidt rank for the input state: {pre_entanglement}\nSchmidt rank for the output state: {post_entanglement_leading}"
             )
-            schmidt_leading_file.write(
-                f"\nThe output state's state basis and probabilities of collapse for each:\n"
-            )
+            schmidt_leading_file.write(f"\nThe output state's state basis and probabilities of collapse for each:\n")
             np.savetxt(schmidt_leading_file, vec_base_leading, delimiter=",")
             np.savetxt(schmidt_leading_file, output_state_leading, delimiter=",")
             schmidt_leading_file.write(f"\nBalance: {balance}\n\n")
 
             # Leading-fidelity states (fidelity applied)
-            schmidt_fidelity_file.write(
-                f"\nIteration {i}\nFor the input state (basis and probabilities for each):\n"
-            )
+            schmidt_fidelity_file.write(f"\nIteration {i}\nFor the input state (basis and probabilities for each):\n")
             np.savetxt(schmidt_fidelity_file, basis_vectors, delimiter=",")
             np.savetxt(schmidt_fidelity_file, prob_amplitudes, delimiter=",")
             schmidt_fidelity_file.write(
@@ -303,7 +269,6 @@ def StateSchmidt(
             schmidt_fidelity_file.write(f"\nBalance: {balance_f}\n\n")
 
         if txt == True:
-
             print(f"\n\nIteration {i}\n")
             print(f"Considered vector: {basis_vectors}")
             print(f"Input state: {input_state}")
@@ -319,29 +284,22 @@ def StateSchmidt(
             )
             print(vec_base_leading)
             print(output_state_leading)
-            print(
-                f"Post-circuit entanglement (leading states): {post_entanglement_leading}"
-            )
+            print(f"Post-circuit entanglement (leading states): {post_entanglement_leading}")
 
             print(f"Balance: {balance}")
 
             # print(f"Number of leading states for fidelity={fidelity}: {leading_terms(output_state,fidelity)}")   #importantes
-            print(
-                f"Number of leading states for fidelity={fidelity}: {len(output_state_fidelity)}"
-            )
+            print(f"Number of leading states for fidelity={fidelity}: {len(output_state_fidelity)}")
             print(
                 f"The fidelity={fidelity} array's exact basis elements and their probabilities after passing the circuit are located in the iteration {i} of '{filename_state}_reduction_{fidelity}.txt'."
             )
             print(vec_base_fidelity)
             print(output_state_fidelity)
-            print(
-                f"Post-circuit entanglement (fidelity={fidelity} in state): {post_entanglement_fidelity}"
-            )
+            print(f"Post-circuit entanglement (fidelity={fidelity} in state): {post_entanglement_fidelity}")
 
             print(f"Balance (fidelity={fidelity}): {balance_f}")
 
     if file_output == True:
-
         schmidt_leading_file.close()
         schmidt_fidelity_file.close()
 
@@ -383,6 +341,4 @@ def StateSchmidt(
 
     t_inc = time.process_time_ns() - t
 
-    print(
-        f"\nSchmidt entanglement: total time of execution (seconds): {float(t_inc/(10**(9)))}\n"
-    )
+    print(f"\nSchmidt entanglement: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")

@@ -64,7 +64,6 @@ import os
 
 # The functions e_jk y f_jk allow to obtain the matrix basis of u(m)
 def e_jk(j, k, base):
-
     j_array = np.array([base[j]])
 
     k_array = np.array([base[k]])
@@ -75,7 +74,6 @@ def e_jk(j, k, base):
 
 
 def f_jk(j, k, base):
-
     j_array = np.array([base[j]])
 
     k_array = np.array([base[k]])
@@ -87,14 +85,11 @@ def f_jk(j, k, base):
 
 # We transform from the u(m) matrix basis to u(M)'s
 def d_phi(base_matrix_m, photons, base_input):
-
     m = len(base_matrix_m)
     num_photons = int(np.sum(photons))
 
     if base_input == True:
-
         try:
-
             # We load the vector basis
             vec_base_file = open(f"m_{m}_n_{num_photons}_vec_base.txt", "r")
 
@@ -103,7 +98,6 @@ def d_phi(base_matrix_m, photons, base_input):
             vec_base_file.close()
 
         except FileNotFoundError:
-
             print("\nThe required vector basis file does not exist.\n")
             print("\nIt will be freshly generated instead.\n")
 
@@ -117,7 +111,6 @@ def d_phi(base_matrix_m, photons, base_input):
             vec_base_file.close()
 
     else:
-
         # We load the combinations with the same amount of photons in order to create the vector basis
         vec_base = photon_combs_generator(m, photons)
 
@@ -139,25 +132,20 @@ def d_phi(base_matrix_m, photons, base_input):
 
 # Specific process of subspace shift. Very similar to iH_U_operator's obtention (see '_2_3rd_evolution_method.py')
 def u_m_to_u_M(m, M, vec_base, base_matrix_m):
-
     # base_matrix_M initialization
     base_matrix_M = np.zeros((M, M), dtype=complex)
     vec_base_canon = np.identity(M, dtype=complex)
 
     for p in range(M):
-
         p_array = np.array(vec_base[p])
 
         p_array_M = np.array(vec_base_canon[p])
 
         for q in range(M):
-
             q_array = np.array(vec_base[q])
 
             for j in range(m):
-
                 for l in range(m):
-
                     # Array subject to the operators
                     q_array_aux = np.array(vec_base[q])
 
@@ -170,9 +158,7 @@ def u_m_to_u_M(m, M, vec_base, base_matrix_m):
                     q_array_aux, mult = a_dagger(j, q_array_aux, mult)
 
                     for k in range(M):
-
                         if (vec_base[k] == q_array_aux).all():
-
                             index = k
 
                             break
@@ -185,7 +171,6 @@ def u_m_to_u_M(m, M, vec_base, base_matrix_m):
 
 
 def matrix_u_basis_generator(m, M, photons, base_input):
-
     # We initialise the basis for each space
     base_U_m = np.identity(m, dtype=complex)
 
@@ -203,13 +188,10 @@ def matrix_u_basis_generator(m, M, photons, base_input):
     cont = 0
 
     for j in range(m):
-
         for k in range(m):
-
             base_u_m_e[m * j + k] = e_jk(j, k, base_U_m)
 
             if k <= j:
-
                 base_u_m[cont] = e_jk(j, k, base_U_m)
                 base_u_M[cont] = d_phi(base_u_m[cont], photons, base_input)
 
@@ -220,13 +202,10 @@ def matrix_u_basis_generator(m, M, photons, base_input):
     separator_e_f = cont
 
     for j in range(m):
-
         for k in range(m):
-
             base_u_m_f[m * j + k] = f_jk(j, k, base_U_m)
 
             if k < j:
-
                 base_u_m[cont] = f_jk(j, k, base_U_m)
 
                 base_u_M[cont] = d_phi(base_u_m[cont], photons, base_input)
@@ -237,7 +216,6 @@ def matrix_u_basis_generator(m, M, photons, base_input):
 
 
 def matrix_u_basis_generator_sparse(m, M, photons, base_input):
-
     # We initialise the basis for each space
     base_U_m = np.identity(m, dtype=complex)
     base_U_M = np.identity(M, dtype=complex)
@@ -250,7 +228,7 @@ def matrix_u_basis_generator_sparse(m, M, photons, base_input):
     cont = 0
     for j in range(m):
         for k in range(m):
-            base_u_m_e[m * j + k].append(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)))
+            base_u_m_e.append(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)))
             if k <= j:
                 base_u_m.append(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)))
                 base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
@@ -306,7 +284,6 @@ def matrix_u_basis_generator_sparse(m, M, photons, base_input):
 
 
 def write_algebra_basis(dim: int, photons: Sequence, base_input: bool) -> None:
-
     num_photons = sum(photons)
 
     folder_path = os.path.join("save_basis", f"m={dim} n={num_photons}")
