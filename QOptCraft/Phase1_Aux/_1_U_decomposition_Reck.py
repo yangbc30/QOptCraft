@@ -20,32 +20,33 @@ limitations under the License."""
 # ----------TIME OF EXECUTION MEASUREMENT:----------
 
 import time
-
-
-# ----------WARNING CONTROL:----------
-
 import warnings
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+# File opening
+from io import open
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
 # Equation system resolution with fsolve
 from scipy.optimize import fsolve
 
+from .Tmn import *
+
+# ----------WARNING CONTROL:----------
+
+
+
+# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+
+
+
 
 # ----------FILE MANAGEMENT:----------
 
-# File opening
-from io import open
 
 
 # ----------OPTIC DEVICES GENERATOR:----------
 
-from .Tmn import *
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

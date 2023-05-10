@@ -19,14 +19,12 @@ limitations under the License."""
 
 # ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
-import numpy as np
-
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import block_diag
-
 import cmath
 
+# NumPy instalation: in the cmd: 'py -m pip install numpy'
+import numpy as np
+# SciPy instalation: in the cmd: 'py -m pip install scipy'
+from scipy.linalg import block_diag
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # 												OPTIC DEVICE FUNCTIONS

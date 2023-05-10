@@ -21,14 +21,11 @@ limitations under the License."""
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
-from numpy.linalg import det, solve
-
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import expm
-
 # SymPy instalation: in the cmd: 'py -m pip install sympy'
 import sympy
+from numpy.linalg import det, solve
+# SciPy instalation: in the cmd: 'py -m pip install scipy'
+from scipy.linalg import expm
 
 # Matrix comparisons by their inner product
 from ..mat_inner_product import comparison

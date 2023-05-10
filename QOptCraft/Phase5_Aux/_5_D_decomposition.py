@@ -19,14 +19,14 @@ limitations under the License."""
 
 # ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
 
+# File opening
+from io import open
+
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
-
 # ----------FILE MANAGEMENT:----------
 
-# File opening
-from io import open
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

@@ -21,15 +21,11 @@ limitations under the License."""
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
-from numpy.lib.scimath import sqrt
-
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import expm
-
 # SymPy instalation: in the cmd: 'py -m pip install sympy'
 import sympy
-
+from numpy.lib.scimath import sqrt
+# SciPy instalation: in the cmd: 'py -m pip install scipy'
+from scipy.linalg import expm
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # 											SCATTERING MATRIX S RECONSTRUCTION

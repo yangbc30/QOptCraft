@@ -24,34 +24,35 @@ limitations under the License."""
 # ----------TIME OF EXECUTION MEASUREMENT:----------
 
 import time
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+# File opening
+from io import open
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import logm, expm
+from scipy.linalg import expm, logm
 
 # Matrix comparisons by their inner product
 from ..mat_inner_product import comparison_noprint
+from ..Phase2_Aux._2_logarithm_algorithms import *
+from ..write_initial_matrix import dft_matrix_auto
+
+# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+
+
+
 
 
 # ----------FILE MANAGEMENT:----------
 
-# File opening
-from io import open
 
 
 # ----------DFT MATRIX GENERATOR:----------
 
-from ..write_initial_matrix import dft_matrix_auto
 
 
 # ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
 
-from ..Phase2_Aux._2_logarithm_algorithms import *
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

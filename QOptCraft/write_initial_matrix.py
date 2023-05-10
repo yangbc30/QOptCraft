@@ -23,10 +23,8 @@ import math
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
 import scipy as sp
-
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # 								CREATION OF MULTIPLE TYPES OF MATRICES (INCLUDING UNITARY AND QFT)

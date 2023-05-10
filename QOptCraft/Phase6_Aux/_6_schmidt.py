@@ -22,10 +22,10 @@ limitations under the License."""
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
+from ._6_basis_manipulations import expand_basis, large_basis
 
 # ----------ALGORITHM 6: AUXILIAR FUNCTIONS:----------
 
-from ._6_basis_manipulations import expand_basis, large_basis
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

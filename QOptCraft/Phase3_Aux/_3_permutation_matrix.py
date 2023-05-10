@@ -22,7 +22,6 @@ limitations under the License."""
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
-
 # ---------------------------------------------------------------------------------------------------------------------------
 # 							PERMUTATION MATRIX ASSOCIATED TO A REARRANGEMENT OF VALUES
 # ---------------------------------------------------------------------------------------------------------------------------

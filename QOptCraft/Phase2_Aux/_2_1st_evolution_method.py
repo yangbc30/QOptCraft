@@ -20,36 +20,37 @@ limitations under the License."""
 # ----------TIME OF EXECUTION MEASUREMENT:----------
 
 import time
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+# File opening
+from io import open
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
 import scipy as sp
+
+from ..photon_comb_basis import photon_comb_index
+from ..recur_factorial import *
+from ._2_creation_and_destruction_operators import a_dagger
+
+# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+
+
 
 
 # ----------FILE MANAGEMENT:----------
 
-# File opening
-from io import open
 
 
 # ----------COMBINATORY:----------
 
-from ..recur_factorial import *
 
 
 # ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
 
-from ._2_creation_and_destruction_operators import a_dagger
 
 
 # ----------PHOTON COMB BASIS:----------
 
-from ..photon_comb_basis import photon_comb_index
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

@@ -20,37 +20,38 @@ limitations under the License."""
 # ----------TIME OF EXECUTION MEASUREMENT:----------
 
 import time
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+# File opening
+from io import open
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
 # from scipy.sparse import csc_matrix
 # from scipy.sparse.linalg import expm
 from scipy.linalg import expm
 
 from ..mat_inner_product import *
+from ..recur_factorial import comb_evol
+from ._2_creation_and_destruction_operators import *
+from ._2_logarithm_algorithms import *
+
+# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+
+
+
 
 
 # ----------FILE MANAGEMENT:----------
 
-# File opening
-from io import open
 
 
 # ----------COMBINATORY:----------
 
-from ..recur_factorial import comb_evol
 
 
 # ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
 
-from ._2_creation_and_destruction_operators import *
 
-from ._2_logarithm_algorithms import *
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

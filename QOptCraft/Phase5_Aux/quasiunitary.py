@@ -21,12 +21,10 @@ limitations under the License."""
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
 from scipy.linalg import block_diag
 
 from ..mat_inner_product import *
-
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # 											QUASIUNITARY MATRIX CONDITION

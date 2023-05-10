@@ -19,13 +19,13 @@ limitations under the License."""
 
 # ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
 
+import sys
+
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy
 
-
 # ----------SYSTEM:----------
 
-import sys
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

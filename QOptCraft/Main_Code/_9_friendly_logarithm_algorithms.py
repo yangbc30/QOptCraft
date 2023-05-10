@@ -24,35 +24,36 @@ limitations under the License."""
 # ----------TIME OF EXECUTION MEASUREMENT:----------
 
 import time
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+# File opening
+from io import open
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
-from numpy.linalg import eig, det, inv
-
+from numpy.linalg import det, eig, inv
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import schur, logm, sqrtm
-
+from scipy.linalg import logm, schur, sqrtm
 from sympy import *
 
+from ..input_control import input_control
 # Matrix comparisons by their inner product
 from ..mat_inner_product import comparison_noprint
+from ..read_matrix import read_matrix_from_txt
+
+# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+
+
+
+
+
 
 
 # ----------FILE MANAGEMENT:----------
 
-# File opening
-from io import open
 
-from ..read_matrix import read_matrix_from_txt
 
 
 # ----------INPUT CONTROL:----------
 
-from ..input_control import input_control
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

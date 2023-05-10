@@ -23,57 +23,58 @@ limitations under the License."""
 
 # ----------TIME OF EXECUTION MEASUREMENT:----------
 
+import sys
 import time
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+# File opening
+from io import open
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
+from ..input_control import input_control, input_control_ints
+from ..Phase2_Aux._2_1st_evolution_method import evolution
+from ..Phase2_Aux._2_2nd_evolution_method import evolution_2, evolution_2_ryser
+from ..Phase2_Aux._2_3rd_evolution_method import evolution_3, iH_U_operator
+from ..Phase2_Aux._2_photon_input import photon_introd
+from ..photon_comb_basis import photon_combs_generator
+from ..read_matrix import read_matrix_from_txt
+from ..recur_factorial import comb_evol
+from ..unitary import *
+
+# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+
+
 
 # ----------FILE MANAGEMENT:----------
 
-# File opening
-from io import open
 
-from ..read_matrix import read_matrix_from_txt
 
 
 # ----------COMBINATORY:----------
 
-from ..recur_factorial import comb_evol
 
 
 # ----------SYSTEM:----------
 
-import sys
 
 
 # ----------UNITARY MATRIX CONDITION----------
 
-from ..unitary import *
 
 
 # ----------INPUT CONTROL:----------
 
-from ..input_control import input_control, input_control_ints
 
 
 # ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
 
-from ..Phase2_Aux._2_photon_input import photon_introd
 
-from ..Phase2_Aux._2_1st_evolution_method import evolution
 
-from ..Phase2_Aux._2_2nd_evolution_method import evolution_2, evolution_2_ryser
 
-from ..Phase2_Aux._2_3rd_evolution_method import evolution_3, iH_U_operator
 
 
 # ----------PHOTON COMB BASIS:----------
 
-from ..photon_comb_basis import photon_combs_generator
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

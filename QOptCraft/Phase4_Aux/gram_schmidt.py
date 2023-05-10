@@ -23,13 +23,11 @@ import math
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
 import scipy as sp
 
 # Matrix comparisons by their inner product
 from ..mat_inner_product import *
-
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # 										GRAM-SCHMIDT ORTOGONALISATION OF A BASIS

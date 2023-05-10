@@ -25,50 +25,51 @@ limitations under the License."""
 # ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
 
 import math
-
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
-import numpy as np
-
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-import scipy as sp
-
-
-# ----------FILE MANAGEMENT:----------
-
 # File opening
 from io import open
 
+# NumPy instalation: in the cmd: 'py -m pip install numpy'
+import numpy as np
+# SciPy instalation: in the cmd: 'py -m pip install scipy'
+import scipy as sp
+
+from ..input_control import (input_control, input_control_floats,
+                             input_control_ints, input_control_intsDim)
+from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import \
+    matrix_u_basis_generator
+from ..photon_comb_basis import photon_combs_generator
 from ..read_matrix import read_matrix_from_txt
+from ..recur_factorial import comb_evol
+from ..write_initial_matrix import *
+from ._2_Get_U_matrix_of_photon_system_evolution import StoU
+
+# ----------FILE MANAGEMENT:----------
+
+
 
 
 # ----------INITIAL MATRIX GENERATOR:----------
 
-from ..write_initial_matrix import *
 
 
 # ----------COMBINATORY:----------
 
-from ..recur_factorial import comb_evol
 
 
 # ----------INPUT CONTROL:----------
 
-from ..input_control import input_control, input_control_ints, input_control_intsDim, input_control_floats
 
 
 # ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
 
-from ._2_Get_U_matrix_of_photon_system_evolution import StoU
 
 
 # ----------PHOTON COMB BASIS:----------
 
-from ..photon_comb_basis import photon_combs_generator
 
 
 # ----------ALGORITHM 3: AUXILIAR FUNCTIONS:----------
 
-from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

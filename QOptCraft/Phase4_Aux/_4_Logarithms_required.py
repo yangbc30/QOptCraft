@@ -21,14 +21,13 @@ limitations under the License."""
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import logm, expm, block_diag
+from scipy.linalg import block_diag, expm, logm
 
+from ..Phase2_Aux._2_logarithm_algorithms import *
 
 # ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
 
-from ..Phase2_Aux._2_logarithm_algorithms import *
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # 										LOGARITHMS REQUIRED FOR TOPONOGOV'S ALGORITHM

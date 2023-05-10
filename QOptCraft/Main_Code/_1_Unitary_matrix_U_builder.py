@@ -24,49 +24,50 @@ limitations under the License."""
 # ----------TIME OF EXECUTION MEASUREMENT:----------
 
 import time
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+# File opening
+from io import open
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
+from ..input_control import input_control, input_control_intsDim
 # Matrix comparisons by their inner product
 from ..mat_inner_product import comparison
+from ..Phase1_Aux._1_U_decomposition import U_decomposition
+from ..Phase1_Aux._1_U_decomposition_Reck import U_decomposition_Reck
+from ..Phase1_Aux._1_U_recomposition import *
+from ..Phase1_Aux._1_U_recomposition_Reck import *
+from ..read_matrix import read_matrix_from_txt
+from ..unitary import *
+from ._7_generators import RandU
+
+# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+
+
 
 
 # ----------FILE MANAGEMENT:----------
 
-# File opening
-from io import open
 
-from ..read_matrix import read_matrix_from_txt
 
 
 # ----------GENERATOR: AUXILIAR FUNCTIONS:----------
 
-from ._7_generators import RandU
 
 
 # ----------INPUT CONTROL:----------
 
-from ..input_control import input_control, input_control_intsDim
 
 
 # ----------ALGORITHM 1: AUXILIAR FUNCTIONS:----------
 
-from ..Phase1_Aux._1_U_decomposition import U_decomposition
 
-from ..Phase1_Aux._1_U_decomposition_Reck import U_decomposition_Reck
 
-from ..Phase1_Aux._1_U_recomposition import *
 
-from ..Phase1_Aux._1_U_recomposition_Reck import *
 
 
 # ----------UNITARY MATRIX CONDITION----------
 
-from ..unitary import *
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

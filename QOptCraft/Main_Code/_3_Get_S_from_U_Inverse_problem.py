@@ -23,57 +23,61 @@ limitations under the License."""
 
 # ----------TIME OF EXECUTION MEASUREMENT:----------
 
+import sys
 import time
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+# File opening
+from io import open
+from itertools import permutations
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
+from ..input_control import (input_control, input_control_ints,
+                             input_control_intsDim)
+from ..Phase3_Aux._3_permutation_matrix import *
+from ..Phase3_Aux._3_S_rebuild import S_output
+from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import (
+    d_phi, e_jk, f_jk, matrix_u_basis_generator)
+from ..Phase3_Aux._3_verification_of_solution_existence import (eq_sys_finder,
+                                                                verification)
+from ..read_matrix import read_matrix_from_txt
+from ..recur_factorial import *
+from ..unitary import *
+
+# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+
+
 
 # ----------FILE MANAGEMENT:----------
 
-# File opening
-from io import open
 
-from ..read_matrix import read_matrix_from_txt
 
 
 # ----------SYSTEM:----------
 
-import sys
 
 
 # ----------COMBINATORY:----------
 
-from ..recur_factorial import *
 
 
 # ----------PERMUTATIONS:----------
 
-from itertools import permutations
 
 
 # ----------UNITARY MATRIX CONDITION----------
 
-from ..unitary import *
 
 
 # ----------INPUT CONTROL:----------
 
-from ..input_control import input_control, input_control_ints, input_control_intsDim
 
 
 # ----------ALGORITHM 3: AUXILIAR FUNCTIONS:----------
 
-from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import e_jk, f_jk, d_phi, matrix_u_basis_generator
 
-from ..Phase3_Aux._3_verification_of_solution_existence import eq_sys_finder, verification
 
-from ..Phase3_Aux._3_S_rebuild import S_output
 
-from ..Phase3_Aux._3_permutation_matrix import *
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

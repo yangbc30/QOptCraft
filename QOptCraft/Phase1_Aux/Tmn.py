@@ -19,11 +19,10 @@ limitations under the License."""
 
 # ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
-import numpy as np
-
 import cmath
 
+# NumPy instalation: in the cmd: 'py -m pip install numpy'
+import numpy as np
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # 												OPTIC DEVICE FUNCTIONS

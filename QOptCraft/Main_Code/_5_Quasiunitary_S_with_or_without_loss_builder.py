@@ -24,56 +24,58 @@ limitations under the License."""
 # ----------TIME OF EXECUTION MEASUREMENT:----------
 
 import time
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+# File opening
+from io import open
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
+from ..input_control import (decimal_precision, input_control,
+                             input_control_ints)
+from ..Phase1_Aux._1_U_decomposition import U_decomposition
+from ..Phase1_Aux._1_U_recomposition import *
+from ..Phase5_Aux._5_D_decomposition import *
+from ..Phase5_Aux._5_matrix_padding_functions import *
+from ..Phase5_Aux._5_S_with_loss_creation import *
+from ..Phase5_Aux.quasiunitary import *
+from ..read_matrix import read_matrix_from_txt
+from ..unitary import *
+from ._7_generators import RandM
+
+# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+
+
 
 # ----------FILE MANAGEMENT:----------
 
-# File opening
-from io import open
 
-from ..read_matrix import read_matrix_from_txt
 
 
 # ----------GENERATOR: AUXILIAR FUNCTIONS:----------
 
-from ._7_generators import RandM
 
 
 # ----------INPUT CONTROL:----------
 
-from ..input_control import decimal_precision, input_control, input_control_ints
 
 
 # ----------ALGORITHM 1: AUXILIAR FUNCTIONS:----------
 
-from ..Phase1_Aux._1_U_decomposition import U_decomposition
 
-from ..Phase1_Aux._1_U_recomposition import *
 
 
 # ----------ALGORITHM 5: AUXILIAR FUNCTIONS:----------
 
-from ..Phase5_Aux._5_D_decomposition import *
 
-from ..Phase5_Aux._5_S_with_loss_creation import *
 
-from ..Phase5_Aux._5_matrix_padding_functions import *
 
 
 # ----------UNITARY MATRIX CONDITION----------
 
-from ..unitary import *
 
 
 # ----------QUASIUNITARY MATRIX CONDITION----------
 
-from ..Phase5_Aux.quasiunitary import *
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

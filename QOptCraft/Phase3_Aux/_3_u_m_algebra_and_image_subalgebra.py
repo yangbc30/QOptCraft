@@ -19,43 +19,43 @@ limitations under the License."""
 
 # ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
 
+import os
+import pickle
+import sys
+# File opening
+from io import open
+from typing import Sequence
+
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
+import scipy as sp
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
 from scipy.linalg import expm
 
+from ..Phase2_Aux._2_creation_and_destruction_operators import *
+from ..photon_comb_basis import photon_combs_generator
+from ..recur_factorial import comb_evol
 
 # ----------FILE MANAGEMENT:----------
 
-# File opening
-from io import open
 
 
 # ----------SYSTEM:----------
 
-import sys
 
 
 # ----------COMBINATORY:----------
 
-from ..recur_factorial import comb_evol
 
 
 # ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
 
-from ..Phase2_Aux._2_creation_and_destruction_operators import *
 
 
 # ----------PHOTON COMB BASIS:----------
 
-from ..photon_comb_basis import photon_combs_generator
 
-import scipy as sp
 
-import pickle
-from typing import Sequence
-import os
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # 									MATRIX BASIS COMPUTATION IN SUBSPACES u(m) AND u(M)

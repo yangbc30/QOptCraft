@@ -21,17 +21,18 @@ limitations under the License."""
 
 import time
 
+import numba
+# NumPy instalation: in the cmd: 'py -m pip install numpy'
+import numpy as np
+
+from ..recur_factorial import fact_array
 
 # ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
-import numpy as np
-import numba
 
 
 # ----------COMBINATORY:----------
 
-from ..recur_factorial import fact_array
 
 
 # ----------PERMUTATIONS:----------

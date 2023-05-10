@@ -23,76 +23,76 @@ limitations under the License."""
 
 # ----------COMBINATORY:----------
 
+from ..input_control import (input_control, input_control_floats,
+                             input_control_ints, input_control_intsDim)
+from ..Phase6_Aux._6_basis_manipulations import *
+from ..Phase6_Aux._6_schmidt import *
+from ..photon_comb_basis import subspace_basis
 from ..recur_factorial import comb_evol
-
+from ..write_initial_matrix import *
+from ._1_Unitary_matrix_U_builder import Selements
+from ._2_aux_a_computation_time_evolutions_comparison import StoUEvolComp
+from ._2_aux_b_logarithm_algorithms_equalities import MatLogCompV
+from ._2_aux_c_logarithm_algorithms_timesanderror import MatLogCompTnE
+from ._2_Get_U_matrix_of_photon_system_evolution import *
+from ._3_Get_S_from_U_Inverse_problem import SfromU
+from ._4_toponogov_theorem_for_uncraftable_matrices_U import Toponogov
+from ._5_Quasiunitary_S_with_or_without_loss_builder import QuasiU
+from ._6_schmidt_entanglement_measurement_of_states import StateSchmidt
+from ._7_generators import *
+from ._9_friendly_logarithm_algorithms import *
 
 # ----------INPUT CONTROL:----------
 
-from ..input_control import input_control, input_control_ints, input_control_intsDim, input_control_floats
 
 
 # ----------INITIAL MATRIX GENERATOR:----------
 
-from ..write_initial_matrix import *
 
 
 # ----------ALGORITHM 1: AUXILIAR FUNCTIONS:----------
 
-from ._1_Unitary_matrix_U_builder import Selements
 
 
 # ----------ALGORITHM 5: AUXILIAR FUNCTIONS:----------
 
-from ._5_Quasiunitary_S_with_or_without_loss_builder import QuasiU
 
 
 # ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
 
-from ._2_Get_U_matrix_of_photon_system_evolution import *
 
 
 # ----------ALGORITHM 9: AUXILIAR FUNCTIONS:----------
 
-from ._9_friendly_logarithm_algorithms import *
 
 
 # ----------ALGORITHM 2_aux_a: AUXILIAR FUNCTIONS:----------
 
-from ._2_aux_a_computation_time_evolutions_comparison import StoUEvolComp
 
 
 # ----------ALGORITHM 2_aux_b: AUXILIAR FUNCTIONS:----------
 
-from ._2_aux_b_logarithm_algorithms_equalities import MatLogCompV
 
-from ._2_aux_c_logarithm_algorithms_timesanderror import MatLogCompTnE
 
 
 # ----------ALGORITHM 3: AUXILIAR FUNCTIONS:----------
 
-from ._3_Get_S_from_U_Inverse_problem import SfromU
 
 
 # ----------ALGORITHM 4: AUXILIAR FUNCTIONS:----------
 
-from ._4_toponogov_theorem_for_uncraftable_matrices_U import Toponogov
 
 
 # ----------ALGORITHM 6: AUXILIAR FUNCTIONS:----------
 
-from ._6_schmidt_entanglement_measurement_of_states import StateSchmidt
 
-from ..Phase6_Aux._6_basis_manipulations import *
 
-from ..Phase6_Aux._6_schmidt import *
 
 # ----------ALGORITHM 7: AUXILIAR FUNCTIONS:----------
 
-from ._7_generators import *
 
 # ----------PHOTON BASIS FUNCTIONS:----------
 
-from ..photon_comb_basis import subspace_basis
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # 														MAIN CODE

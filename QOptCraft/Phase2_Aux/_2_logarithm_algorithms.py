@@ -21,21 +21,22 @@ limitations under the License."""
 
 import time
 
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
-from numpy.linalg import eig, det, inv
-
+from numpy.linalg import det, eig, inv
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import schur, logm, sqrtm
-
+from scipy.linalg import logm, schur, sqrtm
 from sympy import *
 
 # Matrix comparisons by their inner product
 from ..mat_inner_product import comparison_noprint
+
+# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
+
+
+
+
+
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
