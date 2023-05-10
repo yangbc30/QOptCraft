@@ -12,24 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-# SymPy instalation: in the cmd: 'py -m pip install sympy'
-import sympy
 from numpy.lib.scimath import sqrt
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import expm
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 											SCATTERING MATRIX S RECONSTRUCTION
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 # Adjoint representation for a S matrix

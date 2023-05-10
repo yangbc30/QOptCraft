@@ -16,18 +16,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
 import time
-# File opening
 from io import open
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
 from ..input_control import (decimal_precision, input_control,
@@ -41,46 +32,6 @@ from ..Phase5_Aux.quasiunitary import *
 from ..read_matrix import read_matrix_from_txt
 from ..unitary import *
 from ._7_generators import RandM
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-
-# ----------GENERATOR: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------INPUT CONTROL:----------
-
-
-
-# ----------ALGORITHM 1: AUXILIAR FUNCTIONS:----------
-
-
-
-
-# ----------ALGORITHM 5: AUXILIAR FUNCTIONS:----------
-
-
-
-
-
-# ----------UNITARY MATRIX CONDITION----------
-
-
-
-# ----------QUASIUNITARY MATRIX CONDITION----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 														MAIN CODE
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def QuasiU(

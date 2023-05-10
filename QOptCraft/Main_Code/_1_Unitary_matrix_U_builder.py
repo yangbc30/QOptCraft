@@ -16,18 +16,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
 import time
-# File opening
-from io import open
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
 from ..input_control import input_control, input_control_intsDim
@@ -40,39 +30,6 @@ from ..Phase1_Aux._1_U_recomposition_Reck import *
 from ..read_matrix import read_matrix_from_txt
 from ..unitary import *
 from ._7_generators import RandU
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-
-# ----------GENERATOR: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------INPUT CONTROL:----------
-
-
-
-# ----------ALGORITHM 1: AUXILIAR FUNCTIONS:----------
-
-
-
-
-
-
-# ----------UNITARY MATRIX CONDITION----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 														MAIN CODE
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def Selements(

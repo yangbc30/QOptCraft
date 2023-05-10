@@ -16,98 +16,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
-import sys
 import time
-# File opening
 from io import open
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import block_diag, expm, logm
 
-from ..input_control import (input_control, input_control_ints,
-                             input_control_intsDim)
+from ..input_control import input_control
 # Matrix comparisons by their inner product
 from ..mat_inner_product import *
-from ..Phase2_Aux._2_3rd_evolution_method import evolution_3
-from ..Phase2_Aux._2_photon_input import photon_introd
-from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import \
-    matrix_u_basis_generator
-# Adjoint representation
-from ..Phase3_Aux._3_verification_of_solution_existence import adjoint_U
 # Required logarithms
 from ..Phase4_Aux._4_Logarithms_required import *
 from ..Phase4_Aux.gram_schmidt import *
-from ..Phase6_Aux._6_basis_manipulations import (leading_terms,
+from ..Phase6_Aux._6_basis_manipulations import (
                                                  state_leading_fidelity,
                                                  state_leading_terms)
 from ..Phase6_Aux._6_schmidt import schmidt_rank_vector
 from ..photon_comb_basis import photon_combs_generator, state_in_basis
 from ..read_matrix import read_matrix_from_txt, read_matrix_from_txt_general
 from ..recur_factorial import *
-from ..write_initial_matrix import haar_measure
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-
-
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-
-# ----------SYSTEM:----------
-
-
-
-# ----------INITIAL MATRIX GENERATOR:----------
-
-
-
-# ----------COMBINATORY:----------
-
-
-
-# ----------INPUT CONTROL:----------
-
-
-
-# ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
-
-
-
-
-# ----------PHOTON COMB BASIS:----------
-
-
-
-# ----------ALGORITHM 3: AUXILIAR FUNCTIONS:----------
-
-
-
-
-# ----------ALGORITHM 4: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------ALGORITHM 6: AUXILIAR FUNCTIONS:----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 														MAIN CODE
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def StateSchmidt(

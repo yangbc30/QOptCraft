@@ -12,23 +12,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
 import cmath
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
 from scipy.linalg import block_diag
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 												OPTIC DEVICE FUNCTIONS
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def split(phi, N, m, n):

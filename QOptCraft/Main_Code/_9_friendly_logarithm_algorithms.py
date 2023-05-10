@@ -16,49 +16,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
 import time
 # File opening
 from io import open
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-from numpy.linalg import det, eig, inv
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
+from numpy.linalg import inv
 from scipy.linalg import logm, schur, sqrtm
 from sympy import *
 
 from ..input_control import input_control
 # Matrix comparisons by their inner product
-from ..mat_inner_product import comparison_noprint
 from ..read_matrix import read_matrix_from_txt
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-
-
-
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-
-# ----------INPUT CONTROL:----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 														MAIN CODE
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):

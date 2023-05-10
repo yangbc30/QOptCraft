@@ -12,26 +12,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-import math
-
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-import scipy as sp
 
-# Matrix comparisons by their inner product
 from ..mat_inner_product import *
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 										GRAM-SCHMIDT ORTOGONALISATION OF A BASIS
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def gram_schmidt_2dmatrices(basis):

@@ -16,65 +16,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
 import math
-# File opening
 from io import open
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-import scipy as sp
 
-from ..input_control import (input_control, input_control_floats,
+from ..input_control import (
                              input_control_ints, input_control_intsDim)
 from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import \
     matrix_u_basis_generator
 from ..photon_comb_basis import photon_combs_generator
-from ..read_matrix import read_matrix_from_txt
 from ..recur_factorial import comb_evol
 from ..write_initial_matrix import *
 from ._2_Get_U_matrix_of_photon_system_evolution import StoU
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-
-# ----------INITIAL MATRIX GENERATOR:----------
-
-
-
-# ----------COMBINATORY:----------
-
-
-
-# ----------INPUT CONTROL:----------
-
-
-
-# ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------PHOTON COMB BASIS:----------
-
-
-
-# ----------ALGORITHM 3: AUXILIAR FUNCTIONS:----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 														MAIN CODE
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 # Creates Fock states basis of n photons for m modes

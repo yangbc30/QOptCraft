@@ -12,28 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-# File opening
-from io import open
-
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
 import scipy as sp
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 										MATRIX S WITH LOSS CREATOR FUNCTIONS
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 # S_U and S_W matrices creation: we obtain four submatrices, then place them in diagonal

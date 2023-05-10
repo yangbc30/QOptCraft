@@ -12,26 +12,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-# File opening
 from io import open
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 											DECOMPOSITION OF MATRIX D FUNCTIONS
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def D_decomposition(M, maxDim, filename, file_output, txt=False):

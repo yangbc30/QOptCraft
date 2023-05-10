@@ -12,23 +12,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import block_diag
 
 from .mat_inner_product import *
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 												UNITARY MATRIX CONDITION
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 # By undoing the commentary of line 37, the result of computing Uconj_per_U+ is printed onscreen

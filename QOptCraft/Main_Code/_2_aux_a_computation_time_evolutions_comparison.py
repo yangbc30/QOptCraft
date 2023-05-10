@@ -16,17 +16,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
 import math
 import time
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 import xlsxwriter
 
@@ -37,41 +29,6 @@ from ..Phase2_Aux._2_3rd_evolution_method import evolution_3
 from ..photon_comb_basis import photon_combs_generator
 from ..recur_factorial import comb_evol
 from ..write_initial_matrix import haar_measure
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-
-# ----------COMBINATORY:----------
-
-
-
-# ----------INPUT CONTROL:----------
-
-
-
-# ----------UNITARY MATRIX CONDITION----------
-
-
-
-# ----------MICROSOFT EXCEL INTEGRATION----------
-
-
-
-# ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
-
-
-
-
-
-# ----------PHOTON COMB BASIS:----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 														MAIN CODE
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def StoUEvolComp(

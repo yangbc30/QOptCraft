@@ -12,36 +12,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
 import time
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-from numpy.linalg import det, eig, inv
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
+from numpy.linalg import inv
 from scipy.linalg import logm, schur, sqrtm
 from sympy import *
-
-# Matrix comparisons by their inner product
-from ..mat_inner_product import comparison_noprint
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 											LOGARITHM OF A MATRIX FUNCTIONS
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def logm_1(A):

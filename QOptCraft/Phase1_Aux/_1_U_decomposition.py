@@ -12,46 +12,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
-import time
 import warnings
-# File opening
 from io import open
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-# Equation system resolution with fsolve
 from scipy.optimize import fsolve
 
 from .Tmn import *
-
-# ----------WARNING CONTROL:----------
-
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-# ----------OPTIC DEVICES GENERATOR:----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 											DECOMPOSITION OF MATRIX U FUNCTIONS
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 # The functions evenFunction(z) and oddFunction(z) find the required values of theta and phi

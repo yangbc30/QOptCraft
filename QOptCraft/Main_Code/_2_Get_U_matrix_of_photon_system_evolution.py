@@ -16,14 +16,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
-import sys
 import time
 # File opening
 from io import open
@@ -40,46 +32,6 @@ from ..photon_comb_basis import photon_combs_generator
 from ..read_matrix import read_matrix_from_txt
 from ..recur_factorial import comb_evol
 from ..unitary import *
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-
-# ----------COMBINATORY:----------
-
-
-
-# ----------SYSTEM:----------
-
-
-
-# ----------UNITARY MATRIX CONDITION----------
-
-
-
-# ----------INPUT CONTROL:----------
-
-
-
-# ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
-
-
-
-
-
-
-# ----------PHOTON COMB BASIS:----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 														MAIN CODE
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def iHStoiHU(

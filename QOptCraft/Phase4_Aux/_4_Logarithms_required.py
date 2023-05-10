@@ -12,26 +12,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import block_diag, expm, logm
+from scipy.linalg import logm
 
 from ..Phase2_Aux._2_logarithm_algorithms import *
-
-# ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 										LOGARITHMS REQUIRED FOR TOPONOGOV'S ALGORITHM
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 # Schur's third logarithm implementation.

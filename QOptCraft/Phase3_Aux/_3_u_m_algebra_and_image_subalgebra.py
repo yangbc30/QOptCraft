@@ -12,54 +12,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
 import os
 import pickle
-import sys
-# File opening
 from io import open
 from typing import Sequence
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 import scipy as sp
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-from scipy.linalg import expm
 
 from ..Phase2_Aux._2_creation_and_destruction_operators import *
 from ..photon_comb_basis import photon_combs_generator
 from ..recur_factorial import comb_evol
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-# ----------SYSTEM:----------
-
-
-
-# ----------COMBINATORY:----------
-
-
-
-# ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------PHOTON COMB BASIS:----------
-
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 									MATRIX BASIS COMPUTATION IN SUBSPACES u(m) AND u(M)
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 # The functions e_jk y f_jk allow to obtain the matrix basis of u(m)

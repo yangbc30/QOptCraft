@@ -12,23 +12,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
 import math
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
 import scipy as sp
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 								CREATION OF MULTIPLE TYPES OF MATRICES (INCLUDING UNITARY AND QFT)
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def haar_measure(N):

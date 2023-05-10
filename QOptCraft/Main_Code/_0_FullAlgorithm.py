@@ -16,13 +16,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------COMBINATORY:----------
-
 from ..input_control import (input_control, input_control_floats,
                              input_control_ints, input_control_intsDim)
 from ..Phase6_Aux._6_basis_manipulations import *
@@ -41,62 +34,6 @@ from ._5_Quasiunitary_S_with_or_without_loss_builder import QuasiU
 from ._6_schmidt_entanglement_measurement_of_states import StateSchmidt
 from ._7_generators import *
 from ._9_friendly_logarithm_algorithms import *
-
-# ----------INPUT CONTROL:----------
-
-
-
-# ----------INITIAL MATRIX GENERATOR:----------
-
-
-
-# ----------ALGORITHM 1: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------ALGORITHM 5: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------ALGORITHM 9: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------ALGORITHM 2_aux_a: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------ALGORITHM 2_aux_b: AUXILIAR FUNCTIONS:----------
-
-
-
-
-# ----------ALGORITHM 3: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------ALGORITHM 4: AUXILIAR FUNCTIONS:----------
-
-
-
-# ----------ALGORITHM 6: AUXILIAR FUNCTIONS:----------
-
-
-
-
-# ----------ALGORITHM 7: AUXILIAR FUNCTIONS:----------
-
-
-# ----------PHOTON BASIS FUNCTIONS:----------
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 														MAIN CODE
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 # A function designed for testing QOptCraft's algorithms.

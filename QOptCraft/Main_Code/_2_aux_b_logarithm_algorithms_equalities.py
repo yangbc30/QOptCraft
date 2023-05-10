@@ -16,48 +16,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
 import time
-# File opening
 from io import open
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
-import numpy as np
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
 from scipy.linalg import expm, logm
 
 # Matrix comparisons by their inner product
 from ..mat_inner_product import comparison_noprint
 from ..Phase2_Aux._2_logarithm_algorithms import *
 from ..write_initial_matrix import dft_matrix_auto
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-# ----------DFT MATRIX GENERATOR:----------
-
-
-
-# ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 														MAIN CODE
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def MatLogCompV(N1=False, N2=False, txt=False, exp=False):

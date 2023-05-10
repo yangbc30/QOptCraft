@@ -12,19 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 										MATRIX (AND THEIR LISTS) PADDING FUNCTIONS
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 # Extends the size of an square matrix to the maximum dimension maxDim given

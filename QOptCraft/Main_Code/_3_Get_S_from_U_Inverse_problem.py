@@ -16,14 +16,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
-import sys
 import time
 # File opening
 from io import open
@@ -43,46 +35,6 @@ from ..Phase3_Aux._3_verification_of_solution_existence import (eq_sys_finder,
 from ..read_matrix import read_matrix_from_txt
 from ..recur_factorial import *
 from ..unitary import *
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-
-# ----------SYSTEM:----------
-
-
-
-# ----------COMBINATORY:----------
-
-
-
-# ----------PERMUTATIONS:----------
-
-
-
-# ----------UNITARY MATRIX CONDITION----------
-
-
-
-# ----------INPUT CONTROL:----------
-
-
-
-# ----------ALGORITHM 3: AUXILIAR FUNCTIONS:----------
-
-
-
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 														MAIN CODE
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def SfromU(

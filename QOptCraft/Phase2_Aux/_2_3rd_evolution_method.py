@@ -12,51 +12,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
 import time
-# File opening
 from io import open
 
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-# SciPy instalation: in the cmd: 'py -m pip install scipy'
-# from scipy.sparse import csc_matrix
-# from scipy.sparse.linalg import expm
 from scipy.linalg import expm
 
 from ..mat_inner_product import *
 from ..recur_factorial import comb_evol
 from ._2_creation_and_destruction_operators import *
 from ._2_logarithm_algorithms import *
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-# ----------COMBINATORY:----------
-
-
-
-# ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
-
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 										N-PHOTON OPTICAL SYSTEM EVOLUTION: THIRD METHOD
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 # Here, we will perform the third evolution of the system method's operations. Main function to inherit in other algorithms

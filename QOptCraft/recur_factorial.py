@@ -12,19 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 											FACTORIAL COMPUTATION FUNCTIONS
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 # Factorial of a natural number computation

@@ -16,16 +16,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------TIME OF EXECUTION MEASUREMENT:----------
-
 import time
-# File opening
-from io import open
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
@@ -37,36 +28,6 @@ from scipy.linalg import expm, logm
 from ..mat_inner_product import comparison_noprint, mat_module
 from ..Phase2_Aux._2_logarithm_algorithms import *
 from ..write_initial_matrix import dft_matrix_auto, haar_measure
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-
-
-
-
-# ----------FILE MANAGEMENT:----------
-
-
-
-# ----------INITIAL MATRIX GENERATOR:----------
-
-
-
-# ----------MICROSOFT EXCEL INTEGRATION----------
-
-
-
-# ----------DFT MATRIX GENERATOR:----------
-
-
-
-# ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-# 														MAIN CODE
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):

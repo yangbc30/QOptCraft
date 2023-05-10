@@ -12,25 +12,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-# ---------------------------------------------------------------------------------------------------------------------------
-#                                                   LIBRARIES REQUIRED
-# ---------------------------------------------------------------------------------------------------------------------------
-
-
-# ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
-
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
 from ._6_basis_manipulations import expand_basis, large_basis
-
-# ----------ALGORITHM 6: AUXILIAR FUNCTIONS:----------
-
-
-
-# ---------------------------------------------------------------------------------------------------------------------------
-#                                           SCHMIDT RANK FUNCTION
-# ---------------------------------------------------------------------------------------------------------------------------
 
 
 def schmidt_rank(state, subsystem1_basis, subsystem2_basis):
