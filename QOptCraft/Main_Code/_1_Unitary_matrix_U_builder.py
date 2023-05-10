@@ -21,6 +21,7 @@ import time
 import numpy as np
 
 from ..input_control import input_control, input_control_intsDim
+
 # Matrix comparisons by their inner product
 from ..mat_inner_product import comparison
 from ..Phase1_Aux._1_U_decomposition import U_decomposition

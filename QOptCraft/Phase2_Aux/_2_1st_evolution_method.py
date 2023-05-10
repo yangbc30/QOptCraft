@@ -20,7 +20,9 @@ import scipy as sp
 from ..photon_comb_basis import photon_comb_index
 from ..recur_factorial import *
 from ._2_creation_and_destruction_operators import a_dagger
+
 s
+
 
 # Here, we will perform the first evolution of the system method's operations. Main function to inherit in other algorithms
 def evolution(S, photons, vec_base_aux):

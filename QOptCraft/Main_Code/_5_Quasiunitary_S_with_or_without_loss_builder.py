@@ -21,8 +21,7 @@ from io import open
 
 import numpy as np
 
-from ..input_control import (decimal_precision, input_control,
-                             input_control_ints)
+from ..input_control import decimal_precision, input_control, input_control_ints
 from ..Phase1_Aux._1_U_decomposition import U_decomposition
 from ..Phase1_Aux._1_U_recomposition import *
 from ..Phase5_Aux._5_D_decomposition import *

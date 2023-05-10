@@ -22,7 +22,9 @@ for extra in range(0, 10):
         dim = len(basis)
 
         #   base_u_M=np.zeros((m*m, dim, dim), dtype=complex)
-        base_u_m, base_u_M, base_u_m_e, base_u_m_f, separator_e_f, base_U_m, base_U_M = matrix_u_basis_generator_sparse(m, dim, [n] + [0] * (m - 1), False)
+        base_u_m, base_u_M, base_u_m_e, base_u_m_f, separator_e_f, base_U_m, base_U_M = matrix_u_basis_generator_sparse(
+            m, dim, [n] + [0] * (m - 1), False
+        )
         # base_u_M = base_u_M[: m * m]
 
         # base_u_M = gram_schmidt_2dmatrices(base_u_M)

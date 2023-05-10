@@ -16,8 +16,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-from ..input_control import (input_control, input_control_floats,
-                             input_control_ints, input_control_intsDim)
+from ..input_control import input_control, input_control_floats, input_control_ints, input_control_intsDim
 from ..Phase6_Aux._6_basis_manipulations import *
 from ..Phase6_Aux._6_schmidt import *
 from ..photon_comb_basis import subspace_basis

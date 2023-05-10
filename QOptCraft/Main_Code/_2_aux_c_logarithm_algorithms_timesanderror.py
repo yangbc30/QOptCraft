@@ -21,6 +21,7 @@ import time
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 import xlsxwriter
+
 # SciPy instalation: in the cmd: 'py -m pip install scipy'
 from scipy.linalg import expm, logm
 

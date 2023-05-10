@@ -15,8 +15,7 @@ limitations under the License."""
 from ._3_permutation_matrix import *
 from ._3_S_rebuild import *
 from ._3_u_m_algebra_and_image_subalgebra import *
-from ._3_u_m_algebra_and_image_subalgebra import (
-    matrix_u_basis_generator, matrix_u_basis_generator_sparse)
+from ._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator, matrix_u_basis_generator_sparse
 from ._3_verification_of_solution_existence import *
 
 __all__ = [s for s in dir()]

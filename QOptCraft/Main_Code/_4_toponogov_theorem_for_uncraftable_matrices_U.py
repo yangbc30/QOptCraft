@@ -22,13 +22,13 @@ from io import open
 import numpy as np
 from scipy.linalg import expm
 
-from ..input_control import (input_control, input_control_ints,
-                             input_control_intsDim)
+from ..input_control import input_control, input_control_ints, input_control_intsDim
+
 # Matrix comparisons by their inner product
 from ..mat_inner_product import *
 from ..Phase2_Aux._2_3rd_evolution_method import evolution_3
-from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import \
-    matrix_u_basis_generator
+from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
+
 # Adjoint representation
 # Required logarithms
 from ..Phase4_Aux._4_Logarithms_required import *

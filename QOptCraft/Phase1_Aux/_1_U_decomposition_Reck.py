@@ -20,7 +20,6 @@ from scipy.optimize import fsolve
 
 from .Tmn import *
 
-
 # The functions evenFunction(z) and oddFunction(z) find the required values of theta and phi
 # for each decomposition, by using two conditions: the real and imaginary values
 

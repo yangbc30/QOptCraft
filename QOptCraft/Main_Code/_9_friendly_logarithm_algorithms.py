@@ -17,6 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 import time
+
 # File opening
 from io import open
 
@@ -26,6 +27,7 @@ from scipy.linalg import logm, schur, sqrtm
 from sympy import *
 
 from ..input_control import input_control
+
 # Matrix comparisons by their inner product
 from ..read_matrix import read_matrix_from_txt
 
