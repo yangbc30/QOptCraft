@@ -87,7 +87,7 @@ def evolution_loop(S, photons, num_photons, m, sum_, k):
             # number of times corresponding to the amount of photons in each
             for p in range(m):
                 # An S_ji·a+_j is added to the total sum, corresponding to this vector of the basis
-                for q in range(counter[p]):
+                for _q in range(counter[p]):
                     mult *= S[sum_[cont], p]
 
                     photons_aux, mult = a_dagger(sum_[cont], photons_aux, mult)

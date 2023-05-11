@@ -26,5 +26,5 @@ from QOptCraft.read_matrix import *
 from QOptCraft.recur_factorial import *
 from QOptCraft.unitary import *
 from QOptCraft.write_initial_matrix import *
-
+from .state import State, PureState, MixedState
 from ._version import __version__

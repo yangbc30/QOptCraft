@@ -19,7 +19,6 @@ limitations under the License."""
 import time
 
 # File opening
-from io import open
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
@@ -28,7 +27,6 @@ from ..input_control import input_control, input_control_ints
 from ..Phase2_Aux._2_1st_evolution_method import evolution
 from ..Phase2_Aux._2_2nd_evolution_method import evolution_2, evolution_2_ryser
 from ..Phase2_Aux._2_3rd_evolution_method import evolution_3, iH_U_operator
-from ..Phase2_Aux._2_photon_input import photon_introd
 from ..photon_comb_basis import photon_combs_generator
 from ..read_matrix import read_matrix_from_txt
 from ..recur_factorial import comb_evol
@@ -51,12 +49,12 @@ def iHStoiHU(
     # ----------iH_S MATRIX OF THE SYSTEM INPUT:----------
 
     # Load S matrix
-    if file_input == True:
+    if file_input is True:
         iH_S = read_matrix_from_txt(filename)
 
     m = len(iH_S[:, 0])
 
-    if txt == True:
+    if txt is True:
         print("\niH_S MATRIX OF THE SYSTEM INPUT:\n")
 
         print("\nInput matrix iH_S:\n")
@@ -79,7 +77,7 @@ def iHStoiHU(
     else:
         vec_base = photon_combs_generator(m, photons)
 
-    if file_output == True:
+    if file_output is True:
         # We save the vector basis
         vec_base_file = open(f"m_{m}_n_{n}_vec_base.txt", "w")
 
@@ -119,7 +117,7 @@ def StoU(
     Information is displayed on-screen.
     """
 
-    if txt == True:
+    if txt is True:
         print("\n\n================================================================")
         print("||| EVOLUTION OF A PHOTON SYSTEM GIVEN A SCATTERING MATRIX S |||")
         print("================================================================\n\n")
@@ -128,7 +126,7 @@ def StoU(
     file_input, filename, newfile, acc_d = input_control(2, file_input, S, file_output, filename, True, acc_d)
 
     if type(method) is not int:
-        print(f"\nWARNING: invalid method input (needs to be int).")
+        print("\nWARNING: invalid method input (needs to be int).")
 
         while True:
             try:
@@ -149,12 +147,12 @@ def StoU(
     # ----------S MATRIX OF THE SYSTEM INPUT:----------
 
     # Load S matrix
-    if file_input == True:
+    if file_input is True:
         S = read_matrix_from_txt(filename)
 
     m = len(S[:, 0])
 
-    if txt == True:
+    if txt is True:
         print("\nS MATRIX OF THE SYSTEM INPUT:\n")
 
         print("\nInput matrix S:\n")
@@ -171,7 +169,7 @@ def StoU(
 
         # In case S is not unitary, the user is advised of the possible lack of value in the results
         # (see also last section: VERIFICATION OF THE PROGRAM'S SUCCESS)
-        if cond == False:
+        if cond is False:
             print("\nResults will be computed, albeit S (" + filename + ") is not unitary.\n")
 
     # ----------NUMBER OF PHOTONS INPUT---------
@@ -188,7 +186,7 @@ def StoU(
     else:
         vec_base = photon_combs_generator(m, photons)
 
-    if file_output == True:
+    if file_output is True:
         # We save the vector basis
         vec_base_file = open(f"m_{m}_n_{n}_vec_base.txt", "w")
 
@@ -198,7 +196,7 @@ def StoU(
 
     # ----------COMPUTATION BY THE CHOSEN METHOD:----------
 
-    if txt == True:
+    if txt is True:
         print("\n\nPhase2: beginning of the computation...")
 
     # Beginning of time measurement
@@ -237,7 +235,7 @@ def StoU(
 
     # ----------STORAGE OF THE U EVOLUTION MATRIX COEFICIENTS AND PROBABILITIES:----------
 
-    if file_output == True:
+    if file_output is True:
         # Storage in text of the resulting matrix U
         coefs_file = open(filename + f"_m_{m}_n_{n}_coefs_method_{method}.txt", "w")
 
@@ -252,14 +250,14 @@ def StoU(
 
     # We have supposedly found a solution, whose validity is subject to the next loop
 
-    if txt == True:
+    if txt is True:
         # ----------UNITARY CHECK FOR MATRIX U:----------
 
         print("\n\n\n\n\nUNITARY CHECK FOR MATRIX U:\n")
 
         cond = unitary(U, len(U), "U", acc_d)
 
-        if cond == False:
+        if cond is False:
             print("\nS (" + filename + ")'s corresponding evolution U is not unitary.\n")
 
         else:
@@ -278,29 +276,29 @@ def StoU(
 
             break
 
-    if sol == True:
-        if txt == True:
+    if sol is True:
+        if txt is True:
             print("\n\nProgram successfully executed.\n")
 
             print("\nOutput evolution matrix:")
             print(np.round(U, acc_d))
 
-        if file_output == True:
-            probs_file.write(f"\nFor all columns, the sum of probabilities is practically equal to 1.0. ")
+        if file_output is True:
+            probs_file.write("\nFor all columns, the sum of probabilities is practically equal to 1.0. ")
 
     else:
-        if txt == True:
+        if txt is True:
             print(
                 "\nThere are discrepances in the sum of probabilities for at least one column. Was the input matrix really unitary?\n"
             )
 
-        if file_output == True:
+        if file_output is True:
             # Warning of the program's failure
             probs_file.write(
                 "\nThe sum of probabilities is not equal to 1.0 for at least one of the columns of U.\nThere has been a problem with the input.\n"
             )
 
-    if file_output == True:
+    if file_output is True:
         coefs_file.close()
 
         probs_file.close()

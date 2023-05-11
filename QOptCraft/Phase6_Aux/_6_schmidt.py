@@ -46,7 +46,7 @@ def schmidt_rank_vector(state, basis, mvec):
     Ns = len(mvec)  # number of subsystems
 
     rank_vector = np.zeros(Ns)
-    modes_in_subsystem = np.cumsum([0] + mvec)  # Adjusted to include 0 index
+    modes_in_subsystem = np.cumsum([0, *mvec])  # Adjusted to include 0 index
 
     for i in range(Ns):  # Go through each subsystem
         state_larger_space = np.array([1])  # Initializing the state for the Kronecker product

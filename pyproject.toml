@@ -11,7 +11,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "QOptCraft"
-authors = ["Daniel Gómez Aguado <gomezaguado99@gmail.com>"]
+authors = [
+  {email = "gomezaguado99@gmail.com"},
+  {name = "Daniel Gómez Aguado"}
+]
 description = """Package designed for quantum experiments via linear optics instruments.
 
 QOprCraft navigates through the subalgebras of mainly unitary matrices.
@@ -35,18 +38,18 @@ classifiers = [
     "Operating System :: Unix",
     "Operating System :: MacOS",
 ]
-repository = "https://gitlab.tel.uva.es/juagar/qoptcraft"
 
 dynamic = ["version", "dependencies"]
+
+[project.urls]
+repository = "https://gitlab.tel.uva.es/juagar/qoptcraft"
 
 [tool.setuptools]
 platforms = ["unix", "linux", "osx", "cygwin", "win32"]
 packages = ["QOptCraft"]  # optional
 
 [tool.setuptools.dynamic]
-version = {attr = "mypackage._version.__version__"}
-dependencies = {file = ["requirements.txt"]}
-
+version = {attr = "QOptCraft._version.__version__"}
 
 
 ######## Tools

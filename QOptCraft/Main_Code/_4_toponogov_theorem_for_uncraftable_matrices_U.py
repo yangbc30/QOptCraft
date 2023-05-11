@@ -17,7 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 import time
-from io import open
 
 import numpy as np
 from scipy.linalg import expm
@@ -71,11 +70,11 @@ def Toponogov(
     # ----------U MATRIX NOT CRAFTABLE WITH OPTICAL DEVICES:----------
 
     # Loading U from the file name.txt
-    if file_input == True:
+    if file_input is True:
         U_input = read_matrix_from_txt(filename)
     # U_input=qft_matrix_auto(3,-0.4999999999999998+0.8660254037844387j)*(0.8660254037844387+0.49999999999999994j)
 
-    if txt == True:
+    if txt is True:
         print("\nU_input:")
         print(np.round(U_input, acc_d))
 
@@ -124,10 +123,10 @@ def Toponogov(
 
     base_u_M = np.zeros((m * m, M, M), dtype=complex)
 
-    if base_input == True:
+    if base_input is True:
         # Loading both bases
         try:
-            base_u_M_file = open(f"base_u__M_{M}.txt", "r")
+            base_u_M_file = open(f"base_u__M_{M}.txt")
 
             for i in range(m * m):
                 base_u_M[i] = np.loadtxt(base_u_M_file, delimiter=",", max_rows=M, dtype=complex)
@@ -148,7 +147,7 @@ def Toponogov(
 
     base_u_M = gram_schmidt_2dmatrices(base_u_M)
 
-    if txt == True:
+    if txt is True:
         print(f"\nu({M}) basis:")
         print(np.round(base_u_M, acc_d))
 
@@ -174,7 +173,6 @@ def Toponogov(
 
         while True:
             coefs = np.zeros(m * m, dtype=complex)
-            ortho = 0
             logm_3T = np.zeros((M, M), dtype=complex)
 
             # Projection onto the loaded u(M) basis
@@ -188,7 +186,7 @@ def Toponogov(
 
             U_iter = U_iter.dot(expm(logm_3T))
 
-            if first == True and np.abs(mod - mat_module(U_input - U_iter)) < 10 ** (-acc_t):
+            if first is True and np.abs(mod - mat_module(U_input - U_iter)) < 10 ** (-acc_t):
                 # sol_array[k]=U_iter
                 # sol_mod[k]=mod
                 if k == 0:
@@ -201,7 +199,7 @@ def Toponogov(
                     for l in range(len(sol_array)):
                         boolean_arr[l] = (np.round(U_iter, acc_d) == np.round(sol_array[l], acc_d)).all()
 
-                    if not (boolean_arr[:] == True).any():
+                    if not (boolean_arr[:] is True).any():
                         sol_array = np.append(sol_array, np.array([U_iter]), axis=0)
                         sol_mod = np.append(sol_mod, np.array([mod]), axis=0)
 
@@ -209,8 +207,8 @@ def Toponogov(
 
             first = True
 
-            mod = mat_module(U_input - U_iter)
-            mod_logm = mat_module(logm_3_schur(np.linalg.inv(U_iter).dot(U_input))[0])
+            mat_module(U_input - U_iter)
+            mat_module(logm_3_schur(np.linalg.inv(U_iter).dot(U_input))[0])
             # mod_logm=mat_module(LogU(np.linalg.inv(U_iter).dot(U_input),10))
 
         """sol_file=open(f"{filename}_3d__MAIN_sol.txt","w+")
@@ -219,13 +217,13 @@ def Toponogov(
 
 		sol_file.close()"""
 
-    if txt == True:
+    if txt is True:
         print("\n\nSolution:")
         print(np.round(sol_array, acc_d))
         print("\nRespective separation lenghts:")
         print(np.round(sol_mod, acc_d))
 
-    if file_output == True:
+    if file_output is True:
         toponogov_file = open(f"{filename}_toponogov_general.txt", "w+")
 
         for i in range(len(sol_mod)):
@@ -243,7 +241,7 @@ def Toponogov(
 
         toponogov_file.close()
 
-        if txt == True:
+        if txt is True:
             print(
                 f"\nAll matrix arrays with their separation length have been saved in '{filename}_toponogov_general.txt'."
             )

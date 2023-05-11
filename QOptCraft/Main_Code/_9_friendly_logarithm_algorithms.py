@@ -19,7 +19,6 @@ limitations under the License."""
 import time
 
 # File opening
-from io import open
 
 import numpy as np
 from numpy.linalg import inv
@@ -35,11 +34,11 @@ from ..read_matrix import read_matrix_from_txt
 def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
     file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
 
-    if txt == True:
+    if txt is True:
         print("\n\nMATRIX LOGARTHM 1\n")
 
-    while file_input == True and filename == False:
-        print(f"\nWARNING: a new filename is required.")
+    while file_input is True and filename is False:
+        print("\nWARNING: a new filename is required.")
 
         try:
             filename = input("Write the name of the file (without .txt extension): ")
@@ -47,11 +46,11 @@ def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False
         except ValueError:
             print("The given value is not valid.\n")
 
-    if file_input == True:
+    if file_input is True:
         A = read_matrix_from_txt(filename)
 
-    if txt == True:
-        print(f"\nInput matrix:")
+    if txt is True:
+        print("\nInput matrix:")
 
         print(np.round(A, acc_d))
 
@@ -76,7 +75,7 @@ def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False
     H = W.dot(logm(D).dot(np.linalg.inv(W)))
     logm_1A = 0.5 * (H + np.transpose(np.conj(H)))
 
-    if file_output == True:
+    if file_output is True:
         matrix_file = open(filename + "_Logm1.txt", "w+")
 
         np.savetxt(matrix_file, logm_1A, delimiter=",")
@@ -85,10 +84,10 @@ def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False
 
         matrix_file.close()
 
-    if txt == True:
+    if txt is True:
         print(f"\nThe logarithm Logm1({filename}) has been computed.")
 
-        print(f"\nOutput matrix:")
+        print("\nOutput matrix:")
 
         print(np.round(logm_1A, acc_d))
 
@@ -103,11 +102,11 @@ def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False
 def Logm2M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
     file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
 
-    if txt == True:
+    if txt is True:
         print("\n\nMATRIX LOGARTHM 2\n")
 
-    while file_input == True and filename == False:
-        print(f"\nWARNING: a new filename is required.")
+    while file_input is True and filename is False:
+        print("\nWARNING: a new filename is required.")
 
         try:
             filename = input("Write the name of the file (without .txt extension): ")
@@ -115,11 +114,11 @@ def Logm2M(file_input=True, A=False, file_output=True, filename=False, txt=False
         except ValueError:
             print("The given value is not valid.\n")
 
-    if file_input == True:
+    if file_input is True:
         A = read_matrix_from_txt(filename)
 
-    if txt == True:
-        print(f"\nInput matrix:")
+    if txt is True:
+        print("\nInput matrix:")
 
         print(np.round(A, acc_d))
 
@@ -129,7 +128,7 @@ def Logm2M(file_input=True, A=False, file_output=True, filename=False, txt=False
     # Matrix logarithm computation
     logm_2A = 0.5 * (logm(A) + np.transpose(np.conj(logm(A))))
 
-    if file_output == True:
+    if file_output is True:
         matrix_file = open(filename + "_Logm2.txt", "w+")
 
         np.savetxt(matrix_file, logm_2A, delimiter=",")
@@ -138,10 +137,10 @@ def Logm2M(file_input=True, A=False, file_output=True, filename=False, txt=False
 
         matrix_file.close()
 
-    if txt == True:
+    if txt is True:
         print(f"\nThe logarithm Logm2({filename}) has been computed.")
 
-        print(f"\nOutput matrix:")
+        print("\nOutput matrix:")
 
         print(np.round(logm_2A, acc_d))
 
@@ -156,11 +155,11 @@ def Logm2M(file_input=True, A=False, file_output=True, filename=False, txt=False
 def Logm3M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
     file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
 
-    if txt == True:
+    if txt is True:
         print("\n\nMATRIX LOGARTHM 3\n")
 
-    while file_input == True and filename == False:
-        print(f"\nWARNING: a new filename is required.")
+    while file_input is True and filename is False:
+        print("\nWARNING: a new filename is required.")
 
         try:
             filename = input("Write the name of the file (without .txt extension): ")
@@ -168,11 +167,11 @@ def Logm3M(file_input=True, A=False, file_output=True, filename=False, txt=False
         except ValueError:
             print("The given value is not valid.\n")
 
-    if file_input == True:
+    if file_input is True:
         A = read_matrix_from_txt(filename)
 
-    if txt == True:
-        print(f"\nInput matrix:")
+    if txt is True:
+        print("\nInput matrix:")
 
         print(np.round(A, acc_d))
 
@@ -194,7 +193,7 @@ def Logm3M(file_input=True, A=False, file_output=True, filename=False, txt=False
     # Matrix logarithm computation
     logm_3A = Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
 
-    if file_output == True:
+    if file_output is True:
         matrix_file = open(filename + "_Logm3.txt", "w+")
 
         np.savetxt(matrix_file, logm_3A, delimiter=",")
@@ -203,10 +202,10 @@ def Logm3M(file_input=True, A=False, file_output=True, filename=False, txt=False
 
         matrix_file.close()
 
-    if txt == True:
+    if txt is True:
         print(f"\nThe logarithm Logm3({filename}) has been computed.")
 
-        print(f"\nOutput matrix:")
+        print("\nOutput matrix:")
 
         print(np.round(logm_3A, acc_d))
 
@@ -221,11 +220,11 @@ def Logm3M(file_input=True, A=False, file_output=True, filename=False, txt=False
 def Logm4M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
     file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
 
-    if txt == True:
+    if txt is True:
         print("\n\nMATRIX LOGARTHM 4\n")
 
-    while file_input == True and filename == False:
-        print(f"\nWARNING: a new filename is required.")
+    while file_input is True and filename is False:
+        print("\nWARNING: a new filename is required.")
 
         try:
             filename = input("Write the name of the file (without .txt extension): ")
@@ -233,11 +232,11 @@ def Logm4M(file_input=True, A=False, file_output=True, filename=False, txt=False
         except ValueError:
             print("The given value is not valid.\n")
 
-    if file_input == True:
+    if file_input is True:
         A = read_matrix_from_txt(filename)
 
-    if txt == True:
-        print(f"\nInput matrix:")
+    if txt is True:
+        print("\nInput matrix:")
 
         print(np.round(A, acc_d))
 
@@ -262,7 +261,7 @@ def Logm4M(file_input=True, A=False, file_output=True, filename=False, txt=False
     # Matrix logarithm computation
     logm_4A = Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
 
-    if file_output == True:
+    if file_output is True:
         matrix_file = open(filename + "_Logm4.txt", "w+")
 
         np.savetxt(matrix_file, logm_4A, delimiter=",")
@@ -271,10 +270,10 @@ def Logm4M(file_input=True, A=False, file_output=True, filename=False, txt=False
 
         matrix_file.close()
 
-    if txt == True:
+    if txt is True:
         print(f"\nThe logarithm Logm4({filename}) has been computed.")
 
-        print(f"\nOutput matrix:")
+        print("\nOutput matrix:")
 
         print(np.round(logm_4A, acc_d))
 
@@ -289,11 +288,11 @@ def Logm4M(file_input=True, A=False, file_output=True, filename=False, txt=False
 def Logm5M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
     file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
 
-    if txt == True:
+    if txt is True:
         print("\n\nMATRIX LOGARTHM 5\n")
 
-    while file_input == True and filename == False:
-        print(f"\nWARNING: a new filename is required.")
+    while file_input is True and filename is False:
+        print("\nWARNING: a new filename is required.")
 
         try:
             filename = input("Write the name of the file (without .txt extension): ")
@@ -301,11 +300,11 @@ def Logm5M(file_input=True, A=False, file_output=True, filename=False, txt=False
         except ValueError:
             print("The given value is not valid.\n")
 
-    if file_input == True:
+    if file_input is True:
         A = read_matrix_from_txt(filename)
 
-    if txt == True:
-        print(f"\nInput matrix:")
+    if txt is True:
+        print("\nInput matrix:")
 
         print(np.round(A, acc_d))
 
@@ -332,7 +331,7 @@ def Logm5M(file_input=True, A=False, file_output=True, filename=False, txt=False
     # Matrix logarithm computation
     logm_5A = Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
 
-    if file_output == True:
+    if file_output is True:
         matrix_file = open(filename + "_Logm5.txt", "w+")
 
         np.savetxt(matrix_file, logm_5A, delimiter=",")
@@ -341,10 +340,10 @@ def Logm5M(file_input=True, A=False, file_output=True, filename=False, txt=False
 
         matrix_file.close()
 
-    if txt == True:
+    if txt is True:
         print(f"\nThe logarithm Logm5({filename}) has been computed.")
 
-        print(f"\nOutput matrix:")
+        print("\nOutput matrix:")
 
         print(np.round(logm_5A, acc_d))
 

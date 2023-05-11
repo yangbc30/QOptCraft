@@ -25,7 +25,7 @@ def U_recomposition_Reck(D, TmnList, N):
     # We explore TmnList in reverse order as declared, computing
     # inverse operations with each matrix:
     for i in range(N - 1, 0, -1):
-        for j in range(0, i):
+        for _j in range(0, i):
             U_init = U_init.dot(np.transpose(np.conj(TmnList[cont, :, :])))
 
             cont -= 1

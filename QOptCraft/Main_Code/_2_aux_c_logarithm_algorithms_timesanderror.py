@@ -26,9 +26,9 @@ import xlsxwriter
 from scipy.linalg import expm, logm
 
 # Matrices comparisons by their inner product
-from ..mat_inner_product import comparison_noprint, mat_module
+from ..mat_inner_product import mat_module
 from ..Phase2_Aux._2_logarithm_algorithms import *
-from ..write_initial_matrix import dft_matrix_auto, haar_measure
+from ..write_initial_matrix import haar_measure
 
 
 def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
@@ -37,7 +37,7 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
     Information is displayed on-screen.
     """
 
-    if txt == True:
+    if txt is True:
         print("===========================================================================")
         print("||| LOGARITHM OF AN UNITARY MATRIX ALGORITHMS TIME AND ERROR COMPUTATION|||")
         print("===========================================================================\n\n")
@@ -47,7 +47,7 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
     # We input the interval of dimensions to be computed by the algorithm
 
     if (type(N1) is not int) or (type(N2) is not int):
-        print(f"\nWARNING: invalid N1 or N2 input (both need to be int).")
+        print("\nWARNING: invalid N1 or N2 input (both need to be int).")
 
         while True:
             try:
@@ -65,7 +65,7 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
                 print("\nThe given value is not valid.\n")
 
     if type(exp) is not int:
-        print(f"\nWARNING: invalid exp input (needs to be int).")
+        print("\nWARNING: invalid exp input (needs to be int).")
 
         # We input the action of the index i over the series of dimensions
         while True:
@@ -100,7 +100,7 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
     # Beginning of time measurement
     t = time.process_time_ns()
 
-    worksheet = workbook.add_worksheet(f"Logarithms")  # add a sheet
+    worksheet = workbook.add_worksheet("Logarithms")  # add a sheet
 
     # Merge 3 cells.
     worksheet.merge_range("D4:H4", "Time (s)", cell_format)
@@ -111,11 +111,7 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
 
     for i in range(N1, N2 + 1):
         # We generate DFT matrices, with a "sturdy" structure which serves as the adequate test for the algorithm
-        if exp == 2:
-            A = haar_measure(np.power(2, i))
-
-        else:
-            A = haar_measure(i)
+        A = haar_measure(np.power(2, i)) if exp == 2 else haar_measure(i)
 
         t_logm = time.process_time_ns()
         logm_A = logm(A)
@@ -130,7 +126,7 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
         logm_5A, time_5 = logm_5(A)
 
         # We apply expm(M) upon the logarithms
-        exp_A = expm(logm_A)
+        expm(logm_A)
         exp_1A = expm(logm_1A)
         exp_2A = expm(logm_2A)
         exp_3A = expm(logm_3A)

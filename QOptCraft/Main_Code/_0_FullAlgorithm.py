@@ -16,11 +16,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-from ..input_control import input_control, input_control_floats, input_control_ints, input_control_intsDim
+from ..input_control import input_control, input_control_ints, input_control_intsDim
 from ..Phase6_Aux._6_basis_manipulations import *
 from ..Phase6_Aux._6_schmidt import *
-from ..photon_comb_basis import subspace_basis
-from ..recur_factorial import comb_evol
 from ..write_initial_matrix import *
 from ._1_Unitary_matrix_U_builder import Selements
 from ._2_aux_a_computation_time_evolutions_comparison import StoUEvolComp
@@ -54,8 +52,8 @@ def QOCGen(
     """
 
     if choice != 2 and choice != 3:
-        while file_output == True and filename == False:
-            print(f"\nWARNING: a new/loaded filename is required.")
+        while file_output is True and filename is False:
+            print("\nWARNING: a new/loaded filename is required.")
 
             try:
                 filename = input("Write the name of the file (without .txt extension): ")
@@ -64,7 +62,7 @@ def QOCGen(
                 print("The given value is not valid.\n")
 
     if type(choice) is not int:
-        print(f"\nWARNING: invalid choice input (needs to be int).")
+        print("\nWARNING: invalid choice input (needs to be int).")
 
         while True:
             try:
@@ -172,7 +170,7 @@ def QOCTest(
     """
 
     if type(choice) is not int:
-        print(f"\nWARNING: invalid choice input (needs to be int).")
+        print("\nWARNING: invalid choice input (needs to be int).")
 
         while True:
             try:
@@ -190,7 +188,7 @@ def QOCTest(
     if choice == 1:
         # Initial input control
         if type(exp) is not int:
-            print(f"\nWARNING: invalid exp input (needs to be int).")
+            print("\nWARNING: invalid exp input (needs to be int).")
 
             # We input the action of the index i over the series of dimensions
             while True:
@@ -210,7 +208,7 @@ def QOCTest(
                     print("\nThe given value is not valid.\n")
 
         if (type(N1) is not int) or (type(N2) is not int):
-            print(f"\nWARNING: invalid N1 or N2 input (both need to be int).")
+            print("\nWARNING: invalid N1 or N2 input (both need to be int).")
 
             while True:
                 try:
@@ -232,7 +230,7 @@ def QOCTest(
     elif choice == 2:
         # Initial input control
         if (type(N1) is not int) or (type(N2) is not int):
-            print(f"\nWARNING: invalid N1 or N2 input (both need to be int).")
+            print("\nWARNING: invalid N1 or N2 input (both need to be int).")
 
             while True:
                 try:
@@ -250,7 +248,7 @@ def QOCTest(
                     print("\nThe given value is not valid.\n")
 
             if type(exp) is not int:
-                print(f"\nWARNING: invalid exp input (needs to be int).")
+                print("\nWARNING: invalid exp input (needs to be int).")
 
                 # We input the action of the index i over the series of dimensions
                 while True:
@@ -274,7 +272,7 @@ def QOCTest(
     else:
         # Initial input control
         if (type(m1) is not int) or (type(m2) is not int):
-            print(f"\nWARNING: invalid m1 or m2 input (both need to be int).")
+            print("\nWARNING: invalid m1 or m2 input (both need to be int).")
 
             # We input the interval of dimensions to be computed by the algorithm
             while True:
@@ -293,7 +291,7 @@ def QOCTest(
                     print("\nThe given value is not valid.\n")
 
         if (type(n1) is not int) or (type(n2) is not int):
-            print(f"\nWARNING: invalid n1 or n2 input (both need to be int).")
+            print("\nWARNING: invalid n1 or n2 input (both need to be int).")
 
             # We input the interval of number of photons to be computed by the algorithm
             while True:
@@ -329,7 +327,7 @@ def QOCLog(file_input=True, A=False, file_output=True, filename=False, txt=False
     file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
 
     if type(choice) is not int:
-        print(f"\nWARNING: invalid choice input (needs to be int).")
+        print("\nWARNING: invalid choice input (needs to be int).")
 
         while True:
             try:
@@ -412,7 +410,7 @@ def QOptCraft(
     More info on the remaining parameters by reading QOptCraft's user guide.
     """
 
-    if txt == True:
+    if txt is True:
         print("\n\n===========================================================")
         print("||| QOptCraft: BUILD A LINEAR OPTICS QUANTUM COMPUTATOR |||")
         print("===========================================================\n\n")
@@ -422,8 +420,8 @@ def QOptCraft(
     if type(module) is not int:
         print("\nFirst of all, a module needs to be chosen.")
 
-        if module != False:
-            print(f"\nWARNING: invalid module input (needs to be int).")
+        if module is not False:
+            print("\nWARNING: invalid module input (needs to be int).")
 
         while True:
             try:

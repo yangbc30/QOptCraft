@@ -18,7 +18,7 @@ import scipy as sp
 
 # S_U and S_W matrices creation: we obtain four submatrices, then place them in diagonal
 def S_U_W_composition(UW, maxDim, ancDim):
-    totalDim = 2 * (maxDim + ancDim)
+    2 * (maxDim + ancDim)
 
     I = np.identity(ancDim, dtype=complex)
 
@@ -53,7 +53,7 @@ def S_D_composition(DList, maxDim, ancDim, txt=False):
             SD = SD.dot(SDList[cont, :, :])
 
     else:
-        if txt == True:
+        if txt is True:
             print(
                 "\nDue to the lack of required ancilla modes, the resulting S matrix will consist of only the input matrix and its conjugate in the diagonal.\n"
             )

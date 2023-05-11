@@ -48,7 +48,7 @@ def StoUEvolComp(
     Information is displayed on-screen.
     """
 
-    if txt == True:
+    if txt is True:
         print("==============================================================================")
         print("||| COMPUTATION TIME OF ALGORITHM 2 METHODS OF SYSTEM EVOLUTION COMPARISON |||")
         print("==============================================================================\n\n")
@@ -60,7 +60,7 @@ def StoUEvolComp(
         )
 
     if (type(m1) is not int) or (type(m2) is not int):
-        print(f"\nWARNING: invalid m1 or m2 input (both need to be int).")
+        print("\nWARNING: invalid m1 or m2 input (both need to be int).")
 
         # We input the interval of dimensions to be computed by the algorithm
         while True:
@@ -79,7 +79,7 @@ def StoUEvolComp(
                 print("\nThe given value is not valid.\n")
 
     if (type(n1) is not int) or (type(n2) is not int):
-        print(f"\nWARNING: invalid n1 or n2 input (both need to be int).")
+        print("\nWARNING: invalid n1 or n2 input (both need to be int).")
 
         # We input the interval of number of photons to be computed by the algorithm
         while True:
@@ -101,7 +101,7 @@ def StoUEvolComp(
             except ValueError:
                 print("\nThe given value is not valid.\n")
 
-    if txt == True:
+    if txt is True:
         print("\nNow, we will generate random unitary matrices S for each dimension.\n")
         print("Per S, the evolution of the system matrix will be computed for each number of photons.\n")
 
@@ -111,7 +111,7 @@ def StoUEvolComp(
         print(f"\nDimensions m range: [{m1}, {m2}]")
         print(f"\nPhotons n range: [{n1}, {n2}]")
 
-    if file_output == True:
+    if file_output is True:
         # MICROSOFT EXCEL INITIALIZATION
         workbook = xlsxwriter.Workbook(
             f"computation_comparisons_m_{m1}to{m2}_n_{n1}to{n2}_{comparison_matrix}.xlsx"
@@ -134,28 +134,25 @@ def StoUEvolComp(
     t = time.process_time_ns()
 
     for cont in range(tries):
-        if file_output == True:
+        if file_output is True:
             worksheet = workbook.add_worksheet(f"Attempt {cont+1}")  # add a sheet
 
         col = 1
 
         for k in range(m1, m2 + 1):
             # New initial matrix
-            if comparison_matrix is "haar":
+            if comparison_matrix == "haar":
                 S = haar_measure(k)
 
-            elif comparison_matrix is "qft":
+            elif comparison_matrix == "qft":
                 S = np.zeros((k, k), dtype=complex)
-                if inverse == True:
-                    factor = -1
-                else:
-                    factor = 1
+                factor = -1 if inverse is True else 1
 
                 for i in range(k):
                     for j in range(k):
                         S[i, j] = np.exp(factor * 2.0 * math.pi * 1j / float(k) * i * j)
 
-            while comparison_matrix is not "haar" and comparison_matrix is not "qft":
+            while comparison_matrix != "haar" and comparison_matrix != "qft":
                 print("\nThe chosen matrix for comparison is not available.")
 
                 comparison_matrix == input(
@@ -163,15 +160,12 @@ def StoUEvolComp(
                 )
 
                 # New initial matrix
-                if comparison_matrix is "haar":
+                if comparison_matrix == "haar":
                     S = haar_measure(k)
 
-                elif comparison_matrix is "qft":
+                elif comparison_matrix == "qft":
                     S = np.zeros((k, k), dtype=complex)
-                    if inverse == True:
-                        factor = -1
-                    else:
-                        factor = 1
+                    factor = -1 if inverse is True else 1
 
                     for i in range(k):
                         for j in range(k):
@@ -180,7 +174,7 @@ def StoUEvolComp(
             photons = np.zeros(k, dtype=float)
 
             for j in range(n1, n2 + 1):
-                if txt == True:
+                if txt is True:
                     print(f"\n\nDimensions m = {k}, photons n = {j}")
 
                 photons[0] = j
@@ -226,12 +220,12 @@ def StoUEvolComp(
 
                 U, t_inc_3 = evolution_3(S, photons, vec_base)
 
-                if txt == True:
+                if txt is True:
                     print(
                         f"\nMethod 1): {float(t_inc_1/(10**9))}         Method 2): {float(t_inc_2/(10**9))}         Method 2b): {float(t_inc_2b/(10**9))}         Method 3): {float(t_inc_3/(10**9))}\n\n"
                     )
 
-                if file_output == True:
+                if file_output is True:
                     # MICROSOFT EXCEL COMPATIBILITY
                     scores = {
                         "m": f"{k}",
@@ -260,7 +254,7 @@ def StoUEvolComp(
 
                     col += 1
 
-    if file_output == True:
+    if file_output is True:
         print(f"\nResults have been saved on a Workbook 'computation_comparisons_m_{m1}to{m2}_n_{n1}to{n2}.xlsx' file.")
 
         workbook.close()  # close the workbook

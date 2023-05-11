@@ -14,8 +14,7 @@ limitations under the License."""
 
 import os
 import pickle
-from io import open
-from typing import Sequence
+from collections.abc import Sequence
 
 import numpy as np
 import scipy as sp
@@ -31,7 +30,9 @@ def e_jk(j, k, base):
 
     k_array = np.array([base[k]])
 
-    ejk = 0.5j * (np.transpose(j_array).dot(np.conj(k_array)) + np.transpose(k_array).dot(np.conj(j_array)))
+    ejk = 0.5j * (
+        np.transpose(j_array).dot(np.conj(k_array)) + np.transpose(k_array).dot(np.conj(j_array))
+    )
 
     return ejk
 
@@ -41,7 +42,9 @@ def f_jk(j, k, base):
 
     k_array = np.array([base[k]])
 
-    fjk = 0.5 * (np.transpose(j_array).dot(np.conj(k_array)) - np.transpose(k_array).dot(np.conj(j_array)))
+    fjk = 0.5 * (
+        np.transpose(j_array).dot(np.conj(k_array)) - np.transpose(k_array).dot(np.conj(j_array))
+    )
 
     return fjk
 
@@ -51,10 +54,10 @@ def d_phi(base_matrix_m, photons, base_input):
     m = len(base_matrix_m)
     num_photons = int(np.sum(photons))
 
-    if base_input == True:
+    if base_input is True:
         try:
             # We load the vector basis
-            vec_base_file = open(f"m_{m}_n_{num_photons}_vec_base.txt", "r")
+            vec_base_file = open(f"m_{m}_n_{num_photons}_vec_base.txt")
 
             vec_base = np.loadtxt(vec_base_file, delimiter=",", dtype=complex)
 
@@ -100,12 +103,12 @@ def u_m_to_u_M(m, M, vec_base, base_matrix_m):
     vec_base_canon = np.identity(M, dtype=complex)
 
     for p in range(M):
-        p_array = np.array(vec_base[p])
+        np.array(vec_base[p])
 
         p_array_M = np.array(vec_base_canon[p])
 
         for q in range(M):
-            q_array = np.array(vec_base[q])
+            np.array(vec_base[q])
 
             for j in range(m):
                 for l in range(m):
@@ -135,28 +138,28 @@ def u_m_to_u_M(m, M, vec_base, base_matrix_m):
 
 def matrix_u_basis_generator(m, M, photons, base_input):
     # We initialise the basis for each space
-    base_U_m = np.identity(m, dtype=complex)
+    base_group = np.identity(m, dtype=complex)
 
-    base_U_M = np.identity(M, dtype=complex)
+    base_img_group = np.identity(M, dtype=complex)
 
-    base_u_m = np.zeros((m * m, m, m), dtype=complex)
+    base_algebra = np.zeros((m * m, m, m), dtype=complex)
 
-    base_u_M = np.zeros((M * M, M, M), dtype=complex)
+    base_img_algebra = np.zeros((M * M, M, M), dtype=complex)
 
     # Here we will storage correlations with e_jk and f_jk, for a better organisation
-    base_u_m_e = np.zeros((m * m, m, m), dtype=complex)
+    base_algebra_e = np.zeros((m * m, m, m), dtype=complex)
 
-    base_u_m_f = np.zeros((m * m, m, m), dtype=complex)
+    base_algebra_f = np.zeros((m * m, m, m), dtype=complex)
 
     cont = 0
 
     for j in range(m):
         for k in range(m):
-            base_u_m_e[m * j + k] = e_jk(j, k, base_U_m)
+            base_algebra_e[m * j + k] = e_jk(j, k, base_group)
 
             if k <= j:
-                base_u_m[cont] = e_jk(j, k, base_U_m)
-                base_u_M[cont] = d_phi(base_u_m[cont], photons, base_input)
+                base_algebra[cont] = e_jk(j, k, base_group)
+                base_img_algebra[cont] = d_phi(base_algebra[cont], photons, base_input)
 
                 cont += 1
 
@@ -166,68 +169,88 @@ def matrix_u_basis_generator(m, M, photons, base_input):
 
     for j in range(m):
         for k in range(m):
-            base_u_m_f[m * j + k] = f_jk(j, k, base_U_m)
+            base_algebra_f[m * j + k] = f_jk(j, k, base_group)
 
             if k < j:
-                base_u_m[cont] = f_jk(j, k, base_U_m)
+                base_algebra[cont] = f_jk(j, k, base_group)
 
-                base_u_M[cont] = d_phi(base_u_m[cont], photons, base_input)
+                base_img_algebra[cont] = d_phi(base_algebra[cont], photons, base_input)
 
                 cont += 1
 
-    return base_u_m, base_u_M, base_u_m_e, base_u_m_f, separator_e_f, base_U_m, base_U_M
+    return (
+        base_algebra,
+        base_img_algebra,
+        base_algebra_e,
+        base_algebra_f,
+        separator_e_f,
+        base_group,
+        base_img_group,
+    )
 
 
 def matrix_u_basis_generator_sparse(m, M, photons, base_input):
     # We initialise the basis for each space
-    base_U_m = np.identity(m, dtype=complex)
-    base_U_M = np.identity(M, dtype=complex)
-    base_u_m = []
-    base_u_M = []
+    base_group = np.identity(m, dtype=complex)
+    base_img_group = np.identity(M, dtype=complex)
+    base_algebra = []
+    base_img_algebra = []
 
     # Here we will storage correlations with e_jk and f_jk, for a better organisation
-    base_u_m_e = []
-    base_u_m_f = []
+    base_sym_algebra = []
+    base_antisym_algebra = []
     cont = 0
     for j in range(m):
         for k in range(m):
-            base_u_m_e.append(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)))
+            base_sym_algebra.append(sp.sparse.csr_matrix(e_jk(j, k, base_group)))
             if k <= j:
-                base_u_m.append(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)))
-                base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
+                base_algebra.append(sp.sparse.csr_matrix(e_jk(j, k, base_group)))
+                base_img_algebra.append(
+                    sp.sparse.csr_matrix(d_phi(base_algebra[cont].toarray(), photons, base_input))
+                )
                 cont += 1
     # The separator's functions indicate the switch from e_jk to f_jk,
     # after the m*m combinations have been already computed in the former
     separator_e_f = cont
     for j in range(m):
         for k in range(m):
-            base_u_m_f.append(sp.sparse.csr_matrix(f_jk(j, k, base_U_m)))
+            base_antisym_algebra.append(sp.sparse.csr_matrix(f_jk(j, k, base_group)))
             if k < j:
-                base_u_m.append(sp.sparse.csr_matrix(f_jk(j, k, base_U_m)))
-                base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
+                base_algebra.append(sp.sparse.csr_matrix(f_jk(j, k, base_group)))
+                base_img_algebra.append(
+                    sp.sparse.csr_matrix(d_phi(base_algebra[cont].toarray(), photons, base_input))
+                )
                 cont += 1
-    return base_u_m, base_u_M, base_u_m_e, base_u_m_f, separator_e_f, base_U_m, base_U_M
+    return (
+        base_algebra,
+        base_img_algebra,
+        base_sym_algebra,
+        base_antisym_algebra,
+        separator_e_f,
+        base_group,
+        base_img_group,
+    )
 
 
 """def matrix_u_basis_generator_sparse(m, M, photons, base_input):
 
     # We initialise the basis for each space
-    base_U_m = np.identity(m, dtype=complex)
-    base_U_M = np.identity(M, dtype=complex)
-    base_u_m = []
-    base_u_M = []
+    base_group = np.identity(m, dtype=complex)
+    base_img_group = np.identity(M, dtype=complex)
+    base_algebra = []
+    base_img_algebra = []
     # Here we will storage correlations with e_jk and f_jk, for a better organisation
-    base_u_m_e = []
-    base_u_m_f = []
+    base_algebra_e = []
+    base_algebra_f = []
 
     cont = 0
     for j in range(m):
         for k in range(m):
-            base_u_m_e[m * j + k].append(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)))
+            base_algebra_e[m * j + k].append(sp.sparse.csr_matrix(e_jk(j, k, base_group)))
             if k <= j:
-                base_u_m.append(sp.sparse.csr_matrix(e_jk(j, k, base_U_m)))
-                base_u_M.append(
-                    sp.sparse.csr_matrix(d_phi(base_u_m[cont], photons, base_input))
+                base_algebra.append(sp.sparse.csr_matrix(e_jk(j, k, base_group)))
+                base_img_algebra.append(
+                    sp.sparse.csr_matrix(d_phi(base_algebra[cont], photons, base_input))
                 )
                 cont += 1
 
@@ -236,14 +259,14 @@ def matrix_u_basis_generator_sparse(m, M, photons, base_input):
     separator_e_f = cont
     for j in range(m):
         for k in range(m):
-            base_u_m_f.append(sp.sparse.csr_matrix(f_jk(j, k, base_U_m)))
+            base_algebra_f.append(sp.sparse.csr_matrix(f_jk(j, k, base_group)))
             if k < j:
-                base_u_m.append(sp.sparse.csr_matrix(f_jk(j, k, base_U_m)))
-                base_u_M.append(
-                    sp.sparse.csr_matrix(d_phi(base_u_m[cont], photons, base_input))
+                base_algebra.append(sp.sparse.csr_matrix(f_jk(j, k, base_group)))
+                base_img_algebra.append(
+                    sp.sparse.csr_matrix(d_phi(base_algebra[cont], photons, base_input))
                 )
                 cont += 1
-    return base_u_m, base_u_M, base_u_m_e, base_u_m_f, separator_e_f, base_U_m, base_U_M"""
+    return base_algebra, base_img_algebra, base_algebra_e, base_algebra_f, separator_e_f, base_group, base_img_group"""
 
 
 def write_algebra_basis(dim: int, photons: Sequence, base_input: bool) -> None:
@@ -266,19 +289,21 @@ def write_algebra_basis(dim: int, photons: Sequence, base_input: bool) -> None:
                 continue
 
     # Here we will storage correlations with e_jk and f_jk, for a better organisation
-    base_u_m = []
-    base_u_M = []
+    base_algebra = []
+    base_img_algebra = []
 
     # Here we will storage correlations with e_jk and f_jk, for a better organisation
-    # base_u_m_sym = []
-    # base_u_m_antisym = []
+    # base_algebra_sym = []
+    # base_algebra_antisym = []
 
     cont = 0
     for j in range(dim):
         for k in range(j + 1):
-            # base_u_m_sym.append(sp.sparse.csr_matrix(sym_algebra_basis(j, k, dim)))
-            base_u_m.append(sp.sparse.csr_matrix(sym_algebra_basis(j, k, dim)))
-            base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
+            # base_algebra_sym.append(sp.sparse.csr_matrix(sym_algebra_basis(j, k, dim)))
+            base_algebra.append(sp.sparse.csr_matrix(sym_algebra_basis(j, k, dim)))
+            base_img_algebra.append(
+                sp.sparse.csr_matrix(d_phi(base_algebra[cont].toarray(), photons, base_input))
+            )
             cont += 1
 
     # The separator's functions indicate the switch from e_jk to f_jk,
@@ -287,16 +312,18 @@ def write_algebra_basis(dim: int, photons: Sequence, base_input: bool) -> None:
 
     for j in range(dim):
         for k in range(j):
-            # base_u_m_antisym.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
-            base_u_m.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
-            base_u_M.append(sp.sparse.csr_matrix(d_phi(base_u_m[cont].toarray(), photons, base_input)))
+            # base_algebra_antisym.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
+            base_algebra.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
+            base_img_algebra.append(
+                sp.sparse.csr_matrix(d_phi(base_algebra[cont].toarray(), photons, base_input))
+            )
             cont += 1
 
     with open(os.path.join(folder_path, "algebra.pkl"), "wb") as f:
-        pickle.dump(base_u_m, f)
+        pickle.dump(base_algebra, f)
 
     with open(os.path.join(folder_path, "phi_algebra.pkl"), "wb") as f:
-        pickle.dump(base_u_M, f)
+        pickle.dump(base_img_algebra, f)
 
     with open(os.path.join(folder_path, "separator.txt"), "w") as f:
         f.write(f"separator_sym_antisym = {separator_sym_antisym}")

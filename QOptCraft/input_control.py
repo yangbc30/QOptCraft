@@ -35,9 +35,9 @@ def decimal_precision():
 def input_control(
     module=1, file_input=True, M_input=False, file_output=True, filename=False, txt=False, acc_d=3, newfile=True
 ):
-    if file_input == False and isinstance(M_input, numpy.ndarray) == False and (module != 1 and module != 5):
-        if isinstance(M_input, numpy.ndarray) == False:
-            print(f"\nWARNING: invalid matrix input.")
+    if file_input is False and isinstance(M_input, numpy.ndarray) is False and (module != 1 and module != 5):
+        if isinstance(M_input, numpy.ndarray) is False:
+            print("\nWARNING: invalid matrix input.")
 
         while True:
             try:
@@ -53,14 +53,14 @@ def input_control(
 
                     file_input = True
 
-                    if filename != False:
+                    if filename is not False:
                         # Name adapted to str
                         filename = str(filename)
 
                     else:
-                        print(f"\nWARNING: a new/loaded filename is required.")
+                        print("\nWARNING: a new/loaded filename is required.")
 
-                    while filename == False:
+                    while filename is False:
                         try:
                             filename = input("Write the name of the file (without .txt extension): ")
 
@@ -72,27 +72,27 @@ def input_control(
             except ValueError:
                 print("The given value is not valid.\n")
 
-    if filename != False:
+    if filename is not False:
         # Name adapted to str
         filename = str(filename)
 
-    elif file_output == True or file_input == True:
-        print(f"\nWARNING: a new/loaded filename is required.")
+    elif file_output is True or file_input is True:
+        print("\nWARNING: a new/loaded filename is required.")
 
-        while filename == False:
+        while filename is False:
             try:
                 filename = input("Write the name of the file (without .txt extension): ")
 
             except ValueError:
                 print("The given value is not valid.\n")
 
-    if txt == True:
+    if txt is True:
         if acc_d < 0 or type(acc_d) is not int:
             if acc_d < 0:
-                print(f"\nWARNING: interactive mode requires an output decimal precision of 0 or higher.")
+                print("\nWARNING: interactive mode requires an output decimal precision of 0 or higher.")
 
             elif type(acc_d) is not int:
-                print(f"\nWARNING: invalid precision input (needs to be int and equal or higher than 0).")
+                print("\nWARNING: invalid precision input (needs to be int and equal or higher than 0).")
 
             # This variable corresponds to the decimal precision. It applies to the results presented onscreen
             # In the .txt files, results contain all possible decimals
@@ -102,8 +102,8 @@ def input_control(
 
 
 def input_control_ints(var, var_name, cond):
-    if var == False or var < cond or type(var) is not int:
-        if var == False:
+    if var is False or var < cond or type(var) is not int:
+        if var is False:
             print(f"\nWARNING: when creating a new file, a variable {var_name} must be given.")
 
         elif var < cond or type(var) is not int:
@@ -125,8 +125,8 @@ def input_control_ints(var, var_name, cond):
 
 
 def input_control_intsDim(var, var_name, cond):
-    if var == False or var < cond or type(var) is not int:
-        if var == False:
+    if var is False or var < cond or type(var) is not int:
+        if var is False:
             print(
                 f"\nWARNING: when creating a new file, a variable {var_name} (size {var_name} of the {var_name} x {var_name} matrix) must be given."
             )
@@ -150,8 +150,8 @@ def input_control_intsDim(var, var_name, cond):
 
 
 def input_control_floats(var, var_name, cond):
-    if var == False or var < cond or type(var) is not float:
-        if var == False:
+    if var is False or var < cond or type(var) is not float:
+        if var is False:
             print(f"\nWARNING: when creating a new file, a variable {var_name} must be given.")
 
         elif var < cond or type(var) is not float:

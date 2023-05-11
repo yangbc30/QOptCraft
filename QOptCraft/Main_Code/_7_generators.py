@@ -17,7 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 import math
-from io import open
 
 import numpy as np
 
@@ -43,7 +42,7 @@ def Fock(file_output=True, m=False, n=False):
 
     vec_base = photon_combs_generator(m, photons)
 
-    if file_output == True:
+    if file_output is True:
         # We save the vector basis
         vec_base_file = open(f"m_{m}_n_{n}_vec_base.txt", "w")
 
@@ -86,7 +85,7 @@ def AlgBasis(file_output=True, m=False, n=False, M=False):
 
     base_u_m, base_u_M = matrix_u_basis_generator(m, M, photons, False)[:2]
 
-    if file_output == True:
+    if file_output is True:
         # Saving both basis of the u(m) and u(M) subspaces
         base_u_m_file = open(f"base_u_m_{m}.txt", "w+")
 
@@ -111,11 +110,11 @@ def AlgBasis(file_output=True, m=False, n=False, M=False):
 # This function deploys haar_measure(N), N-dimensional unitary random matrix generator,
 # also allowing an N input for support and file printing
 def RandU(file_output=True, filename=False, N=False, txt=False):
-    if txt == True:
+    if txt is True:
         print("\n\nRANDOM UNITARY MATRIX GENERATOR (dim N x N):\n")
 
-    while file_output == True and filename == False:
-        print(f"\nWARNING: a new filename is required.")
+    while file_output is True and filename is False:
+        print("\nWARNING: a new filename is required.")
 
         try:
             filename = input("Write the name of the file (without .txt extension): ")
@@ -127,10 +126,10 @@ def RandU(file_output=True, filename=False, N=False, txt=False):
 
     U = haar_measure(N)
 
-    if txt == True:
+    if txt is True:
         print(f"\nA new {N} x {N} random unitary matrix has been generated.")
 
-    if file_output == True:
+    if file_output is True:
         matrix_file = open(filename + ".txt", "w+")
 
         np.savetxt(matrix_file, U, delimiter=",")
@@ -145,11 +144,11 @@ def RandU(file_output=True, filename=False, N=False, txt=False):
 # This function below generates random non-unitary matrices. It is useful in the design of
 # quasiunitary S matrices with loss
 def RandM(file_output=True, filename=False, N1=False, N2=False, txt=False):
-    if txt == True:
+    if txt is True:
         print("\n\nRANDOM NON-UNITARY MATRIX GENERATOR (dim n x m):\n")
 
-    while file_output == True and filename == False:
-        print(f"\nWARNING: a new filename is required.")
+    while file_output is True and filename is False:
+        print("\nWARNING: a new filename is required.")
 
         try:
             filename = input("Write the name of the file (without .txt extension): ")
@@ -163,10 +162,10 @@ def RandM(file_output=True, filename=False, N1=False, N2=False, txt=False):
 
     U = matrix_generation_general_auto(N1, N2)
 
-    if txt == True:
+    if txt is True:
         print(f"\nA new {N1} x {N2} random matrix has been generated.")
 
-    if file_output == True:
+    if file_output is True:
         matrix_file = open(filename + ".txt", "w+")
 
         np.savetxt(matrix_file, U, delimiter=",")
@@ -180,11 +179,11 @@ def RandM(file_output=True, filename=False, N1=False, N2=False, txt=False):
 
 # Creation of discrete Fourier transformation matrices
 def DFT(file_output=True, filename=False, N=False, txt=False):
-    if txt == True:
+    if txt is True:
         print("\n\nDFT MATRIX GENERATOR (dim N x N):\n")
 
-    while file_output == True and filename == False:
-        print(f"\nWARNING: a new filename is required.")
+    while file_output is True and filename is False:
+        print("\nWARNING: a new filename is required.")
 
         try:
             filename = input("Write the name of the file (without .txt extension): ")
@@ -202,10 +201,10 @@ def DFT(file_output=True, filename=False, N=False, txt=False):
         for j in range(N):
             A[i, j] = omega ** (i * j)
 
-    if txt == True:
+    if txt is True:
         print(f"\nA new {N} x {N} DFT matrix has been generated.")
 
-    if file_output == True:
+    if file_output is True:
         matrix_file = open(filename + ".txt", "w+")
 
         np.savetxt(matrix_file, A, delimiter=",")
@@ -219,11 +218,11 @@ def DFT(file_output=True, filename=False, N=False, txt=False):
 
 # Creation of Quantum Fourier transformation matrices
 def QFT(file_output=True, filename=False, N=False, inverse=False, txt=False):
-    if txt == True:
+    if txt is True:
         print("\n\nQFT MATRIX GENERATOR (dim N x N):\n")
 
-    while file_output == True and filename == False:
-        print(f"\nWARNING: a new filename is required.")
+    while file_output is True and filename is False:
+        print("\nWARNING: a new filename is required.")
 
         try:
             filename = input("Write the name of the file (without .txt extension): ")
@@ -235,12 +234,12 @@ def QFT(file_output=True, filename=False, N=False, inverse=False, txt=False):
 
     A = np.zeros((N, N), dtype=complex)
 
-    if inverse == True:
+    if inverse is True:
         for i in range(N):
             for j in range(N):
                 A[i, j] = np.exp(-2.0 * math.pi * 1j / float(N) * i * j)
 
-        if txt == True:
+        if txt is True:
             print(f"\nA new {N} x {N} inverse QFT matrix has been generated.")
 
     else:
@@ -248,10 +247,10 @@ def QFT(file_output=True, filename=False, N=False, inverse=False, txt=False):
             for j in range(N):
                 A[i, j] = np.exp(2.0 * math.pi * 1j / float(N) * i * j)
 
-        if txt == True:
+        if txt is True:
             print(f"\nA new {N} x {N} QFT matrix has been generated.")
 
-    if file_output == True:
+    if file_output is True:
         matrix_file = open(filename + ".txt", "w+")
 
         np.savetxt(matrix_file, A / np.sqrt(N), delimiter=",")
@@ -264,11 +263,11 @@ def QFT(file_output=True, filename=False, N=False, inverse=False, txt=False):
 
 
 def RandImU(file_output=True, filename=False, m=False, n=False, txt=False):
-    if txt == True:
+    if txt is True:
         print("\n\nImU MATRIX GENERATOR (dim M x M):\n")
 
-    while file_output == True and filename == False:
-        print(f"\nWARNING: a new filename is required.")
+    while file_output is True and filename is False:
+        print("\nWARNING: a new filename is required.")
 
         try:
             filename = input("Write the name of the file (without .txt extension): ")
@@ -287,10 +286,10 @@ def RandImU(file_output=True, filename=False, m=False, n=False, txt=False):
 
     ImU = StoU(file_input=False, S=S, file_output=False, filename=False, method=2, n=n, txt=False)[0]
 
-    if txt == True:
+    if txt is True:
         print(f"\nA new {M} x {M} ImU matrix has been generated.")
 
-    if file_output == True:
+    if file_output is True:
         matrix_file = open(filename + ".txt", "w+")
 
         np.savetxt(matrix_file, ImU, delimiter=",")

@@ -21,7 +21,7 @@ def matrix_padding(M, maxDim):
     column_to_be_added = np.zeros(len(M), dtype=complex)
 
     # Adding column to numpy array
-    for i in range(0, maxDim - len(M)):
+    for _i in range(0, maxDim - len(M)):
         M = np.column_stack((M, column_to_be_added))
 
     for i in range(len(M), maxDim):

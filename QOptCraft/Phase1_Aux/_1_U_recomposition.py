@@ -27,14 +27,14 @@ def U_recomposition(D, TmnList, N):
     for i in range(N - 1, 0, -1):
         # Case: even step i
         if i % 2 == 0:
-            for j in range(1, i + 1):
+            for _j in range(1, i + 1):
                 U_init = np.linalg.inv(TmnList[cont, :, :]).dot(U_init)
 
                 cont -= 1
 
         # Case: odd step i
         else:
-            for j in range(0, i):
+            for _j in range(0, i):
                 U_init = U_init.dot(TmnList[cont, :, :])
 
                 cont -= 1

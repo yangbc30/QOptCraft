@@ -16,7 +16,18 @@ import numpy as np
 
 
 # Main function to inherit in other algorithms
-def photon_combs_generator(m, photons):
+def photon_combs_generator(m: int, photons: list):
+    """Given a Fock state with a certain number of modes, generate
+    the basis for the Hilbert space.
+
+    Args:
+        m (int): number of optical modes.
+        photons (list): a Fock state.
+
+    Returns:
+        _type_: basis of the Hilbert space.
+    """
+
     global photons_aux
     global vec_base
     global check
@@ -50,7 +61,7 @@ def photon_combs_generator_loop(photons, num_photons, m, sum_, k):
             photons_aux = np.zeros(m, dtype=complex)
             cont = 0  # IMPORTANT, we want to explore sum_[] in order
             for p in range(m):
-                for q in range(counter[p]):
+                for _q in range(counter[p]):
                     photons_aux[sum_[cont]] += 1
                     cont += 1
             if check != 0:
@@ -99,16 +110,13 @@ def photon_comb_index(array, vec_base):
 def state_in_basis(basis, pamplitudes, vec_base) -> np.ndarray:
     """Given a vector in terms of elements of a basis and amplitudes, output the state vector."""
     state = np.zeros(len(vec_base), dtype=complex)
-    k = 0
-    for vector in basis:
+    for k, vector in enumerate(basis):
         # print(vector, type(vector))
         for ind in range(len(vec_base)):
             if (vector == vec_base[ind]).all():
                 basis_state = np.zeros_like(state)
                 basis_state[ind] = pamplitudes[k]
                 state = state + basis_state
-        k = k + 1
-
     return state
 
 

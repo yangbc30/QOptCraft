@@ -14,7 +14,6 @@ limitations under the License."""
 
 import sys
 import warnings
-from io import open
 
 import numpy as np
 
@@ -23,7 +22,7 @@ def read_matrix_from_txt(filename):
     print(f"\nSearching for file '{filename}.txt' in the directory...\n")
 
     try:
-        matrix_file = open(f"{filename}.txt", "r")
+        matrix_file = open(f"{filename}.txt")
 
         # Loading S
         S = np.loadtxt(matrix_file, delimiter=",", dtype=complex)

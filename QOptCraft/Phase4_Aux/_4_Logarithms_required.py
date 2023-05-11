@@ -46,7 +46,7 @@ def LogU(U, iterations):
     # from the paper
     V = 0.5 * (np.matrix(U) + np.linalg.inv(np.matrix(U)).H)  # Initial V
 
-    for i in range(iterations):
+    for _i in range(iterations):
         V = 0.5 * (V + np.linalg.inv(V).H)
 
     T, Q = sp.linalg.schur(V)

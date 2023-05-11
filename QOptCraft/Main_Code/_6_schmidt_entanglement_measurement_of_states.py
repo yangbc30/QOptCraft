@@ -17,7 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 import time
-from io import open
 
 import numpy as np
 
@@ -83,7 +82,7 @@ def StateSchmidt(
     # ----------STATE OF INTEREST:----------
 
     # Loading U from the file name.txt
-    if file_input_state == True:
+    if file_input_state is True:
         arrays, array_sep = read_matrix_from_txt_general(filename_state)
 
         # we separate each element
@@ -91,7 +90,7 @@ def StateSchmidt(
         state_prob_amplitudes = arrays[array_sep[0] : array_sep[1]]
         modes_per_partition = np.array(arrays[array_sep[1] : array_sep[2]], dtype=int)[0]
 
-    if txt == True:
+    if txt is True:
         # introduce the three elements (basis, weights and modes per partition) FROM THE SAME FILE
         print("\nOur state's basis vectors:")
         print(np.round(state_basis_vectors, acc_d))
@@ -110,14 +109,14 @@ def StateSchmidt(
     # ----------U MATRIX NOT CRAFTABLE WITH OPTICAL DEVICES:----------
 
     # Loading U from the file name.txt
-    if file_input_matrix == True:
+    if file_input_matrix is True:
         U_input = read_matrix_from_txt(filename_matrix)
 
-    if txt == True:
+    if txt is True:
         print("\nU_input:")
         print(np.round(U_input, acc_d))
 
-    M = len(U_input[:, 0])
+    len(U_input[:, 0])
 
     # ----------BASE IN M SPACE:----------
 
@@ -125,15 +124,15 @@ def StateSchmidt(
     if str(np.array(vec_base)[0, 0]) == str(False):
         vec_base = photon_combs_generator(m, photons)
 
-    elif txt == True:
+    elif txt is True:
         print("\nLoaded an external array for the Fock basis.")
 
-    if txt == True:
+    if txt is True:
         print(f"\nVector basis:\n{vec_base}")
 
     # ---------MAIN PROCESS:----------
 
-    if file_output == True:
+    if file_output is True:
         schmidt_leading_file = open(f"{filename_state}_{filename_matrix}_schmidt_leading.txt", "w+")
         schmidt_fidelity_file = open(f"{filename_state}_{filename_matrix}_schmidt_fidelity_{fidelity}.txt", "w+")
 
@@ -172,7 +171,7 @@ def StateSchmidt(
         weights_f = np.round(abs(output_state_fidelity) ** 2, 3)
         balance_f = min(weights_f) / max(weights_f)
 
-        if file_output == True:
+        if file_output is True:
             # Leading states (no fidelity applied)
             schmidt_leading_file.write(f"\nIteration {i}\nFor the input state (basis and probabilities for each):\n")
             np.savetxt(schmidt_leading_file, basis_vectors, delimiter=",")
@@ -180,7 +179,7 @@ def StateSchmidt(
             schmidt_leading_file.write(
                 f"\nSchmidt rank for the input state: {pre_entanglement}\nSchmidt rank for the output state: {post_entanglement_leading}"
             )
-            schmidt_leading_file.write(f"\nThe output state's state basis and probabilities of collapse for each:\n")
+            schmidt_leading_file.write("\nThe output state's state basis and probabilities of collapse for each:\n")
             np.savetxt(schmidt_leading_file, vec_base_leading, delimiter=",")
             np.savetxt(schmidt_leading_file, output_state_leading, delimiter=",")
             schmidt_leading_file.write(f"\nBalance: {balance}\n\n")
@@ -199,7 +198,7 @@ def StateSchmidt(
             np.savetxt(schmidt_fidelity_file, output_state_fidelity, delimiter=",")
             schmidt_fidelity_file.write(f"\nBalance: {balance_f}\n\n")
 
-        if txt == True:
+        if txt is True:
             print(f"\n\nIteration {i}\n")
             print(f"Considered vector: {basis_vectors}")
             print(f"Input state: {input_state}")
@@ -230,7 +229,7 @@ def StateSchmidt(
 
             print(f"Balance (fidelity={fidelity}): {balance_f}")
 
-    if file_output == True:
+    if file_output is True:
         schmidt_leading_file.close()
         schmidt_fidelity_file.close()
 

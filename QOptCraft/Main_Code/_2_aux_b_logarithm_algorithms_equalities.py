@@ -17,7 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 import time
-from io import open
 
 from scipy.linalg import expm, logm
 
@@ -33,7 +32,7 @@ def MatLogCompV(N1=False, N2=False, txt=False, exp=False):
     Information is displayed on-screen.
     """
 
-    if txt == True:
+    if txt is True:
         print("======================================================================")
         print("||| LOGARITHM OF A MATRIX ALGORITHMS COMPARISON (WITH DFT MATRICES)|||")
         print("======================================================================\n\n")
@@ -44,7 +43,7 @@ def MatLogCompV(N1=False, N2=False, txt=False, exp=False):
     # latter option exists as a test for the algorithms giving the same values of exp(log(A)), avoiding
     # possible discrepances with the different roots of logm_3/4/5 and logm
     if type(exp) is not int:
-        print(f"\nWARNING: invalid exp input (needs to be int).")
+        print("\nWARNING: invalid exp input (needs to be int).")
 
         # We input the action of the index i over the series of dimensions
         while True:
@@ -68,7 +67,7 @@ def MatLogCompV(N1=False, N2=False, txt=False, exp=False):
     # We input the interval of dimensions to be computed by the algorithm
 
     if (type(N1) is not int) or (type(N2) is not int):
-        print(f"\nWARNING: invalid N1 or N2 input (both need to be int).")
+        print("\nWARNING: invalid N1 or N2 input (both need to be int).")
 
         while True:
             try:

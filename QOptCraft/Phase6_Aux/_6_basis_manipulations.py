@@ -49,11 +49,11 @@ def qudit_basis(d, n):  # n qudits (dimension d)
 
     for k in range(d**n):
         state_string = np.base_repr(k, base=d)
-        basis_state = [
+        [
             int(digit) for digit in "0" * (n - len(state_string)) + state_string
         ]  # Padded to n digits in base d. "Compact notation"
 
-    state_larger_space = np.array([1])  # Initializing the state for the Kronecker product
+    np.array([1])  # Initializing the state for the Kronecker product
     # for i in range(m):    #Iterates through all the subsystems (modes)
     #   qudit_i =np.zeros(n+1)   # i-th qudit (n+1-dimensional system from 0 to n photons)
     #   qudit_i[state[i]]=1

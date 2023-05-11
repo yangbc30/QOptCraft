@@ -41,7 +41,7 @@ def Selements(
     Information is displayed on-screen.
     """
 
-    if txt == True:
+    if txt is True:
         print("\n\n===================================================")
         print("||| UNITARY MATRIX U GENERATOR AND DECOMPOSITOR |||")
         print("===================================================\n\n")
@@ -52,7 +52,7 @@ def Selements(
     )
 
     if type(impl) is not int:
-        print(f"\nWARNING: invalid impl input (needs to be int).")
+        print("\nWARNING: invalid impl input (needs to be int).")
 
         while True:
             try:
@@ -65,7 +65,7 @@ def Selements(
             except ValueError:
                 print("The given value is not valid.\n")
 
-    if newfile == True:
+    if newfile is True:
         N = input_control_intsDim(N, "N", 2)
 
     # ----------INITIAL MATRIX INPUT:----------
@@ -74,19 +74,19 @@ def Selements(
     t = time.process_time_ns()
 
     # If a new matrix is created, there are two options: either just create an array, or save it into a .txt file
-    if newfile == True:
+    if newfile is True:
         # A new file 'U.txt' containing an N-dimensional unitary matrix U is created
         # so it can be used in other processes
         U_un = RandU(file_output, filename, N, txt)
 
-    elif file_input == True:
+    elif file_input is True:
         # Loading U_un (un = unitary, for distinguishing it from the evolution matrix 'U' generated in the main algorithm 2)
         # NOTE: for all commentary in this code, U_un is referred as 'U' for simplicity
         U_un = read_matrix_from_txt(filename)
 
         N = len(U_un[0])
 
-    if txt == True:
+    if txt is True:
         print("\nINITIAL MATRIX INPUT:\n")
 
         # We print the input matrix U onscreen (with a decimal precision of 3)
@@ -98,7 +98,7 @@ def Selements(
 
     # ----------UNITARY CHECK FOR MATRIX U:----------
 
-    if txt == True:
+    if txt is True:
         print("\n\n\n\nUNITARY CHECK FOR MATRIX U:\n")
 
         unitary(U_un, N, filename, acc_d)
@@ -123,14 +123,14 @@ def Selements(
 
     # ----------U ONSCREEN PRINTING Y AND RECONSTRUCTION ALGORITHM CHECK:----------
 
-    if txt == True:
+    if txt is True:
         print("\n\n\n\n\nU RECONSTRUCTION CHECK:\n")
 
         print("\nRebuild of the initial U:\n")
 
         print(np.round(U_init, acc_d))
 
-        print(f"\nIs it equal to the initial U?")
+        print("\nIs it equal to the initial U?")
 
         comparison(U_init, U_un, "U_init", "U_un", acc_d)
 

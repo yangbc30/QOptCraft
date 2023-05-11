@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 import warnings
-from io import open
 
 import numpy as np
 from scipy.optimize import fsolve
@@ -80,12 +79,12 @@ def U_decomposition(M, dim, output, name, txt=False):
     global M_current
     M_current = M
 
-    if output == True:
+    if output is True:
         # Decomposition of U storage
-        fullnameTmn = name + str("_TmnList.txt")
+        fullnameTmn = name + "_TmnList.txt"
         TmnList_file = open(fullnameTmn, "w")
 
-        fullnameD = name + str("_D.txt")
+        fullnameD = name + "_D.txt"
         D_file = open(fullnameD, "w")
 
     # Steps counter
@@ -121,7 +120,7 @@ def U_decomposition(M, dim, output, name, txt=False):
 
                 TmnList[cont, :, :] = Tmn(sol[0], sol[1], N, m - 1, n - 1)
 
-                if output == True:
+                if output is True:
                     theta = phase_adjust(sol[0], minn=-np.pi, maxx=np.pi)
                     phi = phase_adjust(sol[1], minn=0.0, maxx=2.0 * np.pi)
                     TmnList_file.write("\nMatriz " + name + f"_T{m}{n} (even): Theta = {theta}, Phi = {phi}\n")
@@ -147,7 +146,7 @@ def U_decomposition(M, dim, output, name, txt=False):
 
                 TmnList[cont, :, :] = Tmn(sol[0], sol[1], N, m - 1, n - 1)
 
-                if output == True:
+                if output is True:
                     theta = phase_adjust(sol[0], minn=-np.pi, maxx=np.pi)
                     phi = phase_adjust(sol[1], minn=0.0, maxx=2.0 * np.pi)
                     TmnList_file.write("\nMatriz " + name + f"_T{m}{n} (odd): Theta = {theta}, Phi = {phi}\n")
@@ -156,8 +155,8 @@ def U_decomposition(M, dim, output, name, txt=False):
 
                 cont += 1
 
-    if output == True:
-        D_file.write("Matrix " + name + f"_D:\n")
+    if output is True:
+        D_file.write("Matrix " + name + "_D:\n")
 
         np.savetxt(D_file, np.round(M_current, 5), delimiter=",")
 
@@ -165,7 +164,7 @@ def U_decomposition(M, dim, output, name, txt=False):
 
         D_file.close()
 
-        if txt == True:
+        if txt is True:
             print(
                 f"\nThe Tmn matrices (each with their theta and phi values) have been storaged in the file '{fullnameTmn}'."
             )
@@ -173,7 +172,7 @@ def U_decomposition(M, dim, output, name, txt=False):
                 f"\nThe diagonal matrix D resulting from the decomposition process has been storaged in the file '{fullnameD}'."
             )
 
-    if txt == True:
+    if txt is True:
         print(f"\nThe {name} matrix has been decomposed in optic devices.")
 
     return TmnList, M_current

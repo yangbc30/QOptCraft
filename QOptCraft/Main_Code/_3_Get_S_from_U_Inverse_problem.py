@@ -19,7 +19,6 @@ limitations under the License."""
 import time
 
 # File opening
-from io import open
 from itertools import permutations
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
@@ -28,7 +27,7 @@ import numpy as np
 from ..input_control import input_control, input_control_ints, input_control_intsDim
 from ..Phase3_Aux._3_permutation_matrix import *
 from ..Phase3_Aux._3_S_rebuild import S_output
-from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import d_phi, e_jk, f_jk, matrix_u_basis_generator
+from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
 from ..Phase3_Aux._3_verification_of_solution_existence import eq_sys_finder, verification
 from ..read_matrix import read_matrix_from_txt
 from ..recur_factorial import *
@@ -52,7 +51,7 @@ def SfromU(
     Information is displayed on-screen.
     """
 
-    if txt == True:
+    if txt is True:
         print("==============================================================================")
         print("||| INVERSE PROBLEM: COMPUTATION OF S FROM OPTICAL SYSTEM EVOLUTION MATRIX |||")
         print("==============================================================================\n\n")
@@ -63,14 +62,14 @@ def SfromU(
     # ----------U EVOLUTION OF THE MATRIX SYSTEM INPUT:----------
 
     # Loading U from the file name.txt
-    if file_input == True:
+    if file_input is True:
         U = read_matrix_from_txt(filename)
 
     # M value (comb_evol(n,m)=comb(m+n-1,n))
     M = len(U[:, 0])
 
-    if txt == True:
-        print(f"\nU EVOLUTION OF THE MATRIX SYSTEM INPUT:\n")
+    if txt is True:
+        print("\nU EVOLUTION OF THE MATRIX SYSTEM INPUT:\n")
 
         # We showcase the system evolution matrix (with a decimal accuracy acc_d)
         print("\nSystem evolution matrix loaded:\n")
@@ -106,7 +105,7 @@ def SfromU(
 
     # ----------UNITARY CHECK FOR MATRIX U:----------
 
-    if txt == True:
+    if txt is True:
         print("\n\n\n\nUNITARY CHECK FOR MATRIX U:\n")
 
         cond = unitary(U, M, filename, acc_d)
@@ -133,7 +132,7 @@ def SfromU(
         U, base_u_m, base_u_m_e, base_u_m_f, separator_e_f, base_u_M, eq_sys, eq_sys_choice, index_choice
     )
 
-    if file_output == True:
+    if file_output is True:
         # Saving both basis of the u(m) and u(M) subspaces
         base_u_m_file = open(f"base_u_m_{m}.txt", "w+")
 
@@ -150,10 +149,10 @@ def SfromU(
 
     # ----------PART 2: S MATRIX OBTENTION:----------
 
-    if file_output == True:
+    if file_output is True:
         S_recon_file_no_perms = open(filename + f"_m_{m}_n_{n}_S_recon_main.txt", "w+")
 
-        if perm == True:
+        if perm is True:
             S_recon_file = open(filename + f"_m_{m}_n_{n}_S_recon_all.txt", "w+")
             U_perms_file = open(filename + f"_m_{m}_n_{n}_S_recon_all_U.txt", "w+")
 
@@ -161,35 +160,35 @@ def SfromU(
             U_perms_file.write("Different U permutations:\n")
 
     # In case a solution exists, S is rebuilt with the given results
-    if check_sol == True:
+    if check_sol is True:
         S = S_output(base_u_m, base_U_m, sol_e, sol_f)
 
-        if txt == True:
+        if txt is True:
             print("\n\n\nRebuilt S matrix:\n")
             print(np.round(S, acc_d))
 
-        if file_output == True:
+        if file_output is True:
             np.savetxt(S_recon_file_no_perms, S, delimiter=",")
 
-            if perm == True:
+            if perm is True:
                 np.savetxt(S_recon_file, S, delimiter=",")
                 np.savetxt(U_perms_file, U, delimiter=",")
 
             S_recon_file_no_perms.close()
 
     else:
-        if txt == True:
+        if txt is True:
             print("\nA S solution has not been found for the matrix given.\n")
 
         S = False
 
-        if file_output == True:
+        if file_output is True:
             S_recon_file_no_perms.write("A S solution has not been found for the matrix given.\n")
 
     # This algorithm has the same function as the previous if, but for numerous permutations of
     # the basis vectors
-    if perm == True:
-        if txt == True:
+    if perm is True:
+        if txt is True:
             print("\n\nPermutations are being computed, wait for a while...\n")
 
         ############## IMPORTANT ##############
@@ -199,7 +198,7 @@ def SfromU(
 
         perm_iterator = permutations(range(M))
 
-        if file_output == True:
+        if file_output is True:
             S_recon_file.write("\n\nStudy of permutations:\n")
 
         for item in perm_iterator:
@@ -221,7 +220,7 @@ def SfromU(
             if check_sol:  # ==True, implied
                 S_perm = S_output(base_u_m, base_U_m, sol_e, sol_f)
 
-                if file_output == True:
+                if file_output is True:
                     S_recon_file.write(f"\n\nS (permutation {np.asarray(item)}):\n")
 
                     np.savetxt(S_recon_file, S_perm, delimiter=",")
@@ -230,9 +229,9 @@ def SfromU(
 
                     np.savetxt(U_perms_file, U_perm, delimiter=",")
 
-    if file_output == True:
-        if perm == True:
-            if txt == True:
+    if file_output is True:
+        if perm is True:
+            if txt is True:
                 print(f"\nAll results have been storaged in the file '{filename}_m_{m}_n_{n}_S_recon_all.txt'.\n")
                 print(
                     f"\nThe corresponding permutation matrices U have been storaged in the file '{filename}_m_{m}_n_{n}_S_recon_all_U.txt'.\n"
@@ -241,7 +240,7 @@ def SfromU(
             S_recon_file.close()
             U_perms_file.close()
 
-        elif txt == True:
+        elif txt is True:
             print(f"\nThe results have been storaged in the file '{filename}_m_{m}_n_{n}_S_recon_main.txt'.\n")
 
     # ----------TOTAL TIME REQUIRED:----------

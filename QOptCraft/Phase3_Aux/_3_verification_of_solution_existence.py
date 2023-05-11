@@ -79,7 +79,7 @@ def eq_sys_finder(base_u_m, base_u_M):
 
                 cont += 1
 
-        if end == True:
+        if end is True:
             break
 
     return eq_sys, eq_sys_choice, index_choice

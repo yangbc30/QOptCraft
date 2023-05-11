@@ -12,13 +12,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-from io import open
 
 import numpy as np
 
 
 def D_decomposition(M, maxDim, filename, file_output, txt=False):
-    if file_output == True:
+    if file_output is True:
         DList_file = open(filename + "_DList.txt", "w")
 
     DList = np.zeros((maxDim, maxDim, maxDim), dtype=complex)
@@ -32,15 +31,15 @@ def D_decomposition(M, maxDim, filename, file_output, txt=False):
 
         DList[i, :, :] = I
 
-        if file_output == True:
+        if file_output is True:
             np.savetxt(DList_file, DList[i, :, :], delimiter=",")
 
             DList_file.write("\n")
 
-    if file_output == True:
+    if file_output is True:
         DList_file.close()
 
-        if txt == True:
-            print(f"\nThe list of matrices DList has been storaged in the file '" + filename + "_DList.txt'.")
+        if txt is True:
+            print("\nThe list of matrices DList has been storaged in the file '" + filename + "_DList.txt'.")
 
     return DList

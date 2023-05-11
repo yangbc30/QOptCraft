@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 import time
-from io import open
 
 import numpy as np
 from scipy.linalg import expm
@@ -44,7 +43,7 @@ def evolution_3(S, photons, vec_base, file_output=False, filename=False):
     # has been the one used. It can be switched by logm_4/5(); the result will be similar
     iH_S = logm_3(S)[0]
 
-    if file_output == True:
+    if file_output is True:
         # We save the vector basis
         iH_S_file = open(f"{filename}_iH_S.txt", "w")
 
@@ -80,7 +79,7 @@ def iH_U_operator(file_output=False, filename=False, iH_S=False, m=False, M=Fals
 
     for p in range(M):
         # Array p to consider (u(m) basis)
-        p_array = np.array(vec_base[p])
+        np.array(vec_base[p])
 
         # Array p to consider (u(M) basis)
         p_array_M = np.array(vec_base_canon[p])
@@ -88,7 +87,7 @@ def iH_U_operator(file_output=False, filename=False, iH_S=False, m=False, M=Fals
         for q in range(M):
             # Array q to consider (u(m) basis). We must find
             # its equivalent in the u(M) basis after the operations
-            q_array = np.array(vec_base[q])
+            np.array(vec_base[q])
 
             for j in range(m):
                 for l in range(m):
@@ -118,7 +117,7 @@ def iH_U_operator(file_output=False, filename=False, iH_S=False, m=False, M=Fals
 
                     iH_U[p, q] += p_array_M.dot(q_array_M) * mult
 
-    if file_output == True:
+    if file_output is True:
         # We save the vector basis
         iH_U_file = open(f"{filename}_iH_U.txt", "w")
 
@@ -137,12 +136,12 @@ def n_operator(m, M, vec_base):
     vec_base_canon = np.identity(M, dtype=complex)
 
     for p in range(M):
-        p_array = np.array(vec_base[p])
+        np.array(vec_base[p])
 
         p_array_M = np.array(vec_base_canon[p])
 
         for q in range(M):
-            q_array = np.array(vec_base[q])
+            np.array(vec_base[q])
 
             for k in range(m):
                 # Array subject to the operators
