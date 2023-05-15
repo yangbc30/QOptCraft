@@ -73,10 +73,16 @@ def MatLogCompV(N1=False, N2=False, txt=False, exp=False):
             try:
                 N1 = int(input("\nInitial dimension of the loop? (it cannot be lower than 2): "))
 
-                N2 = int(input("\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "))
+                N2 = int(
+                    input(
+                        "\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "
+                    )
+                )
 
                 if N1 < 2 or N2 < N1:
-                    print("\nThere is at least a given value not included in the possible domain.\n")
+                    print(
+                        "\nThere is at least a given value not included in the possible domain.\n"
+                    )
 
                 else:
                     break
@@ -149,7 +155,9 @@ def MatLogCompV(N1=False, N2=False, txt=False, exp=False):
 
     comparison_file.close()
 
-    print(f"\nResults have been saved on a 'logarithm_comparisons_V_dim_{N1}to{N2}_{exp}.txt' file.")
+    print(
+        f"\nResults have been saved on a 'logarithm_comparisons_V_dim_{N1}to{N2}_{exp}.txt' file."
+    )
 
     # ----------TOTAL TIME REQUIRED:----------
 

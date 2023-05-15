@@ -36,7 +36,9 @@ print("Terse  :", platform.platform(terse=True))
 U = read_matrix_from_txt(filename="Rotated_toponogov_1")  # Closest matrix
 
 state_basis = subspace_basis(
-    5, [1, 0, 1, 1, 1], [[0, 1, 1, 1, 1], [1, 0, 1, 1, 1], [1, 1, 0, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0]]
+    5,
+    [1, 0, 1, 1, 1],
+    [[0, 1, 1, 1, 1], [1, 0, 1, 1, 1], [1, 1, 0, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0]],
 )
 inputs = []
 
@@ -55,7 +57,9 @@ print(f"Inputs: {inputs}\n")
 fidelity = 0.99
 for state in inputs:
     print(f"\nInitial state: {state}")
-    input_state = state_in_basis([state], np.array([1]), state_basis)  # The state in the Hilbert space basis we use
+    input_state = state_in_basis(
+        [state], np.array([1]), state_basis
+    )  # The state in the Hilbert space basis we use
     output_state = np.matmul(U, input_state.T)
 
     print(

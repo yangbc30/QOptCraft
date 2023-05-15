@@ -57,7 +57,9 @@ def SfromU(
         print("==============================================================================\n\n")
 
     # Input control: in case there is something wrong with given inputs, it is notified on-screen
-    file_input, filename, newfile, acc_d = input_control(3, file_input, U, file_output, filename, True, acc_d)
+    file_input, filename, newfile, acc_d = input_control(
+        3, file_input, U, file_output, filename, True, acc_d
+    )
 
     # ----------U EVOLUTION OF THE MATRIX SYSTEM INPUT:----------
 
@@ -88,8 +90,12 @@ def SfromU(
     # We can rebuild m mode-dimensional matrices S given a n-photon matrix U (M-dimensional). The code only admits
     # plausible combinations, that is, that verify comb_evol(n,m)=comb(m+n-1,n)=M
 
-    while comb_evol(n, m) != M:  # in the function version, n and m are properly declared since launch
-        print("\nThe given photon number n and modes m do not satisfy the equation M=comb_evol(n,m)=comb(m+n-1,n).\n")
+    while (
+        comb_evol(n, m) != M
+    ):  # in the function version, n and m are properly declared since launch
+        print(
+            "\nThe given photon number n and modes m do not satisfy the equation M=comb_evol(n,m)=comb(m+n-1,n).\n"
+        )
 
         try:
             m = int(input("\nNumber of modes? "))
@@ -119,9 +125,15 @@ def SfromU(
     t = time.process_time_ns()
 
     # Matrix basis generation
-    base_u_m, base_u_M, base_u_m_e, base_u_m_f, separator_e_f, base_U_m, base_U_M = matrix_u_basis_generator(
-        m, M, photons, base_input
-    )
+    (
+        base_u_m,
+        base_u_M,
+        base_u_m_e,
+        base_u_m_f,
+        separator_e_f,
+        base_U_m,
+        base_U_M,
+    ) = matrix_u_basis_generator(m, M, photons, base_input)
 
     # We obtain the equation system
     eq_sys, eq_sys_choice, index_choice = eq_sys_finder(base_u_m, base_u_M)
@@ -129,7 +141,15 @@ def SfromU(
     # Verification of the system's validity: in case it is computable, the solution is obtained
     # In case it is not, "None" is given instead
     sol, sol_e, sol_f, check_sol = verification(
-        U, base_u_m, base_u_m_e, base_u_m_f, separator_e_f, base_u_M, eq_sys, eq_sys_choice, index_choice
+        U,
+        base_u_m,
+        base_u_m_e,
+        base_u_m_f,
+        separator_e_f,
+        base_u_M,
+        eq_sys,
+        eq_sys_choice,
+        index_choice,
     )
 
     if file_output is True:
@@ -212,7 +232,15 @@ def SfromU(
 
             # We verify the solution's existence again, this time for each permutation
             sol, sol_e, sol_f, check_sol = verification(
-                U_perm, base_u_m, base_u_m_e, base_u_m_f, separator_e_f, base_u_M, eq_sys, eq_sys_choice, index_choice
+                U_perm,
+                base_u_m,
+                base_u_m_e,
+                base_u_m_f,
+                separator_e_f,
+                base_u_M,
+                eq_sys,
+                eq_sys_choice,
+                index_choice,
             )
 
             # ----------PART 2: S MATRIX OBTENTION:----------
@@ -232,7 +260,9 @@ def SfromU(
     if file_output is True:
         if perm is True:
             if txt is True:
-                print(f"\nAll results have been storaged in the file '{filename}_m_{m}_n_{n}_S_recon_all.txt'.\n")
+                print(
+                    f"\nAll results have been storaged in the file '{filename}_m_{m}_n_{n}_S_recon_all.txt'.\n"
+                )
                 print(
                     f"\nThe corresponding permutation matrices U have been storaged in the file '{filename}_m_{m}_n_{n}_S_recon_all_U.txt'.\n"
                 )
@@ -241,7 +271,9 @@ def SfromU(
             U_perms_file.close()
 
         elif txt is True:
-            print(f"\nThe results have been storaged in the file '{filename}_m_{m}_n_{n}_S_recon_main.txt'.\n")
+            print(
+                f"\nThe results have been storaged in the file '{filename}_m_{m}_n_{n}_S_recon_main.txt'.\n"
+            )
 
     # ----------TOTAL TIME REQUIRED:----------
 

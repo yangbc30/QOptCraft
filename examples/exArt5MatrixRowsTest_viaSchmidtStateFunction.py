@@ -42,7 +42,9 @@ help(QOptCraft)
 # 'Rotated_toponogov_1' is generated in ExAux3EntangMatrix
 
 state_basis = subspace_basis(
-    5, [1, 0, 1, 1, 1], [[0, 1, 1, 1, 1], [1, 0, 1, 1, 1], [1, 1, 0, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0]]
+    5,
+    [1, 0, 1, 1, 1],
+    [[0, 1, 1, 1, 1], [1, 0, 1, 1, 1], [1, 1, 0, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0]],
 )
 
 # Measurement of three vectors in the Fock basis's Schmidt rank after passing through U.

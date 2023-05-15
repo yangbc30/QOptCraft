@@ -39,7 +39,9 @@ help(QOptCraft)
 # Generation of a 6-mode, 4-photonic unitary matrix S 'S_dim6.txt'.
 
 # We first generate and decompose the unitary scattering matrix in linear optic devices:
-QOptCraft(file_input=False, filename="S_dim6", newfile=True, file_output=True, module=1, impl=0, N=6)
+QOptCraft(
+    file_input=False, filename="S_dim6", newfile=True, file_output=True, module=1, impl=0, N=6
+)
 
 # Obtaination of "S_dim6.txt"'s evolution of n=4 photons U.
 # 'S_dim6_m_6_n_4_coefs_method_2.txt' is generated.

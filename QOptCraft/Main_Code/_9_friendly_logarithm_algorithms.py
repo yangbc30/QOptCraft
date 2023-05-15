@@ -32,7 +32,9 @@ from ..read_matrix import read_matrix_from_txt
 
 
 def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
-    file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
+    file_input, filename, filler, acc_d = input_control(
+        10, file_input, A, file_output, filename, txt, acc_d, False
+    )
 
     if txt is True:
         print("\n\nMATRIX LOGARTHM 1\n")
@@ -100,7 +102,9 @@ def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False
 
 
 def Logm2M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
-    file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
+    file_input, filename, filler, acc_d = input_control(
+        10, file_input, A, file_output, filename, txt, acc_d, False
+    )
 
     if txt is True:
         print("\n\nMATRIX LOGARTHM 2\n")
@@ -153,7 +157,9 @@ def Logm2M(file_input=True, A=False, file_output=True, filename=False, txt=False
 
 
 def Logm3M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
-    file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
+    file_input, filename, filler, acc_d = input_control(
+        10, file_input, A, file_output, filename, txt, acc_d, False
+    )
 
     if txt is True:
         print("\n\nMATRIX LOGARTHM 3\n")
@@ -218,7 +224,9 @@ def Logm3M(file_input=True, A=False, file_output=True, filename=False, txt=False
 
 
 def Logm4M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
-    file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
+    file_input, filename, filler, acc_d = input_control(
+        10, file_input, A, file_output, filename, txt, acc_d, False
+    )
 
     if txt is True:
         print("\n\nMATRIX LOGARTHM 4\n")
@@ -286,7 +294,9 @@ def Logm4M(file_input=True, A=False, file_output=True, filename=False, txt=False
 
 
 def Logm5M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):
-    file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
+    file_input, filename, filler, acc_d = input_control(
+        10, file_input, A, file_output, filename, txt, acc_d, False
+    )
 
     if txt is True:
         print("\n\nMATRIX LOGARTHM 5\n")

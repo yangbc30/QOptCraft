@@ -33,9 +33,20 @@ def decimal_precision():
 
 
 def input_control(
-    module=1, file_input=True, M_input=False, file_output=True, filename=False, txt=False, acc_d=3, newfile=True
+    module=1,
+    file_input=True,
+    M_input=False,
+    file_output=True,
+    filename=False,
+    txt=False,
+    acc_d=3,
+    newfile=True,
 ):
-    if file_input is False and isinstance(M_input, numpy.ndarray) is False and (module != 1 and module != 5):
+    if (
+        file_input is False
+        and isinstance(M_input, numpy.ndarray) is False
+        and (module != 1 and module != 5)
+    ):
         if isinstance(M_input, numpy.ndarray) is False:
             print("\nWARNING: invalid matrix input.")
 
@@ -62,7 +73,9 @@ def input_control(
 
                     while filename is False:
                         try:
-                            filename = input("Write the name of the file (without .txt extension): ")
+                            filename = input(
+                                "Write the name of the file (without .txt extension): "
+                            )
 
                         except ValueError:
                             print("The given value is not valid.\n")
@@ -89,10 +102,14 @@ def input_control(
     if txt is True:
         if acc_d < 0 or type(acc_d) is not int:
             if acc_d < 0:
-                print("\nWARNING: interactive mode requires an output decimal precision of 0 or higher.")
+                print(
+                    "\nWARNING: interactive mode requires an output decimal precision of 0 or higher."
+                )
 
             elif type(acc_d) is not int:
-                print("\nWARNING: invalid precision input (needs to be int and equal or higher than 0).")
+                print(
+                    "\nWARNING: invalid precision input (needs to be int and equal or higher than 0)."
+                )
 
             # This variable corresponds to the decimal precision. It applies to the results presented onscreen
             # In the .txt files, results contain all possible decimals
@@ -107,7 +124,9 @@ def input_control_ints(var, var_name, cond):
             print(f"\nWARNING: when creating a new file, a variable {var_name} must be given.")
 
         elif var < cond or type(var) is not int:
-            print(f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond}).")
+            print(
+                f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond})."
+            )
 
         while True:
             try:
@@ -116,7 +135,9 @@ def input_control_ints(var, var_name, cond):
                 if var >= cond:
                     break
 
-                print(f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond}).")
+                print(
+                    f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond})."
+                )
 
             except ValueError:
                 print("The given value is not valid.\n")
@@ -132,16 +153,24 @@ def input_control_intsDim(var, var_name, cond):
             )
 
         elif var < cond or type(var) is not int:
-            print(f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond}).")
+            print(
+                f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond})."
+            )
 
         while True:
             try:
-                var = int(input(f"\nValue of {var_name} (size {var_name} of the {var_name} x {var_name} matrix): "))
+                var = int(
+                    input(
+                        f"\nValue of {var_name} (size {var_name} of the {var_name} x {var_name} matrix): "
+                    )
+                )
 
                 if var >= cond:
                     break
 
-                print(f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond}).")
+                print(
+                    f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond})."
+                )
 
             except ValueError:
                 print("The given value is not valid.\n")
@@ -155,7 +184,9 @@ def input_control_floats(var, var_name, cond):
             print(f"\nWARNING: when creating a new file, a variable {var_name} must be given.")
 
         elif var < cond or type(var) is not float:
-            print(f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond}).")
+            print(
+                f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond})."
+            )
 
         while True:
             try:
@@ -164,7 +195,9 @@ def input_control_floats(var, var_name, cond):
                 if var >= cond:
                     break
 
-                print(f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond}).")
+                print(
+                    f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond})."
+                )
 
             except ValueError:
                 print("The given value is not valid.\n")

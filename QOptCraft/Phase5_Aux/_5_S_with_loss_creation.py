@@ -96,8 +96,12 @@ def S_D_values(index, car, maxDim, ancDim, totalDim):
         S_D_index[index, index_na + maxDim] = sp.sqrt(1 - car**2)
         S_D_index[index_na + maxDim, index] = -sp.sqrt(1 - car**2)
 
-        S_D_index[index + int(totalDim / 2), index_na + maxDim + int(totalDim / 2)] = sp.sqrt(1 - car**2)
-        S_D_index[index_na + maxDim + int(totalDim / 2), index + int(totalDim / 2)] = -sp.sqrt(1 - car**2)
+        S_D_index[index + int(totalDim / 2), index_na + maxDim + int(totalDim / 2)] = sp.sqrt(
+            1 - car**2
+        )
+        S_D_index[index_na + maxDim + int(totalDim / 2), index + int(totalDim / 2)] = -sp.sqrt(
+            1 - car**2
+        )
 
     elif car > 1:
         S_D_index[int(totalDim / 2) + maxDim + index_na, index] = sp.sqrt(car**2 - 1)

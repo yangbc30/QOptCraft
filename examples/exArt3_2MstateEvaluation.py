@@ -40,7 +40,9 @@ U = read_matrix_from_txt(filename)
 
 # We introduce an initial subspace basis, containing the elements we are interested in for our vector
 state_basis = subspace_basis(
-    5, [1, 0, 1, 1, 1], [[0, 1, 1, 1, 1], [1, 0, 1, 1, 1], [1, 1, 0, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0]]
+    5,
+    [1, 0, 1, 1, 1],
+    [[0, 1, 1, 1, 1], [1, 0, 1, 1, 1], [1, 1, 0, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0]],
 )
 
 # State obtaination. Input: |rho> = 1*|1,1,1,1,0>. Output: will have a combination of plenty of elements in the Fock basis of 4 photons.

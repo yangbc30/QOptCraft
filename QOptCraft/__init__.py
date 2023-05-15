@@ -16,15 +16,15 @@ from QOptCraft.input_control import *
 from QOptCraft.Main_Code import *
 from QOptCraft.mat_inner_product import *
 from QOptCraft.Phase3_Aux import *
-from QOptCraft.Phase3_Aux import matrix_u_basis_generator_sparse
+from QOptCraft.Phase3_Aux import algebra_basis_sparse
 from QOptCraft.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import write_algebra_basis
-from QOptCraft.Phase4_Aux import gram_schmidt_modified_2dmatrices
-from QOptCraft.photon_comb_basis import *
+from QOptCraft.Phase4_Aux import gram_schmidt_modified
+from QOptCraft.basis.photon_basis import photon_basis
 
 # from QOptCraft.optic_devices import *
 from QOptCraft.read_matrix import *
 from QOptCraft.recur_factorial import *
 from QOptCraft.unitary import *
 from QOptCraft.write_initial_matrix import *
-from .state import State, PureState, MixedState
-from ._version import __version__
+from QOptCraft.state import State, PureState, MixedState
+from QOptCraft._version import __version__

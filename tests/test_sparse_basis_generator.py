@@ -1,28 +1,22 @@
 import pytest
 from numpy.testing import assert_allclose
 
-from QOptCraft import matrix_u_basis_generator, matrix_u_basis_generator_sparse, photon_combs_generator
+from QOptCraft import matrix_u_basis_generator
+from QOptCraft.lie_algebra import algebra_basis_sparse
+from QOptCraft.basis import photon_basis
 
 
 extra = 2
-n = 2
-m = 4 + (n - 2) + extra
-basis = photon_combs_generator(m, [n] + [0] * (m - 1))
+photons = 2
+modes = 4 + (photons - 2) + extra
+basis = photon_basis(photons, modes)
 dim = len(basis)
 
 
-@pytest.mark.parametrize(("m", "dim", "photons", "base_input"), ((m, dim, [n] + [0] * (m - 1), False),))
-def test_sparse_basis_generator(m, dim, photons, base_input) -> None:
-    u_m, u_M, u_m_e, u_m_f, sep, U_m, U_M = matrix_u_basis_generator(m, dim, photons, base_input)
-    (
-        u_m_sparse,
-        u_M_sparse,
-        u_m_e_sparse,
-        u_m_f_sparse,
-        sep_sparse,
-        U_m_sparse,
-        U_M_sparse,
-    ) = matrix_u_basis_generator_sparse(m, dim, photons, base_input)
+@pytest.mark.parametrize(("modes", "dim", "photons", "base_input"), ((modes, dim, photons, False),))
+def test_sparse_basis_generator(modes, dim, photons, base_input) -> None:
+    alg_basis = matrix_u_basis_generator(modes, dim, photons, base_input)[0]
+    alg_basis_sparse = algebra_basis_sparse(modes, dim, photons)[0]
 
-    for matrix, matrix_sparse in zip(u_m, u_m_sparse):
+    for matrix, matrix_sparse in zip(alg_basis, alg_basis_sparse):
         assert_allclose(matrix, matrix_sparse.toarray())

@@ -40,6 +40,10 @@ def D_decomposition(M, maxDim, filename, file_output, txt=False):
         DList_file.close()
 
         if txt is True:
-            print("\nThe list of matrices DList has been storaged in the file '" + filename + "_DList.txt'.")
+            print(
+                "\nThe list of matrices DList has been storaged in the file '"
+                + filename
+                + "_DList.txt'."
+            )
 
     return DList

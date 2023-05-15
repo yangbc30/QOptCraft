@@ -98,7 +98,9 @@ def U_decomposition_Reck(M, dim, output, name, txt=False):
             if output is True:
                 theta = phase_adjust(sol[0], minn=-np.pi, maxx=np.pi)
                 phi = phase_adjust(sol[1], minn=0.0, maxx=2.0 * np.pi)
-                TmnList_file.write("\nMatrix " + name + f"_T{m}{n} (odd): Theta = {theta}, Phi = {phi}\n")
+                TmnList_file.write(
+                    "\nMatrix " + name + f"_T{m}{n} (odd): Theta = {theta}, Phi = {phi}\n"
+                )
 
                 np.savetxt(TmnList_file, TmnList[cont, :, :], delimiter=",")
 

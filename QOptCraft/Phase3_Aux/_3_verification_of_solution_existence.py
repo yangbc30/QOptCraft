@@ -85,7 +85,9 @@ def eq_sys_finder(base_u_m, base_u_M):
     return eq_sys, eq_sys_choice, index_choice
 
 
-def verification(U, base_u_m, base_u_m_e, base_u_m_f, sep, base_u_M, eq_sys, eq_sys_choice, index_choice):
+def verification(
+    U, base_u_m, base_u_m_e, base_u_m_f, sep, base_u_M, eq_sys, eq_sys_choice, index_choice
+):
     m = len(base_u_m[0])
     M = len(base_u_M[0])
 

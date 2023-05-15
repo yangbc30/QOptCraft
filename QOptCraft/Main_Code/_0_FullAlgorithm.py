@@ -212,12 +212,20 @@ def QOCTest(
 
             while True:
                 try:
-                    N1 = int(input("\nInitial dimension of the loop? (it cannot be lower than 2): "))
+                    N1 = int(
+                        input("\nInitial dimension of the loop? (it cannot be lower than 2): ")
+                    )
 
-                    N2 = int(input("\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "))
+                    N2 = int(
+                        input(
+                            "\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "
+                        )
+                    )
 
                     if N1 < 2 or N2 < N1:
-                        print("\nThere is at least a given value not included in the possible domain.\n")
+                        print(
+                            "\nThere is at least a given value not included in the possible domain.\n"
+                        )
 
                     else:
                         break
@@ -234,12 +242,20 @@ def QOCTest(
 
             while True:
                 try:
-                    N1 = int(input("\nInitial dimension of the loop? (it cannot be lower than 2): "))
+                    N1 = int(
+                        input("\nInitial dimension of the loop? (it cannot be lower than 2): ")
+                    )
 
-                    N2 = int(input("\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "))
+                    N2 = int(
+                        input(
+                            "\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "
+                        )
+                    )
 
                     if N1 < 2 or N2 < N1:
-                        print("\nThere is at least a given value not included in the possible domain.\n")
+                        print(
+                            "\nThere is at least a given value not included in the possible domain.\n"
+                        )
 
                     else:
                         break
@@ -277,12 +293,20 @@ def QOCTest(
             # We input the interval of dimensions to be computed by the algorithm
             while True:
                 try:
-                    m1 = int(input("\nInitial dimension of the loop? (it cannot be lower than 2): "))
+                    m1 = int(
+                        input("\nInitial dimension of the loop? (it cannot be lower than 2): ")
+                    )
 
-                    m2 = int(input("\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "))
+                    m2 = int(
+                        input(
+                            "\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "
+                        )
+                    )
 
                     if m1 < 2 or m2 < m1:
-                        print("\nThere is at least a given value not included in the possible domain.\n")
+                        print(
+                            "\nThere is at least a given value not included in the possible domain.\n"
+                        )
 
                     else:
                         break
@@ -296,7 +320,11 @@ def QOCTest(
             # We input the interval of number of photons to be computed by the algorithm
             while True:
                 try:
-                    n1 = int(input("\nInitial number of photons of the loop? (it cannot be lower than 1): "))
+                    n1 = int(
+                        input(
+                            "\nInitial number of photons of the loop? (it cannot be lower than 1): "
+                        )
+                    )
 
                     n2 = int(
                         input(
@@ -305,7 +333,9 @@ def QOCTest(
                     )
 
                     if n1 < 1 or n2 < n1:
-                        print("\nThere is at least a given value not included in the possible domain.\n")
+                        print(
+                            "\nThere is at least a given value not included in the possible domain.\n"
+                        )
 
                     else:
                         break
@@ -319,12 +349,16 @@ def QOCTest(
 
 
 # A function designed for testing QOptCraft's algorithms.
-def QOCLog(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3, choice=False):
+def QOCLog(
+    file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3, choice=False
+):
     """
     Contains the different logarithm algorithms, Log{i}M (i being the numeration for the functions) developed for certain phases of the library.
     """
 
-    file_input, filename, filler, acc_d = input_control(10, file_input, A, file_output, filename, txt, acc_d, False)
+    file_input, filename, filler, acc_d = input_control(
+        10, file_input, A, file_output, filename, txt, acc_d, False
+    )
 
     if type(choice) is not int:
         print("\nWARNING: invalid choice input (needs to be int).")
@@ -442,7 +476,22 @@ def QOptCraft(
         return M
 
     elif module == 8:
-        QOCTest(file_output, m1, m2, n1, n2, N1, N2, tries, txt, choice, exp, vec_base, inverse, comparison_matrix)
+        QOCTest(
+            file_output,
+            m1,
+            m2,
+            n1,
+            n2,
+            N1,
+            N2,
+            tries,
+            txt,
+            choice,
+            exp,
+            vec_base,
+            inverse,
+            comparison_matrix,
+        )
 
     elif module == 6:
         file_input_state, filename_state, _, acc_d = input_control(
@@ -485,18 +534,33 @@ def QOptCraft(
         )
 
         if module == 2:
-            U, vec_base = StoU(file_input, M_input, file_output, filename, method, n, acc_d, txt, vec_base)
+            U, vec_base = StoU(
+                file_input, M_input, file_output, filename, method, n, acc_d, txt, vec_base
+            )
 
             return U, vec_base
 
         elif module == 3:
-            S = SfromU(file_input, M_input, file_output, filename, base_input, m, n, perm, acc_d, txt)
+            S = SfromU(
+                file_input, M_input, file_output, filename, base_input, m, n, perm, acc_d, txt
+            )
 
             return S
 
         elif module == 4:
             sol_array = Toponogov(
-                file_input, M_input, file_output, filename, base_input, tries, m, n, acc_d, txt, acc_t, vec_base
+                file_input,
+                M_input,
+                file_output,
+                filename,
+                base_input,
+                tries,
+                m,
+                n,
+                acc_d,
+                txt,
+                acc_t,
+                vec_base,
             )
 
             return sol_array
@@ -519,6 +583,8 @@ def QOptCraft(
             return logmA
 
         else:
-            U_un, TmnList, D = Selements(file_input, M_input, file_output, filename, impl, newfile, N, acc_d, txt)
+            U_un, TmnList, D = Selements(
+                file_input, M_input, file_output, filename, impl, newfile, N, acc_d, txt
+            )
 
             return U_un, TmnList, D

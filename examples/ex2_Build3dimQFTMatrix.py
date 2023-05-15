@@ -45,10 +45,27 @@ QOptCraft(filename="QFT_matrix_3", module=7, choice=5, N=3)
 QOptCraft(file_input=True, filename="QFT_matrix_3", txt=True, acc_d=2, module=3, m=2, n=2)
 
 # Obtaination of "QFT_matrix_3.txt"'s closest evolution matrix U.
-QOptCraft(file_input=True, filename="QFT_matrix_3", base_input=False, file_output=True, module=4, m=2, n=2, tries=20)
+QOptCraft(
+    file_input=True,
+    filename="QFT_matrix_3",
+    base_input=False,
+    file_output=True,
+    module=4,
+    m=2,
+    n=2,
+    tries=20,
+)
 
 # Obtaination of "QFT_matrix_3_toponogov_2.txt"'s S-matrix.
-QOptCraft(file_input=True, filename="QFT_matrix_3_toponogov_2", file_output=True, module=3, m=2, n=2, perm=True)
+QOptCraft(
+    file_input=True,
+    filename="QFT_matrix_3_toponogov_2",
+    file_output=True,
+    module=3,
+    m=2,
+    n=2,
+    perm=True,
+)
 
 # Decomposition of "QFT_matrix_3_toponogov_2.txt's S-matrix".
 QOptCraft(

@@ -12,7 +12,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
+from numbers import Number
+
 import numpy as np
+from numpy.typing import NDArray
 
 
 # Main function to inherit in other algorithms
@@ -105,10 +108,10 @@ def photon_comb_index(array, vec_base):
     return index
 
 
+"""
 # A more optimal and N-dimensional version of the former, allowing for
 # probabilities (pamplitudes) per state considered in the linear combination
 def state_in_basis(basis, pamplitudes, vec_base) -> np.ndarray:
-    """Given a vector in terms of elements of a basis and amplitudes, output the state vector."""
     state = np.zeros(len(vec_base), dtype=complex)
     for k, vector in enumerate(basis):
         # print(vector, type(vector))
@@ -118,14 +121,29 @@ def state_in_basis(basis, pamplitudes, vec_base) -> np.ndarray:
                 basis_state[ind] = pamplitudes[k]
                 state = state + basis_state
     return state
+"""
+
+
+def state_in_basis(
+    vectors: list[list[int]], amplitudes: list[Number], basis: list[list[int]]
+) -> NDArray:
+    """Given a vector in terms of elements of a basis and amplitudes,
+    output the state vector.
+    """
+    state = np.zeros(len(basis), dtype=complex)
+
+    for i, vector in enumerate(vectors):
+        for j, basis_vector in enumerate(basis):
+            if vector == basis_vector:
+                state[j] = amplitudes[i]
+    return state
 
 
 # Extracts a particular subspace from the Fock states basis space
 def subspace_basis(m, photons, subspace):
-    vec_base_orig = photon_combs_generator(m, photons)
-    vec_base = subspace
-    for state in vec_base_orig:
-        if not np.any([np.all(y) for y in [state == x for x in vec_base]]):
-            vec_base.append(list(state))
+    basis = photon_combs_generator(m, photons)
+    for vector in basis:
+        if not np.any([np.all(y) for y in [vector == x for x in subspace]]):
+            subspace.append(vector)
 
-    return np.array(vec_base)
+    return np.array(subspace)

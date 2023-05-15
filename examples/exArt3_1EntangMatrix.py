@@ -34,7 +34,9 @@ help(Toponogov)
 
 # We declare a variable containing our state basis, using auxiliar, more advanced functions not belonging to QOptCraft()
 state_basis = subspace_basis(
-    5, [1, 0, 1, 1, 1], [[0, 1, 1, 1, 1], [1, 0, 1, 1, 1], [1, 1, 0, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0]]
+    5,
+    [1, 0, 1, 1, 1],
+    [[0, 1, 1, 1, 1], [1, 0, 1, 1, 1], [1, 1, 0, 1, 1], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0]],
 )
 
 # Toponogov() execution (you may also do QOptCraft(module=4,M_input=RotMat(70,1)) and the remainding parameters, same as below)
@@ -57,4 +59,10 @@ Toponogov(
 SfromU(file_input=True, filename=filename, file_output=True, m=5, n=4)
 
 # Decomposition of S (you may also do QOptCraft(module=1) and the remainding parameters, same as below)
-Selements(file_input=True, file_output=True, newfile=False, impl=0, filename=filename + "_m_5_n_4_S_recon_main")
+Selements(
+    file_input=True,
+    file_output=True,
+    newfile=False,
+    impl=0,
+    filename=filename + "_m_5_n_4_S_recon_main",
+)

@@ -1,9 +1,11 @@
 """Implement a class to describe a pure state photonic state.
 """
+import math
 
 import numpy as np
+from numpy.typing import NDArray
 
-from QOptCraft import state_in_basis
+from QOptCraft.basis import state_in_basis
 
 
 def photon_basis(photons: int, modes: int) -> list[list[int]]:
@@ -67,9 +69,27 @@ class PureState(State):
         self.basis = basis
         self.state_in_basis = state_in_basis(fock_list, coef_list, self.basis)
 
+    @property
     def density_matrix(self):
-        return np.matrix(self.state_in_basis).T @ np.matrix(self.state_in_basis).conj()
+        return np.outer(self.state_in_basis, self.state_in_basis.conj().T)
 
 
 class MixedState(State):
-    ...
+    def __init__(
+        self,
+        pure_states: list[PureState],
+        probs: list[float],
+        density_matrix: NDArray | None = None,
+    ) -> None:
+        if density_matrix is not None:
+            self.matrix = density_matrix
+        else:
+            assert len(pure_states) == len(
+                probs
+            ), "Error: unequal length of states and probabilities list."
+            assert math.isclose(
+                1, sum(probs)
+            ), "Probabilities don't add up to 1."
+            self.matrix = probs[0] * pure_states[0].density_matrix
+            for i in range(1, len(probs)):
+                self.matrix += probs[i] * pure_states[i].density_matrix

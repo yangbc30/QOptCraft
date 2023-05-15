@@ -26,7 +26,7 @@ from ..input_control import input_control_ints
 from ..Phase2_Aux._2_1st_evolution_method import evolution
 from ..Phase2_Aux._2_2nd_evolution_method import evolution_2, evolution_2_ryser
 from ..Phase2_Aux._2_3rd_evolution_method import evolution_3
-from ..photon_comb_basis import photon_combs_generator
+from QOptCraft.photon_comb_basis import photon_combs_generator
 from ..recur_factorial import comb_evol
 from ..write_initial_matrix import haar_measure
 
@@ -67,10 +67,16 @@ def StoUEvolComp(
             try:
                 m1 = int(input("\nInitial dimension of the loop? (it cannot be lower than 2): "))
 
-                m2 = int(input("\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "))
+                m2 = int(
+                    input(
+                        "\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "
+                    )
+                )
 
                 if m1 < 2 or m2 < m1:
-                    print("\nThere is at least a given value not included in the possible domain.\n")
+                    print(
+                        "\nThere is at least a given value not included in the possible domain.\n"
+                    )
 
                 else:
                     break
@@ -84,7 +90,9 @@ def StoUEvolComp(
         # We input the interval of number of photons to be computed by the algorithm
         while True:
             try:
-                n1 = int(input("\nInitial number of photons of the loop? (it cannot be lower than 1): "))
+                n1 = int(
+                    input("\nInitial number of photons of the loop? (it cannot be lower than 1): ")
+                )
 
                 n2 = int(
                     input(
@@ -93,7 +101,9 @@ def StoUEvolComp(
                 )
 
                 if n1 < 1 or n2 < n1:
-                    print("\nThere is at least a given value not included in the possible domain.\n")
+                    print(
+                        "\nThere is at least a given value not included in the possible domain.\n"
+                    )
 
                 else:
                     break
@@ -103,7 +113,9 @@ def StoUEvolComp(
 
     if txt is True:
         print("\nNow, we will generate random unitary matrices S for each dimension.\n")
-        print("Per S, the evolution of the system matrix will be computed for each number of photons.\n")
+        print(
+            "Per S, the evolution of the system matrix will be computed for each number of photons.\n"
+        )
 
         # ----------COMPARISON BETWEEN COMPUTATION TIMES FOR THE THREE EVOLUTION METHODS:----------
 
@@ -122,10 +134,23 @@ def StoUEvolComp(
         )
         # cell_format.set_border() (another way to assign classes)
         cell_format_number = workbook.add_format(
-            {"center_across": True, "left": True, "right": True, "align": "center", "valign": "vcenter"}
+            {
+                "center_across": True,
+                "left": True,
+                "right": True,
+                "align": "center",
+                "valign": "vcenter",
+            }
         )
         cell_format_number_end = workbook.add_format(
-            {"center_across": True, "left": True, "right": True, "bottom": True, "align": "center", "valign": "vcenter"}
+            {
+                "center_across": True,
+                "left": True,
+                "right": True,
+                "bottom": True,
+                "align": "center",
+                "valign": "vcenter",
+            }
         )
 
     tries = input_control_ints(tries, "tries", 1)
@@ -240,10 +265,14 @@ def StoUEvolComp(
                     # line index
                     for name in scores:
                         if col == 1:  # the loop
-                            worksheet.write(0, i, name, cell_format)  # write name at row i and column 0
+                            worksheet.write(
+                                0, i, name, cell_format
+                            )  # write name at row i and column 0
 
                         if k == m2 and j == n2:
-                            worksheet.write(col, i, scores[name], cell_format_number_end)  # write score at last column
+                            worksheet.write(
+                                col, i, scores[name], cell_format_number_end
+                            )  # write score at last column
 
                         else:
                             worksheet.write(
@@ -255,7 +284,9 @@ def StoUEvolComp(
                     col += 1
 
     if file_output is True:
-        print(f"\nResults have been saved on a Workbook 'computation_comparisons_m_{m1}to{m2}_n_{n1}to{n2}.xlsx' file.")
+        print(
+            f"\nResults have been saved on a Workbook 'computation_comparisons_m_{m1}to{m2}_n_{n1}to{n2}.xlsx' file."
+        )
 
         workbook.close()  # close the workbook
 

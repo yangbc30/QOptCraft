@@ -53,10 +53,16 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
             try:
                 N1 = int(input("\nInitial dimension of the loop? (it cannot be lower than 2): "))
 
-                N2 = int(input("\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "))
+                N2 = int(
+                    input(
+                        "\nFinal dimension of the loop? (it cannot be lower than the initial dimension): "
+                    )
+                )
 
                 if N1 < 2 or N2 < N1:
-                    print("\nThere is at least a given value not included in the possible domain.\n")
+                    print(
+                        "\nThere is at least a given value not included in the possible domain.\n"
+                    )
 
                 else:
                     break
@@ -85,11 +91,15 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
                 print("\nThe given value is not valid.\n")
 
     # MICROSOFT EXCEL INITIALIZATION
-    workbook = xlsxwriter.Workbook(f"logarithm_comparisons_TnE_dim_{N1}to{N2}_{exp}.xlsx")  # create the workbook
+    workbook = xlsxwriter.Workbook(
+        f"logarithm_comparisons_TnE_dim_{N1}to{N2}_{exp}.xlsx"
+    )  # create the workbook
 
     cell_format = workbook.add_format({"center_across": True, "border": True, "valign": "vcenter"})
     # cell_format.set_border() (another way to assign classes)
-    cell_format_number = workbook.add_format({"center_across": True, "left": True, "right": True, "valign": "vcenter"})
+    cell_format_number = workbook.add_format(
+        {"center_across": True, "left": True, "right": True, "valign": "vcenter"}
+    )
     cell_format_number_end = workbook.add_format(
         {"center_across": True, "left": True, "right": True, "bottom": True, "valign": "vcenter"}
     )
@@ -192,12 +202,20 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
         # line index
         for name in scores_time:
             if row == 5:  # the loop
-                worksheet.write(row - 1, col, name, cell_format)  # write name at row 'row' and column 1
-                worksheet.write(row - 1, col + 8, name, cell_format)  # write name at row 'row' and column 1
+                worksheet.write(
+                    row - 1, col, name, cell_format
+                )  # write name at row 'row' and column 1
+                worksheet.write(
+                    row - 1, col + 8, name, cell_format
+                )  # write name at row 'row' and column 1
 
             if i == N2:
-                worksheet.write(row, col, scores_time[name], cell_format_number_end)  # write score at last row
-                worksheet.write(row, col + 8, scores_error[name], cell_format_number_end)  # write score at last row
+                worksheet.write(
+                    row, col, scores_time[name], cell_format_number_end
+                )  # write score at last row
+                worksheet.write(
+                    row, col + 8, scores_error[name], cell_format_number_end
+                )  # write score at last row
 
             else:
                 worksheet.write(
@@ -213,7 +231,9 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
 
     workbook.close()  # close the workbook
 
-    print(f"\nResults have been saved on a Workbook 'logarithm_comparisons_TnE_dim_{N1}to{N2}_{exp}.xlsx' file.")
+    print(
+        f"\nResults have been saved on a Workbook 'logarithm_comparisons_TnE_dim_{N1}to{N2}_{exp}.xlsx' file."
+    )
 
     # ----------TOTAL TIME REQUIRED:----------
 

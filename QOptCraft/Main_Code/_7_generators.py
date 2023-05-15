@@ -22,7 +22,7 @@ import numpy as np
 
 from ..input_control import input_control_ints, input_control_intsDim
 from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
-from ..photon_comb_basis import photon_combs_generator
+from QOptCraft.photon_comb_basis import photon_combs_generator
 from ..recur_factorial import comb_evol
 from ..write_initial_matrix import *
 from ._2_Get_U_matrix_of_photon_system_evolution import StoU
@@ -68,8 +68,12 @@ def AlgBasis(file_output=True, m=False, n=False, M=False):
     # We can rebuild m mode-dimensional matrices S given a n-photon matrix U (M-dimensional). The code only admits
     # plausible combinations, that is, that verify comb_evol(n,m)=comb(m+n-1,n)=M
 
-    while comb_evol(n, m) != M:  # in the function version, n and m are properly declared since launch
-        print("\nThe given photon number n and modes m do not satisfy the equation M=comb_evol(n,m)=comb(m+n-1,n).\n")
+    while (
+        comb_evol(n, m) != M
+    ):  # in the function version, n and m are properly declared since launch
+        print(
+            "\nThe given photon number n and modes m do not satisfy the equation M=comb_evol(n,m)=comb(m+n-1,n).\n"
+        )
 
         try:
             m = int(input("\nNumber of modes? "))
@@ -284,7 +288,9 @@ def RandImU(file_output=True, filename=False, m=False, n=False, txt=False):
 
     S = RandU(file_output=False, filename=False, N=m, txt=False)
 
-    ImU = StoU(file_input=False, S=S, file_output=False, filename=False, method=2, n=n, txt=False)[0]
+    ImU = StoU(file_input=False, S=S, file_output=False, filename=False, method=2, n=n, txt=False)[
+        0
+    ]
 
     if txt is True:
         print(f"\nA new {M} x {M} ImU matrix has been generated.")

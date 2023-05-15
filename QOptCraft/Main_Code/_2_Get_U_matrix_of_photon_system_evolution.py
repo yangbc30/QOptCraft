@@ -27,7 +27,7 @@ from ..input_control import input_control, input_control_ints
 from ..Phase2_Aux._2_1st_evolution_method import evolution
 from ..Phase2_Aux._2_2nd_evolution_method import evolution_2, evolution_2_ryser
 from ..Phase2_Aux._2_3rd_evolution_method import evolution_3, iH_U_operator
-from ..photon_comb_basis import photon_combs_generator
+from QOptCraft.photon_comb_basis import photon_combs_generator
 from ..read_matrix import read_matrix_from_txt
 from ..recur_factorial import comb_evol
 from ..unitary import *
@@ -123,7 +123,9 @@ def StoU(
         print("================================================================\n\n")
 
     # Input control: in case there is something wrong with given inputs, it is notified on-screen
-    file_input, filename, newfile, acc_d = input_control(2, file_input, S, file_output, filename, True, acc_d)
+    file_input, filename, newfile, acc_d = input_control(
+        2, file_input, S, file_output, filename, True, acc_d
+    )
 
     if type(method) is not int:
         print("\nWARNING: invalid method input (needs to be int).")
@@ -284,7 +286,9 @@ def StoU(
             print(np.round(U, acc_d))
 
         if file_output is True:
-            probs_file.write("\nFor all columns, the sum of probabilities is practically equal to 1.0. ")
+            probs_file.write(
+                "\nFor all columns, the sum of probabilities is practically equal to 1.0. "
+            )
 
     else:
         if txt is True:

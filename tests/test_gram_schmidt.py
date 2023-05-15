@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 from numpy.testing import assert_almost_equal
 
-from QOptCraft import gram_schmidt_modified_2dmatrices, mat_inner_product
+from QOptCraft import gram_schmidt_modified, mat_inner_product
 
 
 BASIS_1 = [
@@ -41,7 +41,7 @@ BASIS_4 = [
 
 @pytest.mark.parametrize(("basis"), ((BASIS_1), (BASIS_2), (BASIS_3), (BASIS_4)))
 def test_gram_schmidt_modified(basis: list[np.ndarray]) -> None:
-    orth_basis = gram_schmidt_modified_2dmatrices(basis)
+    orth_basis = gram_schmidt_modified(basis)
 
     for matrix_1 in orth_basis:
         for matrix_2 in orth_basis:

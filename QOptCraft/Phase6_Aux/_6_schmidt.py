@@ -80,7 +80,8 @@ def schmidt_rank_vector(state, basis, mvec):
             alpha_i = state[ind]
             # Iterates through the amplitudes
             state_larger_space = state_larger_space + alpha_i * np.kron(
-                large_basis(small_subsystem, n, mvec[i]), large_basis(large_subsystem, n, m - mvec[i])
+                large_basis(small_subsystem, n, mvec[i]),
+                large_basis(large_subsystem, n, m - mvec[i]),
             )
             ind = ind + 1
 

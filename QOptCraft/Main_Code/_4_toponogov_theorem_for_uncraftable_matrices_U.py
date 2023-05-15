@@ -32,7 +32,7 @@ from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_gene
 # Required logarithms
 from ..Phase4_Aux._4_Logarithms_required import *
 from ..Phase4_Aux.gram_schmidt import *
-from ..photon_comb_basis import photon_combs_generator
+from QOptCraft.photon_comb_basis import photon_combs_generator
 from ..read_matrix import read_matrix_from_txt
 from ..recur_factorial import *
 from ..write_initial_matrix import haar_measure
@@ -62,7 +62,9 @@ def Toponogov(
     print("================================================================\n\n")
 
     # Input control: in case there is something wrong with given inputs, it is notified on-screen
-    file_input, filename, newfile, acc_d = input_control(4, file_input, U_input, file_output, filename, txt, acc_d)
+    file_input, filename, newfile, acc_d = input_control(
+        4, file_input, U_input, file_output, filename, txt, acc_d
+    )
 
     # Initial input control
     tries = input_control_ints(tries, "tries", 1)
@@ -90,8 +92,12 @@ def Toponogov(
     # We can rebuild m mode-dimensional matrices S given a n-photon matrix U (M-dimensional). The code only admits
     # plausible combinations, that is, that verify comb_evol(n,m)=comb(m+n-1,n)=M
 
-    while comb_evol(n, m) != M:  # in the function version, n and m are properly declared since launch
-        print("\nThe given photon number n and modes m do not satisfy the equation M=comb_evol(n,m)=comb(m+n-1,n).\n")
+    while (
+        comb_evol(n, m) != M
+    ):  # in the function version, n and m are properly declared since launch
+        print(
+            "\nThe given photon number n and modes m do not satisfy the equation M=comb_evol(n,m)=comb(m+n-1,n).\n"
+        )
 
         try:
             m = int(input("\nNumber of modes? "))
@@ -177,7 +183,9 @@ def Toponogov(
 
             # Projection onto the loaded u(M) basis
             for i in range(m * m):
-                coefs[i] = mat_inner_product(logm_3_schur(np.linalg.inv(U_iter).dot(U_input))[0], base_u_M[i])
+                coefs[i] = mat_inner_product(
+                    logm_3_schur(np.linalg.inv(U_iter).dot(U_input))[0], base_u_M[i]
+                )
                 # coefs[i]=(logm_3_schur(np.linalg.inv(U_iter).dot(U_input))[0]).dot(base_u_M[i])
                 # coefs[i]=mat_inner_product(LogU(np.linalg.inv(U_iter).dot(U_input),10),base_u_M[i])
 
@@ -197,7 +205,9 @@ def Toponogov(
                     boolean_arr = np.zeros(len(sol_array))
 
                     for l in range(len(sol_array)):
-                        boolean_arr[l] = (np.round(U_iter, acc_d) == np.round(sol_array[l], acc_d)).all()
+                        boolean_arr[l] = (
+                            np.round(U_iter, acc_d) == np.round(sol_array[l], acc_d)
+                        ).all()
 
                     if not (boolean_arr[:] is True).any():
                         sol_array = np.append(sol_array, np.array([U_iter]), axis=0)
@@ -228,7 +238,9 @@ def Toponogov(
 
         for i in range(len(sol_mod)):
             toponogov_file.write(
-                "\ntoponogov(" + filename + f")_{i+1} (separation length from original of {sol_mod[i]}):\n"
+                "\ntoponogov("
+                + filename
+                + f")_{i+1} (separation length from original of {sol_mod[i]}):\n"
             )
 
             toponogov_file_2 = open(f"{filename}_toponogov_{i+1}.txt", "w+")

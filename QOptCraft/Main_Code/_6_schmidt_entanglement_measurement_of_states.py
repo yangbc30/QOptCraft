@@ -30,7 +30,7 @@ from ..Phase4_Aux._4_Logarithms_required import *
 from ..Phase4_Aux.gram_schmidt import *
 from ..Phase6_Aux._6_basis_manipulations import state_leading_fidelity, state_leading_terms
 from ..Phase6_Aux._6_schmidt import schmidt_rank_vector
-from ..photon_comb_basis import photon_combs_generator, state_in_basis
+from QOptCraft.photon_comb_basis import photon_combs_generator, state_in_basis
 from ..read_matrix import read_matrix_from_txt, read_matrix_from_txt_general
 from ..recur_factorial import *
 
@@ -134,7 +134,9 @@ def StateSchmidt(
 
     if file_output is True:
         schmidt_leading_file = open(f"{filename_state}_{filename_matrix}_schmidt_leading.txt", "w+")
-        schmidt_fidelity_file = open(f"{filename_state}_{filename_matrix}_schmidt_fidelity_{fidelity}.txt", "w+")
+        schmidt_fidelity_file = open(
+            f"{filename_state}_{filename_matrix}_schmidt_fidelity_{fidelity}.txt", "w+"
+        )
 
     # Beginning of time measurement
     t = time.process_time_ns()
@@ -153,13 +155,17 @@ def StateSchmidt(
         post_entanglement = schmidt_rank_vector(output_state, vec_base, list(modes_per_partition))
 
         vec_base_leading, output_state_leading = state_leading_terms(output_state, vec_base)
-        vec_base_fidelity, output_state_fidelity = state_leading_fidelity(output_state, vec_base, fidelity)
+        vec_base_fidelity, output_state_fidelity = state_leading_fidelity(
+            output_state, vec_base, fidelity
+        )
         short = state_in_basis(vec_base_fidelity, output_state_fidelity, vec_base)
 
         post_entanglement_leading = schmidt_rank_vector(
             output_state_leading, vec_base_leading, list(modes_per_partition)
         )
-        post_entanglement_fidelity = schmidt_rank_vector(short, vec_base_fidelity, list(modes_per_partition))
+        post_entanglement_fidelity = schmidt_rank_vector(
+            short, vec_base_fidelity, list(modes_per_partition)
+        )
 
         # these are generated without the need for a function, but the current way it is better organised
         # vec_base_fidelity=vec_base[np.argsort(np.abs(output_state)**2)[-leading_terms(output_state,fidelity):]] # se ordenan los pesos de mayor a menor
@@ -173,19 +179,25 @@ def StateSchmidt(
 
         if file_output is True:
             # Leading states (no fidelity applied)
-            schmidt_leading_file.write(f"\nIteration {i}\nFor the input state (basis and probabilities for each):\n")
+            schmidt_leading_file.write(
+                f"\nIteration {i}\nFor the input state (basis and probabilities for each):\n"
+            )
             np.savetxt(schmidt_leading_file, basis_vectors, delimiter=",")
             np.savetxt(schmidt_leading_file, prob_amplitudes, delimiter=",")
             schmidt_leading_file.write(
                 f"\nSchmidt rank for the input state: {pre_entanglement}\nSchmidt rank for the output state: {post_entanglement_leading}"
             )
-            schmidt_leading_file.write("\nThe output state's state basis and probabilities of collapse for each:\n")
+            schmidt_leading_file.write(
+                "\nThe output state's state basis and probabilities of collapse for each:\n"
+            )
             np.savetxt(schmidt_leading_file, vec_base_leading, delimiter=",")
             np.savetxt(schmidt_leading_file, output_state_leading, delimiter=",")
             schmidt_leading_file.write(f"\nBalance: {balance}\n\n")
 
             # Leading-fidelity states (fidelity applied)
-            schmidt_fidelity_file.write(f"\nIteration {i}\nFor the input state (basis and probabilities for each):\n")
+            schmidt_fidelity_file.write(
+                f"\nIteration {i}\nFor the input state (basis and probabilities for each):\n"
+            )
             np.savetxt(schmidt_fidelity_file, basis_vectors, delimiter=",")
             np.savetxt(schmidt_fidelity_file, prob_amplitudes, delimiter=",")
             schmidt_fidelity_file.write(
@@ -225,7 +237,9 @@ def StateSchmidt(
             )
             print(vec_base_fidelity)
             print(output_state_fidelity)
-            print(f"Post-circuit entanglement (fidelity={fidelity} in state): {post_entanglement_fidelity}")
+            print(
+                f"Post-circuit entanglement (fidelity={fidelity} in state): {post_entanglement_fidelity}"
+            )
 
             print(f"Balance (fidelity={fidelity}): {balance_f}")
 

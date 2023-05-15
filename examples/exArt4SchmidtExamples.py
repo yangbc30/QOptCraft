@@ -37,7 +37,9 @@ print("Terse  :", platform.platform(terse=True))
 # We generate the vector basis with photon_combs_generator()
 basisn1m3 = photon_combs_generator(3, [1, 0, 0])
 # We create the vector W itself with state_in_basis()
-W = state_in_basis([[1, 0, 0], [0, 1, 0], [0, 0, 1]], [1 / np.sqrt(3), 1 / np.sqrt(3), 1 / np.sqrt(3)], basisn1m3)
+W = state_in_basis(
+    [[1, 0, 0], [0, 1, 0], [0, 0, 1]], [1 / np.sqrt(3), 1 / np.sqrt(3), 1 / np.sqrt(3)], basisn1m3
+)
 print("\nW state:", W)
 # Schmidt rank computation (modes per partition: [1,1,1], last argument)
 print("Schmidt rank vector:", schmidt_rank_vector(W, basisn1m3, [1, 1, 1]))
@@ -45,7 +47,9 @@ print("Schmidt rank vector:", schmidt_rank_vector(W, basisn1m3, [1, 1, 1]))
 # M state
 # Let's try now with a 2-photon basis
 basisn2m3 = photon_combs_generator(3, [1, 1, 0])
-M = state_in_basis([[1, 1, 0], [0, 1, 1], [1, 0, 1]], [1 / np.sqrt(3), 1 / np.sqrt(3), 1 / np.sqrt(3)], basisn2m3)
+M = state_in_basis(
+    [[1, 1, 0], [0, 1, 1], [1, 0, 1]], [1 / np.sqrt(3), 1 / np.sqrt(3), 1 / np.sqrt(3)], basisn2m3
+)
 print("\nM state:", M)
 print("Schmidt rank vector:", schmidt_rank_vector(M, basisn2m3, [1, 1, 1]))
 
@@ -78,7 +82,12 @@ print("Schmidt rank vector:", schmidt_rank_vector(cleanstate, basisn1m2, [1, 1])
 # --> 1/2(|0001>|01>|01>+|0010>|01>|10>+|0100>|10>|01>+|1000>|10>|10>)
 basisn3m8 = photon_combs_generator(8, [1, 1, 1, 0, 0, 0, 0, 0])
 State422 = state_in_basis(
-    [[0, 0, 0, 1, 0, 1, 0, 1], [0, 0, 1, 0, 0, 1, 1, 0], [0, 1, 0, 0, 1, 0, 0, 1], [1, 0, 0, 0, 1, 0, 1, 0]],
+    [
+        [0, 0, 0, 1, 0, 1, 0, 1],
+        [0, 0, 1, 0, 0, 1, 1, 0],
+        [0, 1, 0, 0, 1, 0, 0, 1],
+        [1, 0, 0, 0, 1, 0, 1, 0],
+    ],
     [1 / 2, 1 / 2, 1 / 2, 1 / 2],
     basisn3m8,
 )

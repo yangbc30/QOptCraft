@@ -47,7 +47,8 @@ def comb_evol(num_elements, num_dim):
     """
 
     sol = int(
-        recur_factorial(num_elements + num_dim - 1) / (recur_factorial(num_elements) * recur_factorial(num_dim - 1))
+        recur_factorial(num_elements + num_dim - 1)
+        / (recur_factorial(num_elements) * recur_factorial(num_dim - 1))
     )
 
     return sol
@@ -55,6 +56,9 @@ def comb_evol(num_elements, num_dim):
 
 # Combinatory computation
 def comb_evol_no_reps(num_elements, num_dim):
-    sol = int(recur_factorial(num_elements) / (recur_factorial(num_dim) * recur_factorial(num_elements - num_dim)))
+    sol = int(
+        recur_factorial(num_elements)
+        / (recur_factorial(num_dim) * recur_factorial(num_elements - num_dim))
+    )
 
     return sol

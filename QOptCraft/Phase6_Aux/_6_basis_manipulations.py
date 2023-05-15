@@ -90,7 +90,9 @@ def leading_terms(state, ratio):
     This function determines how many states are left relevant, for a particular ratio of precision
     """
 
-    return (np.cumsum(np.flip(np.sort(np.abs(state) ** 2))) < ratio).sum() + 1  # prob of each state growing in order
+    return (
+        np.cumsum(np.flip(np.sort(np.abs(state) ** 2))) < ratio
+    ).sum() + 1  # prob of each state growing in order
 
 
 def state_leading_fidelity(state, basis, fidelity):
