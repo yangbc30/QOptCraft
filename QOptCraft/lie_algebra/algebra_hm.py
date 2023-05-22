@@ -69,10 +69,10 @@ def f_jk(j, k, base):
     return fjk
 
 
-def get_basis(photons: int, modes: int) -> list[list[int]]:
+def get_photon_basis(photons: int, modes: int) -> list[list[int]]:
     """Return a basis for the Hilbert space with n photons and m modes.
     If the basis was saved retrieve it, otherwise the function creates
-    and saves the basis to a text file.
+    and saves the basis to a file.
 
     Args:
         photons (int): number of photons.
@@ -81,17 +81,44 @@ def get_basis(photons: int, modes: int) -> list[list[int]]:
     Returns:
         list[list[int]]: basis of the Hilbert space.
     """
+    basis_path = os.path.join("save_basis", f"m={modes} n={photons}", "photon_basis.pkl")
     try:
-        with open(f"m_{modes}_n_{photons}_basis.txt") as basis_file:
-            basis = np.loadtxt(basis_file, delimiter=",", dtype=complex)
+        with open(basis_path) as f:
+            basis = pickle.load(f)
 
     except FileNotFoundError:
-        print("\nThe required vector basis file does not exist.\n")
-        print("\nIt will be freshly generated instead.\n")
-
+        print("Basis not found.\nGenerating basis...")
         basis = photon_basis(modes, photons)
-        with open(f"m_{modes}_n_{photons}_vec_base.txt", "w") as basis_file:
-            np.savetxt(basis_file, basis, fmt="(%e)", delimiter=",")
+        with open(basis_path, "w") as f:
+            pickle.dump(basis, f)
+        print(f"Basis saved in {basis_path}.")
+
+    return basis
+
+
+def get_algebra_basis(photons: int, modes: int) -> list[list[int]]:
+    """Return a basis for the Hilbert space with n photons and m modes.
+    If the basis was saved retrieve it, otherwise the function creates
+    and saves the basis to a file.
+
+    Args:
+        photons (int): number of photons.
+        modes (int): number of modes.
+
+    Returns:
+        list[list[int]]: basis of the Hilbert space.
+    """
+    basis_path = os.path.join("save_basis", f"m={modes} n={photons}", "photon_basis.pkl")
+    try:
+        with open(basis_path) as f:
+            basis = pickle.load(f)
+
+    except FileNotFoundError:
+        print("Basis not found.\nGenerating basis...")
+        basis = photon_basis(modes, photons)
+        with open(basis_path, "w") as f:
+            pickle.dump(basis, f)
+        print(f"Basis saved in {basis_path}.")
 
     return basis
 

@@ -10,7 +10,8 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License."""
+limitations under the License.
+"""
 
 import os
 import pickle
@@ -19,6 +20,7 @@ from collections.abc import Sequence
 import numpy as np
 from numpy.typing import NDArray
 import scipy as sp
+from scipy.special import comb
 
 from QOptCraft.basis import photon_basis
 
@@ -129,11 +131,13 @@ def d_phi(matrix: NDArray, photons: int) -> NDArray:
     return img_matrix
 
 
-def algebra_basis_sparse(modes: int, dim_img: int, photons):
+def algebra_basis_sparse(modes: int, photons: int):
     """Given"""
     # We initialise the basis for each space
+    dim = int(comb(modes + photons - 1, photons))
+
     basis_group = np.identity(modes, dtype=complex)
-    basis_img_group = np.identity(dim_img, dtype=complex)
+    basis_img_group = np.identity(dim, dtype=complex)
     basis_algebra = []
     basis_img_algebra = []
 

@@ -1,9 +1,8 @@
 """Module docstrings.
 """
 import numpy as np
-from scipy.special import comb
 
-from QOptCraft.state import State
+from QOptCraft.state import State, PureState, MixedState
 from QOptCraft import algebra_basis_sparse, gram_schmidt_modified, mat_inner_product
 
 
@@ -15,11 +14,17 @@ def can_transition(in_state: State, out_state: State) -> bool:
     assert in_state.num_photons == out_state.num_photons
     assert in_state.num_modes == out_state.num_modes
 
-    modes = in_state.num_modes
-    photons = in_state.num_photons
-    dim = int(comb(modes + photons - 1, photons))
+    if isinstance(in_state, PureState) and isinstance(out_state, PureState):
+        modes = in_state.num_modes
+        photons = in_state.num_photons
+    elif isinstance(in_state, MixedState) and isinstance(out_state, MixedState):
+        # TODO: what if the state is a mixture of different number of photons??
+        modes = in_state.num_modes[0]
+        photons = in_state.num_photons[0]
+    else:
+        raise ValueError("Input states must be both PureState or both MixedState.")
 
-    basis_img_algebra = algebra_basis_sparse(modes, dim, photons)[1]
+    basis_img_algebra = algebra_basis_sparse(modes, photons)[1]
     orthonormal_basis = gram_schmidt_modified(basis_img_algebra)
 
     in_state_coefs = []

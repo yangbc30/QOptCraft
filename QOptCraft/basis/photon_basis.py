@@ -4,7 +4,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 
-def photon_basis(photons: int, modes: int) -> list[list[int]]:
+def photon_basis(photons: int | list[int], modes: int) -> list[list[int]]:
     """Given a number of photons and modes, generate the basis of the Hilbert space.
 
     Args:
@@ -14,7 +14,7 @@ def photon_basis(photons: int, modes: int) -> list[list[int]]:
     Returns:
         list[list[int]]: basis of the Hilbert space.
     """
-
+    # TODO: create a basis for different number of photons but same modes
     if photons < 0:
         photons = 0
     if modes == 1:

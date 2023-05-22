@@ -3,7 +3,7 @@
     "python.formatting.provider": "black",
     "python.formatting.blackArgs": [
         "--line-length",
-        "80"
+        "100"
     ],
     "[python]": {
         "editor.defaultFormatter": null,
