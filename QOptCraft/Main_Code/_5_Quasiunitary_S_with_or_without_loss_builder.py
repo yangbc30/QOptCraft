@@ -27,7 +27,7 @@ from ..Phase5_Aux._5_D_decomposition import *
 from ..Phase5_Aux._5_matrix_padding_functions import *
 from ..Phase5_Aux._5_S_with_loss_creation import *
 from ..Phase5_Aux.quasiunitary import *
-from ..read_matrix import read_matrix_from_txt
+from ..legacy.read_matrix import read_matrix_from_txt
 from ..unitary import *
 from ._7_generators import RandM
 

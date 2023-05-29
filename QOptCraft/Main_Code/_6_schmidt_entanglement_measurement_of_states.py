@@ -23,16 +23,16 @@ import numpy as np
 from ..input_control import input_control
 
 # Matrix comparisons by their inner product
-from ..mat_inner_product import *
+from ..legacy.mat_inner_product import *
 
 # Required logarithms
 from ..Phase4_Aux._4_Logarithms_required import *
 from ..Phase4_Aux.gram_schmidt import *
 from ..Phase6_Aux._6_basis_manipulations import state_leading_fidelity, state_leading_terms
 from ..Phase6_Aux._6_schmidt import schmidt_rank_vector
-from QOptCraft.photon_comb_basis import photon_combs_generator, state_in_basis
-from ..read_matrix import read_matrix_from_txt, read_matrix_from_txt_general
-from ..recur_factorial import *
+from QOptCraft.legacy.photon_comb_basis import photon_combs_generator, state_in_basis
+from ..legacy.read_matrix import read_matrix_from_txt, read_matrix_from_txt_general
+from ..legacy.recur_factorial import *
 
 
 def StateSchmidt(

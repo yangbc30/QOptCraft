@@ -15,7 +15,7 @@ limitations under the License."""
 import numpy as np
 from scipy.linalg import block_diag
 
-from ..mat_inner_product import *
+from ..legacy.mat_inner_product import *
 
 
 # By undoing the commentary of line 44, the result of computing S_per_G_per_S+ is printed onscreen

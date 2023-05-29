@@ -1,5 +1,3 @@
-from math import isclose
-
 import pytest
 import numpy as np
 from numpy.testing import assert_almost_equal

@@ -26,8 +26,8 @@ from ..input_control import input_control_ints
 from ..Phase2_Aux._2_1st_evolution_method import evolution
 from ..Phase2_Aux._2_2nd_evolution_method import evolution_2, evolution_2_ryser
 from ..Phase2_Aux._2_3rd_evolution_method import evolution_3
-from QOptCraft.photon_comb_basis import photon_combs_generator
-from ..recur_factorial import comb_evol
+from QOptCraft.legacy.photon_comb_basis import photon_combs_generator
+from ..legacy.recur_factorial import comb_evol
 from ..write_initial_matrix import haar_measure
 
 

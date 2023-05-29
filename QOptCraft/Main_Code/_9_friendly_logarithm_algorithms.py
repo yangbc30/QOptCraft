@@ -28,7 +28,7 @@ from sympy import *
 from ..input_control import input_control
 
 # Matrix comparisons by their inner product
-from ..read_matrix import read_matrix_from_txt
+from ..legacy.read_matrix import read_matrix_from_txt
 
 
 def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):

@@ -24,7 +24,7 @@ from scipy.linalg import expm
 from ..input_control import input_control, input_control_ints, input_control_intsDim
 
 # Matrix comparisons by their inner product
-from ..mat_inner_product import *
+from ..legacy.mat_inner_product import *
 from ..Phase2_Aux._2_3rd_evolution_method import evolution_3
 from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
 
@@ -32,9 +32,9 @@ from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_gene
 # Required logarithms
 from ..Phase4_Aux._4_Logarithms_required import *
 from ..Phase4_Aux.gram_schmidt import *
-from QOptCraft.photon_comb_basis import photon_combs_generator
-from ..read_matrix import read_matrix_from_txt
-from ..recur_factorial import *
+from QOptCraft.legacy.photon_comb_basis import photon_combs_generator
+from ..legacy.read_matrix import read_matrix_from_txt
+from ..legacy.recur_factorial import *
 from ..write_initial_matrix import haar_measure
 
 

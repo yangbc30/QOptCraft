@@ -22,8 +22,8 @@ import numpy as np
 
 from ..input_control import input_control_ints, input_control_intsDim
 from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
-from QOptCraft.photon_comb_basis import photon_combs_generator
-from ..recur_factorial import comb_evol
+from QOptCraft.legacy.photon_comb_basis import photon_combs_generator
+from ..legacy.recur_factorial import comb_evol
 from ..write_initial_matrix import *
 from ._2_Get_U_matrix_of_photon_system_evolution import StoU
 

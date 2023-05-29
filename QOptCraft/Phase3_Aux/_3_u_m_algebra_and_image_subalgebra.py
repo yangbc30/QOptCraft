@@ -16,30 +16,47 @@ limitations under the License.
 import os
 import pickle
 from collections.abc import Sequence
+from numbers import Number
 
 import numpy as np
 from numpy.typing import NDArray
 import scipy as sp
 from scipy.special import comb
 
-from QOptCraft.basis import photon_basis
+from QOptCraft.basis import _photon_basis
 
 
-def creation_op(mode, state, coef):
+def creation(mode: int, state: NDArray, coef: Number) -> tuple[NDArray, Number]:
+    """Creation operator acting on a specific mode. Modifies state in-place.
+
+    Args:
+        mode (int): a quantum mode.
+        state (list[int]): fock basis state.
+        coef (Number): coefficient of the state.
+
+    Returns:
+        tuple[list[int], Number]: created state and its coefficient.
+    """
     photons = state[mode]
-
-    coef *= np.sqrt(photons)
-    state[mode] = photons - 1
-
+    coef *= np.sqrt(photons + 1)
+    state[mode] = photons + 1
     return state, coef
 
 
-def annihil_op(mode, state, coef):
+def annihilation(mode: int, state: NDArray, coef: Number) -> tuple[NDArray, Number]:
+    """Annihilation operator acting on a specific mode.
+
+    Args:
+        mode (int): a quantum mode.
+        state (list[int]): fock basis state.
+        coef (Number): coefficient of the state.
+
+    Returns:
+        tuple[list[int], Number]: annihilated state and its coefficient.
+    """
     photons = state[mode]
-
-    coef *= np.sqrt(photons + 1)
-    state[mode] = photons + 1
-
+    coef *= np.sqrt(photons)
+    state[mode] = photons - 1
     return state, coef
 
 
@@ -87,7 +104,7 @@ def get_basis(photons: int, modes: int) -> list[list[int]]:
 
     except FileNotFoundError:
         print("Basis not found.\nGenerating basis...")
-        basis = photon_basis(modes, photons)
+        basis = _photon_basis(modes, photons)
         with open(basis_path, "w") as f:
             pickle.dump(basis, f)
         print(f"Basis saved in {basis_path}.")
@@ -97,13 +114,15 @@ def get_basis(photons: int, modes: int) -> list[list[int]]:
 
 # We transform from the u(m) matrix basis to u(M)'s
 def d_phi(matrix: NDArray, photons: int) -> NDArray:
-    modes = len(matrix)
+    modes = matrix.shape[0]
     dim = int(sp.special.comb(modes + photons - 1, photons))
 
     img_matrix = np.zeros((dim, dim), dtype=complex)
     basis_canon = np.identity(dim, dtype=complex)
 
-    basis = photon_basis(photons, modes)
+    basis = _photon_basis(modes, photons)
+
+    assert len(basis) == dim
 
     for p in range(dim):
         p_array_M = np.array(basis_canon[p])
@@ -117,8 +136,8 @@ def d_phi(matrix: NDArray, photons: int) -> NDArray:
                     # Multiplier
                     mult = matrix[j, k]
                     # These two functions update q_array_aux and mult
-                    q_array_aux, mult = creation_op(k, q_array_aux, mult)
-                    q_array_aux, mult = annihil_op(j, q_array_aux, mult)
+                    q_array_aux, mult = creation(k, q_array_aux, mult)
+                    q_array_aux, mult = annihilation(j, q_array_aux, mult)
 
                     for r in range(dim):
                         if (basis[r] == q_array_aux).all():
@@ -131,136 +150,12 @@ def d_phi(matrix: NDArray, photons: int) -> NDArray:
     return img_matrix
 
 
-def algebra_basis_sparse(modes: int, photons: int):
-    """Given"""
-    # We initialise the basis for each space
-    dim = int(comb(modes + photons - 1, photons))
-
-    basis_group = np.identity(modes, dtype=complex)
-    basis_img_group = np.identity(dim, dtype=complex)
-    basis_algebra = []
-    basis_img_algebra = []
-
-    # Here we will storage correlations with e_jk and f_jk, for a better organisation
-    basis_sym_algebra = []
-    basis_antisym_algebra = []
-    cont = 0
-    for j in range(modes):
-        for k in range(modes):
-            basis_sym_algebra.append(sp.sparse.csr_matrix(e_jk(j, k, basis_group)))
-            if k <= j:
-                basis_algebra.append(sp.sparse.csr_matrix(e_jk(j, k, basis_group)))
-                basis_img_algebra.append(
-                    sp.sparse.csr_matrix(d_phi(basis_algebra[cont].toarray(), photons))
-                )
-                cont += 1
-    # The separator's functions indicate the switch from e_jk to f_jk,
-    # after the m*m combinations have been already computed in the former
-    separator_e_f = cont
-    for j in range(modes):
-        for k in range(modes):
-            basis_antisym_algebra.append(sp.sparse.csr_matrix(f_jk(j, k, basis_group)))
-            if k < j:
-                basis_algebra.append(sp.sparse.csr_matrix(f_jk(j, k, basis_group)))
-                basis_img_algebra.append(
-                    sp.sparse.csr_matrix(d_phi(basis_algebra[cont].toarray(), photons))
-                )
-                cont += 1
-    return (
-        basis_algebra,
-        basis_img_algebra,
-        basis_sym_algebra,
-        basis_antisym_algebra,
-        separator_e_f,
-        basis_group,
-        basis_img_group,
-    )
-
-
-def write_algebra_basis(dim: int, photons: Sequence, base_input: bool) -> None:
-    num_photons = sum(photons)
-
-    folder_path = os.path.join("save_basis", f"m={dim} n={num_photons}")
-    try:
-        os.makedirs(folder_path)
-    except FileExistsError:
-        print("This basis has already been computed, do you want to overwrite it?")
-        while True:
-            user_input = input("Press y/n: ")
-
-            if user_input.lower() in ["yes", "y"]:
-                break
-            elif user_input.lower() in ["no", "n"]:
-                print("Program finished")
-                return
-            else:
-                continue
-
-    # Here we will storage correlations with e_jk and f_jk, for a better organisation
-    base_algebra = []
-    base_img_algebra = []
-
-    # Here we will storage correlations with e_jk and f_jk, for a better organisation
-    # base_algebra_sym = []
-    # base_algebra_antisym = []
-
-    cont = 0
-    for j in range(dim):
-        for k in range(j + 1):
-            # base_algebra_sym.append(sp.sparse.csr_matrix(sym_algebra_basis(j, k, dim)))
-            base_algebra.append(sp.sparse.csr_matrix(sym_algebra_basis(j, k, dim)))
-            base_img_algebra.append(
-                sp.sparse.csr_matrix(d_phi(base_algebra[cont].toarray(), photons))
-            )
-            cont += 1
-
-    # The separator's functions indicate the switch from e_jk to f_jk,
-    # after the m*m combinations have been already computed in the former
-    separator_sym_antisym = cont
-
-    for j in range(dim):
-        for k in range(j):
-            # base_algebra_antisym.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
-            base_algebra.append(sp.sparse.csr_matrix(antisym_algebra_basis(j, k, dim)))
-            base_img_algebra.append(
-                sp.sparse.csr_matrix(d_phi(base_algebra[cont].toarray(), photons))
-            )
-            cont += 1
-
-    with open(os.path.join(folder_path, "algebra.pkl"), "wb") as f:
-        pickle.dump(base_algebra, f)
-
-    with open(os.path.join(folder_path, "phi_algebra.pkl"), "wb") as f:
-        pickle.dump(base_img_algebra, f)
-
-    with open(os.path.join(folder_path, "separator.txt"), "w") as f:
-        f.write(f"separator_sym_antisym = {separator_sym_antisym}")
-
-
-def sym_algebra_basis(index_1: int, index_2: int, dim: int) -> np.ndarray:
-    """Create the element of the algebra i/2(|j><k| + |k><j|)."""
-    basis_matrix = sp.sparse.csr_matrix((dim, dim), dtype="complex64")
-    basis_matrix[index_1, index_2] = 0.5j
-    basis_matrix[index_2, index_1] = 0.5j
-
-    return basis_matrix
-
-
-def antisym_algebra_basis(index_1: int, index_2: int, dim: int) -> np.ndarray:
-    """Create the element of the algebra 1/2(|j><k| - |k><j|)."""
-    basis_matrix = sp.sparse.csr_matrix((dim, dim), dtype="complex64")
-    basis_matrix[index_1, index_2] = 0.5
-    basis_matrix[index_2, index_1] = -0.5
-
-    return basis_matrix
-
-
 def matrix_u_basis_generator(m, M, photons, base_input):
     # We initialise the basis for each space
     base_group = np.identity(m, dtype=complex)
     base_img_group = np.identity(M, dtype=complex)
     base_algebra = np.zeros((m * m, m, m), dtype=complex)
-    base_img_algebra = np.zeros((M * M, M, M), dtype=complex)
+    base_img_algebra = np.zeros((m * m, M, M), dtype=complex)
     # Here we will storage correlations with e_jk and f_jk, for a better organisation
     base_algebra_e = np.zeros((m * m, m, m), dtype=complex)
     base_algebra_f = np.zeros((m * m, m, m), dtype=complex)
@@ -269,11 +164,11 @@ def matrix_u_basis_generator(m, M, photons, base_input):
 
     for j in range(m):
         for k in range(m):
-            base_algebra_e[m * j + k] = e_jk(j, k, base_group)
+            # base_algebra_e[m * j + k] = e_jk(j, k, base_group)
 
             if k <= j:
-                base_algebra[cont] = e_jk(j, k, base_group)
-                base_img_algebra[cont] = d_phi(base_algebra[cont], photons)
+                base_algebra[cont, ...] = e_jk(j, k, base_group)
+                base_img_algebra[cont, ...] = d_phi(base_algebra[cont], photons)
 
                 cont += 1
 
@@ -283,7 +178,7 @@ def matrix_u_basis_generator(m, M, photons, base_input):
 
     for j in range(m):
         for k in range(m):
-            base_algebra_f[m * j + k] = f_jk(j, k, base_group)
+            # base_algebra_f[m * j + k] = f_jk(j, k, base_group)
 
             if k < j:
                 base_algebra[cont] = f_jk(j, k, base_group)

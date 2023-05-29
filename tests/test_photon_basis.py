@@ -1,6 +1,6 @@
 import pytest
 
-from QOptCraft import photon_basis
+from QOptCraft.basis import _photon_basis
 
 
 PHOTONS_1 = 3
@@ -53,6 +53,6 @@ BASIS_4 = [
 )
 def test_photon_basis(photons: int, modes: int, result_basis: list[list[int]]) -> None:
     result_basis = set(tuple(i) for i in result_basis)
-    test_basis = photon_basis(photons=photons, modes=modes)
+    test_basis = _photon_basis(photons=photons, modes=modes)
     test_basis = set(tuple(i) for i in test_basis)
     assert result_basis == test_basis

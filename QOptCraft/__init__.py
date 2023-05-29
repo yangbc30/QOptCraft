@@ -14,16 +14,14 @@ limitations under the License."""
 
 from QOptCraft.input_control import *
 from QOptCraft.Main_Code import *
-from QOptCraft.mat_inner_product import *
+from QOptCraft.legacy.mat_inner_product import *
 from QOptCraft.Phase3_Aux import *
-from QOptCraft.Phase3_Aux import algebra_basis_sparse
-from QOptCraft.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import write_algebra_basis
 from QOptCraft.Phase4_Aux import gram_schmidt_modified
-from QOptCraft.basis.photon_basis import photon_basis
+from QOptCraft.basis import get_photon_basis
 
 # from QOptCraft.optic_devices import *
-from QOptCraft.read_matrix import *
-from QOptCraft.recur_factorial import *
+from QOptCraft.legacy.read_matrix import *
+from QOptCraft.legacy.recur_factorial import *
 from QOptCraft.unitary import *
 from QOptCraft.write_initial_matrix import *
 from QOptCraft.state import State, PureState, MixedState

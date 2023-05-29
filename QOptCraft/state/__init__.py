@@ -1,1 +1,1 @@
-from .purestate import State, PureState
+from .state import State, PureState, MixedState

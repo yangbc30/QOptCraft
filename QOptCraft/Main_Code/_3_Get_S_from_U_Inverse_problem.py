@@ -29,8 +29,8 @@ from ..Phase3_Aux._3_permutation_matrix import *
 from ..Phase3_Aux._3_S_rebuild import S_output
 from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
 from ..Phase3_Aux._3_verification_of_solution_existence import eq_sys_finder, verification
-from ..read_matrix import read_matrix_from_txt
-from ..recur_factorial import *
+from ..legacy.read_matrix import read_matrix_from_txt
+from ..legacy.recur_factorial import *
 from ..unitary import *
 
 

@@ -23,12 +23,12 @@ import numpy as np
 from ..input_control import input_control, input_control_intsDim
 
 # Matrix comparisons by their inner product
-from ..mat_inner_product import comparison
+from ..legacy.mat_inner_product import comparison
 from ..Phase1_Aux._1_U_decomposition import U_decomposition
 from ..Phase1_Aux._1_U_decomposition_Reck import U_decomposition_Reck
 from ..Phase1_Aux._1_U_recomposition import *
 from ..Phase1_Aux._1_U_recomposition_Reck import *
-from ..read_matrix import read_matrix_from_txt
+from ..legacy.read_matrix import read_matrix_from_txt
 from ..unitary import *
 from ._7_generators import RandU
 

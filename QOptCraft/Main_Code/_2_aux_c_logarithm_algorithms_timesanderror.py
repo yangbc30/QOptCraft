@@ -26,7 +26,7 @@ import xlsxwriter
 from scipy.linalg import expm, logm
 
 # Matrices comparisons by their inner product
-from ..mat_inner_product import mat_module
+from ..legacy.mat_inner_product import mat_module
 from ..Phase2_Aux._2_logarithm_algorithms import *
 from ..write_initial_matrix import haar_measure
 

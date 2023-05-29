@@ -21,7 +21,7 @@ import time
 from scipy.linalg import expm, logm
 
 # Matrix comparisons by their inner product
-from ..mat_inner_product import comparison_noprint
+from ..legacy.mat_inner_product import comparison_noprint
 from ..Phase2_Aux._2_logarithm_algorithms import *
 from ..write_initial_matrix import dft_matrix_auto
 

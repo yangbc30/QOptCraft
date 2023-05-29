@@ -3,7 +3,7 @@ import time
 import numba
 import numpy as np
 
-from ..recur_factorial import fact_array
+from ..legacy.recur_factorial import fact_array
 
 
 @numba.jit(nopython=True)
