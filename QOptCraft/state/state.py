@@ -114,14 +114,10 @@ class PureState(State):
 
         self.photons = sum(fock_list[0])
         self.modes = len(fock_list[0])
-        if basis is None:
-            basis = get_photon_basis(self.modes, self.photons)
-        self.basis = basis
+        self.basis = None
         self.fock_list = fock_list
         self.amplitudes = amplitudes
         self.probabilites = [amp * amp.conjugate() for amp in amplitudes]
-        self.state_in_basis = self._state_in_basis()
-        self.density_matrix = np.outer(self.state_in_basis, self.state_in_basis.conj().T)
 
     @staticmethod
     def _assert_inputs(fock_list: list[list[int]], amplitudes: list[float]):
@@ -149,10 +145,19 @@ class PureState(State):
         if not np.isclose(1, sum_amps):
             raise ProbabilityError(sum_amps)
 
-    def _state_in_basis(self) -> NDArray:
+    @property
+    def density_matrix(self):
+        state_in_basis = self.state_in_basis
+        return np.outer(state_in_basis, state_in_basis.conj().T)
+
+    @property
+    def state_in_basis(self) -> NDArray:
         """Given a vector in terms of elements of a basis and amplitudes,
         output the state vector.
         """
+        if self.basis is None:
+            self.basis = get_photon_basis(self.modes, self.photons)
+
         state = np.zeros(len(self.basis), dtype=complex)
 
         for i, fock in enumerate(self.fock_list):
