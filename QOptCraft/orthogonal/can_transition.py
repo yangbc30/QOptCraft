@@ -1,6 +1,7 @@
 """Module docstrings.
 """
 import numpy as np
+from scipy.special import factorial as fact
 
 from QOptCraft.state import State, PureState
 from .mat_inner_product import mat_inner_product
@@ -27,9 +28,10 @@ def can_transition(input_: State, output: State) -> bool:
 
     in_energy = sum(np.abs(in_coefs) ** 2)
     out_energy = sum(np.abs(out_coefs) ** 2)
+    in_energy = round(in_energy, 7)
+    out_energy = round(out_energy, 7)
 
-    print("In state energy ", in_energy)
-    print("Out state energy ", out_energy)
+    print(f"In energy = {in_energy} \t\t Out energy = {out_energy}")
 
     return np.isclose(in_energy, out_energy)
 
@@ -54,7 +56,13 @@ def can_transition_no_basis(input_: PureState, output: PureState):
             out_invariant += output.exp_photons(mode_1, mode_2) * output.exp_photons(mode_2, mode_1)
             out_invariant -= output.exp_photons(mode_1, mode_1) * output.exp_photons(mode_2, mode_2)
 
-    print("In state invariant ", in_invariant)
-    print("Out state invariant ", out_invariant)
+    in_invariant = round(in_invariant, 7)
+    out_invariant = round(out_invariant, 7)
+
+    # photons = input_.photons
+    # C1 = (modes * photons + 1) * fact(modes) * fact(photons) / fact(modes + photons)
+    # C2 = 2 * fact(modes + 1) * fact(photons - 1) / fact(modes + photons)
+    # print(f"In invariant = {in_invariant} \t\t Out invariant = {out_invariant}")
+    # print(f"In energy = {C1 + C2 * in_invariant} \t\t Out out = {C1 + C2 * out_invariant}")
 
     return np.isclose(in_invariant, out_invariant)
