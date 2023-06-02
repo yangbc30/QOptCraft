@@ -36,7 +36,7 @@ def can_transition(input_: State, output: State) -> bool:
     return np.isclose(in_energy, out_energy)
 
 
-def can_transition_no_basis(input_: PureState, output: PureState):
+def photon_invariant(input_: PureState, output: PureState):
     """Check if we cannot transition from an input state to an output state
     through an optical network. The function tests if the invariant defined in
     corollary 3 is conserved.
@@ -59,10 +59,27 @@ def can_transition_no_basis(input_: PureState, output: PureState):
     in_invariant = round(in_invariant, 7)
     out_invariant = round(out_invariant, 7)
 
-    # photons = input_.photons
-    # C1 = (modes * photons + 1) * fact(modes) * fact(photons) / fact(modes + photons)
-    # C2 = 2 * fact(modes + 1) * fact(photons - 1) / fact(modes + photons)
+    return in_invariant, out_invariant
+
+
+def can_transition_no_basis(input_: PureState, output: PureState) -> bool:
+    """Check if we cannot transition from an input state to an output state
+    through an optical network. The function tests if the invariant defined in
+    corollary 3 is conserved.
+    """
+    in_invariant, out_invariant = photon_invariant(input_, output)
+
+    modes = input_.modes
+    photons = input_.photons
+
+    photons = input_.photons
+    C1 = (modes * photons + 1) * fact(modes) * fact(photons) / fact(modes + photons)
+    C2 = 2 * fact(modes + 1) * fact(photons - 1) / fact(modes + photons)
+    if np.isnan(C1):
+        C1 = 0
+    if np.isnan(C2):
+        C2 = 0
     # print(f"In invariant = {in_invariant} \t\t Out invariant = {out_invariant}")
-    # print(f"In energy = {C1 + C2 * in_invariant} \t\t Out out = {C1 + C2 * out_invariant}")
+    print(f"\nIn invariant = {C1 + C2 * in_invariant} \t Out invariant = {C1 + C2 * out_invariant}")
 
     return np.isclose(in_invariant, out_invariant)
