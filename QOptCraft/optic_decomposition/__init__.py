@@ -12,22 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-import numpy as np
-
-
-def U_recomposition_Reck(D, TmnList, N):
-    # We explore TmnList in reverse order
-    cont = int(N * (N - 1) / 2) - 1
-
-    # The matrix given after the rebuild. We declare it equal to the diagonal D matrix as its initial value:
-    U_init = D
-
-    # We explore TmnList in reverse order as declared, computing
-    # inverse operations with each matrix:
-    for i in range(N - 1, 0, -1):
-        for _j in range(0, i):
-            U_init = U_init.dot(np.transpose(np.conj(TmnList[cont, :, :])))
-
-            cont -= 1
-
-    return U_init
+from .clemens_decomp import decomposition
+from .reck_decomp import U_decomposition_Reck
+from .recomposition import recomposition, recomposition_reck
+from ._1_U_recomposition_Reck import *
+from .beamsplitter import beamsplitter, beamsplitter_reck

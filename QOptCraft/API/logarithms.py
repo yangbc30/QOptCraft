@@ -1,7 +1,3 @@
-# ---------------------------------------------------------------------------------------------------------------------------
-# 									ALGORITHM 9: LOGARITHM OF A MATRIX FUNCTIONS
-# ---------------------------------------------------------------------------------------------------------------------------
-
 """Copyright 2021 Daniel Gómez Aguado
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,9 +19,9 @@ import time
 import numpy as np
 from numpy.linalg import inv
 from scipy.linalg import logm, schur, sqrtm
-from sympy import *
+from sympy import Matrix
 
-from ..input_control import input_control
+from ..utils.input_control import input_control
 
 # Matrix comparisons by their inner product
 from ..legacy.read_matrix import read_matrix_from_txt
@@ -78,13 +74,9 @@ def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False
     logm_1A = 0.5 * (H + np.transpose(np.conj(H)))
 
     if file_output is True:
-        matrix_file = open(filename + "_Logm1.txt", "w+")
-
-        np.savetxt(matrix_file, logm_1A, delimiter=",")
-
-        print("\nThe new matrix is found in the file '" + filename + "_Logm1.txt'.\n")
-
-        matrix_file.close()
+        with open(filename + "_Logm1.txt", "w+") as matrix_file:
+            np.savetxt(matrix_file, logm_1A, delimiter=",")
+            print("\nThe new matrix is found in the file '" + filename + "_Logm1.txt'.\n")
 
     if txt is True:
         print(f"\nThe logarithm Logm1({filename}) has been computed.")
@@ -133,13 +125,9 @@ def Logm2M(file_input=True, A=False, file_output=True, filename=False, txt=False
     logm_2A = 0.5 * (logm(A) + np.transpose(np.conj(logm(A))))
 
     if file_output is True:
-        matrix_file = open(filename + "_Logm2.txt", "w+")
-
-        np.savetxt(matrix_file, logm_2A, delimiter=",")
-
-        print("\nThe new matrix is found in the file '" + filename + "_Logm2.txt'.\n")
-
-        matrix_file.close()
+        with open(filename + "_Logm2.txt", "w+") as matrix_file:
+            np.savetxt(matrix_file, logm_2A, delimiter=",")
+            print("\nThe new matrix is found in the file '" + filename + "_Logm2.txt'.\n")
 
     if txt is True:
         print(f"\nThe logarithm Logm2({filename}) has been computed.")
@@ -200,13 +188,9 @@ def Logm3M(file_input=True, A=False, file_output=True, filename=False, txt=False
     logm_3A = Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
 
     if file_output is True:
-        matrix_file = open(filename + "_Logm3.txt", "w+")
-
-        np.savetxt(matrix_file, logm_3A, delimiter=",")
-
-        print("\nThe new matrix is found in the file '" + filename + "_Logm3.txt'.\n")
-
-        matrix_file.close()
+        with open(filename + "_Logm3.txt", "w+") as matrix_file:
+            np.savetxt(matrix_file, logm_3A, delimiter=",")
+            print("\nThe new matrix is found in the file '" + filename + "_Logm3.txt'.\n")
 
     if txt is True:
         print(f"\nThe logarithm Logm3({filename}) has been computed.")
@@ -270,13 +254,9 @@ def Logm4M(file_input=True, A=False, file_output=True, filename=False, txt=False
     logm_4A = Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
 
     if file_output is True:
-        matrix_file = open(filename + "_Logm4.txt", "w+")
-
-        np.savetxt(matrix_file, logm_4A, delimiter=",")
-
-        print("\nThe new matrix is found in the file '" + filename + "_Logm4.txt'.\n")
-
-        matrix_file.close()
+        with open(filename + "_Logm4.txt", "w+") as matrix_file:
+            np.savetxt(matrix_file, logm_4A, delimiter=",")
+            print("\nThe new matrix is found in the file '" + filename + "_Logm4.txt'.\n")
 
     if txt is True:
         print(f"\nThe logarithm Logm4({filename}) has been computed.")
@@ -342,13 +322,9 @@ def Logm5M(file_input=True, A=False, file_output=True, filename=False, txt=False
     logm_5A = Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
 
     if file_output is True:
-        matrix_file = open(filename + "_Logm5.txt", "w+")
-
-        np.savetxt(matrix_file, logm_5A, delimiter=",")
-
-        print("\nThe new matrix is found in the file '" + filename + "_Logm5.txt'.\n")
-
-        matrix_file.close()
+        with open(filename + "_Logm5.txt", "w+") as matrix_file:
+            np.savetxt(matrix_file, logm_5A, delimiter=",")
+            print("\nThe new matrix is found in the file '" + filename + "_Logm5.txt'.\n")
 
     if txt is True:
         print(f"\nThe logarithm Logm5({filename}) has been computed.")

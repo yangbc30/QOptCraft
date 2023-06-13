@@ -16,21 +16,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-from ..input_control import input_control, input_control_ints, input_control_intsDim
+from ..utils.input_control import input_control, input_control_ints, input_control_intsDim
 from ..Phase6_Aux._6_basis_manipulations import *
 from ..Phase6_Aux._6_schmidt import *
-from ..write_initial_matrix import *
-from ._1_Unitary_matrix_U_builder import Selements
+from ..utils.write_initial_matrix import *
+from .unitary_decomp import Selements
 from ._2_aux_a_computation_time_evolutions_comparison import StoUEvolComp
 from ._2_aux_b_logarithm_algorithms_equalities import MatLogCompV
 from ._2_aux_c_logarithm_algorithms_timesanderror import MatLogCompTnE
-from ._2_Get_U_matrix_of_photon_system_evolution import *
+from ._2_Get_U_matrix_of_photon_system_evolution import iHStoiHU, StoU
 from ._3_Get_S_from_U_Inverse_problem import SfromU
 from ._4_toponogov_theorem_for_uncraftable_matrices_U import Toponogov
 from ._5_Quasiunitary_S_with_or_without_loss_builder import QuasiU
 from ._6_schmidt_entanglement_measurement_of_states import StateSchmidt
 from ._7_generators import *
-from ._9_friendly_logarithm_algorithms import *
+from .logarithms import Logm1M, Logm2M, Logm3M, Logm4M, Logm5M
 
 
 # A function designed for testing QOptCraft's algorithms.
@@ -425,7 +425,7 @@ def QOptCraft(
     inverse=False,
     exp=False,
     acc_t=8,
-    vec_base=[[False, False], [False, False]],
+    vec_base=None,
     file_input_state=True,
     file_input_matrix=True,
     state_input=False,
@@ -436,13 +436,18 @@ def QOptCraft(
 ):
     """
     The main function, making full use of all the algorithms available.
-    Its standalone subfunctions or blocks (read user guide) can be deployed on their own as well.
-    Use the module parameter (1-10) for picking which subfunction to use: Selements (module=1), StoU (module=2),
-    SfromU (module=3), Toponogov (module=4), QuasiU (module=5), QuasiHStoU (module=10), StateSchmidt (module=6).
+    Its standalone subfunctions or blocks (read user guide) can be deployed
+    on their own as well.
+    Use the module parameter (1-10) for picking which subfunction to use:
+    Selements (module=1), StoU (module=2),
+    SfromU (module=3), Toponogov (module=4), QuasiU (module=5), QuasiHStoU (module=10),
+    StateSchmidt (module=6).
     Use the choice parameter for subsubfunctions in QOCGen (module=7, choice=0-6),
     QOCTest (module=8, choice=0-2) or QOCLog (module=9, choice=1-5).
     More info on the remaining parameters by reading QOptCraft's user guide.
     """
+    if vec_base is None:
+        vec_base = [[False, False], [False, False]]
 
     if txt is True:
         print("\n\n===========================================================")
@@ -461,7 +466,10 @@ def QOptCraft(
             try:
                 module = int(
                     input(
-                        "\nInput the right number for your algortihm of interest:\nSelements: '1' (or any other number not mentioned afterwards)\nStoU: '2'\nSfromU: '3'\nToponogov: '4'\nQuasiU: '5'\niHStoiHU: '6'\nQOCGen: '7'\nQOCTest: '8'\nQOCLog: '9'"
+                        "\nInput the right number for your algortihm of interest:\n"
+                        "Selements: '1' (or any other number not mentioned afterwards)\n"
+                        "StoU:'2'\nSfromU: '3'\nToponogov: '4'\nQuasiU: '5'\niHStoiHU: '6'\n"
+                        "QOCGen: '7'\nQOCTest: '8'\nQOCLog: '9'"
                     )
                 )
 

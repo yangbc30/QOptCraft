@@ -17,56 +17,10 @@ import warnings
 import numpy as np
 from scipy.optimize import fsolve
 
-from .Tmn import *
+from .beamsplitter import beamsplitter
 
 
-# The functions evenFunction(z) and oddFunction(z) find the required values of theta and phi
-# for each decomposition, by using two conditions: the real and imaginary values
-def evenFunction(z):
-    global M_current
-    global N
-
-    # Theta and phi are indexed for each iteration...
-    theta = z[0]
-    phi = z[1]
-
-    T = Tmn(theta, phi, N, m - 1, n - 1)
-
-    # ...until the desired results are written in f0 y f1 (ehich nullify
-    # the real and imaginary values)
-    f0 = np.real(T[N + j - i - 1, :].dot(M_current[:, j - 1]))
-    f1 = np.imag(T[N + j - i - 1, :].dot(M_current[:, j - 1]))
-
-    return np.array([f0, f1])
-
-
-def oddFunction(z):
-    global M_current
-    global N
-
-    theta = z[0]
-    phi = z[1]
-
-    T = Tmn(theta, phi, N, m - 1, n - 1)
-
-    # This time, we apply the dot product in the other side of the matrix
-    f0 = np.real(M_current[N - j - 1, :].dot(np.linalg.inv(T)[:, i - j - 1]))
-    f1 = np.imag(M_current[N - j - 1, :].dot(np.linalg.inv(T)[:, i - j - 1]))
-
-    return np.array([f0, f1])
-
-
-def phase_adjust(phase, minn=-np.pi, maxx=np.pi):
-    while phase < minn:
-        phase += 2.0 * np.pi
-
-    while phase > maxx:
-        phase -= 2.0 * np.pi
-
-    return phase
-
-
-def U_decomposition(M, dim, output, name, txt=False):
+def decomposition(M, dim, output, name, txt=False):
     # We declare those variables as global in orden to use them in odd/evenFunction(z)
     global m
     global n
@@ -116,9 +70,9 @@ def U_decomposition(M, dim, output, name, txt=False):
 
                     sol = fsolve(evenFunction, zGuess)
 
-                M_current = Tmn(sol[0], sol[1], N, m - 1, n - 1).dot(M_current)
+                M_current = beamsplitter(sol[0], sol[1], N, m - 1, n - 1).dot(M_current)
 
-                TmnList[cont, :, :] = Tmn(sol[0], sol[1], N, m - 1, n - 1)
+                TmnList[cont, :, :] = beamsplitter(sol[0], sol[1], N, m - 1, n - 1)
 
                 if output is True:
                     theta = phase_adjust(sol[0], minn=-np.pi, maxx=np.pi)
@@ -144,9 +98,11 @@ def U_decomposition(M, dim, output, name, txt=False):
                     sol = fsolve(oddFunction, zGuess)
 
                 # The computation changes compared to the even case
-                M_current = M_current.dot(np.linalg.inv(Tmn(sol[0], sol[1], N, m - 1, n - 1)))
+                M_current = M_current.dot(
+                    np.linalg.inv(beamsplitter(sol[0], sol[1], N, m - 1, n - 1))
+                )
 
-                TmnList[cont, :, :] = Tmn(sol[0], sol[1], N, m - 1, n - 1)
+                TmnList[cont, :, :] = beamsplitter(sol[0], sol[1], N, m - 1, n - 1)
 
                 if output is True:
                     theta = phase_adjust(sol[0], minn=-np.pi, maxx=np.pi)
@@ -170,7 +126,7 @@ def U_decomposition(M, dim, output, name, txt=False):
 
         if txt is True:
             print(
-                f"\nThe Tmn matrices (each with their theta and phi values) have been storaged in the file '{fullnameTmn}'."
+                f"\nThe beamsplitter matrices (each with their theta and phi values) have been storaged in the file '{fullnameTmn}'."
             )
             print(
                 f"\nThe diagonal matrix D resulting from the decomposition process has been storaged in the file '{fullnameD}'."
@@ -180,6 +136,52 @@ def U_decomposition(M, dim, output, name, txt=False):
         print(f"\nThe {name} matrix has been decomposed in optic devices.")
 
     return TmnList, M_current
+
+
+# The functions evenFunction(z) and oddFunction(z) find the required values of theta and phi
+# for each decomposition, by using two conditions: the real and imaginary values
+def evenFunction(z):
+    global M_current
+    global N
+
+    # Theta and phi are indexed for each iteration...
+    theta = z[0]
+    phi = z[1]
+
+    T = beamsplitter(theta, phi, N, m - 1, n - 1)
+
+    # ...until the desired results are written in f0 y f1 (ehich nullify
+    # the real and imaginary values)
+    f0 = np.real(T[N + j - i - 1, :].dot(M_current[:, j - 1]))
+    f1 = np.imag(T[N + j - i - 1, :].dot(M_current[:, j - 1]))
+
+    return np.array([f0, f1])
+
+
+def oddFunction(z):
+    global M_current
+    global N
+
+    theta = z[0]
+    phi = z[1]
+
+    T = beamsplitter(theta, phi, N, m - 1, n - 1)
+
+    # This time, we apply the dot product in the other side of the matrix
+    f0 = np.real(M_current[N - j - 1, :].dot(np.linalg.inv(T)[:, i - j - 1]))
+    f1 = np.imag(M_current[N - j - 1, :].dot(np.linalg.inv(T)[:, i - j - 1]))
+
+    return np.array([f0, f1])
+
+
+def phase_adjust(phase, minn=-np.pi, maxx=np.pi):
+    while phase < minn:
+        phase += 2.0 * np.pi
+
+    while phase > maxx:
+        phase -= 2.0 * np.pi
+
+    return phase
 
 
 # The following function is not used in the actual code. It has been left regardless in case the user finds it useful

@@ -17,41 +17,13 @@ import warnings
 import numpy as np
 from scipy.optimize import fsolve
 
-from .Tmn import *
+from .beamsplitter import beamsplitter_reck
 
 # The functions evenFunction(z) and oddFunction(z) find the required values of theta and phi
 # for each decomposition, by using two conditions: the real and imaginary values
 
 
-def oddFunction(z):
-    global M_current
-    global N
-    global m
-    global n
-
-    theta = z[0]
-    phi = z[1]
-
-    T = TmnReck(theta, phi, N, m - 1, n - 1)
-
-    # This time, we apply the dot product in the other side of the matrix
-    f0 = np.real(M_current[m - 1, :].dot(T[:, n - 1]))
-    f1 = np.imag(M_current[m - 1, :].dot(T[:, n - 1]))
-
-    return np.array([f0, f1])
-
-
-def phase_adjust(phase, minn=-np.pi, maxx=np.pi):
-    while phase < minn:
-        phase += 2.0 * np.pi
-
-    while phase > maxx:
-        phase -= 2.0 * np.pi
-
-    return phase
-
-
-def U_decomposition_Reck(M, dim, output, name, txt=False):
+def decomposition_reck(M, dim, output, name, txt=False):
     # We declare those variables as global in orden to use them in odd/evenFunction(z)
     global m
     global n
@@ -91,9 +63,9 @@ def U_decomposition_Reck(M, dim, output, name, txt=False):
                 sol = fsolve(oddFunction, zGuess)
 
             # The computation changes compared to the even case
-            M_current = M_current.dot(TmnReck(sol[0], sol[1], N, m - 1, n - 1))
+            M_current = M_current.dot(beamsplitter_reck(sol[0], sol[1], N, m - 1, n - 1))
 
-            TmnList[cont, :, :] = TmnReck(sol[0], sol[1], N, m - 1, n - 1)
+            TmnList[cont, :, :] = beamsplitter_reck(sol[0], sol[1], N, m - 1, n - 1)
 
             if output is True:
                 theta = phase_adjust(sol[0], minn=-np.pi, maxx=np.pi)
@@ -127,3 +99,31 @@ def U_decomposition_Reck(M, dim, output, name, txt=False):
         print(f"\nThe {name} matrix has been decomposed in optic devices.")
 
     return TmnList, M_current
+
+
+def oddFunction(z):
+    global M_current
+    global N
+    global m
+    global n
+
+    theta = z[0]
+    phi = z[1]
+
+    T = beamsplitter_reck(theta, phi, N, m - 1, n - 1)
+
+    # This time, we apply the dot product in the other side of the matrix
+    f0 = np.real(M_current[m - 1, :].dot(T[:, n - 1]))
+    f1 = np.imag(M_current[m - 1, :].dot(T[:, n - 1]))
+
+    return np.array([f0, f1])
+
+
+def phase_adjust(phase, minn=-np.pi, maxx=np.pi):
+    while phase < minn:
+        phase += 2.0 * np.pi
+
+    while phase > maxx:
+        phase -= 2.0 * np.pi
+
+    return phase

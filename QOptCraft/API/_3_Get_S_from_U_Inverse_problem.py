@@ -24,14 +24,14 @@ from itertools import permutations
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
-from ..input_control import input_control, input_control_ints, input_control_intsDim
+from ..utils.input_control import input_control, input_control_ints, input_control_intsDim
 from ..Phase3_Aux._3_permutation_matrix import *
 from ..Phase3_Aux._3_S_rebuild import S_output
 from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
 from ..Phase3_Aux._3_verification_of_solution_existence import eq_sys_finder, verification
 from ..legacy.read_matrix import read_matrix_from_txt
 from ..legacy.recur_factorial import *
-from ..unitary import *
+from ..legacy.unitary import *
 
 
 def SfromU(
@@ -114,9 +114,7 @@ def SfromU(
     if txt is True:
         print("\n\n\n\nUNITARY CHECK FOR MATRIX U:\n")
 
-        cond = unitary(U, M, filename, acc_d)
-
-        if not cond:
+        if not np.allclose(np.eye(M), U @ U.T.conj()):
             print("\nResults will be computed, albeit U (" + filename + ") is not unitary.\n")
 
     # ----------PART 1: CAN THIS MATRIX BE BUILT BY LINEAR OPTICS INSTRUMENTS?:----------

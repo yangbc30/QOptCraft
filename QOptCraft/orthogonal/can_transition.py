@@ -26,14 +26,20 @@ def can_transition(input_: State, output: State) -> bool:
         in_coefs.append(mat_inner_product(1j * input_.density_matrix, basis_matrix))
         out_coefs.append(mat_inner_product(1j * output.density_matrix, basis_matrix))
 
-    in_energy = sum(np.abs(in_coefs) ** 2)
-    out_energy = sum(np.abs(out_coefs) ** 2)
-    in_energy = round(in_energy, 7)
-    out_energy = round(out_energy, 7)
+    in_tan_energy = sum(np.abs(in_coefs) ** 2)
+    out_tan_energy = sum(np.abs(out_coefs) ** 2)
 
-    print(f"In energy = {in_energy} \t\t Out energy = {out_energy}")
+    in_orth_energy = mat_inner_product(input_.density_matrix, input_.density_matrix) - in_tan_energy
+    out_orth_energy = (
+        mat_inner_product(output.density_matrix, output.density_matrix) - out_tan_energy
+    )
 
-    return np.isclose(in_energy, out_energy)
+    print(f"In tangent energy = {in_tan_energy:.7f} \t\t Out tangent energy = {out_tan_energy:.7f}")
+    print(
+        f"In orthogonal energy = {in_orth_energy:.7f} \t\t Out orthogonal energy = {out_orth_energy:.7f}"
+    )
+
+    return np.isclose(in_tan_energy, out_tan_energy)
 
 
 def photon_invariant(input_: PureState, output: PureState):

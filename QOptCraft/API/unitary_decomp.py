@@ -1,14 +1,10 @@
-# ---------------------------------------------------------------------------------------------------------------------------
-# 								ALGORITHM 1: UNITARY MATRIX U GENERATOR AND DECOMPOSITOR
-# ---------------------------------------------------------------------------------------------------------------------------
-
 """Copyright 2021 Daniel Gómez Aguado
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    https://www.apache.org/licenses/LICENSE-2.0
+https://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,25 +16,31 @@ import time
 
 import numpy as np
 
-from ..input_control import input_control, input_control_intsDim
+from ..utils.input_control import input_control, input_control_intsDim
 
 # Matrix comparisons by their inner product
 from ..legacy.mat_inner_product import comparison
-from ..Phase1_Aux._1_U_decomposition import U_decomposition
-from ..Phase1_Aux._1_U_decomposition_Reck import U_decomposition_Reck
-from ..Phase1_Aux._1_U_recomposition import *
-from ..Phase1_Aux._1_U_recomposition_Reck import *
+from ..optic_decomposition.clemens_decomp import U_decomposition
+from ..optic_decomposition.reck_decomp import U_decomposition_Reck
+from ..optic_decomposition.recomposition import recomposition, recomposition_reck
 from ..legacy.read_matrix import read_matrix_from_txt
-from ..unitary import *
 from ._7_generators import RandU
 
 
 def Selements(
-    file_input=True, U_un=False, file_output=True, filename=False, impl=0, newfile=True, N=False, acc_d=3, txt=False
+    file_input=True,
+    U_un=False,
+    file_output=True,
+    filename=False,
+    impl=0,
+    newfile=True,
+    N=False,
+    acc_d=3,
+    txt=False,
 ):
     """
-    Creates/loads .txt files containing an unitary matrix and decomposes them into linear optics devices plus the remaining diagonal.
-    Information is displayed on-screen.
+    Creates/loads .txt files containing an unitary matrix and decomposes them into linear
+    optics devices plus the remaining diagonal. Information is displayed on-screen.
     """
 
     if txt is True:
@@ -57,7 +59,9 @@ def Selements(
         while True:
             try:
                 impl = int(
-                    input("\nType of implementation\nInput '0' for Clements'\nInput any other int number for Reck's\n")
+                    input(
+                        "\nInput '0' for Clements' implementation\nInput any other int number for Reck's\n"
+                    )
                 )
 
                 break
@@ -70,17 +74,20 @@ def Selements(
 
     # ----------INITIAL MATRIX INPUT:----------
 
-    # Beginning of time measurement (in nanoseconds. The final result is also presented in IS units of measure, in this case seconds)
+    # Beginning of time measurement (in nanoseconds. The final result is also presented
+    # in IS units of measure, in this case seconds)
     t = time.process_time_ns()
 
-    # If a new matrix is created, there are two options: either just create an array, or save it into a .txt file
+    # If a new matrix is created, there are two options: either just create an array,
+    # or save it into a .txt file
     if newfile is True:
         # A new file 'U.txt' containing an N-dimensional unitary matrix U is created
         # so it can be used in other processes
         U_un = RandU(file_output, filename, N, txt)
 
     elif file_input is True:
-        # Loading U_un (un = unitary, for distinguishing it from the evolution matrix 'U' generated in the main algorithm 2)
+        # Loading U_un (un = unitary, for distinguishing it from the evolution
+        # matrix 'U' generated in the main algorithm 2)
         # NOTE: for all commentary in this code, U_un is referred as 'U' for simplicity
         U_un = read_matrix_from_txt(filename)
 
@@ -100,8 +107,7 @@ def Selements(
 
     if txt is True:
         print("\n\n\n\nUNITARY CHECK FOR MATRIX U:\n")
-
-        unitary(U_un, N, filename, acc_d)
+        np.testing.assert_allclose(np.eye(N), U_un @ U_un.T.conj())
 
     # ----------MATRIX U DECOMPOSITION:----------
 
@@ -112,14 +118,16 @@ def Selements(
     if impl == 0:
         TmnList, D = U_decomposition(U_un, N, file_output, filename, txt)
 
-        # We try the recomposition algorithm with the matrix U, by using the recently computed D and Tmn matrices
-        U_init = U_recomposition(D, TmnList, N)
+        # We try the recomposition algorithm with the matrix U, by using the
+        # recently computed D and Tmn matrices
+        U_init = recomposition(D, TmnList, N)
 
     else:
         TmnList, D = U_decomposition_Reck(U_un, N, file_output, filename, txt)
 
-        # We try the recomposition algorithm with the matrix U, by using the recently computed D and Tmn matrices
-        U_init = U_recomposition_Reck(D, TmnList, N)
+        # We try the recomposition algorithm with the matrix U, by using the recently
+        # computed D and Tmn matrices
+        U_init = recomposition_reck(D, TmnList, N)
 
     # ----------U ONSCREEN PRINTING Y AND RECONSTRUCTION ALGORITHM CHECK:----------
 

@@ -1,26 +1,5 @@
-# ---------------------------------------------------------------------------------------------------------------------------
-# 									ALGORITHM 2: N-PHOTON OPTICAL SYSTEM EVOLUTION
-# ---------------------------------------------------------------------------------------------------------------------------
-
-"""Copyright 2021 Daniel Gómez Aguado
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License."""
-
 import time
 
-# File opening
-
-# NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
 from ..input_control import input_control, input_control_ints
@@ -167,11 +146,9 @@ def StoU(
 
         print("\n\n\n\nUNITARY CHECK FOR MATRIX S:\n")
 
-        cond = unitary(S, m, filename, acc_d)
-
         # In case S is not unitary, the user is advised of the possible lack of value in the results
         # (see also last section: VERIFICATION OF THE PROGRAM'S SUCCESS)
-        if cond is False:
+        if not np.allclose(np.eye(m), S @ S.T.conj()):
             print("\nResults will be computed, albeit S (" + filename + ") is not unitary.\n")
 
     # ----------NUMBER OF PHOTONS INPUT---------
@@ -256,10 +233,7 @@ def StoU(
         # ----------UNITARY CHECK FOR MATRIX U:----------
 
         print("\n\n\n\n\nUNITARY CHECK FOR MATRIX U:\n")
-
-        cond = unitary(U, len(U), "U", acc_d)
-
-        if cond is False:
+        if not np.allclose(np.eye(len(U)), U @ U.T.conj()):
             print("\nS (" + filename + ")'s corresponding evolution U is not unitary.\n")
 
         else:

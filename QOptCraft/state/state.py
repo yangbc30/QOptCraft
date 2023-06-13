@@ -39,17 +39,15 @@ class MixedState(State):
         density_matrix: NDArray,
         modes: int,
         photons: int,
-        basis: list[list[int]],
     ) -> None:
         if not np.allclose(density_matrix, density_matrix.conj().T):
             raise NotHermitianError()
         self.density_matrix = density_matrix
         self.photons = photons
         self.modes = modes
-        self.basis = basis
 
     @classmethod
-    def from_mixture(cls, pure_states: list[PureState], probs: list[float], basis: list[list[int]]):
+    def from_mixture(cls, pure_states: list[PureState], probs: list[float]):
         """Initialize a mixed state from a superposition of pure states instead of
         initializing directly the density matrix.
 
@@ -84,7 +82,7 @@ class MixedState(State):
         for i in range(1, len(probs)):
             density_matrix += probs[i] * pure_states[i].density_matrix
 
-        return cls(density_matrix, modes_list[0], photons_list[0], basis)
+        return cls(density_matrix, modes_list[0], photons_list[0])
 
 
 class PureState(State):
@@ -114,7 +112,7 @@ class PureState(State):
 
         self.photons = sum(fock_list[0])
         self.modes = len(fock_list[0])
-        self.basis = None
+        self.basis = basis
         self.fock_list = fock_list
         self.amplitudes = amplitudes
         self.probabilites = [amp * amp.conjugate() for amp in amplitudes]

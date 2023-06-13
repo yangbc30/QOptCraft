@@ -15,7 +15,7 @@ limitations under the License."""
 import numpy as np
 
 
-def U_recomposition(D, TmnList, N):
+def recomposition(D, TmnList, N):
     # We explore TmnList in reverse order
     cont = int(N * (N - 1) / 2) - 1
 
@@ -38,5 +38,23 @@ def U_recomposition(D, TmnList, N):
                 U_init = U_init.dot(TmnList[cont, :, :])
 
                 cont -= 1
+
+    return U_init
+
+
+def recomposition_reck(D, TmnList, N):
+    # We explore TmnList in reverse order
+    cont = int(N * (N - 1) / 2) - 1
+
+    # The matrix given after the rebuild. We declare it equal to the diagonal D matrix as its initial value:
+    U_init = D
+
+    # We explore TmnList in reverse order as declared, computing
+    # inverse operations with each matrix:
+    for i in range(N - 1, 0, -1):
+        for _j in range(0, i):
+            U_init = U_init.dot(np.transpose(np.conj(TmnList[cont, :, :])))
+
+            cont -= 1
 
     return U_init

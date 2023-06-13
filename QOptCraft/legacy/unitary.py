@@ -14,7 +14,7 @@ limitations under the License."""
 
 import numpy as np
 
-from .legacy.mat_inner_product import *
+from .mat_inner_product import *
 
 
 # By undoing the commentary of line 37, the result of computing Uconj_per_U+ is printed onscreen

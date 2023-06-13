@@ -20,7 +20,7 @@ import time
 
 import numpy as np
 
-from ..input_control import input_control
+from ..utils.input_control import input_control
 
 # Matrix comparisons by their inner product
 from ..legacy.mat_inner_product import *
