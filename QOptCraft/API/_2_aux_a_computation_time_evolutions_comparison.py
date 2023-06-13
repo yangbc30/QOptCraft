@@ -1,20 +1,5 @@
-# ---------------------------------------------------------------------------------------------------------------------------
-# 					ALGORITHM 2a: COMPUTATION TIME OF ALGORITHM 2 METHODS OF SYSTEM EVOLUTION COMPARISON
-# ---------------------------------------------------------------------------------------------------------------------------
-
-"""Copyright 2021 Daniel Gómez Aguado
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License."""
+"""Computation time of algorithm 2. Methods of system evolution comparison.
+"""
 
 import math
 import time
@@ -23,9 +8,9 @@ import numpy as np
 import xlsxwriter
 
 from ..utils.input_control import input_control_ints
-from ..Phase2_Aux._2_1st_evolution_method import evolution
-from ..Phase2_Aux._2_2nd_evolution_method import evolution_2, evolution_2_ryser
-from ..Phase2_Aux._2_3rd_evolution_method import evolution_3
+from QOptCraft.utils.Phase2_Aux._2_1st_evolution_method import evolution
+from QOptCraft.utils.Phase2_Aux._2_2nd_evolution_method import evolution_2, evolution_2_ryser
+from QOptCraft.utils.Phase2_Aux._2_3rd_evolution_method import evolution_3
 from QOptCraft.legacy.photon_comb_basis import photon_combs_generator
 from ..legacy.recur_factorial import comb_evol
 from ..utils.write_initial_matrix import haar_measure
@@ -39,7 +24,7 @@ def StoUEvolComp(
     n2=False,
     txt=False,
     tries=1,
-    vec_base=[[False, False], [False, False]],
+    vec_base=None,
     inverse=False,
     comparison_matrix="haar",
 ):
@@ -47,6 +32,9 @@ def StoUEvolComp(
     An additional function intended for comparing times of computation between scattering matrix evolution algorithms.
     Information is displayed on-screen.
     """
+
+    if vec_base is None:
+        vec_base = [[False, False], [False, False]]
 
     if txt is True:
         print("==============================================================================")

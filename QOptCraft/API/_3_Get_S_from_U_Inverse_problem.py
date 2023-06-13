@@ -24,11 +24,14 @@ from itertools import permutations
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
-from ..utils.input_control import input_control, input_control_ints, input_control_intsDim
-from ..Phase3_Aux._3_permutation_matrix import *
-from ..Phase3_Aux._3_S_rebuild import S_output
-from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
-from ..Phase3_Aux._3_verification_of_solution_existence import eq_sys_finder, verification
+from QOptCraft.utils.input_control import input_control, input_control_ints, input_control_intsDim
+from QOptCraft.utils.Phase3_Aux._3_permutation_matrix import *
+from QOptCraft.utils.Phase3_Aux._3_S_rebuild import S_output
+from QOptCraft.utils.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
+from QOptCraft.utils.Phase3_Aux._3_verification_of_solution_existence import (
+    eq_sys_finder,
+    verification,
+)
 from ..legacy.read_matrix import read_matrix_from_txt
 from ..legacy.recur_factorial import *
 from ..legacy.unitary import *

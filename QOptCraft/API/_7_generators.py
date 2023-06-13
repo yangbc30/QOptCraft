@@ -1,30 +1,15 @@
-# ---------------------------------------------------------------------------------------------------------------------------
-# 													AVAILABLE GENERATORS
-# ---------------------------------------------------------------------------------------------------------------------------
-
-"""Copyright 2021 Daniel Gómez Aguado
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License."""
+"""Available generators
+"""
 
 import math
 
 import numpy as np
 
 from ..utils.input_control import input_control_ints, input_control_intsDim
-from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
+from QOptCraft.utils.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
 from QOptCraft.legacy.photon_comb_basis import photon_combs_generator
 from ..legacy.recur_factorial import comb_evol
-from ..utils.write_initial_matrix import *
+from ..utils.write_initial_matrix import matrix_generation_general_auto, haar_measure
 from ._2_Get_U_matrix_of_photon_system_evolution import StoU
 
 
