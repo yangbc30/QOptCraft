@@ -21,7 +21,7 @@ import time
 import numpy as np
 from scipy.linalg import expm
 
-from ..input_control import input_control, input_control_ints, input_control_intsDim
+from ..utils.input_control import input_control, input_control_ints, input_control_intsDim
 
 # Matrix comparisons by their inner product
 from ..legacy.mat_inner_product import *
@@ -35,7 +35,7 @@ from ..Phase4_Aux.gram_schmidt import *
 from QOptCraft.legacy.photon_comb_basis import photon_combs_generator
 from ..legacy.read_matrix import read_matrix_from_txt
 from ..legacy.recur_factorial import *
-from ..write_initial_matrix import haar_measure
+from ..utils.write_initial_matrix import haar_measure
 
 
 def Toponogov(

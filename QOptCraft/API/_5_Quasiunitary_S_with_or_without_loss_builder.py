@@ -20,15 +20,15 @@ import time
 
 import numpy as np
 
-from ..input_control import decimal_precision, input_control, input_control_ints
-from ..Phase1_Aux._1_U_decomposition import U_decomposition
-from ..Phase1_Aux._1_U_recomposition import *
+from ..utils.input_control import decimal_precision, input_control, input_control_ints
+from ..optic_decomposition.clemens_decomp import U_decomposition
+from ..optic_decomposition.recomposition import *
 from ..Phase5_Aux._5_D_decomposition import *
 from ..Phase5_Aux._5_matrix_padding_functions import *
 from ..Phase5_Aux._5_S_with_loss_creation import *
 from ..Phase5_Aux.quasiunitary import *
 from ..legacy.read_matrix import read_matrix_from_txt
-from ..unitary import *
+from ..legacy.unitary import *
 from ._7_generators import RandM
 
 
@@ -55,7 +55,9 @@ def QuasiU(
         print("==========================================================\n\n")
 
     # Input control: in case there is something wrong with given inputs, it is notified on-screen
-    file_input, filename, newfile, acc_d = input_control(5, file_input, T, file_output, filename, True, acc_d, newfile)
+    file_input, filename, newfile, acc_d = input_control(
+        5, file_input, T, file_output, filename, True, acc_d, newfile
+    )
 
     if newfile is True:
         N1 = input_control_ints(N1, "N1", 1)
@@ -64,10 +66,14 @@ def QuasiU(
 
     if acc_anc < 0 or type(acc_anc) is not int:
         if acc_anc < 0:
-            print("\nWARNING: a value higher than 0 for acc_anc, the precision of finding ancilla modes, is required.")
+            print(
+                "\nWARNING: a value higher than 0 for acc_anc, the precision of finding ancilla modes, is required."
+            )
 
         elif type(acc_anc) is not int:
-            print("\nWARNING: invalid acc_anc ancilla precision input (needs to be int and equal or higher than 0).")
+            print(
+                "\nWARNING: invalid acc_anc ancilla precision input (needs to be int and equal or higher than 0)."
+            )
 
         # This variable corresponds to the ancilla decimal precision. It applies to the comparisons for finding photon loss
         # In the .txt files, results contain all possible decimals
@@ -81,11 +87,15 @@ def QuasiU(
         print(
             "\nThe algorithm requires a file 'U.txt' in this code's directory, containing the unitary/non-unitary matrix to decompose."
         )
-        print("\nFor the study of unitary matrices, the file must be generated in the main algorithm 1.")
+        print(
+            "\nFor the study of unitary matrices, the file must be generated in the main algorithm 1."
+        )
         print(
             "\nIn the case of non-unitary matrices, this algorithm gives the option of creating a random one, overwriting the previous file."
         )
-        print("\nIf no new file is created and no other file is present, the code will end without computing.\n")
+        print(
+            "\nIf no new file is created and no other file is present, the code will end without computing.\n"
+        )
 
     # Beginning of time measurement
     t = time.process_time_ns()
@@ -123,7 +133,9 @@ def QuasiU(
     U, D, W = np.linalg.svd(T)
 
     if txt is True:
-        print("\n\nThe singular value decomposition of T in the matrices U, D, W has been computed.\n")
+        print(
+            "\n\nThe singular value decomposition of T in the matrices U, D, W has been computed.\n"
+        )
 
     # We save the dimensions of the square matrices U y W, they will be required later
     OGdimU = len(U[:, 0])
