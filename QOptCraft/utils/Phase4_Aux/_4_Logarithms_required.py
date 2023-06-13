@@ -15,7 +15,7 @@ limitations under the License."""
 import numpy as np
 from scipy.linalg import logm
 
-from ..Phase2_Aux._2_logarithm_algorithms import *
+from QOptCraft.utils.Phase2_Aux._2_logarithm_algorithms import *
 
 
 # Schur's third logarithm implementation.

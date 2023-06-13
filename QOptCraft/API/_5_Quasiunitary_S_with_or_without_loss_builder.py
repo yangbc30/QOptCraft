@@ -20,15 +20,15 @@ import time
 
 import numpy as np
 
-from ..utils.input_control import decimal_precision, input_control, input_control_ints
-from ..optic_decomposition.clemens_decomp import U_decomposition
+from QOptCraft.utils.input_control import decimal_precision, input_control, input_control_ints
+from ..optic_decomposition.clemens_decomp import decomposition
 from ..optic_decomposition.recomposition import *
-from ..Phase5_Aux._5_D_decomposition import *
-from ..Phase5_Aux._5_matrix_padding_functions import *
-from ..Phase5_Aux._5_S_with_loss_creation import *
-from ..Phase5_Aux.quasiunitary import *
-from ..legacy.read_matrix import read_matrix_from_txt
-from ..legacy.unitary import *
+from QOptCraft.utils.Phase5_Aux._5_D_decomposition import *
+from QOptCraft.utils.Phase5_Aux._5_matrix_padding_functions import *
+from QOptCraft.utils.Phase5_Aux._5_S_with_loss_creation import *
+from QOptCraft.utils.Phase5_Aux.quasiunitary import *
+from QOptCraft.legacy.read_matrix import read_matrix_from_txt
+from QOptCraft.legacy.unitary import *
 from ._7_generators import RandM
 
 
@@ -142,8 +142,8 @@ def QuasiU(
     OGdimW = len(W[:, 0])
 
     # Initial decompositions of U y W, by using the method of the main algorithm 1
-    UList, UD = U_decomposition(U, OGdimU, file_output, filename + "_U", txt)
-    WList, WD = U_decomposition(W, OGdimW, file_output, filename + "_W", txt)
+    UList, UD = decomposition(U, OGdimU, file_output, filename + "_U", txt)
+    WList, WD = decomposition(W, OGdimW, file_output, filename + "_W", txt)
 
     # Matrix padding loop: depending of which has the lower dimensions, either U or W square matrices
     # will go from being minDim-dimensional to maxDim-dimensional

@@ -15,8 +15,8 @@ limitations under the License."""
 from QOptCraft.utils.input_control import *
 from QOptCraft.API import *
 from QOptCraft.legacy.mat_inner_product import *
-from QOptCraft.Phase3_Aux import *
-from QOptCraft.Phase4_Aux import gram_schmidt_modified
+from QOptCraft.utils.Phase3_Aux import *
+from QOptCraft.utils.Phase4_Aux import gram_schmidt_modified
 from QOptCraft.basis import get_photon_basis
 
 # from QOptCraft.optic_devices import *

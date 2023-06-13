@@ -32,9 +32,9 @@ from QOptCraft.utils.Phase3_Aux._3_verification_of_solution_existence import (
     eq_sys_finder,
     verification,
 )
-from ..legacy.read_matrix import read_matrix_from_txt
-from ..legacy.recur_factorial import *
-from ..legacy.unitary import *
+from QOptCraft.legacy.read_matrix import read_matrix_from_txt
+from QOptCraft.legacy.recur_factorial import *
+from QOptCraft.legacy.unitary import *
 
 
 def SfromU(

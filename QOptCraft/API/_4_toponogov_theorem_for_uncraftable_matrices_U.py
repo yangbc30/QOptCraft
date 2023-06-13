@@ -9,18 +9,18 @@ from scipy.linalg import expm
 from ..utils.input_control import input_control, input_control_ints, input_control_intsDim
 
 # Matrix comparisons by their inner product
-from ..legacy.mat_inner_product import *
-from ..Phase2_Aux._2_3rd_evolution_method import evolution_3
-from ..Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
+from QOptCraft.legacy.mat_inner_product import *
+from QOptCraft.utils.Phase2_Aux._2_3rd_evolution_method import evolution_3
+from QOptCraft.utils.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
 
 # Adjoint representation
 # Required logarithms
-from ..Phase4_Aux._4_Logarithms_required import *
-from ..Phase4_Aux.gram_schmidt import *
+from QOptCraft.utils.Phase4_Aux._4_Logarithms_required import *
+from QOptCraft.utils.Phase4_Aux.gram_schmidt import *
 from QOptCraft.legacy.photon_comb_basis import photon_combs_generator
-from ..legacy.read_matrix import read_matrix_from_txt
-from ..legacy.recur_factorial import *
-from ..utils.write_initial_matrix import haar_measure
+from QOptCraft.legacy.read_matrix import read_matrix_from_txt
+from QOptCraft.legacy.recur_factorial import *
+from QOptCraft.utils.write_initial_matrix import haar_measure
 
 
 def Toponogov(

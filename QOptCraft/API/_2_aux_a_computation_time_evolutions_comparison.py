@@ -7,13 +7,13 @@ import time
 import numpy as np
 import xlsxwriter
 
-from ..utils.input_control import input_control_ints
+from QOptCraft.utils.input_control import input_control_ints
 from QOptCraft.utils.Phase2_Aux._2_1st_evolution_method import evolution
 from QOptCraft.utils.Phase2_Aux._2_2nd_evolution_method import evolution_2, evolution_2_ryser
 from QOptCraft.utils.Phase2_Aux._2_3rd_evolution_method import evolution_3
 from QOptCraft.legacy.photon_comb_basis import photon_combs_generator
-from ..legacy.recur_factorial import comb_evol
-from ..utils.write_initial_matrix import haar_measure
+from QOptCraft.legacy.recur_factorial import comb_evol
+from QOptCraft.utils.write_initial_matrix import haar_measure
 
 
 def StoUEvolComp(

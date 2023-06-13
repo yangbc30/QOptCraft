@@ -5,11 +5,11 @@ import math
 
 import numpy as np
 
-from ..utils.input_control import input_control_ints, input_control_intsDim
+from QOptCraft.utils.input_control import input_control_ints, input_control_intsDim
 from QOptCraft.utils.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
 from QOptCraft.legacy.photon_comb_basis import photon_combs_generator
-from ..legacy.recur_factorial import comb_evol
-from ..utils.write_initial_matrix import matrix_generation_general_auto, haar_measure
+from QOptCraft.legacy.recur_factorial import comb_evol
+from QOptCraft.utils.write_initial_matrix import matrix_generation_general_auto, haar_measure
 from ._2_Get_U_matrix_of_photon_system_evolution import StoU
 
 

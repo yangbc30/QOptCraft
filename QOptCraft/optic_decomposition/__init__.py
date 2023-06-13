@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 from .clemens_decomp import decomposition
-from .reck_decomp import U_decomposition_Reck
+from .reck_decomp import decomposition_reck
 from .recomposition import recomposition, recomposition_reck
-from ._1_U_recomposition_Reck import *
 from .beamsplitter import beamsplitter, beamsplitter_reck

@@ -5,9 +5,9 @@ from numpy.linalg import inv
 from scipy.linalg import logm, schur, sqrtm
 from sympy import Matrix
 
-from ..utils.input_control import input_control
+from QOptCraft.utils.input_control import input_control
 
-from ..legacy.read_matrix import read_matrix_from_txt
+from QOptCraft.legacy.read_matrix import read_matrix_from_txt
 
 
 def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):

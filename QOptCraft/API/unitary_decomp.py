@@ -16,14 +16,14 @@ import time
 
 import numpy as np
 
-from ..utils.input_control import input_control, input_control_intsDim
+from QOptCraft.utils.input_control import input_control, input_control_intsDim
 
 # Matrix comparisons by their inner product
-from ..legacy.mat_inner_product import comparison
-from ..optic_decomposition.clemens_decomp import U_decomposition
-from ..optic_decomposition.reck_decomp import U_decomposition_Reck
+from QOptCraft.legacy.mat_inner_product import comparison
+from QOptCraft.optic_decomposition.clemens_decomp import decomposition
+from QOptCraft.optic_decomposition.reck_decomp import decomposition_reck
 from ..optic_decomposition.recomposition import recomposition, recomposition_reck
-from ..legacy.read_matrix import read_matrix_from_txt
+from QOptCraft.legacy.read_matrix import read_matrix_from_txt
 from ._7_generators import RandU
 
 
@@ -116,14 +116,14 @@ def Selements(
 
     # No-null Tmn matrices and the resulting diagonal D (with its initial offsets) are obtained
     if impl == 0:
-        TmnList, D = U_decomposition(U_un, N, file_output, filename, txt)
+        TmnList, D = decomposition(U_un, N, file_output, filename, txt)
 
         # We try the recomposition algorithm with the matrix U, by using the
         # recently computed D and Tmn matrices
         U_init = recomposition(D, TmnList, N)
 
     else:
-        TmnList, D = U_decomposition_Reck(U_un, N, file_output, filename, txt)
+        TmnList, D = decomposition_reck(U_un, N, file_output, filename, txt)
 
         # We try the recomposition algorithm with the matrix U, by using the recently
         # computed D and Tmn matrices

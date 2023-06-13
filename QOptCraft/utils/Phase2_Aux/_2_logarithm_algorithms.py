@@ -17,7 +17,7 @@ import time
 import numpy as np
 from numpy.linalg import inv
 from scipy.linalg import logm, schur, sqrtm
-from sympy import *
+from sympy import Matrix
 
 
 def logm_1(A):

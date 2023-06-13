@@ -17,9 +17,9 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 from ..utils.input_control import input_control, input_control_ints, input_control_intsDim
-from ..Phase6_Aux._6_basis_manipulations import *
-from ..Phase6_Aux._6_schmidt import *
-from ..utils.write_initial_matrix import *
+from QOptCraft.utils.Phase6_Aux._6_basis_manipulations import *
+from QOptCraft.utils.Phase6_Aux._6_schmidt import *
+from QOptCraft.utils.write_initial_matrix import *
 from .unitary_decomp import Selements
 from ._2_aux_a_computation_time_evolutions_comparison import StoUEvolComp
 from ._2_aux_b_logarithm_algorithms_equalities import MatLogCompV

@@ -12,8 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-from ._0_FullAlgorithm import *
-from ._1_Unitary_matrix_U_builder import *
+from .main import *
+from .unitary_decomp import *
 from ._2_aux_a_computation_time_evolutions_comparison import *
 from ._2_aux_b_logarithm_algorithms_equalities import *
 from ._2_aux_c_logarithm_algorithms_timesanderror import *
@@ -23,6 +23,6 @@ from ._4_toponogov_theorem_for_uncraftable_matrices_U import *
 from ._5_Quasiunitary_S_with_or_without_loss_builder import *
 from ._6_schmidt_entanglement_measurement_of_states import *
 from ._7_generators import *
-from ._9_friendly_logarithm_algorithms import *
+from .logarithms import *
 
 __all__ = [s for s in dir()]

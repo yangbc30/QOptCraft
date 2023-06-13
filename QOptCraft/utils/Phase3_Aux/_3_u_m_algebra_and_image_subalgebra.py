@@ -15,13 +15,11 @@ limitations under the License.
 
 import os
 import pickle
-from collections.abc import Sequence
 from numbers import Number
 
 import numpy as np
 from numpy.typing import NDArray
 import scipy as sp
-from scipy.special import comb
 
 from QOptCraft.basis import _photon_basis
 
