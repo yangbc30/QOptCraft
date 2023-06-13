@@ -117,6 +117,34 @@ class PureState(State):
         self.amplitudes = amplitudes
         self.probabilites = [amp * amp.conjugate() for amp in amplitudes]
 
+    def __str__(self) -> str:
+        """Tensor product or scalar multiplication of a state or number times
+        another state.
+        """
+        str_ = ""
+        for fock, amp in zip(self.fock_list, self.amplitudes, strict=True):
+            str_ = str_ + f"{amp:.2f} * {fock} + \n"
+        str_ = str_[:-4]
+        return str_
+
+    def __mul__(self, other: PureState) -> PureState:
+        """Tensor product or scalar multiplication of a state or number times
+        another state.
+        """
+        fock_list = []
+        amplitudes = []
+        for fock, amp in zip(self.fock_list, self.amplitudes, strict=True):
+            for fock_other, amp_other in zip(other.fock_list, other.amplitudes, strict=True):
+                fock_list.append(fock + fock_other)
+                amplitudes.append(amp * amp_other)
+        return PureState(fock_list, amplitudes)
+
+    def __pow__(self, other: int, modulo=None) -> PureState:
+        state = self
+        for _ in range(other - 1):
+            state = state * self
+        return state
+
     @staticmethod
     def _assert_inputs(fock_list: list[list[int]], amplitudes: list[float]):
         """Assert the instance inputs are not contradictory.
