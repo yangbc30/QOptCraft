@@ -25,4 +25,5 @@ from QOptCraft.legacy.recur_factorial import *
 from QOptCraft.legacy.unitary import *
 from QOptCraft.utils.write_initial_matrix import *
 from QOptCraft.state import State, PureState, MixedState
+from QOptCraft.utils import creation, annihilation
 from QOptCraft._version import __version__

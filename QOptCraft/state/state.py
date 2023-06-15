@@ -8,6 +8,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from QOptCraft.basis import get_photon_basis
+from QOptCraft.utils import creation, annihilation
 from ._exceptions import (
     ProbabilityError,
     PureStateLengthError,
@@ -28,10 +29,13 @@ class MixedState(State):
 
     Args:
         density_matrix (NDArray): provide directly the density matrix of the mixed state.
+        modes (int): number of modes in the optical network.
+        photons (int): number of photons.
 
     Attributes:
-        basis (list[list[int]]): basis of the Hilbert state. Defaults to None.
         density_matrix (NDArray): density matrix of the state.
+        modes (int): number of modes in the optical network.
+        photons (int): number of photons.
     """
 
     def __init__(
@@ -54,7 +58,6 @@ class MixedState(State):
         Args:
             pure_states (list[PureState]): pure states in the statistical mixture.
             probs (list[float]): probability of measuring each pure state.
-            basis (list[list[int]]): a basis for the photon states.
 
         Raises:
             PureStateLengthError: States and probabilities differ in length.
@@ -92,11 +95,10 @@ class PureState(State):
         fock_list (list[list[int]]): Fock states that, in superposition,
             constitute our pure state.
         amplitudes (list[float]): amplitude of each Fock state in the superposition.
-        basis (list[list[int]], optional): basis of the Hilbert state. Defaults to None.
 
     Attributes:
-        photons (int): number of photons.
         modes (int): number of modes in the optical network.
+        photons (int): number of photons.
         basis (list[list[int]]): basis of the Hilbert state. Defaults to None.
         density_matrix (NDArray): density matrix of the state.
         state_in_basis (NDArray): pure state in the given basis.
@@ -106,16 +108,15 @@ class PureState(State):
         self,
         fock_list: list[list[int]],
         amplitudes: list[Number],
-        basis: list[list[int]] | None = None,
     ) -> None:
         self._assert_inputs(fock_list, amplitudes)
 
-        self.photons = sum(fock_list[0])
-        self.modes = len(fock_list[0])
-        self.basis = basis
+        self.photons: int = sum(fock_list[0])
+        self.modes: int = len(fock_list[0])
+        self.basis: list[list[int]] | None = None
         self.fock_list = fock_list
         self.amplitudes = amplitudes
-        self.probabilites = [amp * amp.conjugate() for amp in amplitudes]
+        self.probabilites: list[Number] = [amp * amp.conjugate() for amp in amplitudes]
 
     def __str__(self) -> str:
         """Tensor product or scalar multiplication of a state or number times
@@ -128,9 +129,7 @@ class PureState(State):
         return str_
 
     def __mul__(self, other: PureState) -> PureState:
-        """Tensor product or scalar multiplication of a state or number times
-        another state.
-        """
+        """Tensor product of self with other state."""
         fock_list = []
         amplitudes = []
         for fock, amp in zip(self.fock_list, self.amplitudes, strict=True):
@@ -139,9 +138,10 @@ class PureState(State):
                 amplitudes.append(amp * amp_other)
         return PureState(fock_list, amplitudes)
 
-    def __pow__(self, other: int, modulo=None) -> PureState:
+    def __pow__(self, exponent: int, modulo=None) -> PureState:
+        """Tensor product of self with itself a given number of times."""
         state = self
-        for _ in range(other - 1):
+        for _ in range(exponent - 1):
             state = state * self
         return state
 
@@ -173,6 +173,7 @@ class PureState(State):
 
     @property
     def density_matrix(self):
+        """Density matrix of the pure state in a certain basis."""
         state_in_basis = self.state_in_basis
         return np.outer(state_in_basis, state_in_basis.conj().T)
 
@@ -210,46 +211,11 @@ class PureState(State):
             for i, fock_ in enumerate(self.fock_list):
                 fock = fock_.copy()
                 coef = self.amplitudes[i]
-                coef *= self.annihilation(mode_annih, fock)
-                coef *= self.creation(mode_creat, fock)
+                coef *= annihilation(mode_annih, fock)
+                coef *= creation(mode_creat, fock)
                 try:
                     j = self.fock_list.index(fock)
                     exp += coef * self.amplitudes[j]
                 except ValueError:
                     continue
-
         return exp
-
-    @staticmethod
-    def creation(mode: int, state: list[int]) -> Number:
-        """Creation operator acting on a specific mode. Modifies state in-place.
-
-        Args:
-            mode (int): a quantum mode.
-            state (list[int]): fock basis state.
-            coef (Number): coefficient of the state.
-
-        Returns:
-            tuple[list[int], Number]: created state and its coefficient.
-        """
-        photons = state[mode]
-        coef = np.sqrt(photons + 1)
-        state[mode] = photons + 1  # * modified in-place
-        return coef
-
-    @staticmethod
-    def annihilation(mode: int, state: list[int]) -> Number:
-        """Annihilation operator acting on a specific mode.
-
-        Args:
-            mode (int): a quantum mode.
-            state (list[int]): fock basis state.
-            coef (Number): coefficient of the state.
-
-        Returns:
-            tuple[list[int], Number]: annihilated state and its coefficient.
-        """
-        photons = state[mode]
-        coef = np.sqrt(photons)
-        state[mode] = photons - 1  # * modified in-place
-        return coef
