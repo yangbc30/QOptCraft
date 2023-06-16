@@ -6,21 +6,23 @@ import time
 import numpy as np
 from scipy.linalg import expm
 
-from ..utils.input_control import input_control, input_control_ints, input_control_intsDim
+from QOptCraft._legacy.input_control import input_control, input_control_ints, input_control_intsDim
 
 from QOptCraft.basis import hilbert_dim
 from QOptCraft._legacy.mat_inner_product import *
 from QOptCraft.evolution._2_3rd_evolution_method import evolution_3
-from QOptCraft.utils.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
+from QOptCraft._legacy.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import (
+    matrix_u_basis_generator,
+)
 
 # Adjoint representation
 # Required logarithms
-from QOptCraft.utils.Phase4_Aux._4_Logarithms_required import *
-from QOptCraft.utils.Phase4_Aux.gram_schmidt import *
+from QOptCraft.topogonov._4_Logarithms_required import *
+from QOptCraft.topogonov.gram_schmidt import *
 from QOptCraft._legacy.photon_comb_basis import photon_combs_generator
 from QOptCraft._legacy.read_matrix import read_matrix_from_txt
 from QOptCraft._legacy.recur_factorial import *
-from QOptCraft.utils.write_initial_matrix import haar_measure
+from QOptCraft.operators.write_initial_matrix import haar_measure
 
 
 def Toponogov(

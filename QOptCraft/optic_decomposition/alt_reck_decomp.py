@@ -1,4 +1,5 @@
-# Decompose a unitary into beamsplitters
+"""Decompose a unitary into beamsplitters
+"""
 
 from os.path import join
 from pickle import dump

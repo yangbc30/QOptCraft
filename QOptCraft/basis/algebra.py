@@ -5,7 +5,8 @@ import warnings
 import scipy as sp
 from scipy.sparse import spmatrix, csr_matrix, lil_matrix
 
-from QOptCraft.basis import get_photon_basis, hilbert_dim
+from .photon import get_photon_basis
+from .hilbert_dimension import hilbert_dim
 from QOptCraft.operators import creation, annihilation
 
 

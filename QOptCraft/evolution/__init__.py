@@ -12,11 +12,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
+from ._2_aux_a_computation_time_evolutions_comparison import *
+from ._2_aux_b_logarithm_algorithms_equalities import *
+from ._2_aux_c_logarithm_algorithms_timesanderror import *
+from ._2_Get_U_matrix_of_photon_system_evolution import *
 from ._2_1st_evolution_method import *
 from ._2_2nd_evolution_method import *
 from ._2_3rd_evolution_method import *
 from ._2_creation_and_destruction_operators import *
 from ._2_logarithm_algorithms import *
-from ._2_photon_input import *
-
-__all__ = [s for s in dir()]

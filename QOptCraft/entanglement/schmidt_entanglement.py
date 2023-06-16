@@ -1,7 +1,3 @@
-# ---------------------------------------------------------------------------------------------------------------------------
-# 						ALGORITHM 6: ENTANGLEMENT VALUES OF STATES WITHIN AN UNITARY SYSTEM
-# ---------------------------------------------------------------------------------------------------------------------------
-
 """Copyright 2021 Daniel Gómez Aguado
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,19 +16,19 @@ import time
 
 import numpy as np
 
-from QOptCraft.utils.input_control import input_control
+from QOptCraft._legacy.input_control import input_control
 
 # Matrix comparisons by their inner product
 from QOptCraft._legacy.mat_inner_product import *
 
 # Required logarithms
-from QOptCraft.utils.Phase4_Aux._4_Logarithms_required import *
-from QOptCraft.utils.Phase4_Aux.gram_schmidt import *
-from QOptCraft.utils.Phase6_Aux._6_basis_manipulations import (
+from QOptCraft.topogonov._4_Logarithms_required import *
+from QOptCraft.topogonov.gram_schmidt import *
+from QOptCraft.entanglement._6_basis_manipulations import (
     state_leading_fidelity,
     state_leading_terms,
 )
-from QOptCraft.utils.Phase6_Aux._6_schmidt import schmidt_rank_vector
+from QOptCraft.entanglement._6_schmidt import schmidt_rank_vector
 from QOptCraft._legacy.photon_comb_basis import photon_combs_generator, state_in_basis
 from QOptCraft._legacy.read_matrix import read_matrix_from_txt, read_matrix_from_txt_general
 from QOptCraft._legacy.recur_factorial import *
@@ -53,7 +49,7 @@ def StateSchmidt(
     fidelity=0.95,
 ):
     """
-    Loads a state either from a file or from inputs given directly to the function, as well as an unitary matrix under the same condition.
+    Loads a state either from a file or from inputs given directly to the function, as well as a unitary matrix under the same condition.
     First, the state gets adapted to the vec_base available (either generated or given) and multiplied by the unitary matrix operator.
     Later, now that it has interacted with the circuit, its entanglement is computed via the Schmidt rank vector.
     """

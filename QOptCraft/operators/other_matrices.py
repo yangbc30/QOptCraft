@@ -1,16 +1,13 @@
-"""Available generators
-"""
-
 import math
 
 import numpy as np
 
 from QOptCraft.basis import hilbert_dim
-from QOptCraft.utils.input_control import input_control_ints, input_control_intsDim
-from QOptCraft.utils.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
+from QOptCraft._legacy.input_control import input_control_ints, input_control_intsDim
+from QOptCraft._legacy.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
 from QOptCraft._legacy.photon_comb_basis import photon_combs_generator
-from QOptCraft.utils.write_initial_matrix import matrix_generation_general_auto, haar_measure
-from ._2_Get_U_matrix_of_photon_system_evolution import StoU
+from QOptCraft.operators.write_initial_matrix import matrix_generation_general_auto, haar_measure
+from QOptCraft.evolution import StoU
 
 
 # Creates Fock states basis of n photons for m modes

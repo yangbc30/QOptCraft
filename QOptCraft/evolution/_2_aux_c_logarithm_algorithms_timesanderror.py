@@ -13,7 +13,7 @@ from scipy.linalg import expm, logm
 # Matrices comparisons by their inner product
 from QOptCraft._legacy.mat_inner_product import mat_module
 from QOptCraft.evolution._2_logarithm_algorithms import *
-from QOptCraft.utils.write_initial_matrix import haar_measure
+from QOptCraft.operators.write_initial_matrix import haar_measure
 
 
 def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):

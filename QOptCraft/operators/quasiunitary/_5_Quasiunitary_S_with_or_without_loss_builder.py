@@ -20,16 +20,16 @@ import time
 
 import numpy as np
 
-from QOptCraft.utils.input_control import decimal_precision, input_control, input_control_ints
-from ..optic_decomposition.clemens_decomp import decomposition
-from ..optic_decomposition.recomposition import *
-from QOptCraft.utils.Phase5_Aux._5_D_decomposition import *
-from QOptCraft.utils.Phase5_Aux._5_matrix_padding_functions import *
-from QOptCraft.utils.Phase5_Aux._5_S_with_loss_creation import *
-from QOptCraft.utils.Phase5_Aux.quasiunitary import *
+from QOptCraft._legacy.input_control import decimal_precision, input_control, input_control_ints
+from QOptCraft.optic_decomposition.clemens_decomp import decomposition
+from .quasiunitary import quasiunitary
+from QOptCraft.optic_decomposition.recomposition import *
+from ._5_D_decomposition import *
+from ._5_matrix_padding_functions import *
+from ._5_S_with_loss_creation import *
 from QOptCraft._legacy.read_matrix import read_matrix_from_txt
 from QOptCraft._legacy.unitary import *
-from ._7_generators import RandM
+from ..other_matrices import RandM
 
 
 def QuasiU(

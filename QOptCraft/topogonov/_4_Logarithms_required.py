@@ -13,9 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 import numpy as np
-from scipy.linalg import logm
-
-from QOptCraft.evolution._2_logarithm_algorithms import *
+from scipy.linalg import logm, schur
 
 
 # Schur's third logarithm implementation.
@@ -49,7 +47,7 @@ def LogU(U, iterations):
     for _i in range(iterations):
         V = 0.5 * (V + np.linalg.inv(V).H)
 
-    T, Q = sp.linalg.schur(V)
+    T, Q = schur(V)
 
     D = np.diag([T[i][i] / np.absolute(T[i][i]) for i in range(len(U))])
 

@@ -3,7 +3,7 @@ import time
 import numpy as np
 
 from QOptCraft.basis import hilbert_dim
-from QOptCraft.utils.input_control import input_control, input_control_ints
+from QOptCraft._legacy.input_control import input_control, input_control_ints
 from QOptCraft.evolution._2_1st_evolution_method import evolution
 from QOptCraft.evolution._2_2nd_evolution_method import evolution_2, evolution_2_ryser
 from QOptCraft.evolution._2_3rd_evolution_method import evolution_3, iH_U_operator

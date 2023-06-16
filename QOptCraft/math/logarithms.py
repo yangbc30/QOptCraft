@@ -5,7 +5,7 @@ from numpy.linalg import inv
 from scipy.linalg import logm, schur, sqrtm
 from sympy import Matrix
 
-from QOptCraft.utils.input_control import input_control
+from QOptCraft._legacy.input_control import input_control
 
 from QOptCraft._legacy.read_matrix import read_matrix_from_txt
 

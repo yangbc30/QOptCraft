@@ -23,11 +23,11 @@ from itertools import permutations
 import numpy as np
 
 from QOptCraft.basis import hilbert_dim
-from QOptCraft.utils.input_control import input_control, input_control_ints, input_control_intsDim
-from QOptCraft.utils.Phase3_Aux._3_permutation_matrix import *
-from QOptCraft.utils.Phase3_Aux._3_S_rebuild import S_output
-from QOptCraft.utils.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
-from QOptCraft.utils.Phase3_Aux._3_verification_of_solution_existence import (
+from QOptCraft._legacy.input_control import input_control, input_control_ints, input_control_intsDim
+from QOptCraft._legacy.Phase3_Aux._3_permutation_matrix import *
+from QOptCraft._legacy.Phase3_Aux._3_S_rebuild import S_output
+from QOptCraft._legacy.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
+from QOptCraft._legacy.Phase3_Aux._3_verification_of_solution_existence import (
     eq_sys_finder,
     verification,
 )
