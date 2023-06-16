@@ -5,10 +5,10 @@ import math
 
 import numpy as np
 
+from QOptCraft.basis import hilbert_dim
 from QOptCraft.utils.input_control import input_control_ints, input_control_intsDim
 from QOptCraft.utils.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
 from QOptCraft._legacy.photon_comb_basis import photon_combs_generator
-from QOptCraft._legacy.recur_factorial import comb_evol
 from QOptCraft.utils.write_initial_matrix import matrix_generation_general_auto, haar_measure
 from ._2_Get_U_matrix_of_photon_system_evolution import StoU
 
@@ -54,7 +54,7 @@ def AlgBasis(file_output=True, m=False, n=False, M=False):
     # plausible combinations, that is, that verify comb_evol(n,m)=comb(m+n-1,n)=M
 
     while (
-        comb_evol(n, m) != M
+        hilbert_dim(m, n) != M
     ):  # in the function version, n and m are properly declared since launch
         print(
             "\nThe given photon number n and modes m do not satisfy the equation M=comb_evol(n,m)=comb(m+n-1,n).\n"
@@ -269,7 +269,7 @@ def RandImU(file_output=True, filename=False, m=False, n=False, txt=False):
 
     n = input_control_ints(n, "n", 1)
 
-    M = comb_evol(n, m)
+    M = hilbert_dim(m, n)
 
     S = RandU(file_output=False, filename=False, N=m, txt=False)
 

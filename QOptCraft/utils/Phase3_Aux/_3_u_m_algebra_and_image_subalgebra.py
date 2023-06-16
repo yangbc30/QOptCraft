@@ -19,9 +19,8 @@ from numbers import Number
 
 import numpy as np
 from numpy.typing import NDArray
-import scipy as sp
 
-from QOptCraft.basis import _photon_basis
+from QOptCraft.basis import _photon_basis, hilbert_dim
 
 
 def creation(mode: int, state: NDArray, coef: Number) -> tuple[NDArray, Number]:
@@ -113,7 +112,7 @@ def get_basis(photons: int, modes: int) -> list[list[int]]:
 # We transform from the u(m) matrix basis to u(M)'s
 def d_phi(matrix: NDArray, photons: int) -> NDArray:
     modes = matrix.shape[0]
-    dim = int(sp.special.comb(modes + photons - 1, photons))
+    dim = hilbert_dim(modes, photons)
 
     img_matrix = np.zeros((dim, dim), dtype=complex)
     basis_canon = np.identity(dim, dtype=complex)
@@ -194,125 +193,3 @@ def matrix_u_basis_generator(m, M, photons, base_input):
         base_group,
         base_img_group,
     )
-
-
-"""
-# We transform from the u(m) matrix basis to u(M)'s
-def d_phi(base_matrix_m, num_photons, base_input):
-    m = len(base_matrix_m)
-    num_photons = int(np.sum(photon_state))
-
-    if base_input is True:
-        try:
-            # We load the vector basis
-            with open(f"m_{m}_n_{num_photons}_vec_base.txt") as vec_base_file:
-                vec_base = np.loadtxt(vec_base_file, delimiter=",", dtype=complex)
-
-        except FileNotFoundError:
-            print("\nThe required vector basis file does not exist.\n")
-            print("\nIt will be freshly generated instead.\n")
-
-            # We load the combinations with the same amount of photons in order to create the vector basis
-            vec_base = photon_combs_generator(m, num_photons)
-            with open(f"m_{m}_n_{num_photons}_vec_base.txt", "w") as vec_base_file:
-                np.savetxt(vec_base_file, vec_base, fmt="(%e)", delimiter=",")
-
-    else:
-        # We load the combinations with the same amount of photons in order to create the vector basis
-        vec_base = photon_combs_generator(m, num_photons)
-
-    # It is required to introduce photons_aux for 'photons_aux' and 'photons' not to "update" together
-    global photons_aux
-    global mult
-
-    # Dimensions of the resulting matrix U:
-    M = comb_evol(num_photons, m)
-    # This value can be otained too with the measurement of vec_base's length
-
-    # base_matrix_M initialization
-    base_matrix_M = np.zeros((M, M), dtype=complex)
-
-    base_matrix_M = u_m_to_u_M(m, M, vec_base, base_matrix_m)
-
-    return base_matrix_M
-"""
-
-
-"""
-# Specific process of subspace shift. Very similar to iH_U_operator's obtention (see '_2_3rd_evolution_method.py')
-def u_m_to_u_M(modes, dim, photons, base_matrix_m):
-    # base_matrix_M initialization
-    base_matrix_M = np.zeros((dim, dim), dtype=complex)
-    basis_canon = np.identity(dim, dtype=complex)
-
-    basis = photon_basis(photons, modes)
-
-    for p in range(dim):
-        np.array(basis[p])
-
-        p_array_M = np.array(basis_canon[p])
-
-        for q in range(dim):
-            for j in range(modes):
-                for k in range(modes):
-                    # Array subject to the operators
-                    q_array_aux = np.array(basis[q])
-
-                    # Multiplier
-                    mult = base_matrix_m[j, k]
-
-                    # These two functions update q_array_aux and mult
-                    q_array_aux, mult = a(k, q_array_aux, mult)
-
-                    q_array_aux, mult = a_dagger(j, q_array_aux, mult)
-
-                    for r in range(dim):
-                        if (basis[r] == q_array_aux).all():
-                            index = r
-
-                            break
-
-                    q_array_M = np.array(basis_canon[index])
-
-                    base_matrix_M[p, q] += p_array_M.dot(q_array_M) * mult
-
-    return base_matrix_M
-"""
-
-"""
-def matrix_u_basis_generator_sparse(m, M, photons, base_input):
-
-    # We initialise the basis for each space
-    base_group = np.identity(m, dtype=complex)
-    base_img_group = np.identity(M, dtype=complex)
-    base_algebra = []
-    base_img_algebra = []
-    # Here we will storage correlations with e_jk and f_jk, for a better organisation
-    base_algebra_e = []
-    base_algebra_f = []
-
-    cont = 0
-    for j in range(m):
-        for k in range(m):
-            base_algebra_e[m * j + k].append(sp.sparse.csr_matrix(e_jk(j, k, base_group)))
-            if k <= j:
-                base_algebra.append(sp.sparse.csr_matrix(e_jk(j, k, base_group)))
-                base_img_algebra.append(
-                    sp.sparse.csr_matrix(d_phi(base_algebra[cont], photons, base_input))
-                )
-                cont += 1
-
-    # The separator's functions indicate the switch from e_jk to f_jk,
-    # after the m*m combinations have been already computed in the former
-    separator_e_f = cont
-    for j in range(m):
-        for k in range(m):
-            base_algebra_f.append(sp.sparse.csr_matrix(f_jk(j, k, base_group)))
-            if k < j:
-                base_algebra.append(sp.sparse.csr_matrix(f_jk(j, k, base_group)))
-                base_img_algebra.append(
-                    sp.sparse.csr_matrix(d_phi(base_algebra[cont], photons, base_input))
-                )
-                cont += 1
-    return base_algebra, base_img_algebra, base_algebra_e, base_algebra_f, separator_e_f, base_group, base_img_group
-"""

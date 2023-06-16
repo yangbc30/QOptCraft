@@ -13,52 +13,20 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 import numpy as np
-
-
-# Factorial of a natural number computation
-def recur_factorial(n):
-    if n == 1.0:
-        return n
-
-    elif n == 0.0:
-        return 1.0
-
-    elif n < 0.0:
-        return "NA"
-
-    else:
-        return n * recur_factorial(n - 1)
+from scipy.special import factorial
 
 
 # Factorial computation for all values of an array
 def fact_array(array):
     array_2 = np.array([array])
 
-    array_fact = np.apply_along_axis(recur_factorial, 0, array_2)
+    array_fact = np.apply_along_axis(factorial, 0, array_2)
 
     return array_fact
 
 
-# Combinatory computation (modes, photons)
-def comb_evol(num_elements, num_dim):
-    """
-    num_elements=n, num_dim=m
-    Computes the combinatory of (m+n-1,n). Variables given so the user only needs to know n and m.
-    """
-
-    sol = int(
-        recur_factorial(num_elements + num_dim - 1)
-        / (recur_factorial(num_elements) * recur_factorial(num_dim - 1))
-    )
-
-    return sol
-
-
 # Combinatory computation
 def comb_evol_no_reps(num_elements, num_dim):
-    sol = int(
-        recur_factorial(num_elements)
-        / (recur_factorial(num_dim) * recur_factorial(num_elements - num_dim))
-    )
+    sol = int(factorial(num_elements) / (factorial(num_dim) * factorial(num_elements - num_dim)))
 
     return sol

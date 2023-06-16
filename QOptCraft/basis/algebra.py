@@ -5,7 +5,7 @@ import warnings
 import scipy as sp
 from scipy.sparse import spmatrix, csr_matrix, lil_matrix
 
-from QOptCraft.basis import get_photon_basis
+from QOptCraft.basis import get_photon_basis, hilbert_dim
 from QOptCraft.operators import creation, annihilation
 
 
@@ -61,7 +61,7 @@ def _algebra_basis(modes: int, photons: int) -> tuple[Basis, Basis]:
     """Generate the basis for the algebra and image algebra."""
     basis = []
     basis_image = []
-    dim_image = int(sp.special.comb(modes + photons - 1, photons))
+    dim_image = hilbert_dim(modes, photons)
     photon_basis = get_photon_basis(modes, photons)
 
     for mode_1 in range(modes):

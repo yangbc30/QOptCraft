@@ -16,9 +16,10 @@ import time
 
 import numpy as np
 import scipy as sp
+from scipy.special import factorial
 
+from QOptCraft.basis import hilbert_dim
 from QOptCraft._legacy.photon_comb_basis import photon_comb_index
-from QOptCraft._legacy.recur_factorial import *
 from ._2_creation_and_destruction_operators import a_dagger
 
 
@@ -31,7 +32,7 @@ def evolution(S, photons, vec_base_aux):
 
     vec_base = vec_base_aux
 
-    m = len(S)
+    modes = len(S)
     num_photons = int(np.sum(photons))
 
     # It is required to introduce photons_aux for 'photons_aux' and 'photons' not to "update" together
@@ -42,13 +43,13 @@ def evolution(S, photons, vec_base_aux):
     global U_ket
 
     # U_ket initialization
-    U_ket = np.zeros(comb_evol(num_photons, m), dtype=complex)
+    U_ket = np.zeros(hilbert_dim(modes, photons), dtype=complex)
 
     # Vectors from the basis which will appear in the operations
     sum_ = np.zeros(num_photons, dtype=int)
 
     # The last two terms are required because of the function's recursive character
-    evolution_loop(S, photons, num_photons, m, sum_, 0)
+    evolution_loop(S, photons, num_photons, modes, sum_, 0)
 
     # Computation time
     t_inc = time.process_time_ns() - t
@@ -57,7 +58,7 @@ def evolution(S, photons, vec_base_aux):
 
 
 # Loop whose amount of callings depend on the number of photons in each mode
-def evolution_loop(S, photons, num_photons, m, sum_, k):
+def evolution_loop(S, photons, num_photons, modes, sum_, k):
     # Variables to share with evolution() and successive callings of
     # evolution_loop()
     global U_ket
@@ -67,23 +68,23 @@ def evolution_loop(S, photons, num_photons, m, sum_, k):
 
     counter = np.array(photons[:], dtype=int)
 
-    for sum_[k] in range(m):
+    for sum_[k] in range(modes):
         if k < num_photons - 1:
             # System's recursivity: we need to call the loop indeterminate
             # times, depending of the amount of photons present
-            evolution_loop(S, photons, num_photons, m, sum_, k + 1)
+            evolution_loop(S, photons, num_photons, modes, sum_, k + 1)
 
         else:
             mult = 1.0
 
-            photons_aux = np.zeros(m, dtype=complex)
+            photons_aux = np.zeros(modes, dtype=complex)
 
             # IMPORTANT, we want to explore sum_[] in order
             cont = 0
 
             # Here goes the sum algorithm. All i modes are visited a n_i
             # number of times corresponding to the amount of photons in each
-            for p in range(m):
+            for p in range(modes):
                 # An S_ji·a+_j is added to the total sum, corresponding to this vector of the basis
                 for _q in range(counter[p]):
                     mult *= S[sum_[cont], p]
@@ -92,7 +93,7 @@ def evolution_loop(S, photons, num_photons, m, sum_, k):
 
                     cont += 1
 
-                mult = mult / sp.sqrt(complex(recur_factorial(photons[p])))
+                mult = mult / sp.sqrt(complex(factorial(photons[p])))
 
             # Following runs: we call the function photon_comb_index() for
             # obtaining the adequate index for each vector of the basis

@@ -7,12 +7,12 @@ import time
 import numpy as np
 import xlsxwriter
 
+from QOptCraft.basis import hilbert_dim
 from QOptCraft.utils.input_control import input_control_ints
 from QOptCraft.utils.Phase2_Aux._2_1st_evolution_method import evolution
 from QOptCraft.utils.Phase2_Aux._2_2nd_evolution_method import evolution_2, evolution_2_ryser
 from QOptCraft.utils.Phase2_Aux._2_3rd_evolution_method import evolution_3
 from QOptCraft._legacy.photon_comb_basis import photon_combs_generator
-from QOptCraft._legacy.recur_factorial import comb_evol
 from QOptCraft.utils.write_initial_matrix import haar_measure
 
 
@@ -243,7 +243,7 @@ def StoUEvolComp(
                     scores = {
                         "m": f"{k}",
                         "n": f"{j}",
-                        "M": f"{comb_evol(j,k)}",
+                        "M": f"{hilbert_dim(k + j - 1, j)}",
                         "Method 1": t_inc_1 / (10.0**9),
                         "Method 2": t_inc_2 / (10.0**9),
                         "Method 2b": t_inc_2b / (10.0**9),

@@ -17,8 +17,8 @@ import time
 import numpy as np
 from scipy.linalg import expm
 
+from QOptCraft.basis import hilbert_dim
 from QOptCraft._legacy.mat_inner_product import *
-from QOptCraft._legacy.recur_factorial import comb_evol
 from ._2_creation_and_destruction_operators import *
 from ._2_logarithm_algorithms import *
 
@@ -36,7 +36,7 @@ def evolution_3(S, photons, vec_base, file_output=False, filename=False):
     num_photons = int(np.sum(photons))
 
     # Resulting U matrix's dimensions:
-    M = comb_evol(num_photons, m)
+    M = hilbert_dim(m, num_photons)
     # This value could also be obtained by measuring vec_base's length
 
     # Out of the three logarithm algorithms developed in the main algorithm 2b, logm_3()
@@ -145,7 +145,8 @@ def n_operator(m, M, vec_base):
 
             for k in range(m):
                 # Array subject to the operators
-                q_array_aux = np.array(vec_base[q])
+                # q_array_aux = np.array(vec_base[q])
+                q_array_aux = vec_base[q].copy()
 
                 mult = 1
 
