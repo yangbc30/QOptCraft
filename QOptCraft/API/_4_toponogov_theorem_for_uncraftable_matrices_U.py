@@ -10,7 +10,7 @@ from ..utils.input_control import input_control, input_control_ints, input_contr
 
 from QOptCraft.basis import hilbert_dim
 from QOptCraft._legacy.mat_inner_product import *
-from QOptCraft.utils.Phase2_Aux._2_3rd_evolution_method import evolution_3
+from QOptCraft.evolution._2_3rd_evolution_method import evolution_3
 from QOptCraft.utils.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import matrix_u_basis_generator
 
 # Adjoint representation
@@ -77,7 +77,9 @@ def Toponogov(
     # We can rebuild m mode-dimensional matrices S given a n-photon matrix U (M-dimensional). The code only admits
     # plausible combinations, that is, that verify comb_evol(n,m)=comb(m+n-1,n)=M
 
-    while hilbert_dim(m, n) != M:  # in the function version, n and m are properly declared since launch
+    while (
+        hilbert_dim(m, n) != M
+    ):  # in the function version, n and m are properly declared since launch
         print(
             "\nThe given photon number n and modes m do not satisfy the equation M=comb_evol(n,m)=comb(m+n-1,n).\n"
         )

@@ -4,9 +4,9 @@ import numpy as np
 
 from QOptCraft.basis import hilbert_dim
 from QOptCraft.utils.input_control import input_control, input_control_ints
-from QOptCraft.utils.Phase2_Aux._2_1st_evolution_method import evolution
-from QOptCraft.utils.Phase2_Aux._2_2nd_evolution_method import evolution_2, evolution_2_ryser
-from QOptCraft.utils.Phase2_Aux._2_3rd_evolution_method import evolution_3, iH_U_operator
+from QOptCraft.evolution._2_1st_evolution_method import evolution
+from QOptCraft.evolution._2_2nd_evolution_method import evolution_2, evolution_2_ryser
+from QOptCraft.evolution._2_3rd_evolution_method import evolution_3, iH_U_operator
 from QOptCraft._legacy.photon_comb_basis import photon_combs_generator
 from QOptCraft._legacy.read_matrix import read_matrix_from_txt
 
