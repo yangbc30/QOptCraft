@@ -1,3 +1,6 @@
+"""Matrix inner product and norm.
+"""
+
 from numbers import Number
 
 import numpy as np

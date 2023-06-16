@@ -11,7 +11,7 @@ import xlsxwriter
 from scipy.linalg import expm, logm
 
 # Matrices comparisons by their inner product
-from QOptCraft.legacy.mat_inner_product import mat_module
+from QOptCraft._legacy.mat_inner_product import mat_module
 from QOptCraft.utils.Phase2_Aux._2_logarithm_algorithms import *
 from QOptCraft.utils.write_initial_matrix import haar_measure
 

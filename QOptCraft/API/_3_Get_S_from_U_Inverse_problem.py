@@ -17,8 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 import time
-
-# File opening
 from itertools import permutations
 
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
@@ -32,9 +30,9 @@ from QOptCraft.utils.Phase3_Aux._3_verification_of_solution_existence import (
     eq_sys_finder,
     verification,
 )
-from QOptCraft.legacy.read_matrix import read_matrix_from_txt
-from QOptCraft.legacy.recur_factorial import *
-from QOptCraft.legacy.unitary import *
+from QOptCraft._legacy.read_matrix import read_matrix_from_txt
+from QOptCraft._legacy.recur_factorial import *
+from QOptCraft._legacy.unitary import *
 
 
 def SfromU(

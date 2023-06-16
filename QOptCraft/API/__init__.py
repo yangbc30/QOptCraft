@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-from .main import *
+from .main_api import QOptCraft
 from .unitary_decomp import *
 from ._2_aux_a_computation_time_evolutions_comparison import *
 from ._2_aux_b_logarithm_algorithms_equalities import *
@@ -24,5 +24,3 @@ from ._5_Quasiunitary_S_with_or_without_loss_builder import *
 from ._6_schmidt_entanglement_measurement_of_states import *
 from ._7_generators import *
 from .logarithms import *
-
-__all__ = [s for s in dir()]

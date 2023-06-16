@@ -17,8 +17,8 @@ import time
 import numpy as np
 import scipy as sp
 
-from QOptCraft.legacy.photon_comb_basis import photon_comb_index
-from QOptCraft.legacy.recur_factorial import *
+from QOptCraft._legacy.photon_comb_basis import photon_comb_index
+from QOptCraft._legacy.recur_factorial import *
 from ._2_creation_and_destruction_operators import a_dagger
 
 

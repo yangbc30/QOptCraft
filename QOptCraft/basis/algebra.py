@@ -1,14 +1,15 @@
 from pathlib import Path
 import pickle
-from numbers import Number
 import warnings
 
-import numpy as np
-from numpy.typing import NDArray
 import scipy as sp
 from scipy.sparse import spmatrix, csr_matrix, lil_matrix
 
 from QOptCraft.basis import get_photon_basis
+from QOptCraft.operators import creation, annihilation
+
+
+Basis = list[sp.sparse.spmatrix]
 
 
 warnings.filterwarnings(
@@ -20,7 +21,7 @@ warnings.filterwarnings(
 )
 
 
-def get_algebra_basis(modes: int, photons: int):
+def get_algebra_basis(modes: int, photons: int) -> tuple[Basis, Basis]:
     """Return a basis for the Hilbert space with n photons and m modes.
     If the basis was saved retrieve it, otherwise the function creates
     and saves the basis to a file.
@@ -56,7 +57,7 @@ def get_algebra_basis(modes: int, photons: int):
     return basis, basis_image
 
 
-def _algebra_basis(modes: int, photons: int):
+def _algebra_basis(modes: int, photons: int) -> tuple[Basis, Basis]:
     """Generate the basis for the algebra and image algebra."""
     basis = []
     basis_image = []
@@ -79,7 +80,7 @@ def _algebra_basis(modes: int, photons: int):
     return basis, basis_image
 
 
-def sym_matrix(mode_1: int, mode_2: int, dim: int) -> NDArray:
+def sym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
     """Create the element of the algebra i/2(|j><k| + |k><j|)."""
     matrix = csr_matrix((dim, dim), dtype="complex64")
     matrix[mode_1, mode_2] = 0.5j
@@ -87,7 +88,7 @@ def sym_matrix(mode_1: int, mode_2: int, dim: int) -> NDArray:
     return matrix
 
 
-def antisym_matrix(mode_1: int, mode_2: int, dim: int) -> NDArray:
+def antisym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
     """Create the element of the algebra 1/2(|j><k| - |k><j|)."""
     matrix = csr_matrix((dim, dim), dtype="complex64")
     matrix[mode_1, mode_2] = 0.5

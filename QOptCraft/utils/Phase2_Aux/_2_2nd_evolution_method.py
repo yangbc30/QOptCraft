@@ -3,7 +3,7 @@ import time
 import numba
 import numpy as np
 
-from QOptCraft.legacy.recur_factorial import fact_array
+from QOptCraft._legacy.recur_factorial import fact_array
 
 
 @numba.jit(nopython=True)

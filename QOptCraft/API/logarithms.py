@@ -7,7 +7,7 @@ from sympy import Matrix
 
 from QOptCraft.utils.input_control import input_control
 
-from QOptCraft.legacy.read_matrix import read_matrix_from_txt
+from QOptCraft._legacy.read_matrix import read_matrix_from_txt
 
 
 def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3):

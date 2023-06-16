@@ -60,16 +60,24 @@ def _photon_basis(modes: int, photons: int) -> list[list[int]]:
 
 
 def state_in_basis(
-    vectors: list[list[int]], amplitudes: list[Number], basis: list[list[int]]
+    fock_list: list[list[int]], amplitudes: list[Number], basis: list[list[int]]
 ) -> NDArray:
     """Given a vector in terms of elements of a basis and amplitudes,
     output the state vector.
+
+    Args:
+        fock_list (list[list[int]]): basis fock states.
+        amplitudes (list[Number]): amplitude of each fock state.
+        basis (list[list[int]]): basis of the Hilbert space.
+
+    Returns:
+        NDArray: state in the given basis.
     """
     state = np.zeros(len(basis), dtype=complex)
 
-    for i, vector in enumerate(vectors):
+    for i, fock in enumerate(fock_list):
         for j, basis_vector in enumerate(basis):
-            if vector == basis_vector:
+            if fock == basis_vector:
                 state[j] = amplitudes[i]
 
     assert np.isclose(

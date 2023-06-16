@@ -12,8 +12,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "QOptCraft"
 authors = [
-  {email = "gomezaguado99@gmail.com"},
-  {name = "Daniel Gómez Aguado"}
+  {name = "Daniel Gómez Aguado", email = "gomezaguado99@gmail.com"},
+  {name = "Pablo V. Parellada", email = "pablo.veganzones@uva.es"}
+]
+maintainers = [
+  {name = "Pablo V. Parellada", email = "pablo.veganzones@uva.es"}
 ]
 description = """Package designed for quantum experiments via linear optics instruments.
 
@@ -38,8 +41,14 @@ classifiers = [
     "Operating System :: Unix",
     "Operating System :: MacOS",
 ]
-
-dynamic = ["version", "dependencies"]
+dependencies = [
+    "numpy",
+    "scipy",
+    "numba",
+    "sympy",
+    "xlsxwriter"
+]
+dynamic = ["version"]
 
 [project.urls]
 repository = "https://gitlab.tel.uva.es/juagar/qoptcraft"
@@ -50,6 +59,39 @@ packages = ["QOptCraft"]  # optional
 
 [tool.setuptools.dynamic]
 version = {attr = "QOptCraft._version.__version__"}
+
+
+[project.optional-dependencies]
+dev = ["python-tips-tools[test,lint,build,docs]"]
+test = [
+    "pytest",
+    "pyinstrument"
+]
+lint = [
+    "ruff",
+    "black",
+    "black[jupyter]",
+    "mypy"
+]
+build = [
+    "setuptools",
+    "build",
+    "twine"
+    ]
+docs = [
+    "mkdocs",
+    "mkdocstrings",
+    "mkdocstrings[python]",
+    "mkdocs-material",
+    "Pygments",
+    "python-markdown-math",
+    "mkdocs-gen-files",
+    "mkdocs-literate-nav",
+    "mkdocs-section-index",
+    "mkdocs-same-dir",
+    "mkdocs-autorefs",
+]
+
 
 
 ######## Tools

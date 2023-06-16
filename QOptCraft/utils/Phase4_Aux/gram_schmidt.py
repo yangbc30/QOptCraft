@@ -14,7 +14,7 @@ limitations under the License."""
 
 import numpy as np
 
-from QOptCraft.legacy.mat_inner_product import mat_inner_product
+from QOptCraft._legacy.mat_inner_product import mat_inner_product
 
 
 def gram_schmidt_2dmatrices(basis):

@@ -8,7 +8,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from QOptCraft.basis import get_photon_basis
-from QOptCraft.utils import creation, annihilation
+from QOptCraft.operators import creation, annihilation
 from ._exceptions import (
     ProbabilityError,
     PureStateLengthError,
@@ -51,7 +51,7 @@ class MixedState(State):
         self.modes = modes
 
     @classmethod
-    def from_mixture(cls, pure_states: list[PureState], probs: list[float]):
+    def from_mixture(cls, pure_states: list[PureState], probs: list[float] | NDArray):
         """Initialize a mixed state from a superposition of pure states instead of
         initializing directly the density matrix.
 
@@ -107,16 +107,18 @@ class PureState(State):
     def __init__(
         self,
         fock_list: list[list[int]],
-        amplitudes: list[Number],
+        amplitudes: list[Number] | NDArray,
     ) -> None:
-        self._assert_inputs(fock_list, amplitudes)
 
         self.photons: int = sum(fock_list[0])
         self.modes: int = len(fock_list[0])
         self.basis: list[list[int]] | None = None
         self.fock_list = fock_list
-        self.amplitudes = amplitudes
-        self.probabilites: list[Number] = [amp * amp.conjugate() for amp in amplitudes]
+        self.amplitudes = np.array(amplitudes)
+        self.probabilites: list[Number] = self.amplitudes * self.amplitudes.conj()
+
+        self._assert_inputs()
+
 
     def __str__(self) -> str:
         """Tensor product or scalar multiplication of a state or number times
@@ -145,8 +147,7 @@ class PureState(State):
             state = state * self
         return state
 
-    @staticmethod
-    def _assert_inputs(fock_list: list[list[int]], amplitudes: list[float]):
+    def _assert_inputs(self):
         """Assert the instance inputs are not contradictory.
 
         Args:
@@ -159,17 +160,20 @@ class PureState(State):
             NumberModesError: Not all states have the same number of modes.
             ProbabilityError: Probabilities don't add up to 1.
         """
-        photons_list = [sum(fock_state) for fock_state in fock_list]
+        photons_list = [sum(fock_state) for fock_state in self.fock_list]
         if not all(photons == photons_list[0] for photons in photons_list):
             raise NumberPhotonsError()
 
-        modes_list = [len(fock_state) for fock_state in fock_list]
+        modes_list = [len(fock_state) for fock_state in self.fock_list]
         if not all(modes == modes_list[0] for modes in modes_list):
             raise NumberModesError()
 
-        sum_amps = np.array(amplitudes).dot(np.array(amplitudes).conj())
+        sum_amps = self.amplitudes.dot(self.amplitudes.conj())
         if not np.isclose(1, sum_amps):
             raise ProbabilityError(sum_amps)
+
+        if len(self.fock_list) != len(self.amplitudes):
+            raise ValueError("Error: fock_list and amplitudes must have the same length.")
 
     @property
     def density_matrix(self):

@@ -19,11 +19,11 @@ import numpy as np
 from QOptCraft.utils.input_control import input_control, input_control_intsDim
 
 # Matrix comparisons by their inner product
-from QOptCraft.legacy.mat_inner_product import comparison
+from QOptCraft._legacy.mat_inner_product import comparison
 from QOptCraft.optic_decomposition.clemens_decomp import decomposition
 from QOptCraft.optic_decomposition.reck_decomp import decomposition_reck
 from ..optic_decomposition.recomposition import recomposition, recomposition_reck
-from QOptCraft.legacy.read_matrix import read_matrix_from_txt
+from QOptCraft._legacy.read_matrix import read_matrix_from_txt
 from ._7_generators import RandU
 
 

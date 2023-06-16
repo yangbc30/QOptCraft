@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 
 from QOptCraft.state import PureState, State
-from QOptCraft.orthogonal import can_transition
+from QOptCraft.invariant import can_transition
 
 PHOTONS_1 = 2
 PHOTONS_2 = 3

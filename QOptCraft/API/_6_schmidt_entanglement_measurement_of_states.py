@@ -23,7 +23,7 @@ import numpy as np
 from QOptCraft.utils.input_control import input_control
 
 # Matrix comparisons by their inner product
-from QOptCraft.legacy.mat_inner_product import *
+from QOptCraft._legacy.mat_inner_product import *
 
 # Required logarithms
 from QOptCraft.utils.Phase4_Aux._4_Logarithms_required import *
@@ -33,9 +33,9 @@ from QOptCraft.utils.Phase6_Aux._6_basis_manipulations import (
     state_leading_terms,
 )
 from QOptCraft.utils.Phase6_Aux._6_schmidt import schmidt_rank_vector
-from QOptCraft.legacy.photon_comb_basis import photon_combs_generator, state_in_basis
-from QOptCraft.legacy.read_matrix import read_matrix_from_txt, read_matrix_from_txt_general
-from QOptCraft.legacy.recur_factorial import *
+from QOptCraft._legacy.photon_comb_basis import photon_combs_generator, state_in_basis
+from QOptCraft._legacy.read_matrix import read_matrix_from_txt, read_matrix_from_txt_general
+from QOptCraft._legacy.recur_factorial import *
 
 
 def StateSchmidt(

@@ -1,3 +1,6 @@
+"""Stable Gram-Schmidt algorithm.
+"""
+
 import numpy as np
 
 from .mat_inner_product import mat_inner_product, mat_norm
@@ -11,6 +14,12 @@ def gram_schmidt(basis: list[np.ndarray]) -> list[np.ndarray]:
         from numerical instability: Round-off errors can accumulate and destroy orthogonality
         of the resulting vectors. We introduce the modified Gram-Schmidt procedure to help
         remedy this issue.
+
+    Args:
+        basis (list[np.ndarray]): basis to orthonormalize.
+
+    Returns:
+        list[np.ndarray]: orthonormalized basis.
 
     References:
         Algorithm can be found in https://www.math.uci.edu/~ttrogdon/105A/html/Lecture23.html

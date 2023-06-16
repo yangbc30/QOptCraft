@@ -1,6 +1,4 @@
-DESCRIPTION
-==============
-
+# QOptCraft
 
 Author: Daniel Gómez Aguado
 e-mail: gomezaguado99@gmail.com
