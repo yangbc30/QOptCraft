@@ -13,20 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 import numpy as np
-import scipy as sp
-
-
-def mat_inner_product(U, V):
-    matrix = U.conj().T @ V + V.conj().T @ U
-    if isinstance(matrix, np.ndarray):
-        return 0.5 * np.trace(matrix)
-    if isinstance(matrix, sp.sparse.spmatrix):
-        return 0.5 * np.trace(matrix.toarray())
-    raise ValueError("Matrices should be either scipy sparse or numpy arrays.")
-
-
-def mat_module(U):
-    return np.sqrt(np.real(mat_inner_product(U, U)))
 
 
 # The comparison() function asks the names in the input due to, by being obtained within the function,
@@ -52,10 +38,3 @@ def comparison_noprint(U, V):
 
     # 22 decimal accuracy upon computing the inner product, it can be modified
     return np.round(prod, 22) == 0
-
-
-def comparison_noprint_3a(U, V):
-    prod = mat_inner_product(U - V, U - V)
-
-    # 22 decimal accuracy upon computing the inner product, it can be modified
-    return prod

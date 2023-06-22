@@ -1,25 +1,25 @@
 """Stable Gram-Schmidt algorithm.
 """
-
-import numpy as np
+from numpy.typing import NDArray
+from scipy.sparse import spmatrix
 
 from .mat_inner_product import mat_inner_product, mat_norm
 
 
-def gram_schmidt(basis: list[np.ndarray]) -> list[np.ndarray]:
+def gram_schmidt(basis: list[spmatrix] | list[NDArray]) -> list[spmatrix] | list[NDArray]:
     """Gram-Schmidt algorithm to orthonormalize a basis.
 
     Note:
-        It turns out that the Gram-Schmidt procedure we introduced previously suffers
-        from numerical instability: Round-off errors can accumulate and destroy orthogonality
-        of the resulting vectors. We introduce the modified Gram-Schmidt procedure to help
-        remedy this issue.
+        It turns out that the normal Gram-Schmidt algorithm suffers from
+        numerical instability: Round-off errors can accumulate and destroy
+        orthogonality of the resulting vectors. We introduce the modified
+        Gram-Schmidt procedure to help remedy this issue.
 
     Args:
-        basis (list[np.ndarray]): basis to orthonormalize.
+        basis (list[spmatrix]): basis to orthonormalize.
 
     Returns:
-        list[np.ndarray]: orthonormalized basis.
+        list[spmatrix]: orthonormalized basis.
 
     References:
         Algorithm can be found in https://www.math.uci.edu/~ttrogdon/105A/html/Lecture23.html

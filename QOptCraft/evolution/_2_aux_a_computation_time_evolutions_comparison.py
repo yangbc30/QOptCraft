@@ -7,13 +7,28 @@ import time
 import numpy as np
 import xlsxwriter
 
-from QOptCraft.basis import hilbert_dim
 from QOptCraft._legacy.input_control import input_control_ints
 from QOptCraft.evolution._2_1st_evolution_method import evolution
 from QOptCraft.evolution._2_2nd_evolution_method import evolution_2, evolution_2_ryser
 from QOptCraft.evolution._2_3rd_evolution_method import evolution_3
 from QOptCraft._legacy.photon_comb_basis import photon_combs_generator
-from QOptCraft.operators.write_initial_matrix import haar_measure
+from QOptCraft.operators import haar_random_unitary
+
+
+from scipy.special import comb
+
+
+def hilbert_dim(modes: int, photons: int) -> int:
+    """Dimension of the Hilbert space with m modes and n photons.
+
+    Args:
+        modes (int): number of modes.
+        photons (int): number of photons.
+
+    Returns:
+        int: dimension.
+    """
+    return int(comb(modes + photons - 1, photons))
 
 
 def StoUEvolComp(
@@ -155,7 +170,7 @@ def StoUEvolComp(
         for k in range(m1, m2 + 1):
             # New initial matrix
             if comparison_matrix == "haar":
-                S = haar_measure(k)
+                S = haar_random_unitary(k)
 
             elif comparison_matrix == "qft":
                 S = np.zeros((k, k), dtype=complex)
@@ -174,7 +189,7 @@ def StoUEvolComp(
 
                 # New initial matrix
                 if comparison_matrix == "haar":
-                    S = haar_measure(k)
+                    S = haar_random_unitary(k)
 
                 elif comparison_matrix == "qft":
                     S = np.zeros((k, k), dtype=complex)

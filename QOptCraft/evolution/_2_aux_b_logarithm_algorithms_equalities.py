@@ -7,7 +7,6 @@ from scipy.linalg import expm, logm
 # Matrix comparisons by their inner product
 from QOptCraft._legacy.mat_inner_product import comparison_noprint
 from QOptCraft.evolution._2_logarithm_algorithms import *
-from QOptCraft.operators.write_initial_matrix import dft_matrix_auto
 
 
 def MatLogCompV(N1=False, N2=False, txt=False, exp=False):
@@ -83,7 +82,9 @@ def MatLogCompV(N1=False, N2=False, txt=False, exp=False):
 
     for i in range(N1, N2 + 1):
         # We generate DFT matrices, with a "sturdy" structure which serves as the adequate test for the algorithm
-        A = dft_matrix_auto(i)
+        from scipy.linalg import dft
+
+        A = dft(i)
 
         t_logm = time.process_time_ns()
         obj_A = logm(A)

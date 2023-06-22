@@ -7,7 +7,7 @@ from pickle import dump
 import numpy as np
 from scipy.optimize import fsolve
 
-from .beamsplitter import beamsplitter
+from .beamsplitter import beam_splitter
 
 
 def optic_decomposition(
@@ -59,7 +59,7 @@ def optic_decomposition(
 
                 # We calculate the beamsplitter angles phi y theta
                 θ, φ = _solve_angles(U, mode_1, mode_2, row, col, is_odd=True)
-                R = beamsplitter(dim, θ, φ, mode_1, mode_2)
+                R = beam_splitter(dim, θ, φ, mode_1, mode_2)
                 U = U @ R.conj().T
                 Right_list.append(R)
         else:
@@ -72,7 +72,7 @@ def optic_decomposition(
 
                 # We calculate the beamsplitter angles phi y theta
                 θ, φ = _solve_angles(U, mode_1, mode_2, row, col, is_odd=False)
-                L = beamsplitter(dim, θ, φ, mode_1, mode_2)
+                L = beam_splitter(dim, θ, φ, mode_1, mode_2)
                 U = L @ U
                 Lelft_list.append(L.conj().T)
     D = U

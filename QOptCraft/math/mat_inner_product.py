@@ -33,7 +33,7 @@ def mat_inner_product(matrix_1: Matrix, matrix_2: Matrix) -> Number:
     return 0.5 * res.trace()
 
 
-def mat_norm(matrix: Matrix) -> Number:
+def mat_norm(matrix: Matrix) -> float:
     """Hilbert-Schmidt norm of a matrix
 
     Args:

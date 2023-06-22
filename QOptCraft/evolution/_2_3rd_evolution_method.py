@@ -18,7 +18,6 @@ import numpy as np
 from scipy.linalg import expm
 
 from QOptCraft.basis import hilbert_dim
-from QOptCraft._legacy.mat_inner_product import *
 from ._2_creation_and_destruction_operators import *
 from ._2_logarithm_algorithms import *
 
@@ -56,11 +55,6 @@ def evolution_3(S, photons, vec_base, file_output=False, filename=False):
     # If the commentary of the following four lines is undone, the operator n will also be computed
     # and its conmutation with iH_U, which must exist, will be tested. It is by default omitted
     # for a faster pace
-
-    """n_op=n_operator(m,M,vec_base)
-	AperB=n_op.dot(iH_U)
-	BperA=iH_U.dot(n_op)
-	comparison(AperB,BperA,retrieve_name(AperB)[0],retrieve_name(BperA)[0])"""
 
     U = expm(iH_U)
 

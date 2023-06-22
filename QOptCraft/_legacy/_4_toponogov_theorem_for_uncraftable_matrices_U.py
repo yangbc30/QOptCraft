@@ -9,20 +9,15 @@ from scipy.linalg import expm
 from QOptCraft._legacy.input_control import input_control, input_control_ints, input_control_intsDim
 
 from QOptCraft.basis import hilbert_dim
-from QOptCraft._legacy.mat_inner_product import *
 from QOptCraft.evolution._2_3rd_evolution_method import evolution_3
 from QOptCraft._legacy.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import (
     matrix_u_basis_generator,
 )
 
-# Adjoint representation
-# Required logarithms
-from QOptCraft.topogonov._4_Logarithms_required import *
-from QOptCraft.topogonov.gram_schmidt import *
 from QOptCraft._legacy.photon_comb_basis import photon_combs_generator
 from QOptCraft._legacy.read_matrix import read_matrix_from_txt
 from QOptCraft._legacy.recur_factorial import *
-from QOptCraft.operators.write_initial_matrix import haar_measure
+from QOptCraft.operators import haar_random_unitary
 
 
 def Toponogov(
@@ -98,7 +93,7 @@ def Toponogov(
 
     photons[0] = n
 
-    S_rand = haar_measure(m)
+    S_rand = haar_random_unitary(m)
 
     # We load the combinations with the same amount of photons in order to create the vector basis
     if np.array(vec_base)[0, 0]:
@@ -124,7 +119,7 @@ def Toponogov(
             for i in range(m * m):
                 base_u_M[i] = np.loadtxt(base_u_M_file, delimiter=",", max_rows=M, dtype=complex)
 
-                base_u_M[i] = base_u_M[i] / np.sqrt(mat_module(base_u_M[i]))
+                base_u_M[i] = base_u_M[i] / np.sqrt(mat_norm(base_u_M[i]))
 
             base_u_M_file.close()
 
@@ -135,7 +130,7 @@ def Toponogov(
             base_u_M = base_u_M[: m * m]
 
     else:
-        base_u_M = matrix_u_basis_generator(m, M, photons, base_input)[1]
+        base_u_M = matrix_u_basis_generator(m, M, photons, base_input)[1]  # image algebra
         base_u_M = base_u_M[: m * m]
 
     base_u_M = gram_schmidt_2dmatrices(base_u_M)
@@ -158,7 +153,7 @@ def Toponogov(
         first = False
 
         if k > 0:
-            S_rand = haar_measure(m)
+            S_rand = haar_random_unitary(m)
             U_iter = evolution_3(S_rand, photons, vec_base)[0]
 
         # print(f"\nU_{k}:")
@@ -171,9 +166,9 @@ def Toponogov(
             # Projection onto the loaded u(M) basis
             for i in range(m * m):
                 coefs[i] = mat_inner_product(
-                    logm_3_schur(np.linalg.inv(U_iter).dot(U_input))[0], base_u_M[i]
+                    logm_3(np.linalg.inv(U_iter).dot(U_input))[0], base_u_M[i]
                 )
-                # coefs[i]=(logm_3_schur(np.linalg.inv(U_iter).dot(U_input))[0]).dot(base_u_M[i])
+                # coefs[i]=(logm_3(np.linalg.inv(U_iter).dot(U_input))[0]).dot(base_u_M[i])
                 # coefs[i]=mat_inner_product(LogU(np.linalg.inv(U_iter).dot(U_input),10),base_u_M[i])
 
             for i in range(m * m):
@@ -181,7 +176,7 @@ def Toponogov(
 
             U_iter = U_iter.dot(expm(logm_3T))
 
-            if first is True and np.abs(mod - mat_module(U_input - U_iter)) < 10 ** (-acc_t):
+            if first is True and np.abs(mod - mat_norm(U_input - U_iter)) < 10 ** (-acc_t):
                 # sol_array[k]=U_iter
                 # sol_mod[k]=mod
                 if k == 0:
@@ -204,9 +199,9 @@ def Toponogov(
 
             first = True
 
-            mat_module(U_input - U_iter)
-            mat_module(logm_3_schur(np.linalg.inv(U_iter).dot(U_input))[0])
-            # mod_logm=mat_module(LogU(np.linalg.inv(U_iter).dot(U_input),10))
+            mat_norm(U_input - U_iter)
+            mat_norm(logm_3(np.linalg.inv(U_iter).dot(U_input))[0])
+            # mod_logm=mat_norm(LogU(np.linalg.inv(U_iter).dot(U_input),10))
 
         """sol_file=open(f"{filename}_3d__MAIN_sol.txt","w+")
 

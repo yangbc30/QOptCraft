@@ -16,34 +16,13 @@ limitations under the License."""
 import numpy as np
 
 
-def D_decomposition(M, maxDim, filename, file_output, txt=False):
-    if file_output is True:
-        DList_file = open(filename + "_DList.txt", "w")
+def D_decomposition(M, dim):
+    DList = np.zeros((dim, dim, dim), dtype=complex)
 
-    DList = np.zeros((maxDim, maxDim, maxDim), dtype=complex)
-
-    for i in range(0, maxDim):
-        I = np.identity(maxDim, dtype=complex)
-
+    for i in range(0, dim):
+        I = np.identity(dim, dtype=complex)
         # Matrix D_i creation consists on replacing the identity
         # matrix element [i,i] for D_i of the original matrix D (here, M)
         I[i, i] = M[i, i]
-
         DList[i, :, :] = I
-
-        if file_output is True:
-            np.savetxt(DList_file, DList[i, :, :], delimiter=",")
-
-            DList_file.write("\n")
-
-    if file_output is True:
-        DList_file.close()
-
-        if txt is True:
-            print(
-                "\nThe list of matrices DList has been storaged in the file '"
-                + filename
-                + "_DList.txt'."
-            )
-
     return DList

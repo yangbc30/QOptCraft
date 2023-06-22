@@ -1,20 +1,25 @@
 """API of the library
 """
 
+from numpy.typing import NDArray
+from scipy.linalg import dft
+
+
+from QOptCraft.operators import haar_random_unitary, qft, qft_inv
+from QOptCraft.basis import get_algebra_basis
 from QOptCraft.entanglement import StateSchmidt
 from QOptCraft.math.logarithms import Logm1M, Logm2M, Logm3M, Logm4M, Logm5M
 
 from QOptCraft._legacy.input_control import input_control, input_control_ints, input_control_intsDim
 from QOptCraft.entanglement._6_basis_manipulations import *
 from QOptCraft.entanglement._6_schmidt import *
-from QOptCraft.operators.write_initial_matrix import *
 from QOptCraft.optic_decomposition.unitary_decomp import Selements
 from QOptCraft.evolution._2_aux_a_computation_time_evolutions_comparison import StoUEvolComp
 from QOptCraft.evolution._2_aux_b_logarithm_algorithms_equalities import MatLogCompV
 from QOptCraft.evolution._2_aux_c_logarithm_algorithms_timesanderror import MatLogCompTnE
 from QOptCraft.evolution._2_Get_U_matrix_of_photon_system_evolution import iHStoiHU, StoU
 from QOptCraft.evolution._3_Get_S_from_U_Inverse_problem import SfromU
-from QOptCraft.topogonov._4_toponogov_theorem_for_uncraftable_matrices_U import Toponogov
+from QOptCraft._legacy._4_toponogov_theorem_for_uncraftable_matrices_U import Toponogov
 from QOptCraft.operators.quasiunitary._5_Quasiunitary_S_with_or_without_loss_builder import QuasiU
 from QOptCraft.operators.other_matrices import *
 
@@ -86,50 +91,33 @@ def QOCGen(
 
     elif choice == 3:
         # Initial input control
-        m = input_control_intsDim(m, "m", 2)
+        modes = input_control_intsDim(m, "modes", 2)
+        photons = input_control_ints(n, "photons", 1)
 
-        n = input_control_ints(n, "n", 1)
+        basis, basis_image = get_algebra_basis(modes, photons)
 
-        M = input_control_intsDim(M, "n", 2)
-
-        base_u_m, base_u_M = AlgBasis(file_output, m, n, M)
-
-        return base_u_m, base_u_M
+        return basis, basis_image
 
     elif choice == 4:
         N = input_control_intsDim(N, "N", 2)
-
-        # A new file 'filename.txt' containing an N-dimensional DFT matrix is created
-        # so it can be used in other processes
-        DFT_M = DFT(file_output, filename, N, txt)
-
-        return DFT_M
+        return dft(N)
 
     elif choice == 5:
-        N = input_control_intsDim(N, "N", 2)
-
-        # A new file 'filename.txt' containing an N-dimensional QFT matrix is created
-        # for its use in other processes
-        QFT_M = QFT(file_output, filename, N, inverse, txt)
-
-        return QFT_M
+        N = input_control_intsDim(N, "N", 2)  # TODO: remove inputs
+        return qft_inv(N) if inverse else qft(N)
 
     elif choice == 6:
-        # Initial input control
         m = input_control_intsDim(m, "m", 2)
-
         n = input_control_ints(n, "n", 1)
 
-        ImU = RandImU(file_output, filename, m, n, txt)
-
-        return ImU
+        return RandImU(file_output, filename, m, n, txt)
 
     else:
         N = input_control_intsDim(N, "N", 2)
 
         # A new file 'filename.txt' containing a random N-dimensional unitary matrix U can be created
         # for its use in other processes
-        U_un = RandU(file_output, filename, N, txt)
+        U_un = haar_random_unitary(N)
 
         return U_un
 
@@ -336,14 +324,20 @@ def QOCTest(
 
 # A function designed for testing QOptCraft's algorithms.
 def QOCLog(
-    file_input=True, A=False, file_output=True, filename=False, txt=False, acc_d=3, choice=False
+    file_input=False,
+    matrix: NDArray | None = None,
+    file_output=True,
+    filename=False,
+    txt=False,
+    acc_d=3,
+    choice=False,
 ):
     """
     Contains the different logarithm algorithms, Log{i}M (i being the numeration for the functions) developed for certain phases of the library.
     """
 
     file_input, filename, filler, acc_d = input_control(
-        10, file_input, A, file_output, filename, txt, acc_d, False
+        10, file_input, matrix, file_output, filename, txt, acc_d, False
     )
 
     if type(choice) is not int:
@@ -363,19 +357,19 @@ def QOCLog(
                 print("The given value is not valid.\n")
 
     if choice == 1:
-        logmA = Logm1M(file_input, A, file_output, filename, txt, acc_d)
+        logmA = logm_1(matrix)
 
     elif choice == 2:
-        logmA = Logm2M(file_input, A, file_output, filename, txt, acc_d)
+        logmA = logm_2(matrix)
 
     elif choice == 4:
-        logmA = Logm4M(file_input, A, file_output, filename, txt, acc_d)
+        logmA = logm_4(matrix)
 
     elif choice == 5:
-        logmA = Logm5M(file_input, A, file_output, filename, txt, acc_d)
+        logmA = logm_5(matrix)
 
     else:
-        logmA = Logm3M(file_input, A, file_output, filename, txt, acc_d)
+        logmA = logm_3(matrix)
 
     return logmA
 

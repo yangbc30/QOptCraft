@@ -23,10 +23,3 @@ def fact_array(array):
     array_fact = np.apply_along_axis(factorial, 0, array_2)
 
     return array_fact
-
-
-# Combinatory computation
-def comb_evol_no_reps(num_elements, num_dim):
-    sol = int(factorial(num_elements) / (factorial(num_dim) * factorial(num_elements - num_dim)))
-
-    return sol

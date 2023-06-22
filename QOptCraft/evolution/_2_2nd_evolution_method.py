@@ -240,7 +240,7 @@ def evolution_2_ryser(S, photons, vec_base):
     int(np.sum(photons))
 
     # Number of vectors in the basis
-    num_lines = len(vec_base[:, 0])
+    num_lines = len(vec_base)
 
     # Array 2 required for submatrices computations:
     perm_2 = m_inverse(photons)

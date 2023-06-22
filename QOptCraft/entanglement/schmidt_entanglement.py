@@ -18,12 +18,6 @@ import numpy as np
 
 from QOptCraft._legacy.input_control import input_control
 
-# Matrix comparisons by their inner product
-from QOptCraft._legacy.mat_inner_product import *
-
-# Required logarithms
-from QOptCraft.topogonov._4_Logarithms_required import *
-from QOptCraft.topogonov.gram_schmidt import *
 from QOptCraft.entanglement._6_basis_manipulations import (
     state_leading_fidelity,
     state_leading_terms,

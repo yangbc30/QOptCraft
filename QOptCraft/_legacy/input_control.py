@@ -176,30 +176,3 @@ def input_control_intsDim(var, var_name, cond):
                 print("The given value is not valid.\n")
 
     return var
-
-
-def input_control_floats(var, var_name, cond):
-    if var is False or var < cond or type(var) is not float:
-        if var is False:
-            print(f"\nWARNING: when creating a new file, a variable {var_name} must be given.")
-
-        elif var < cond or type(var) is not float:
-            print(
-                f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond})."
-            )
-
-        while True:
-            try:
-                var = float(input(f"\nValue of {var_name}: "))
-
-                if var >= cond:
-                    break
-
-                print(
-                    f"\nWARNING: invalid {var_name} input (needs to be int and equal or higher than {cond})."
-                )
-
-            except ValueError:
-                print("The given value is not valid.\n")
-
-    return var

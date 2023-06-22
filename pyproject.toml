@@ -71,7 +71,8 @@ lint = [
     "ruff",
     "black",
     "black[jupyter]",
-    "mypy"
+    "mypy",
+    "vulture"
 ]
 build = [
     "setuptools",

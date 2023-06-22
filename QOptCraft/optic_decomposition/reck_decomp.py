@@ -17,7 +17,7 @@ import warnings
 import numpy as np
 from scipy.optimize import fsolve
 
-from .beamsplitter import beamsplitter_reck
+from .beamsplitter import beam_splitter_reck
 
 # The functions evenFunction(z) and oddFunction(z) find the required values of theta and phi
 # for each decomposition, by using two conditions: the real and imaginary values
@@ -36,14 +36,6 @@ def decomposition_reck(M, dim, output, name, txt=False):
     global M_current
     M_current = np.array(M)
 
-    if output is True:
-        # Decomposition of U storage
-        fullnameTmn = name + "_TmnList.txt"
-        TmnList_file = open(fullnameTmn, "w")
-
-        fullnameD = name + "_D.txt"
-        D_file = open(fullnameD, "w")
-
     # Steps counter
     cont = 0
 
@@ -51,52 +43,17 @@ def decomposition_reck(M, dim, output, name, txt=False):
 
     for i in range(N, 1, -1):
         m = i
-
         for j in range(1, i):
             n = i - j
-
             zGuess = np.ones(2)
-
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-
                 sol = fsolve(oddFunction, zGuess)
-
             # The computation changes compared to the even case
-            M_current = M_current.dot(beamsplitter_reck(sol[0], sol[1], N, m - 1, n - 1))
-
-            TmnList[cont, :, :] = beamsplitter_reck(sol[0], sol[1], N, m - 1, n - 1)
-
-            if output is True:
-                theta = phase_adjust(sol[0], minn=-np.pi, maxx=np.pi)
-                phi = phase_adjust(sol[1], minn=0.0, maxx=2.0 * np.pi)
-                TmnList_file.write(
-                    "\nMatrix " + name + f"_T{m}{n} (odd): Theta = {theta}, Phi = {phi}\n"
-                )
-
-                np.savetxt(TmnList_file, TmnList[cont, :, :], delimiter=",")
+            M_current = M_current.dot(beam_splitter_reck(sol[0], sol[1], N, m - 1, n - 1))
+            TmnList[cont, :, :] = beam_splitter_reck(sol[0], sol[1], N, m - 1, n - 1)
 
             cont += 1
-
-    if output is True:
-        D_file.write("Matrix " + name + "_D:\n")
-
-        np.savetxt(D_file, M_current, delimiter=",")
-
-        TmnList_file.close()
-
-        D_file.close()
-
-        if txt is True:
-            print(
-                f"\nThe Tmn matrices (each with their theta and phi values) have been storaged in the file '{fullnameTmn}'."
-            )
-            print(
-                f"\nThe diagonal matrix D resulting from the decomposition process has been storaged in the file '{fullnameD}'."
-            )
-
-    if txt is True:
-        print(f"\nThe {name} matrix has been decomposed in optic devices.")
 
     return TmnList, M_current
 
@@ -110,7 +67,7 @@ def oddFunction(z):
     theta = z[0]
     phi = z[1]
 
-    T = beamsplitter_reck(theta, phi, N, m - 1, n - 1)
+    T = beam_splitter_reck(theta, phi, N, m - 1, n - 1)
 
     # This time, we apply the dot product in the other side of the matrix
     f0 = np.real(M_current[m - 1, :].dot(T[:, n - 1]))

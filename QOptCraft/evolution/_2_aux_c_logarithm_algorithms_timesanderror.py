@@ -11,9 +11,8 @@ import xlsxwriter
 from scipy.linalg import expm, logm
 
 # Matrices comparisons by their inner product
-from QOptCraft._legacy.mat_inner_product import mat_module
 from QOptCraft.evolution._2_logarithm_algorithms import *
-from QOptCraft.operators.write_initial_matrix import haar_measure
+from QOptCraft.operators import haar_random_unitary
 
 
 def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
@@ -106,7 +105,7 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
 
     for i in range(N1, N2 + 1):
         # We generate DFT matrices, with a "sturdy" structure which serves as the adequate test for the algorithm
-        A = haar_measure(np.power(2, i)) if exp == 2 else haar_measure(i)
+        A = haar_random_unitary(np.power(2, i)) if exp == 2 else haar_random_unitary(i)
 
         t_logm = time.process_time_ns()
         logm_A = logm(A)
@@ -129,16 +128,16 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
         exp_5A = expm(logm_5A)
 
         # We compare logm(A) with logm_3/4/5(A). Normally, they should not be equivalent
-        inner_prod_1 = mat_module(exp_1A - A)
-        inner_prod_2 = mat_module(exp_2A - A)
-        inner_prod_3 = mat_module(exp_3A - A)
-        inner_prod_4 = mat_module(exp_4A - A)
-        inner_prod_5 = mat_module(exp_5A - A)
+        inner_prod_1 = mat_norm(exp_1A - A)
+        inner_prod_2 = mat_norm(exp_2A - A)
+        inner_prod_3 = mat_norm(exp_3A - A)
+        inner_prod_4 = mat_norm(exp_4A - A)
+        inner_prod_5 = mat_norm(exp_5A - A)
 
         # MICROSOFT EXCEL COMPATIBILITY
         if exp == 1:
             # Deviation from unitarity
-            dev = mat_module(np.transpose(np.conj(A)).dot(A) - np.identity(i))
+            dev = mat_norm(np.transpose(np.conj(A)).dot(A) - np.identity(i))
 
             scores_time = {
                 "N": f"{i}",
@@ -161,7 +160,7 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
 
         else:
             # Deviation from unitarity
-            dev = mat_module(np.transpose(np.conj(A)).dot(A) - np.identity(np.power(2, i)))
+            dev = mat_norm(np.transpose(np.conj(A)).dot(A) - np.identity(np.power(2, i)))
 
             scores_time = {
                 "N": f"{np.power(2,i)}",

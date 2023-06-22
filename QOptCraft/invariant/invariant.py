@@ -4,7 +4,7 @@ import numpy as np
 from scipy.special import factorial as fact
 
 from QOptCraft.state import State, PureState
-from QOptCraft.math import mat_inner_product, gram_schmidt
+from QOptCraft.math import mat_inner_product, mat_norm, gram_schmidt
 from QOptCraft.basis import get_algebra_basis
 
 
@@ -16,7 +16,7 @@ def photon_invariant(state: PureState) -> float:
         state (State): a photonic quantum state.
 
     Returns:
-        tuple[float, float]: tangent and orthogonal invariants.
+        float: invariant.
     """
     modes = state.modes
     invariant = 0
@@ -24,7 +24,7 @@ def photon_invariant(state: PureState) -> float:
         for mode_2 in range(mode_1 + 1, modes):
             invariant += state.exp_photons(mode_1, mode_2) * state.exp_photons(mode_2, mode_1)
             invariant -= state.exp_photons(mode_1, mode_1) * state.exp_photons(mode_2, mode_2)
-    return invariant
+    return invariant.real
 
 
 def can_transition(state_in: PureState, state_out: PureState) -> bool:
@@ -78,7 +78,7 @@ def photon_invariant_basis(state: State) -> tuple[float, float]:
     for basis_matrix in orthonormal_basis:
         coefs.append(mat_inner_product(1j * state.density_matrix, basis_matrix))
     tangent = sum(np.abs(coefs) ** 2)
-    orthogonal = mat_inner_product(state.density_matrix, state.density_matrix) - tangent
+    orthogonal = mat_norm(state.density_matrix) ** 2 - tangent
     return tangent, orthogonal
 
 

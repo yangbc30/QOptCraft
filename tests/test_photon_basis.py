@@ -51,7 +51,7 @@ BASIS_4 = [
         (PHOTONS_2, MODES_2, BASIS_4),
     ),
 )
-def test_photon_basis(photons: int, modes: int, result_basis: list[list[int]]) -> None:
+def test_photon_basis(photons: int, modes: int, result_basis: tuple[tuple[int, ...]]) -> None:
     result_basis = set(tuple(i) for i in result_basis)
     test_basis = _photon_basis(photons=photons, modes=modes)
     test_basis = set(tuple(i) for i in test_basis)

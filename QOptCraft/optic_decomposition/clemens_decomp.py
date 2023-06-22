@@ -17,7 +17,7 @@ import warnings
 import numpy as np
 from scipy.optimize import fsolve
 
-from .beamsplitter import beamsplitter
+from .beamsplitter import beam_splitter
 
 
 def decomposition(M, dim, output, name, txt=False):
@@ -70,9 +70,9 @@ def decomposition(M, dim, output, name, txt=False):
 
                     sol = fsolve(evenFunction, zGuess)
 
-                M_current = beamsplitter(sol[0], sol[1], N, m - 1, n - 1).dot(M_current)
+                M_current = beam_splitter(sol[0], sol[1], N, m - 1, n - 1).dot(M_current)
 
-                TmnList[cont, :, :] = beamsplitter(sol[0], sol[1], N, m - 1, n - 1)
+                TmnList[cont, :, :] = beam_splitter(sol[0], sol[1], N, m - 1, n - 1)
 
                 if output is True:
                     theta = phase_adjust(sol[0], minn=-np.pi, maxx=np.pi)
@@ -99,10 +99,10 @@ def decomposition(M, dim, output, name, txt=False):
 
                 # The computation changes compared to the even case
                 M_current = M_current.dot(
-                    np.linalg.inv(beamsplitter(sol[0], sol[1], N, m - 1, n - 1))
+                    np.linalg.inv(beam_splitter(sol[0], sol[1], N, m - 1, n - 1))
                 )
 
-                TmnList[cont, :, :] = beamsplitter(sol[0], sol[1], N, m - 1, n - 1)
+                TmnList[cont, :, :] = beam_splitter(sol[0], sol[1], N, m - 1, n - 1)
 
                 if output is True:
                     theta = phase_adjust(sol[0], minn=-np.pi, maxx=np.pi)
@@ -148,7 +148,7 @@ def evenFunction(z):
     theta = z[0]
     phi = z[1]
 
-    T = beamsplitter(theta, phi, N, m - 1, n - 1)
+    T = beam_splitter(theta, phi, N, m - 1, n - 1)
 
     # ...until the desired results are written in f0 y f1 (ehich nullify
     # the real and imaginary values)
@@ -165,7 +165,7 @@ def oddFunction(z):
     theta = z[0]
     phi = z[1]
 
-    T = beamsplitter(theta, phi, N, m - 1, n - 1)
+    T = beam_splitter(theta, phi, N, m - 1, n - 1)
 
     # This time, we apply the dot product in the other side of the matrix
     f0 = np.real(M_current[N - j - 1, :].dot(np.linalg.inv(T)[:, i - j - 1]))
@@ -182,21 +182,3 @@ def phase_adjust(phase, minn=-np.pi, maxx=np.pi):
         phase -= 2.0 * np.pi
 
     return phase
-
-
-# The following function is not used in the actual code. It has been left regardless in case the user finds it useful
-def TmnListInverse(TmnList):
-    N = len(TmnList[0, 0, :])
-
-    l = len(TmnList[:, 0, 0])
-
-    TmnList_inv = np.zeros((l, N, N), dtype=complex)
-
-    # We explore TmnList in reverse order as declared, computing
-    # inverse operations with each matrix:
-    for i in range(l):
-        # In unitary matrices, the transpose matrix is identical to the inverse. Thus,
-        # np.transpose is used for better performance
-        TmnList_inv[i, :, :] = np.transpose(TmnList[i, :, :])
-
-    return TmnList_inv

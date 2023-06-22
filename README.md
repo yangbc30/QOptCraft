@@ -1,4 +1,57 @@
-# QOptCraft
+# QOptCraft
+
+[![License: Apache 2.0](https://img.shields.io/github/license/saltstack/salt)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)](https://github.com/charliermarsh/ruff)
+[![black](https://img.shields.io/badge/code%20style-black-black)](https://github.com/psf/black)
+
+
+A Python package for the design and study of linear optical quantum systems.
+
+## Documentation and examples
+Documentation and examples can be found in 
+
+## Installation
+
+With `pip`:
+```console
+pip install qoptcraft
+```
+
+## Quick usage
+
+
+
+
+## References
+
+
+
+
+## Citing
+
+QOptCraft is the work of Daniel Gómez Aguado and Pablo V. Parellada. 
+
+If you are doing research using QOptCraft, please cite our paper:
+
+    Daniel Gómez Aguado et al. QOptCraft: A Python package for the design and study of linear optical quantum systems. 2023. https://doi.org/10.1016/j.cpc.2022.108511
+
+
+## Contributing
+
+We appreciate and welcome contributions. For major changes, please open an issue first
+to discuss what you would like to change. Also, make sure to update tests as appropriate.
+
+If you are new to contributing to open source, [this guide](https://opensource.guide/how-to-contribute/) helps explain why, what, and how to get involved.
+
+## License
+
+This software is under the [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/).
+
+
+
+
+# OLD README
+
 
 Author: Daniel Gómez Aguado
 e-mail: gomezaguado99@gmail.com

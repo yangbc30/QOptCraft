@@ -34,36 +34,6 @@ def expand_basis(state):
     return state_larger_space
 
 
-def expand(state, basis):
-    state_larger_space = np.zeros_like(expand_basis(basis[0]))
-    ind = 0  # index in the given basis
-    for alpha_i in state:  # Iterates through the amplitudes
-        state_larger_space = state_larger_space + alpha_i * expand_basis(basis[ind])
-        ind = ind + 1
-
-    return state_larger_space
-
-
-def qudit_basis(d, n):  # n qudits (dimension d)
-    qdbasis = []
-
-    for k in range(d**n):
-        state_string = np.base_repr(k, base=d)
-        [
-            int(digit) for digit in "0" * (n - len(state_string)) + state_string
-        ]  # Padded to n digits in base d. "Compact notation"
-
-    np.array([1])  # Initializing the state for the Kronecker product
-    # for i in range(m):    #Iterates through all the subsystems (modes)
-    #   qudit_i =np.zeros(n+1)   # i-th qudit (n+1-dimensional system from 0 to n photons)
-    #   qudit_i[state[i]]=1
-
-    #  state_larger_space=np.kron(state_larger_space,qudit_i)  #Composite system with one additional qudit at each round
-
-    # qdbasis.append(basis_state)
-    return qdbasis
-
-
 def large_basis(state, n, m):
     """
     Takes the state from the "photonic" Hilbert space (with a total of n photons) to a (n+1)^m Hilbert space  ##MODIFIED FOR subsets of total number photons
@@ -79,10 +49,6 @@ def large_basis(state, n, m):
         )  # Composite system with one additional qudit at each round
 
     return state_larger_space
-
-
-def RotMat(N, offset):
-    return np.eye(N, k=offset) + np.eye(N, k=-(N - offset))
 
 
 def leading_terms(state, ratio):

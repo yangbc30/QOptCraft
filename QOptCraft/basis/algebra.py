@@ -2,16 +2,14 @@ from pathlib import Path
 import pickle
 import warnings
 
-import scipy as sp
 from scipy.sparse import spmatrix, csr_matrix, lil_matrix
 
-from .photon import get_photon_basis
+from .photon import get_photon_basis, BasisPhoton
 from .hilbert_dimension import hilbert_dim
 from QOptCraft.operators import creation, annihilation
 
 
-Basis = list[sp.sparse.spmatrix]
-
+BasisAlgebra = list[spmatrix]
 
 warnings.filterwarnings(
     "ignore",
@@ -22,7 +20,7 @@ warnings.filterwarnings(
 )
 
 
-def get_algebra_basis(modes: int, photons: int) -> tuple[Basis, Basis]:
+def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]:
     """Return a basis for the Hilbert space with n photons and m modes.
     If the basis was saved retrieve it, otherwise the function creates
     and saves the basis to a file.
@@ -32,7 +30,7 @@ def get_algebra_basis(modes: int, photons: int) -> tuple[Basis, Basis]:
         modes (int): number of modes.
 
     Returns:
-        list[list[int]]: basis of the Hilbert space.
+        BasisAlgebra, BasisAlgebra: basis of the algebra and the image algebra.
     """
     folder = Path(f"save_basis/m={modes} n={photons}")
     folder.mkdir(parents=True, exist_ok=True)
@@ -58,7 +56,7 @@ def get_algebra_basis(modes: int, photons: int) -> tuple[Basis, Basis]:
     return basis, basis_image
 
 
-def _algebra_basis(modes: int, photons: int) -> tuple[Basis, Basis]:
+def _algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]:
     """Generate the basis for the algebra and image algebra."""
     basis = []
     basis_image = []
@@ -98,43 +96,37 @@ def antisym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
     return matrix
 
 
-def image_sym_matrix(mode_1: int, mode_2: int, dim: int, basis: list[list[int]]) -> spmatrix:
+def image_sym_matrix(mode_1: int, mode_2: int, dim: int, basis: BasisPhoton) -> spmatrix:
     """Image of the symmetric basis matrix by the lie algebra homomorphism."""
     matrix = lil_matrix((dim, dim), dtype="complex64")  # * efficient format for loading data
 
     for col, fock_ in enumerate(basis):
         if fock_[mode_1] != 0:
-            fock = fock_.copy()  # * We don't want to modify the basis!!
-            coef = annihilation(mode_1, fock)
-            coef *= creation(mode_2, fock)
-            matrix[basis.index(fock), col] = 0.5j * coef
+            fock, coef = annihilation(mode_1, fock_)
+            fock, coef_ = creation(mode_2, fock)
+            matrix[basis.index(fock), col] = 0.5j * coef * coef_
 
         if fock_[mode_2] != 0:
-            fock = fock_.copy()
-            coef = annihilation(mode_2, fock)
-            coef *= creation(mode_1, fock)
-            matrix[basis.index(fock), col] += 0.5j * coef
+            fock, coef = annihilation(mode_2, fock_)
+            fock, coef_ = creation(mode_1, fock)
+            matrix[basis.index(fock), col] += 0.5j * coef * coef_
 
     return matrix.tocsr()
 
 
-def image_antisym_matrix(
-    mode_1: int, mode_2: int, dim: int, photon_basis: list[list[int]]
-) -> spmatrix:
+def image_antisym_matrix(mode_1: int, mode_2: int, dim: int, photon_basis: BasisPhoton) -> spmatrix:
     """Image of the antisymmetric basis matrix by the lie algebra homomorphism."""
     matrix = lil_matrix((dim, dim), dtype="complex64")
 
     for col, fock_ in enumerate(photon_basis):
         if fock_[mode_1] != 0:
-            fock = fock_.copy()
-            coef = annihilation(mode_1, fock)
-            coef *= creation(mode_2, fock)
-            matrix[photon_basis.index(fock), col] = 0.5 * coef
+            fock, coef = annihilation(mode_1, fock_)
+            fock, coef_ = creation(mode_2, fock)
+            matrix[photon_basis.index(fock), col] = 0.5 * coef * coef_
 
         if fock_[mode_2] != 0:
-            fock = fock_.copy()
-            coef = annihilation(mode_2, fock)
-            coef *= creation(mode_1, fock)
-            matrix[photon_basis.index(fock), col] += -0.5 * coef
+            fock, coef = annihilation(mode_2, fock_)
+            fock, coef_ = creation(mode_1, fock)
+            matrix[photon_basis.index(fock), col] += -0.5 * coef * coef_
 
     return matrix.tocsr()

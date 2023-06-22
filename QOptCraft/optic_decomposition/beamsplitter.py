@@ -2,39 +2,29 @@
 """
 
 import numpy as np
+from numpy.typing import NDArray
 
 
-def beamsplitter(angle: float, shift: float, dim: int, mode_1: int, mode_2: int) -> np.ndarray:
-    """
-    Create the beamsplitter matrix with reflectivity cos(θ) and phase shift φ
+def beam_splitter(angle: float, shift: float, dim: int, mode_1: int, mode_2: int) -> NDArray:
+    """Create the beam splitter matrix with reflectivity cos(θ) and phase shift φ
     acting on mode_1 and mode_2.
 
-    Parameters
-    ----------
-    dim_matrix: int
-        dimension of the circuit matrix
-    angle: float
-        reflectivity angle
-    φ: float
-        phase shift angle
-    mode_1: int
-        the first mode to which the beamsplitter is applied
-    mode_2: int
-        the second mode to which the beamsplitter is applied
+    Parameters:
+        angle (float): reflectivity angle.
+        shift (float): phase shift angle.
+        dim (int): dimension of the circuit matrix.
+        mode_1 (int): the first mode to which the beam splitter is applied. Starts at 0.
+        mode_2 (int): the second mode to which the beam splitter is applied. Starts at 0.
 
-    Returns
-    -------
-    ndarray
-        the matrix of the beamsplitter
+    Returns:
+        NDArray: the matrix of the beam splitter
 
-    References
-    ----------
-    The matrix can be found in [1]_.
+    References:
+        The matrix can be found in [1].
 
-    .. [1] Clements et al., "An Optimal Design for Universal Multiport
-        Interferometers" arXiv, 2007. https://arxiv.org/pdf/1603.08788.pdf
+        [1] Clements et al., "An Optimal Design for Universal Multiport
+            Interferometers" arXiv, 2007. https://arxiv.org/pdf/1603.08788.pdf
     """
-
     T = np.eye(dim, dtype=np.complex64)
     T[mode_1, mode_1] = np.exp(1j * shift) * np.cos(angle)
     T[mode_1, mode_2] = -np.sin(angle)
@@ -44,37 +34,28 @@ def beamsplitter(angle: float, shift: float, dim: int, mode_1: int, mode_2: int)
     return T
 
 
-def beamsplitter_reck(angle: float, shift: float, dim: int, mode_1: int, mode_2: int) -> np.ndarray:
-    """
-    Create the beamsplitter matrix with reflectivity cos(θ) and phase shift φ
+def beam_splitter_reck(
+    angle: float, shift: float, dim: int, mode_1: int, mode_2: int
+) -> NDArray:
+    """Create the beam splitter matrix with reflectivity cos(θ) and phase shift φ
     acting on mode_1 and mode_2.
 
-    Parameters
-    ----------
-    angle: float
-        reflectivity angle
-    φ: float
-        phase shift angle
-    dim_matrix: int
-        dimension of the circuit matrix
-    mode_1: int
-        the first mode to which the beamsplitter is applied
-    mode_2: int
-        the second mode to which the beamsplitter is applied
+    Parameters:
+        angle (float): reflectivity angle.
+        shift (float): phase shift angle.
+        dim (int): dimension of the circuit matrix.
+        mode_1 (int): the first mode to which the beam splitter is applied. Starts at 0.
+        mode_2 (int): the second mode to which the beam splitter is applied. Starts at 0.
 
-    Returns
-    -------
-    ndarray
-        the matrix of the beamsplitter
+    Returns:
+        NDArray: the matrix of the beam splitter
 
-    References
-    ----------
-    The matrix can be found in [1]_.
+    References:
+        The matrix can be found in [1].
 
-    .. [1] Clements et al., "An Optimal Design for Universal Multiport
-        Interferometers" arXiv, 2007. https://arxiv.org/pdf/1603.08788.pdf
+        [1] Clements et al., "An Optimal Design for Universal Multiport
+            Interferometers" arXiv, 2007. https://arxiv.org/pdf/1603.08788.pdf
     """
-
     T = np.eye(dim, dtype=np.complex64)
     T[mode_1, mode_1] = np.exp(1j * shift) * np.sin(angle)
     T[mode_1, mode_2] = np.exp(1j * shift) * np.cos(angle)
@@ -82,3 +63,25 @@ def beamsplitter_reck(angle: float, shift: float, dim: int, mode_1: int, mode_2:
     T[mode_2, mode_2] = -np.sin(angle)
 
     return T
+
+
+def phase_shifter(shift: float, dim: int, mode: int) -> NDArray:
+    """Create a phase shifter of a certain angle acting on a mode.
+
+    Parameters:
+        shift (float): phase shift angle.
+        dim (int): dimension of the circuit matrix.
+        mode (int): the mode to which the beam splitter is applied. Starts at 0.
+
+    Returns:
+        ndarray: the matrix of the phase shifter.
+
+    References:
+        The matrix can be found in [1].
+
+        [1] Clements et al., "An Optimal Design for Universal Multiport
+            Interferometers" arXiv, 2007. https://arxiv.org/pdf/1603.08788.pdf
+    """
+    matrix = np.eye(dim, dtype=np.complex64)
+    matrix[mode, mode] = np.exp(1j * shift)
+    return matrix
