@@ -6,18 +6,18 @@ import time
 import numpy as np
 from scipy.linalg import expm
 
-from QOptCraft._legacy.input_control import input_control, input_control_ints, input_control_intsDim
+from qoptcraft._legacy.input_control import input_control, input_control_ints, input_control_intsDim
 
-from QOptCraft.basis import hilbert_dim
-from QOptCraft.evolution._2_3rd_evolution_method import evolution_3
-from QOptCraft._legacy.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import (
+from qoptcraft.basis import hilbert_dim
+from qoptcraft.evolution._2_3rd_evolution_method import evolution_3
+from qoptcraft._legacy.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import (
     matrix_u_basis_generator,
 )
 
-from QOptCraft._legacy.photon_comb_basis import photon_combs_generator
-from QOptCraft._legacy.read_matrix import read_matrix_from_txt
-from QOptCraft._legacy.recur_factorial import *
-from QOptCraft.operators import haar_random_unitary
+from qoptcraft._legacy.photon_comb_basis import photon_combs_generator
+from qoptcraft._legacy.read_matrix import read_matrix_from_txt
+from qoptcraft._legacy.recur_factorial import *
+from qoptcraft.operators import haar_random_unitary
 
 
 def Toponogov(

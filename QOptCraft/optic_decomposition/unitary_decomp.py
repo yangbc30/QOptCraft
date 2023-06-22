@@ -14,8 +14,8 @@ limitations under the License."""
 
 import numpy as np
 
-from QOptCraft.optic_decomposition.clemens_decomp import decomposition
-from QOptCraft.optic_decomposition.reck_decomp import decomposition_reck
+from qoptcraft.optic_decomposition.clemens_decomp import decomposition
+from qoptcraft.optic_decomposition.reck_decomp import decomposition_reck
 
 
 def Selements(

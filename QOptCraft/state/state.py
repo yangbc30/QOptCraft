@@ -8,8 +8,8 @@ from numbers import Number
 import numpy as np
 from numpy.typing import NDArray, ArrayLike
 
-from QOptCraft.basis import get_photon_basis
-from QOptCraft.operators import creation, annihilation
+from qoptcraft.basis import get_photon_basis
+from qoptcraft.operators import creation, annihilation
 from ._exceptions import (
     ProbabilityError,
     PureStateLengthError,

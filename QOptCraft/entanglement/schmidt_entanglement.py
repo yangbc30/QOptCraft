@@ -16,16 +16,16 @@ import time
 
 import numpy as np
 
-from QOptCraft._legacy.input_control import input_control
+from qoptcraft._legacy.input_control import input_control
 
-from QOptCraft.entanglement._6_basis_manipulations import (
+from qoptcraft.entanglement._6_basis_manipulations import (
     state_leading_fidelity,
     state_leading_terms,
 )
-from QOptCraft.entanglement._6_schmidt import schmidt_rank_vector
-from QOptCraft._legacy.photon_comb_basis import photon_combs_generator, state_in_basis
-from QOptCraft._legacy.read_matrix import read_matrix_from_txt, read_matrix_from_txt_general
-from QOptCraft._legacy.recur_factorial import *
+from qoptcraft.entanglement._6_schmidt import schmidt_rank_vector
+from qoptcraft._legacy.photon_comb_basis import photon_combs_generator, state_in_basis
+from qoptcraft._legacy.read_matrix import read_matrix_from_txt, read_matrix_from_txt_general
+from qoptcraft._legacy.recur_factorial import *
 
 
 def StateSchmidt(

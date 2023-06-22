@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-from ._5_D_decomposition import *
+from .diagonal_decomp import *
 from ._5_matrix_padding_functions import *
 from ._5_S_with_loss_creation import *
 from .quasiunitary import *

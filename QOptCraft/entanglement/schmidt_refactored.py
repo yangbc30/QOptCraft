@@ -10,7 +10,7 @@ References:
 
 import numpy as np
 
-from QOptCraft._legacy.photon_comb_basis import state_in_basis
+from qoptcraft._legacy.photon_comb_basis import state_in_basis
 
 
 def expand_basis(state):
