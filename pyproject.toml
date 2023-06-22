@@ -10,7 +10,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "QOptCraft"
+name = "qoptcraft"
 authors = [
   {name = "Daniel Gómez Aguado", email = "gomezaguado99@gmail.com"},
   {name = "Pablo V. Parellada", email = "pablo.veganzones@uva.es"}
@@ -55,10 +55,10 @@ repository = "https://gitlab.tel.uva.es/juagar/qoptcraft"
 
 [tool.setuptools]
 platforms = ["unix", "linux", "osx", "cygwin", "win32"]
-packages = ["QOptCraft"]  # optional
+packages = ["qoptcraft"]  # optional
 
 [tool.setuptools.dynamic]
-version = {attr = "QOptCraft._version.__version__"}
+version = {attr = "qoptcraft._version.__version__"}
 
 
 [project.optional-dependencies]

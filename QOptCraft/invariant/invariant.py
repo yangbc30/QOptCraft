@@ -3,9 +3,9 @@
 import numpy as np
 from scipy.special import factorial as fact
 
-from QOptCraft.state import State, PureState
-from QOptCraft.math import mat_inner_product, mat_norm, gram_schmidt
-from QOptCraft.basis import get_algebra_basis
+from qoptcraft.state import State, PureState
+from qoptcraft.math import mat_inner_product, mat_norm, gram_schmidt
+from qoptcraft.basis import get_algebra_basis
 
 
 def photon_invariant(state: PureState) -> float:

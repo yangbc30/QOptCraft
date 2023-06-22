@@ -7,9 +7,9 @@
 #                                                   LIBRARIES REQUIRED
 # ---------------------------------------------------------------------------------------------------------------------------
 
-# ----------QOptCraft: MAIN ALGORITHM----------
+# ----------qoptcraft: MAIN ALGORITHM----------
 
-from QOptCraft.Main_Code import *
+from qoptcraft.Main_Code import *
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ print("Aliased:", platform.platform(aliased=True))
 print("Terse  :", platform.platform(terse=True))
 
 # Information of the global function
-help(QOptCraft)
+help(qoptcraft)
 help(SfromU)
 help(Selements)
 

@@ -2,13 +2,13 @@
 
 import numpy as np
 
-from QOptCraft.optic_decomposition.clemens_decomp import decomposition
+from qoptcraft.optic_decomposition.clemens_decomp import decomposition
 from .quasiunitary import quasiunitary
-from QOptCraft.optic_decomposition.recomposition import *
+from qoptcraft.optic_decomposition.recomposition import *
 from .diagonal_decomp import *
 from ._5_matrix_padding_functions import *
 from ._5_S_with_loss_creation import *
-from QOptCraft._legacy.unitary import *
+from qoptcraft._legacy.unitary import *
 
 
 def QuasiU(

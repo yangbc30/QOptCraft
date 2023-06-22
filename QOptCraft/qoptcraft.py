@@ -5,26 +5,26 @@ from numpy.typing import NDArray
 from scipy.linalg import dft
 
 
-from QOptCraft.operators import haar_random_unitary, qft, qft_inv
-from QOptCraft.basis import get_algebra_basis
-from QOptCraft.entanglement import StateSchmidt
-from QOptCraft.math.logarithms import Logm1M, Logm2M, Logm3M, Logm4M, Logm5M
+from qoptcraft.operators import haar_random_unitary, qft, qft_inv
+from qoptcraft.basis import get_algebra_basis
+from qoptcraft.entanglement import StateSchmidt
+from qoptcraft.math.logarithms import logm_1, logm_2, logm_3, logm_4, logm_5
 
-from QOptCraft._legacy.input_control import input_control, input_control_ints, input_control_intsDim
-from QOptCraft.entanglement._6_basis_manipulations import *
-from QOptCraft.entanglement._6_schmidt import *
-from QOptCraft.optic_decomposition.unitary_decomp import Selements
-from QOptCraft.evolution._2_aux_a_computation_time_evolutions_comparison import StoUEvolComp
-from QOptCraft.evolution._2_aux_b_logarithm_algorithms_equalities import MatLogCompV
-from QOptCraft.evolution._2_aux_c_logarithm_algorithms_timesanderror import MatLogCompTnE
-from QOptCraft.evolution._2_Get_U_matrix_of_photon_system_evolution import iHStoiHU, StoU
-from QOptCraft.evolution._3_Get_S_from_U_Inverse_problem import SfromU
-from QOptCraft._legacy._4_toponogov_theorem_for_uncraftable_matrices_U import Toponogov
-from QOptCraft.operators.quasiunitary._5_Quasiunitary_S_with_or_without_loss_builder import QuasiU
-from QOptCraft.operators.other_matrices import *
+from qoptcraft._legacy.input_control import input_control, input_control_ints, input_control_intsDim
+from qoptcraft.entanglement._6_basis_manipulations import *
+from qoptcraft.entanglement._6_schmidt import *
+from qoptcraft.optic_decomposition.unitary_decomp import Selements
+from qoptcraft.evolution._2_aux_a_computation_time_evolutions_comparison import StoUEvolComp
+from qoptcraft.evolution._2_aux_b_logarithm_algorithms_equalities import MatLogCompV
+from qoptcraft.evolution._2_aux_c_logarithm_algorithms_timesanderror import MatLogCompTnE
+from qoptcraft.evolution._2_Get_U_matrix_of_photon_system_evolution import iHStoiHU, StoU
+from qoptcraft.evolution._3_Get_S_from_U_Inverse_problem import SfromU
+from qoptcraft._legacy._4_toponogov_theorem_for_uncraftable_matrices_U import Toponogov
+from qoptcraft.operators.quasiunitary._5_Quasiunitary_S_with_or_without_loss_builder import QuasiU
+from qoptcraft.operators.other_matrices import *
 
 
-# A function designed for testing QOptCraft's algorithms.
+# A function designed for testing qoptcraft's algorithms.
 def QOCGen(
     file_output=True,
     filename=False,
@@ -39,7 +39,7 @@ def QOCGen(
     choice=False,
 ):
     """
-    Allows the user to generate any type of matrix covered by QOptCraft individually, incluiding unitary, random, Discrete Fourier Transform and Quantum Fourier Transform matrices. The option to generate vector basis for Fock states (relevant in Phases 2 and upwards) and subalgebra u(m), U(M) matrices (Phases 3 and 4) is given as well.
+    Allows the user to generate any type of matrix covered by qoptcraft individually, incluiding unitary, random, Discrete Fourier Transform and Quantum Fourier Transform matrices. The option to generate vector basis for Fock states (relevant in Phases 2 and upwards) and subalgebra u(m), U(M) matrices (Phases 3 and 4) is given as well.
     """
 
     if choice != 2 and choice != 3:
@@ -122,7 +122,7 @@ def QOCGen(
         return U_un
 
 
-# A function designed for testing QOptCraft's algorithms.
+# A function designed for testing qoptcraft's algorithms.
 def QOCTest(
     file_output=True,
     m1=False,
@@ -140,7 +140,7 @@ def QOCTest(
     comparison_matrix="haar",
 ):
     """
-    Contains functions centered about checking certain aspects of QOptCraft. For example, the validity of its logarithms, as well as speed comparisons between analogous algorithms.
+    Contains functions centered about checking certain aspects of qoptcraft. For example, the validity of its logarithms, as well as speed comparisons between analogous algorithms.
     """
 
     if type(choice) is not int:
@@ -322,7 +322,7 @@ def QOCTest(
         StoUEvolComp(file_output, m1, m2, n1, n2, txt, tries, vec_base, inverse, comparison_matrix)
 
 
-# A function designed for testing QOptCraft's algorithms.
+# A function designed for testing qoptcraft's algorithms.
 def QOCLog(
     file_input=False,
     matrix: NDArray | None = None,
@@ -424,17 +424,17 @@ def QOptCraft(
     StateSchmidt (module=6).
     Use the choice parameter for subsubfunctions in QOCGen (module=7, choice=0-6),
     QOCTest (module=8, choice=0-2) or QOCLog (module=9, choice=1-5).
-    More info on the remaining parameters by reading QOptCraft's user guide.
+    More info on the remaining parameters by reading qoptcraft's user guide.
     """
     if vec_base is None:
         vec_base = [[False, False], [False, False]]
 
     if txt is True:
         print("\n\n===========================================================")
-        print("||| QOptCraft: BUILD A LINEAR OPTICS QUANTUM COMPUTATOR |||")
+        print("||| qoptcraft: BUILD A LINEAR OPTICS QUANTUM COMPUTATOR |||")
         print("===========================================================\n\n")
 
-        print("Welcome to QOptCraft, a quantum mechanics computator builder.\n")
+        print("Welcome to qoptcraft, a quantum mechanics computator builder.\n")
 
     if type(module) is not int:
         print("\nFirst of all, a module needs to be chosen.")

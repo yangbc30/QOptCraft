@@ -7,9 +7,9 @@
 # 													LIBRARIES REQUIRED
 # ---------------------------------------------------------------------------------------------------------------------------
 
-# ----------QOptCraft: MAIN ALGORITHM----------
+# ----------qoptcraft: MAIN ALGORITHM----------
 
-from QOptCraft.Main_Code import *
+from qoptcraft.Main_Code import *
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ print("Terse  :", platform.platform(terse=True))
 # ---------------------------------------------------------------------------------------------------------------------------
 
 # Information of the global function
-help(QOptCraft)
+help(qoptcraft)
 
 
 # QFT_matrix (N=3)

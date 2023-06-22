@@ -1,6 +1,6 @@
 import pytest
 
-from QOptCraft.basis import _photon_basis
+from qoptcraft.basis import _photon_basis
 
 
 PHOTONS_1 = 3

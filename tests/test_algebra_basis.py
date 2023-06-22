@@ -1,8 +1,8 @@
 import pytest
 from numpy.testing import assert_allclose
 
-from QOptCraft import matrix_u_basis_generator
-from QOptCraft.basis import _algebra_basis, _photon_basis
+from qoptcraft import matrix_u_basis_generator
+from qoptcraft.basis import _algebra_basis, _photon_basis
 
 
 extra = 0

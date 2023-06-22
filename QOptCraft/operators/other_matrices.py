@@ -3,8 +3,6 @@ import math
 import numpy as np
 import scipy as sp
 
-from QOptCraft.operators import haar_random_unitary
-
 
 def RotMat(N, offset):
     return np.eye(N, k=offset) + np.eye(N, k=-(N - offset))

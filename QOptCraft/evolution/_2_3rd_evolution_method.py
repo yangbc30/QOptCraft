@@ -17,7 +17,7 @@ import time
 import numpy as np
 from scipy.linalg import expm
 
-from QOptCraft.basis import hilbert_dim
+from qoptcraft.basis import hilbert_dim
 from ._2_creation_and_destruction_operators import *
 from ._2_logarithm_algorithms import *
 

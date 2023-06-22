@@ -18,8 +18,8 @@ import numpy as np
 import scipy as sp
 from scipy.special import factorial
 
-from QOptCraft.basis import hilbert_dim
-from QOptCraft._legacy.photon_comb_basis import photon_comb_index
+from qoptcraft.basis import hilbert_dim
+from qoptcraft._legacy.photon_comb_basis import photon_comb_index
 from ._2_creation_and_destruction_operators import a_dagger
 
 

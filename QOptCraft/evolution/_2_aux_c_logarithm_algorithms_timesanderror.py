@@ -11,8 +11,8 @@ import xlsxwriter
 from scipy.linalg import expm, logm
 
 # Matrices comparisons by their inner product
-from QOptCraft.evolution._2_logarithm_algorithms import *
-from QOptCraft.operators import haar_random_unitary
+from qoptcraft.evolution._2_logarithm_algorithms import *
+from qoptcraft.operators import haar_random_unitary
 
 
 def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):

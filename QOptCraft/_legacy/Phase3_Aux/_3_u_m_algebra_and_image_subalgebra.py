@@ -20,7 +20,7 @@ from numbers import Number
 import numpy as np
 from numpy.typing import NDArray
 
-from QOptCraft.basis import _photon_basis, hilbert_dim
+from qoptcraft.basis import _photon_basis, hilbert_dim
 
 
 def creation(mode: int, state: NDArray, coef: Number) -> tuple[NDArray, Number]:

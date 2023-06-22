@@ -1,4 +1,4 @@
-# QOptCraft
+# qoptcraft
 
 [![License: Apache 2.0](https://img.shields.io/github/license/saltstack/salt)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)](https://github.com/charliermarsh/ruff)
@@ -29,11 +29,11 @@ pip install qoptcraft
 
 ## Citing
 
-QOptCraft is the work of Daniel Gómez Aguado and Pablo V. Parellada. 
+qoptcraft is the work of Daniel Gómez Aguado and Pablo V. Parellada. 
 
-If you are doing research using QOptCraft, please cite our paper:
+If you are doing research using qoptcraft, please cite our paper:
 
-    Daniel Gómez Aguado et al. QOptCraft: A Python package for the design and study of linear optical quantum systems. 2023. https://doi.org/10.1016/j.cpc.2022.108511
+    Daniel Gómez Aguado et al. qoptcraft: A Python package for the design and study of linear optical quantum systems. 2023. https://doi.org/10.1016/j.cpc.2022.108511
 
 
 ## Contributing
@@ -66,7 +66,7 @@ Divided in ten functions (ver 1.1). It navigates through the subalgebras of main
 6) Measurement via computing the Schmidt rank of Fock states vectors after passing a quantum through a given linear optics circuit (StateSchmidt()).
 A matrix generator, a test of some algorithms and every logarithm developed are also included as individual functions.
 
-"QOptCraft()" is the main function, making full use of all the algorithms available. 
+"qoptcraft()" is the main function, making full use of all the algorithms available. 
 Its standalone subfunctions or blocks (read user guide) can be deployed on their own as well.
 Use the module parameter (1-10) for picking which subfunction to use: 
 > Selements (module=1)
@@ -77,14 +77,14 @@ Use the module parameter (1-10) for picking which subfunction to use:
 > StateSchmidt (module=6)
 > iHStoiHU (module=7).
 > Use the choice parameter for subsubfunctions in QOCGen (module=8, choice=1-7), QOCTest (module=9, choice=1-3) or QOCLog (module=10, choice=1-5).
-More info on the remaining parameters by reading QOptCraft's user guide.
+More info on the remaining parameters by reading qoptcraft's user guide.
 
 
 
-LICENSE NOTICE (SOFTWARE PACKAGE QOptCraft-1.1.tar.gz)
+LICENSE NOTICE (SOFTWARE PACKAGE qoptcraft-1.1.tar.gz)
 ==============
 
-   QOptCraft
+   qoptcraft
 
    Copyright 2021 Daniel Gómez Aguado
 

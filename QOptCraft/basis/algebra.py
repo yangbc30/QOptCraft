@@ -6,7 +6,7 @@ from scipy.sparse import spmatrix, csr_matrix, lil_matrix
 
 from .photon import get_photon_basis, BasisPhoton
 from .hilbert_dimension import hilbert_dim
-from QOptCraft.operators import creation, annihilation
+from qoptcraft.operators import creation, annihilation
 
 
 BasisAlgebra = list[spmatrix]

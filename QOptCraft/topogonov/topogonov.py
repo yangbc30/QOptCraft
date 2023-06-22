@@ -6,11 +6,11 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.linalg import expm
 
-from QOptCraft.operators import haar_random_unitary
-from QOptCraft.basis import hilbert_dim, get_photon_basis, get_algebra_basis
-from QOptCraft.math import gram_schmidt, mat_inner_product, mat_norm, Logm3M
+from qoptcraft.operators import haar_random_unitary
+from qoptcraft.basis import hilbert_dim, get_photon_basis, get_algebra_basis
+from qoptcraft.math import gram_schmidt, mat_inner_product, mat_norm, logm_3
 
-from QOptCraft.evolution._2_3rd_evolution_method import evolution_3
+from qoptcraft.evolution._2_3rd_evolution_method import evolution_3
 
 
 def toponogov(matrix: NDArray, modes: int, photons: int) -> NDArray:

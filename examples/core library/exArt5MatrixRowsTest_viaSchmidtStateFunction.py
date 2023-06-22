@@ -7,9 +7,9 @@
 # 													LIBRARIES REQUIRED
 # ---------------------------------------------------------------------------------------------------------------------------
 
-# ----------QOptCraft: MAIN ALGORITHM----------
+# ----------qoptcraft: MAIN ALGORITHM----------
 
-from QOptCraft.Main_Code import *
+from qoptcraft.Main_Code import *
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ print("Terse  :", platform.platform(terse=True))
 # ---------------------------------------------------------------------------------------------------------------------------
 
 # Information of the global function
-help(QOptCraft)
+help(qoptcraft)
 
 
 # NOTE: 'exArt5MatrixRowsTest.txt' needs to be in this .py file's directory.

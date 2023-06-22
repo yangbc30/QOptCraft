@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from numpy.testing import assert_almost_equal
 
-from QOptCraft import gram_schmidt_modified, mat_inner_product
+from qoptcraft import gram_schmidt_modified, mat_inner_product
 
 
 BASIS_1 = [

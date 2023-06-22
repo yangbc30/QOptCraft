@@ -7,12 +7,12 @@ import time
 import numpy as np
 import xlsxwriter
 
-from QOptCraft._legacy.input_control import input_control_ints
-from QOptCraft.evolution._2_1st_evolution_method import evolution
-from QOptCraft.evolution._2_2nd_evolution_method import evolution_2, evolution_2_ryser
-from QOptCraft.evolution._2_3rd_evolution_method import evolution_3
-from QOptCraft._legacy.photon_comb_basis import photon_combs_generator
-from QOptCraft.operators import haar_random_unitary
+from qoptcraft._legacy.input_control import input_control_ints
+from qoptcraft.evolution._2_1st_evolution_method import evolution
+from qoptcraft.evolution._2_2nd_evolution_method import evolution_2, evolution_2_ryser
+from qoptcraft.evolution._2_3rd_evolution_method import evolution_3
+from qoptcraft._legacy.photon_comb_basis import photon_combs_generator
+from qoptcraft.operators import haar_random_unitary
 
 
 from scipy.special import comb
