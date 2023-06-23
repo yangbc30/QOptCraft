@@ -1,100 +1,70 @@
 import numpy as np
+from numpy.typing import NDArray
+import numba
 
-from qoptcraft.basis import get_photon_basis
-
-from ._2_aux_a_computation_time_evolutions_comparison import *
-from ._2_aux_b_logarithm_algorithms_equalities import *
-from ._2_aux_c_logarithm_algorithms_timesanderror import *
-from .hamiltonian_evol import *
-from ._2_1st_evolution_method import *
-from ._2_2nd_evolution_method import *
-from ._2_3rd_evolution_method import *
-from ._2_creation_and_destruction_operators import *
+from qoptcraft.basis import get_photon_basis, hilbert_dim
+from qoptcraft.math import logm_3
+from qoptcraft.evolution import photon_hamiltonian
 
 
-def StoU(
-    file_input=True,
-    S=False,
-    file_output=True,
-    filename=False,
-    method=2,
-    n=False,
-    acc_d=3,
-    txt=False,
-    vec_base=[False, False],
-):
+def photon_unitary_hamiltonian(scattering_matrix: NDArray, photons: int) -> NDArray:
+    """Previously known as evolution_3.
+
+    Args:
+        scattering_matrix (NDArray): _description_
+        photons (int): _description_
+
+    Returns:
+        NDArray: _description_
     """
-    Loads .txt files containing an unitary matrix (the so-called scattering matrix S). Depending on the total number of photons within the modes, a different evolution matrix U will be obtained.
-    Information is displayed on-screen.
+    S_hamiltonian = logm_3(scattering_matrix)
+    U_hamiltonian = photon_hamiltonian(S_hamiltonian, photons)
+    return np.expm(U_hamiltonian)
+
+
+@numba.jit(nopython=True)
+def in_out_photon_matrix(matrix: NDArray, in_fock: list[int], out_fock: list[int]) -> NDArray:
     """
-    modes = len(S)
+    Return a matrix with row index 'i' repeated 'row_rep' times
+    and column index 'j' repeated 'col_rep' times.
 
-    vec_base = get_photon_basis(modes, n)
+    Parameters
+    ----------
+    matrix : (m, m) array
+        Linear optical scattering matrix with m modes.
 
-    photons = np.zeros(modes)
-    photons[0] = n
+    Returns
+    -------
+    (n, n) array
+        Optical scattering matrix with m modes and n photons.
 
-    if method != 3:
-        M = len(vec_base)
+    """
+    # assert sum(in_fock) == sum(out_fock), "Error: number of photons must be conserved."
+    photons = sum(in_fock)
+    final_matrix = np.empty((photons, photons))  # * Correct size? I think so...
+    in_photon_count = 0
+    in_photon_idx = 0
+    cumulative_in_fock = np.cumsum(in_fock)
+    cumulative_out_fock = np.cumsum(out_fock)
 
-        U = np.zeros((M, M), dtype=complex)
+    for i in range(photons):
+        while cumulative_in_fock[in_photon_idx] <= in_photon_count:
+            in_photon_idx += 1
 
-        t_inc = 0
+        out_photon_idx = 0
+        out_photon_count = 0
+        for j in range(photons):
+            while cumulative_out_fock[out_photon_idx] <= out_photon_count:
+                out_photon_idx += 1
 
-        for i in range(M):
-            if method == 1:
-                U[i], t_inc_aux = evolution_2(S, vec_base[i], vec_base)
+            final_matrix[i, j] = matrix[in_photon_idx, out_photon_idx]
 
-            elif method == 2:
-                U[i], t_inc_aux = evolution_2_ryser(S, vec_base[i], vec_base)
+            out_photon_count += 1
+        in_photon_count += 1
 
-            else:
-                method = 0  # readjust so the default method is associated to '0' in the output's filename
-
-                U[i], t_inc_aux = evolution(S, vec_base[i], vec_base)
-
-            t_inc += t_inc_aux
-
-        U = np.transpose(U)
-
-    elif method == 3:
-        U, t_inc = evolution_3(S, photons, vec_base, file_output, filename)
-
-    return U, vec_base
+    return final_matrix
 
 
-# Here, we will perform the third evolution of the system method's operations. Main function to inherit in other algorithms
-def evolution_3(S, photons, vec_base, file_output=False, filename=False):
-    # Initial time
-    # It is required to introduce photons_aux for 'photons_aux' and 'photons' not to "update" together
-    global photons_aux
-    global mult
-
-    m = len(S)
-    photons = int(np.sum(photons))
-
-    # Resulting U matrix's dimensions:
-    M = hilbert_dim(m, photons)
-    # This value could also be obtained by measuring vec_base's length
-
-    # Out of the three logarithm algorithms developed in the main algorithm 2b, logm_3()
-    # has been the one used. It can be switched by logm_4/5(); the result will be similar
-    iH_S = logm_3(S)[0]
-
-    if file_output is True:
-        # We save the vector basis
-        iH_S_file = open(f"{filename}_iH_S.txt", "w")
-
-        np.savetxt(iH_S_file, iH_S, delimiter=",")
-
-        iH_S_file.close()
-
-    iH_U = photon_hamiltonian(iH_S, photons)
-
-    # If the commentary of the following four lines is undone, the operator n will also be computed
-    # and its conmutation with iH_U, which must exist, will be tested. It is by default omitted
-    # for a faster pace
-
-    U = expm(iH_U)
-
-    return U, t_inc
+def photon_unitary_permanent(scattering_matrix: NDArray, photons: int) -> NDArray:
+    """<S|phi(U)|T> = Per(U_ST) / sqrt(s1! ...sm! t1! ... tm!)"""
+    ...

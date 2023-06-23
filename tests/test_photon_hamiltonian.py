@@ -18,7 +18,7 @@ def test_sym_hamiltonian(modes, photons) -> None:
         for mode_2 in range(mode_1 + 1):
             sym = sym_matrix(mode_1, mode_2, modes)
             assert_allclose(
-                photon_hamiltonian(sym, photons),
+                photon_hamiltonian(sym, photons).toarray(),
                 image_sym_matrix(mode_1, mode_2, photon_basis).toarray(),
             )
 
@@ -30,6 +30,6 @@ def test_antisym_hamiltonian(modes, photons) -> None:
         for mode_2 in range(mode_1):
             matrix = antisym_matrix(mode_1, mode_2, modes)
             assert_allclose(
-                photon_hamiltonian(matrix, photons),
+                photon_hamiltonian(matrix, photons).toarray(),
                 image_antisym_matrix(mode_1, mode_2, photon_basis).toarray(),
             )

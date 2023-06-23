@@ -14,8 +14,7 @@ limitations under the License."""
 
 import numpy as np
 
-from qoptcraft.optic_decomposition.clemens_decomp import decomposition
-from qoptcraft.optic_decomposition.reck_decomp import decomposition_reck
+from qoptcraft.optical_elements import reck_decomposition, clemens_decomposition
 
 
 def Selements(
@@ -38,9 +37,9 @@ def Selements(
 
     # No-null Tmn matrices and the resulting diagonal D (with its initial offsets) are obtained
     if impl == 0:
-        TmnList, D = decomposition(U_un, N, file_output, filename, txt)
+        TmnList, D = clemens_decomposition(U_un, N, file_output, filename, txt)
 
     else:
-        TmnList, D = decomposition_reck(U_un, N, file_output, filename, txt)
+        TmnList, D = reck_decomposition(U_un, N, file_output, filename, txt)
 
     return U_un, TmnList, D

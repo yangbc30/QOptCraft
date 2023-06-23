@@ -1,12 +1,7 @@
 ######## Building
 
-### Setuptools
-
 [build-system]
-requires = [
-    "setuptools",
-    "setuptools-scm",
-]
+requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -18,7 +13,7 @@ authors = [
 maintainers = [
   {name = "Pablo V. Parellada", email = "pablo.veganzones@uva.es"}
 ]
-description = """Package designed for quantum experiments via linear optics instruments.
+description = """A package for the design and study of linear optical quantum systems.
 
 QOprCraft navigates through the subalgebras of mainly unitary matrices.
 Via decomposing files into beam splitters and shifters, theoretically desired matrices can be implemented (Selements()), as well as their quantum evolution (read: influence) given a number of photons (StoU()).
@@ -92,20 +87,17 @@ docs = [
     "mkdocs-section-index",
     "mkdocs-same-dir",
     "mkdocs-autorefs",
+    "mkdocs-jupyter",
 ]
 
 
 
 ######## Tools
 
-### Pytest
-
 [tool.pytest.ini_options]
 minversion = "7.3"
 testpaths = "tests"
 
-
-### Ruff
 
 [tool.ruff]
 line-length = 100
@@ -139,8 +131,6 @@ allow-star-arg-any = false
 ignore-fully-untyped = false
 
 
-### Black
-
 [tool.black]
 line-length = 100
 skip-string-normalization = false
@@ -158,8 +148,6 @@ exclude = '''
 )
 '''
 
-
-### MyPy
 
 [tool.mypy]
 warn_return_any = true

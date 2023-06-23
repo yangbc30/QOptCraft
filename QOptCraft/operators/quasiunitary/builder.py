@@ -2,9 +2,9 @@
 
 import numpy as np
 
-from qoptcraft.optic_decomposition.clemens_decomp import decomposition
+from qoptcraft.optical_elements._legacy_clemens_decomp import decomposition
 from .quasiunitary import quasiunitary
-from qoptcraft.optic_decomposition.recomposition import *
+from qoptcraft.optical_elements.recomposition import *
 from .diagonal_decomp import *
 from .padding import *
 from .with_loss import *

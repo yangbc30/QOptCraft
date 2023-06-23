@@ -14,7 +14,7 @@ from qoptcraft.math.logarithms import logm_1, logm_2, logm_3, logm_4, logm_5
 from qoptcraft._legacy.input_control import input_control, input_control_ints, input_control_intsDim
 from qoptcraft.entanglement._6_basis_manipulations import *
 from qoptcraft.entanglement._6_schmidt import *
-from qoptcraft.optic_decomposition.unitary_decomp import Selements
+from qoptcraft._legacy.unitary_decomp import Selements
 from qoptcraft.evolution._2_aux_a_computation_time_evolutions_comparison import StoUEvolComp
 from qoptcraft.evolution._2_aux_b_logarithm_algorithms_equalities import MatLogCompV
 from qoptcraft.evolution._2_aux_c_logarithm_algorithms_timesanderror import MatLogCompTnE

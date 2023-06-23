@@ -1,46 +1,36 @@
-"""Decompose a unitary into beamsplitters
+"""Decompose a unitary into beamsplitters following Clemens et al.
 """
 
-from pickle import dump
-
 import numpy as np
+from numpy.typing import NDArray
 from scipy.optimize import fsolve
 
 from .optical_elements import beam_splitter
 
 
-def optic_decomposition(U: np.ndarray) -> list[np.ndarray]:
+def clemens_decomposition(unitary: NDArray) -> list[NDArray]:
     """
-    Given a unitary matrix U calculates the Clemens et al. decompositon
+    Given a unitary matrix calculates the Clemens et al. decompositon
     into beam splitters and phase shifters:
 
     D = L_n ... L_1 · U · R_1.inv ... R_n.inv  =>
     => U = L_1.inv ... L_n.inv · D · R_n ... R_1
 
-    Parameters
-    ----------
-    U: ndarray
-        unitary matrix to decompose
-    save_U_path: str
-        the path to the file to store U
-    save_decomp_path: str
-        the path to the file to store the decomposition
+    Args:
+        unitary (NDArray): unitary matrix to decompose.
 
-    Returns
-    -------
-    list[ndarray]
-        list of matrices that decompose U in the order of the decomposition
+    Returns:
+        list[NDArray]: list of matrices that decompose U in the order of the decomposition
 
-    References
-    ----------
-    The algorithm can be found in [1]_.
+    References:
+        The algorithm can be found in [1]_.
 
     .. [1] Clements et al., "An Optimal Design for Universal Multiport
         Interferometers" arXiv, 2007. https://arxiv.org/pdf/1603.08788.pdf
     """
 
-    assert U.shape[0] == U.shape[1], "The matrix is not square"
-    dim = U.shape[0]
+    assert unitary.shape[0] == unitary.shape[1], "The matrix is not square"
+    dim = unitary.shape[0]
 
     Right_list = []
     Lelft_list = []
@@ -55,9 +45,9 @@ def optic_decomposition(U: np.ndarray) -> list[np.ndarray]:
                 mode_2 = i - j
 
                 # We calculate the beamsplitter angles phi y theta
-                θ, φ = _solve_angles(U, mode_1, mode_2, row, col, is_odd=True)
-                R = beam_splitter(dim, θ, φ, mode_1, mode_2)
-                U = U @ R.conj().T
+                angle, shift = _solve_angles(unitary, mode_1, mode_2, row, col, is_odd=True)
+                R = beam_splitter(angle, shift, dim, mode_1, mode_2)
+                unitary = unitary @ R.conj().T
                 Right_list.append(R)
         else:
             for j in range(1, i + 1):
@@ -68,11 +58,11 @@ def optic_decomposition(U: np.ndarray) -> list[np.ndarray]:
                 mode_2 = dim + j - i - 1  # mode_2 must equal row
 
                 # We calculate the beamsplitter angles phi y theta
-                θ, φ = _solve_angles(U, mode_1, mode_2, row, col, is_odd=False)
-                L = beam_splitter(dim, θ, φ, mode_1, mode_2)
-                U = L @ U
+                angle, shift = _solve_angles(unitary, mode_1, mode_2, row, col, is_odd=False)
+                L = beam_splitter(angle, shift, dim, mode_1, mode_2)
+                unitary = L @ unitary
                 Lelft_list.append(L.conj().T)
-    D = U
+    D = unitary
 
     Right_list.reverse()  # save as [R_n, ..., R_1]
     # Lelft_list = [L_1.inv, ... L_n.inv]
@@ -81,55 +71,48 @@ def optic_decomposition(U: np.ndarray) -> list[np.ndarray]:
 
 
 def _solve_angles(
-    U: np.ndarray, mode_1: int, mode_2: int, row: int, col: int, is_odd: bool
-) -> np.ndarray:
+    unitary: NDArray, mode_1: int, mode_2: int, row: int, col: int, is_odd: bool
+) -> NDArray:
     """
     Solve for the angles that make a certain element of U zero.
 
-    Parameters
-    ----------
-    U: np.ndarray
-        the unitary matrix
-    mode_1: int
-        the first mode to which the beamsplitter is applied
-    mode_2: int
-        the second mode to which the beamsplitter is applied
-    row: int
-        row to be multiplied
-    col: int
-        column to be multiplied
-    is_odd: bool
-        whether the product corresponds to an odd or even step in the unitary_decomposition
+    Args:
+        unitary (NDArray): the unitary matrix.
+        mode_1 (int): the first mode to which the beamsplitter is applied.
+        mode_2 (int): the second mode to which the beamsplitter is applied.
+        row (int): row to be multiplied.
+        col (int): column to be multiplied.
+        is_odd (bool): whether the product corresponds to an odd or even step
+            in the unitary decomposition.
+
+    Returns:
+        NDArray: the real and imaginary parts of the dot product
     """
 
     def null_U_entry(angles):
-        return _U_times_BS_entry(angles, U, mode_1, mode_2, row, col, is_odd)
+        return _U_times_BS_entry(angles, unitary, mode_1, mode_2, row, col, is_odd)
 
     return fsolve(null_U_entry, np.ones(2))  # type: ignore
 
 
 def _U_times_BS_entry(
     angles: tuple[float, float],
-    U: np.ndarray,
+    U: NDArray,
     mode_1: int,
     mode_2: int,
     row: int,
     col: int,
     is_odd: bool,
-) -> np.ndarray:
+) -> NDArray:
     """
     If is_odd is True, multiply a row of the unitary U times a column of a beamsplitter's inverse.
     If is_odd is False, multiply a row of a beamsplitter times a column of the unitary U.
 
-    Parameters
-    ----------
-    angles: tuple[float]
-        angles θ and φ for the beamsplitter
+    Args:
+        angles (float, float): angles and shift of the beamsplitter
 
-    Returns
-    -------
-    ndarray
-        the real and imaginary parts of the dot product
+    Returns:
+        NDArray: the real and imaginary parts of the dot product
     """
 
     θ = angles[0]

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Self
 from numbers import Number
 
 import numpy as np
@@ -52,7 +53,7 @@ class MixedState(State):
         self.modes = modes
 
     @classmethod
-    def from_mixture(cls, pure_states: list[PureState], probs: ArrayLike):
+    def from_mixture(cls, pure_states: list[PureState], probs: ArrayLike) -> Self:
         """Initialize a mixed state from a superposition of pure states instead of
         initializing directly the density matrix.
 
@@ -95,7 +96,7 @@ class PureState(State):
     Args:
         fock_states (tuple[tuple[int, ...]]): Fock states that, in superposition,
             constitute our pure state.
-        amplitudes (ArrayLike): amplitude of each Fock state in the superposition.
+        coefs (ArrayLike): amplitude of each Fock state in the superposition.
 
     Attributes:
         modes (int): number of modes in the optical network.

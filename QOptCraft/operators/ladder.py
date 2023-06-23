@@ -9,7 +9,7 @@ def creation(mode: int, fock: tuple[int]) -> tuple[tuple[int, ...], float]:
 
     Args:
         mode (int): a quantum mode.
-        state (list[int]): fock basis state.
+        fock (tuple[int, ...]): fock basis state.
 
     Returns:
         tuple[int, ...], float: created Fock state and its coefficient.
@@ -26,10 +26,10 @@ def annihilation(mode: int, fock: tuple[int, ...]) -> tuple[tuple[int, ...], flo
 
     Args:
         mode (int): a quantum mode.
-        state (list[int]): fock basis state.
+        fock (tuple[int, ...]): fock basis state.
 
     Returns:
-        float: annihilated Fock state and its coefficient.
+        tuple[int, ...], float: annihilated Fock state and its coefficient.
     """
     photons = fock[mode]
     coef = sqrt(photons)

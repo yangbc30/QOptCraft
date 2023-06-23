@@ -15,8 +15,8 @@ def mat_inner_product(matrix_1: Matrix, matrix_2: Matrix) -> Number:
     """Hilbert-Schmidt product of two matrices.
 
     Args:
-        U (Matrix): first matrix
-        V (Matrix): second matrix
+        matrix_1 (Matrix): first matrix
+        matrix_2 (Matrix): second matrix
 
     Raises:
         ValueError: Matrix type is not array or scipy sparse.
