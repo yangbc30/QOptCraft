@@ -11,7 +11,7 @@ import xlsxwriter
 from scipy.linalg import expm, logm
 
 # Matrices comparisons by their inner product
-from qoptcraft.evolution._2_logarithm_algorithms import *
+from qoptcraft.math import logm_1, logm_2, logm_3, logm_4, logm_5
 from qoptcraft.operators import haar_random_unitary
 
 

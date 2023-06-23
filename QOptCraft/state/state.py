@@ -262,6 +262,8 @@ class PureState(State):
         else:
             for i, fock in enumerate(self.fock_states):
                 fock_, coef_ = annihilation(mode_annih, fock)
+                if coef_ == 0:  # not really necessary to check this
+                    continue  # since it will raise a ValueError below
                 coef = self.amplitudes[i] * coef_
                 fock_, coef_ = creation(mode_creat, fock_)
                 coef *= coef_

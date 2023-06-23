@@ -17,7 +17,7 @@ import warnings
 import numpy as np
 from scipy.optimize import fsolve
 
-from .beamsplitter import beam_splitter
+from .optical_elements import beam_splitter
 
 
 def decomposition(M, dim, output, name, txt=False):

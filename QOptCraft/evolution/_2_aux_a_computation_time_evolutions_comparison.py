@@ -7,28 +7,14 @@ import time
 import numpy as np
 import xlsxwriter
 
+from qoptcraft.operators import haar_random_unitary
+from qoptcraft.basis import hilbert_dim
+
 from qoptcraft._legacy.input_control import input_control_ints
 from qoptcraft.evolution._2_1st_evolution_method import evolution
 from qoptcraft.evolution._2_2nd_evolution_method import evolution_2, evolution_2_ryser
 from qoptcraft.evolution._2_3rd_evolution_method import evolution_3
 from qoptcraft._legacy.photon_comb_basis import photon_combs_generator
-from qoptcraft.operators import haar_random_unitary
-
-
-from scipy.special import comb
-
-
-def hilbert_dim(modes: int, photons: int) -> int:
-    """Dimension of the Hilbert space with m modes and n photons.
-
-    Args:
-        modes (int): number of modes.
-        photons (int): number of photons.
-
-    Returns:
-        int: dimension.
-    """
-    return int(comb(modes + photons - 1, photons))
 
 
 def StoUEvolComp(

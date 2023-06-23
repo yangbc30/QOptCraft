@@ -26,7 +26,7 @@ from qoptcraft.basis import hilbert_dim
 from qoptcraft._legacy.input_control import input_control, input_control_ints, input_control_intsDim
 from qoptcraft._legacy.Phase3_Aux._3_permutation_matrix import *
 from qoptcraft._legacy.Phase3_Aux._3_S_rebuild import S_output
-from qoptcraft._legacy.Phase3_Aux._3_u_m_algebra_and_image_subalgebra import (
+from qoptcraft._legacy.Phase3_Aux.get_algebra_basis_legacy import (
     matrix_u_basis_generator,
 )
 from qoptcraft._legacy.Phase3_Aux._3_verification_of_solution_existence import (

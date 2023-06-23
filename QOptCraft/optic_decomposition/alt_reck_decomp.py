@@ -1,18 +1,15 @@
 """Decompose a unitary into beamsplitters
 """
 
-from os.path import join
 from pickle import dump
 
 import numpy as np
 from scipy.optimize import fsolve
 
-from .beamsplitter import beam_splitter
+from .optical_elements import beam_splitter
 
 
-def optic_decomposition(
-    U: np.ndarray, save_decomp_path: str = join("..", "saved_data", "unitary_decomposition.pkl")
-) -> list[np.ndarray]:
+def optic_decomposition(U: np.ndarray) -> list[np.ndarray]:
     """
     Given a unitary matrix U calculates the Clemens et al. decompositon
     into beam splitters and phase shifters:
@@ -79,9 +76,6 @@ def optic_decomposition(
 
     Right_list.reverse()  # save as [R_n, ..., R_1]
     # Lelft_list = [L_1.inv, ... L_n.inv]
-
-    with open(save_decomp_path, "wb") as file:
-        dump((Lelft_list, D, Right_list), file=file)
 
     return Lelft_list + [D] + Right_list
 

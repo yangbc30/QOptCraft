@@ -65,7 +65,8 @@ version = {attr = "qoptcraft._version.__version__"}
 dev = ["python-tips-tools[test,lint,build,docs]"]
 test = [
     "pytest",
-    "pyinstrument"
+    "pyinstrument",
+    "hypothesis"
 ]
 lint = [
     "ruff",
@@ -111,7 +112,7 @@ line-length = 100
 select = ["F", "E"]
 extend-select = ["W", "I002", "B", "UP", "PLE", "PLW", "NPY", "RUF", "PD", "SIM", "PT"]
 unfixable = ["NPY002"]
-ignore = []
+ignore = ["RUF005"]
 fixable = ["E", "F", "W", "I", "B", "UP", "PLE", "PLW", "NPY", "RUF", "PD", "SIM", "PT"]
 extend-exclude = ["tests", "test"]
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"

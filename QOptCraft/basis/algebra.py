@@ -5,7 +5,6 @@ import warnings
 from scipy.sparse import spmatrix, csr_matrix, lil_matrix
 
 from .photon import get_photon_basis, BasisPhoton
-from .hilbert_dimension import hilbert_dim
 from qoptcraft.operators import creation, annihilation
 
 
@@ -60,21 +59,20 @@ def _algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra
     """Generate the basis for the algebra and image algebra."""
     basis = []
     basis_image = []
-    dim_image = hilbert_dim(modes, photons)
     photon_basis = get_photon_basis(modes, photons)
 
     for mode_1 in range(modes):
         for mode_2 in range(mode_1 + 1):
             matrix = sym_matrix(mode_1, mode_2, modes)
             basis.append(matrix)
-            basis_image.append(image_sym_matrix(mode_1, mode_2, dim_image, photon_basis))
+            basis_image.append(image_sym_matrix(mode_1, mode_2, photon_basis))
 
     # Divide into two loops to separate symmetric from antisymmetric matrices
     for mode_1 in range(modes):
         for mode_2 in range(mode_1):
             matrix = antisym_matrix(mode_1, mode_2, modes)
             basis.append(matrix)
-            basis_image.append(image_antisym_matrix(mode_1, mode_2, dim_image, photon_basis))
+            basis_image.append(image_antisym_matrix(mode_1, mode_2, photon_basis))
 
     return basis, basis_image
 
@@ -96,37 +94,39 @@ def antisym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
     return matrix
 
 
-def image_sym_matrix(mode_1: int, mode_2: int, dim: int, basis: BasisPhoton) -> spmatrix:
+def image_sym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spmatrix:
     """Image of the symmetric basis matrix by the lie algebra homomorphism."""
+    dim = len(photon_basis)
     matrix = lil_matrix((dim, dim), dtype="complex64")  # * efficient format for loading data
 
-    for col, fock_ in enumerate(basis):
+    for col, fock_ in enumerate(photon_basis):
         if fock_[mode_1] != 0:
             fock, coef = annihilation(mode_1, fock_)
             fock, coef_ = creation(mode_2, fock)
-            matrix[basis.index(fock), col] = 0.5j * coef * coef_
+            matrix[photon_basis.index(fock), col] = 0.5j * coef * coef_
 
         if fock_[mode_2] != 0:
             fock, coef = annihilation(mode_2, fock_)
             fock, coef_ = creation(mode_1, fock)
-            matrix[basis.index(fock), col] += 0.5j * coef * coef_
+            matrix[photon_basis.index(fock), col] += 0.5j * coef * coef_
 
     return matrix.tocsr()
 
 
-def image_antisym_matrix(mode_1: int, mode_2: int, dim: int, photon_basis: BasisPhoton) -> spmatrix:
+def image_antisym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spmatrix:
     """Image of the antisymmetric basis matrix by the lie algebra homomorphism."""
+    dim = len(photon_basis)
     matrix = lil_matrix((dim, dim), dtype="complex64")
 
     for col, fock_ in enumerate(photon_basis):
         if fock_[mode_1] != 0:
             fock, coef = annihilation(mode_1, fock_)
             fock, coef_ = creation(mode_2, fock)
-            matrix[photon_basis.index(fock), col] = 0.5 * coef * coef_
+            matrix[photon_basis.index(fock), col] = -0.5 * coef * coef_
 
         if fock_[mode_2] != 0:
             fock, coef = annihilation(mode_2, fock_)
             fock, coef_ = creation(mode_1, fock)
-            matrix[photon_basis.index(fock), col] += -0.5 * coef * coef_
+            matrix[photon_basis.index(fock), col] += 0.5 * coef * coef_
 
     return matrix.tocsr()

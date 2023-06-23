@@ -1,13 +1,14 @@
 import pytest
 from numpy.testing import assert_allclose
 
-from qoptcraft import matrix_u_basis_generator
+from qoptcraft._legacy.Phase3_Aux.get_algebra_basis_legacy import (
+    matrix_u_basis_generator,
+)
 from qoptcraft.basis import _algebra_basis, _photon_basis
 
 
-extra = 0
 photons = 2
-modes = 4 + (photons - 2) + extra
+modes = 4
 basis = _photon_basis(modes, photons)
 dim = len(basis)
 
@@ -27,4 +28,4 @@ def test_sparse_image_basis(modes, dim, photons, basis) -> None:
     basis_image_sparse = _algebra_basis(modes, photons)[1]
 
     for matrix, matrix_sparse in zip(basis_image, basis_image_sparse):
-        assert_allclose(matrix, matrix_sparse.toarray())
+        assert_allclose(-matrix, matrix_sparse.toarray())

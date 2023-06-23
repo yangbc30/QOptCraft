@@ -19,7 +19,7 @@ from scipy.linalg import expm
 
 from qoptcraft.basis import hilbert_dim
 from ._2_creation_and_destruction_operators import *
-from ._2_logarithm_algorithms import *
+from qoptcraft.math import logm_3
 
 
 # Here, we will perform the third evolution of the system method's operations. Main function to inherit in other algorithms
@@ -120,41 +120,3 @@ def iH_U_operator(file_output=False, filename=False, iH_S=False, m=False, M=Fals
         iH_U_file.close()
 
     return iH_U
-
-
-# Operator n computation. Its use is optional. The function works similar to the iH_U operator one,
-# but simpler: it only needs to search for diagonal elements and doesn't require iH_S
-def n_operator(m, M, vec_base):
-    n_operator = np.zeros((M, M), dtype=complex)
-
-    vec_base_canon = np.identity(M, dtype=complex)
-
-    for p in range(M):
-        np.array(vec_base[p])
-
-        p_array_M = np.array(vec_base_canon[p])
-
-        for q in range(M):
-            np.array(vec_base[q])
-
-            for k in range(m):
-                # Array subject to the operators
-                # q_array_aux = np.array(vec_base[q])
-                q_array_aux = vec_base[q].copy()
-
-                mult = 1
-
-                q_array_aux, mult = a(k, q_array_aux, mult)
-                q_array_aux, mult = a_dagger(k, q_array_aux, mult)
-
-                for l in range(M):
-                    if (vec_base[l] == q_array_aux).all():
-                        index = l
-
-                        break
-
-                q_array_M = np.array(vec_base_canon[index])
-
-                n_operator[p, q] += p_array_M.dot(q_array_M) * mult
-
-    return n_operator

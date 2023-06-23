@@ -13,8 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import os
-import pickle
 from numbers import Number
 
 import numpy as np
@@ -80,33 +78,6 @@ def f_jk(j, k, base):
     )
 
     return fjk
-
-
-def get_basis(photons: int, modes: int) -> list[list[int]]:
-    """Return a basis for the Hilbert space with n photons and m modes.
-    If the basis was saved retrieve it, otherwise the function creates
-    and saves the basis to a text file.
-
-    Args:
-        photons (int): number of photons.
-        modes (int): number of modes.
-
-    Returns:
-        list[list[int]]: basis of the Hilbert space.
-    """
-    basis_path = os.path.join("save_basis", f"m={modes} n={photons}")
-    try:
-        with open(basis_path) as f:
-            basis = pickle.load(f)
-
-    except FileNotFoundError:
-        print("Basis not found.\nGenerating basis...")
-        basis = _photon_basis(modes, photons)
-        with open(basis_path, "w") as f:
-            pickle.dump(basis, f)
-        print(f"Basis saved in {basis_path}.")
-
-    return basis
 
 
 # We transform from the u(m) matrix basis to u(M)'s

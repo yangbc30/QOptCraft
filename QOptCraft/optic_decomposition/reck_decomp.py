@@ -17,7 +17,7 @@ import warnings
 import numpy as np
 from scipy.optimize import fsolve
 
-from .beamsplitter import beam_splitter_reck
+from .optical_elements import beam_splitter_reck
 
 # The functions evenFunction(z) and oddFunction(z) find the required values of theta and phi
 # for each decomposition, by using two conditions: the real and imaginary values

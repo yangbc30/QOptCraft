@@ -13,8 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License."""
 
 from .diagonal_decomp import *
-from ._5_matrix_padding_functions import *
-from ._5_S_with_loss_creation import *
+from .padding import *
+from .with_loss import *
 from .quasiunitary import *
-
-__all__ = [s for s in dir()]

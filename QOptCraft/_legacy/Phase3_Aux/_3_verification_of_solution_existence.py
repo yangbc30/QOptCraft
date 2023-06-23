@@ -15,17 +15,13 @@ limitations under the License."""
 import numpy as np
 import sympy
 from numpy.linalg import det, solve
-
-
-# Adjoint representation for an U matrix
-def adjoint_U(iH_U, U):
-    return U.dot(iH_U.dot(np.transpose(np.conj(U))))
+from qoptcraft.operators import adjoint
 
 
 # A selection of linear independent equations is obtained
-def eq_sys_finder(base_u_m, base_u_M):
-    m = len(base_u_m[0])
-    M = len(base_u_M[0])
+def eq_sys_finder(basis_algebra, basis_image_algebra):
+    m = len(basis_algebra[0])
+    M = len(basis_image_algebra[0])
 
     # Equation system initialization
     eq_sys = np.zeros((M * M, m * m), dtype=complex)
@@ -34,7 +30,7 @@ def eq_sys_finder(base_u_m, base_u_M):
     for j in range(m * m):
         for l in range(M):
             for o in range(M):
-                eq_sys[M * l + o, j] = base_u_M[j, l, o]
+                eq_sys[M * l + o, j] = basis_image_algebra[j, l, o]
 
     # Array wich storages m*m equations of eq_sys, for which we will attempt to solve the system
     # We will use np.append() in this and the following array for adding new terms
@@ -100,7 +96,7 @@ def verification(
 
     for j in range(m * m):
         # We compute the adjoint for each matrix in the basis of u(M)
-        adj_U_b_j = adjoint_U(base_u_M[j], U)
+        adj_U_b_j = adjoint(base_u_M[j], U)
         adj_U_b_j_reshape = np.reshape(adj_U_b_j, M * M)
 
         # We choose the adj_U_b_j values of the indexes corresponding to the used equations

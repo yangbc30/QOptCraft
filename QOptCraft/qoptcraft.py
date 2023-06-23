@@ -6,6 +6,7 @@ from scipy.linalg import dft
 
 
 from qoptcraft.operators import haar_random_unitary, qft, qft_inv
+from qoptcraft.evolution import photon_hamiltonian
 from qoptcraft.basis import get_algebra_basis
 from qoptcraft.entanglement import StateSchmidt
 from qoptcraft.math.logarithms import logm_1, logm_2, logm_3, logm_4, logm_5
@@ -17,10 +18,10 @@ from qoptcraft.optic_decomposition.unitary_decomp import Selements
 from qoptcraft.evolution._2_aux_a_computation_time_evolutions_comparison import StoUEvolComp
 from qoptcraft.evolution._2_aux_b_logarithm_algorithms_equalities import MatLogCompV
 from qoptcraft.evolution._2_aux_c_logarithm_algorithms_timesanderror import MatLogCompTnE
-from qoptcraft.evolution._2_Get_U_matrix_of_photon_system_evolution import iHStoiHU, StoU
-from qoptcraft.evolution._3_Get_S_from_U_Inverse_problem import SfromU
-from qoptcraft._legacy._4_toponogov_theorem_for_uncraftable_matrices_U import Toponogov
-from qoptcraft.operators.quasiunitary._5_Quasiunitary_S_with_or_without_loss_builder import QuasiU
+from qoptcraft.evolution import StoU
+from qoptcraft.evolution.inverse_problem import SfromU
+from qoptcraft.topogonov import topogonov
+from qoptcraft.operators.quasiunitary.builder import QuasiU
 from qoptcraft.operators.other_matrices import *
 
 
@@ -561,7 +562,7 @@ def QOptCraft(
             return T, S, S_cut, UList, UD, WList, WD, D, DList
 
         elif module == 10:
-            iH_U, vec_base = iHStoiHU(file_input, M_input, file_output, filename, n, acc_d, txt)
+            iH_U, vec_base = photon_hamiltonian(M_input, n)
 
             return iH_U, vec_base
 
