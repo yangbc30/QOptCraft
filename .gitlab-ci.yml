@@ -1,14 +1,15 @@
 image: python:3.8-buster
 
 before_script:
-  - pip install -r requirements.txt
+  - pip install --upgrade pip && pip install .[dev]
 
 pages:
   stage: deploy
   script:
-  - mkdocs build --strict --verbose
+    - mkdocs build
+    - mv site public
   artifacts:
     paths:
     - public
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  only:
+  - optimized  # branch

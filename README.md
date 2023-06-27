@@ -29,12 +29,28 @@ pip install .
 
 ## Quick usage
 
+We can create pure quantum states by summing Fock states:
+```python
+from math import sqrt
 
+from qoptcraft.state import Fock
 
+in_state = Fock(1, 1, 0, 0)
+bell_state = 1 / sqrt(2) * Fock(1, 0, 1, 0) + 1 / sqrt(2) * Fock(0, 1, 0, 1)
+```
+
+To check if transitions between quantum states are forbidden by a linear optical transformation, we simply run
+```python
+from qoptcraft.invariant import can_transition, photon_invariant
+
+can_transition(in_state, bell_state)
+
+>>> False
+```
 
 ## References
 
-
+...
 
 
 ## Citing

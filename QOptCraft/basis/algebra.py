@@ -1,10 +1,10 @@
-from pathlib import Path
 import pickle
 import warnings
 
 from scipy.sparse import spmatrix, csr_matrix, lil_matrix
 
 from .photon import get_photon_basis, BasisPhoton
+from .config import FOLDER_PATH
 from qoptcraft.operators import creation, annihilation
 
 
@@ -19,9 +19,7 @@ warnings.filterwarnings(
 )
 
 
-def get_algebra_basis(
-    modes: int, photons: int, folder_path: Path = None
-) -> tuple[BasisAlgebra, BasisAlgebra]:
+def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]:
     """Return a basis for the Hilbert space with n photons and m modes.
     If the basis was saved retrieve it, otherwise the function creates
     and saves the basis to a file.
@@ -33,9 +31,7 @@ def get_algebra_basis(
     Returns:
         BasisAlgebra, BasisAlgebra: basis of the algebra and the image algebra.
     """
-    if folder_path is None:
-        folder_path = Path("save_basis")
-    folder_path = folder_path / f"m={modes} n={photons}"
+    folder_path = FOLDER_PATH / f"m={modes} n={photons}"
     folder_path.mkdir(parents=True, exist_ok=True)
 
     basis_path = folder_path / "algebra.pkl"
