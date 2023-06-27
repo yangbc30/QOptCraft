@@ -102,7 +102,6 @@ unitary_from_H = photon_unitary_hamiltonian(interferometer, photons)
 unitary_glynn = photon_unitary_glynn(interferometer, photons)
 unitary_ryser = photon_unitary_ryser(interferometer, photons)    
 
->>> False
 ```
 
 ## References
