@@ -41,7 +41,6 @@ dependencies = [
     "scipy",
     "numba",
     "sympy",
-    "xlsxwriter"
 ]
 dynamic = ["version"]
 
@@ -57,7 +56,7 @@ version = {attr = "qoptcraft._version.__version__"}
 
 
 [project.optional-dependencies]
-dev = ["python-tips-tools[test,lint,build,docs]"]
+dev = ["qoptcraft[test,lint,build,docs]"]
 test = [
     "pytest",
     "pyinstrument",
@@ -89,7 +88,6 @@ docs = [
     "mkdocs-autorefs",
     "mkdocs-jupyter",
 ]
-
 
 
 ######## Tools

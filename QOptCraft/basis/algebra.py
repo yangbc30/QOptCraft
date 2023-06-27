@@ -19,7 +19,9 @@ warnings.filterwarnings(
 )
 
 
-def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]:
+def get_algebra_basis(
+    modes: int, photons: int, folder_path: Path = None
+) -> tuple[BasisAlgebra, BasisAlgebra]:
     """Return a basis for the Hilbert space with n photons and m modes.
     If the basis was saved retrieve it, otherwise the function creates
     and saves the basis to a file.
@@ -31,11 +33,13 @@ def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlge
     Returns:
         BasisAlgebra, BasisAlgebra: basis of the algebra and the image algebra.
     """
-    folder = Path(f"save_basis/m={modes} n={photons}")
-    folder.mkdir(parents=True, exist_ok=True)
+    if folder_path is None:
+        folder_path = Path("save_basis")
+    folder_path = folder_path / f"m={modes} n={photons}"
+    folder_path.mkdir(parents=True, exist_ok=True)
 
-    basis_path = folder / "algebra.pkl"
-    basis_image_path = folder / "image_algebra.pkl"
+    basis_path = folder_path / "algebra.pkl"
+    basis_image_path = folder_path / "image_algebra.pkl"
     basis_path.touch()  # create file if it doesn't exist
     basis_image_path.touch()
     try:
@@ -50,7 +54,7 @@ def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlge
             pickle.dump(basis, f)
         with basis_image_path.open("wb") as f:
             pickle.dump(basis_image, f)
-        print(f"Basis saved in {folder}")
+        print(f"Basis saved in {folder_path}")
 
     return basis, basis_image
 

@@ -95,7 +95,7 @@ def photon_comb_basis(array, vec_base):
 # used an already existent one for extracting which index within it corresponds to a
 # chosen array. It is used in the system's first evolution method (main algorithm 2)
 def photon_comb_index(array, vec_base):
-    num_lines = len(vec_base[:, 0])  # Reads all lines
+    num_lines = len(vec_base)  # Reads all lines
     index = 0
 
     for i in range(num_lines):

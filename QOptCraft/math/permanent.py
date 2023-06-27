@@ -1,15 +1,18 @@
-import numba
+from numbers import Number
+
 import numpy as np
+from numpy.typing import NDArray
+import numba
 
 
 @numba.jit(nopython=True)
-def ryser_permanent(matrix: np.ndarray) -> float | complex:
+def permanent_ryser(matrix: NDArray) -> Number:
     """
     Returns the permanent of a matrix using the Ryser formula in Gray ordering.
 
     Parameters
     ----------
-    matrix : np.ndarray
+    matrix : NDArray
         A square matrix
 
     Returns
@@ -68,13 +71,13 @@ def ryser_permanent(matrix: np.ndarray) -> float | complex:
 
 
 @numba.jit(nopython=True)
-def permanent(matrix: np.ndarray) -> float | complex:
+def permanent(matrix: NDArray) -> Number:
     """
     Returns the permanent of a matrix using the Ryser formula in Gray ordering.
 
     Parameters
     ----------
-    matrix : np.ndarray
+    matrix : NDArray
         A square matrix
 
     Returns

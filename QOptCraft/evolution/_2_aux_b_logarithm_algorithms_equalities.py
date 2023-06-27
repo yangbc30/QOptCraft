@@ -9,7 +9,6 @@ from qoptcraft._legacy.mat_inner_product import comparison_noprint
 from qoptcraft.math import logm_1, logm_2, logm_3, logm_4, logm_5
 
 
-
 def MatLogCompV(N1=False, N2=False, txt=False, exp=False):
     """
     An additional function intended for comparing the indexes and time values between matrix logarithms (and their exponentials), mainly 3, 4 and 5.

@@ -1,8 +1,7 @@
-import time
-
 import numpy as np
 
 from qoptcraft._legacy.recur_factorial import fact_array
+from qoptcraft.math import permanent, permanent_ryser
 
 
 # Submatrices
@@ -65,47 +64,6 @@ def m_inverse(array):
 # Here, we will perform the second evolution of the system method's operations. Main function to inherit in other algorithms
 def evolution_2(S, photons, vec_base):
     # Initial time
-    t = time.process_time_ns()
-
-    m = len(S)
-    int(np.sum(photons))
-
-    # Number of vectors in the basis
-    num_lines = len(vec_base[:, 0])
-
-    # Array 2 required for submatrices computations:
-    perm_2 = m_inverse(photons)
-
-    # All terms will begin multiplied by this factor
-    mult = complex(np.prod(fact_array(photons))) ** (-1 / 2)
-
-    # Here each basis vector's coeficients upon |ket> are storaged:
-    U_ket = np.zeros(num_lines, dtype=complex)
-
-    for i in range(num_lines):
-        # Array 1 required for submatrices computations:
-        perm_1 = m_inverse(vec_base[i])
-
-        m_array = m_(perm_1, m)
-
-        # U·|ket> coeficients' computation by using permaments
-        U_ket[i] = (
-            mult
-            * permanent(sub_matrix(S, perm_1, perm_2))
-            * complex(np.prod(fact_array(m_array))) ** (-1 / 2)
-        )
-
-    # Computation time
-    t_inc = time.process_time_ns() - t
-
-    return U_ket, t_inc
-
-
-# Here, we will perform the second evolution of the system method's operations. Main function to inherit in other algorithms
-def evolution_2_ryser(S, photons, vec_base):
-    # Initial time
-    t = time.process_time_ns()
-
     m = len(S)
     int(np.sum(photons))
 
@@ -130,11 +88,42 @@ def evolution_2_ryser(S, photons, vec_base):
         # U·|ket> coeficients' computation by using permaments
         U_ket[i] = (
             mult
-            * ryser_permanent(sub_matrix(S, perm_1, perm_2))
+            * permanent(sub_matrix(S, perm_1, perm_2))
             * complex(np.prod(fact_array(m_array))) ** (-1 / 2)
         )
 
-    # Computation time
-    t_inc = time.process_time_ns() - t
+    return U_ket
 
-    return U_ket, t_inc
+
+# Here, we will perform the second evolution of the system method's operations. Main function to inherit in other algorithms
+def evolution_2_ryser(S, photons, vec_base):
+    # Initial time
+    m = len(S)
+    int(np.sum(photons))
+
+    # Number of vectors in the basis
+    num_lines = len(vec_base)
+
+    # Array 2 required for submatrices computations:
+    perm_2 = m_inverse(photons)
+
+    # All terms will begin multiplied by this factor
+    mult = complex(np.prod(fact_array(photons))) ** (-1 / 2)
+
+    # Here each basis vector's coeficients upon |ket> are storaged:
+    U_ket = np.zeros(num_lines, dtype=complex)
+
+    for i in range(num_lines):
+        # Array 1 required for submatrices computations:
+        perm_1 = m_inverse(vec_base[i])
+
+        m_array = m_(perm_1, m)
+
+        # U·|ket> coeficients' computation by using permaments
+        U_ket[i] = (
+            mult
+            * permanent_ryser(sub_matrix(S, perm_1, perm_2))
+            * complex(np.prod(fact_array(m_array))) ** (-1 / 2)
+        )
+
+    return U_ket

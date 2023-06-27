@@ -8,7 +8,7 @@ from numpy.typing import NDArray, ArrayLike
 BasisPhoton = list[tuple[int, ...]]
 
 
-def get_photon_basis(modes: int, photons: int) -> BasisPhoton:
+def get_photon_basis(modes: int, photons: int, folder_path: Path = None) -> BasisPhoton:
     """Return a basis for the Hilbert space with n photons and m modes.
     If the basis was saved retrieve it, otherwise the function creates
     and saves the basis to a file.
@@ -20,9 +20,11 @@ def get_photon_basis(modes: int, photons: int) -> BasisPhoton:
     Returns:
         BasisPhoton: basis of the Hilbert space.
     """
-    folder = Path(f"save_basis/m={modes} n={photons}")
-    folder.mkdir(parents=True, exist_ok=True)
-    basis_path = folder / "photon.pkl"
+    if folder_path is None:
+        folder_path = Path("save_basis")
+    folder_path = folder_path / f"m={modes} n={photons}"
+    folder_path.mkdir(parents=True, exist_ok=True)
+    basis_path = folder_path / "photon.pkl"
     basis_path.touch()
 
     try:

@@ -8,13 +8,23 @@
 A Python package for the design and study of linear optical quantum systems.
 
 ## Documentation and examples
-Documentation and examples can be found in 
+Documentation and examples can be found in [...] 
 
 ## Installation
-
+Create and activate a new conda environment
+```console
+conda create --name test python==3.11
+conda activate test
+```
+Then clone the optimized branch from the GitLab repository
+```console
+git clone -b optimized https://github.tel.uva.es/juagar/qoptcraft.git
+```
+Finally, step inside the qoptcraft folder and do a local install
 With `pip`:
 ```console
-pip install qoptcraft
+cd qoptcraft
+pip install .
 ```
 
 ## Quick usage
@@ -78,29 +88,3 @@ Use the module parameter (1-10) for picking which subfunction to use:
 > iHStoiHU (module=7).
 > Use the choice parameter for subsubfunctions in QOCGen (module=8, choice=1-7), QOCTest (module=9, choice=1-3) or QOCLog (module=10, choice=1-5).
 More info on the remaining parameters by reading qoptcraft's user guide.
-
-
-
-LICENSE NOTICE (SOFTWARE PACKAGE qoptcraft-1.1.tar.gz)
-==============
-
-   qoptcraft
-
-   Copyright 2021 Daniel Gómez Aguado
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-
-
-
-The user guide (QOptCraft_user_guide.pdf) is under no license.
-

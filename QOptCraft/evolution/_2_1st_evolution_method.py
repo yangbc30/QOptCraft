@@ -26,8 +26,6 @@ from ._2_creation_and_destruction_operators import a_dagger
 # Here, we will perform the first evolution of the system method's operations. Main function to inherit in other algorithms
 def evolution(S, photons, vec_base_aux):
     # Initial time
-    t = time.process_time_ns()
-
     global vec_base
 
     vec_base = vec_base_aux
@@ -43,7 +41,7 @@ def evolution(S, photons, vec_base_aux):
     global U_ket
 
     # U_ket initialization
-    U_ket = np.zeros(hilbert_dim(modes, photons), dtype=complex)
+    U_ket = np.zeros(hilbert_dim(modes, num_photons), dtype=complex)
 
     # Vectors from the basis which will appear in the operations
     sum_ = np.zeros(num_photons, dtype=int)
@@ -51,10 +49,7 @@ def evolution(S, photons, vec_base_aux):
     # The last two terms are required because of the function's recursive character
     evolution_loop(S, photons, num_photons, modes, sum_, 0)
 
-    # Computation time
-    t_inc = time.process_time_ns() - t
-
-    return U_ket, t_inc
+    return U_ket
 
 
 # Loop whose amount of callings depend on the number of photons in each mode
@@ -93,7 +88,7 @@ def evolution_loop(S, photons, num_photons, modes, sum_, k):
 
                     cont += 1
 
-                mult = mult / sp.sqrt(complex(factorial(photons[p])))
+                mult = mult / sp.sqrt(factorial(photons[p]))
 
             # Following runs: we call the function photon_comb_index() for
             # obtaining the adequate index for each vector of the basis

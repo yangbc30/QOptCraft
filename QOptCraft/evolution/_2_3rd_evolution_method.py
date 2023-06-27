@@ -24,9 +24,6 @@ from qoptcraft.math import logm_3
 
 # Here, we will perform the third evolution of the system method's operations. Main function to inherit in other algorithms
 def evolution_3(S, photons, vec_base, file_output=False, filename=False):
-    # Initial time
-    t = time.process_time_ns()
-
     # It is required to introduce photons_aux for 'photons_aux' and 'photons' not to "update" together
     global photons_aux
     global mult
@@ -40,15 +37,7 @@ def evolution_3(S, photons, vec_base, file_output=False, filename=False):
 
     # Out of the three logarithm algorithms developed in the main algorithm 2b, logm_3()
     # has been the one used. It can be switched by logm_4/5(); the result will be similar
-    iH_S = logm_3(S)[0]
-
-    if file_output is True:
-        # We save the vector basis
-        iH_S_file = open(f"{filename}_iH_S.txt", "w")
-
-        np.savetxt(iH_S_file, iH_S, delimiter=",")
-
-        iH_S_file.close()
+    iH_S = logm_3(S)
 
     iH_U = iH_U_operator(file_output, filename, iH_S, m, M, vec_base)
 
@@ -58,9 +47,7 @@ def evolution_3(S, photons, vec_base, file_output=False, filename=False):
 
     U = expm(iH_U)
 
-    t_inc = time.process_time_ns() - t
-
-    return U, t_inc
+    return U
 
 
 # Operator iH_U computation. It requires the use of the creation and annihilation operators.

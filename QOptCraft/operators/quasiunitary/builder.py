@@ -2,9 +2,8 @@
 
 import numpy as np
 
-from qoptcraft.optical_elements._legacy_clemens_decomp import decomposition
+from qoptcraft.optical_elements import clemens_decomp
 from .quasiunitary import quasiunitary
-from qoptcraft.optical_elements.recomposition import *
 from .diagonal_decomp import *
 from .padding import *
 from .with_loss import *
@@ -27,16 +26,16 @@ def QuasiU(
     np.min([N1, N2])
     maxDim = np.max([N1, N2])
 
-    # An specific method of numpy.linalg (np.linalg in our case) is required for the singular value decomposition
+    # An specific method of numpy.linalg (np.linalg in our case) is required for the singular value clemens_decomp
     U, D, W = np.linalg.svd(T)
 
     # We save the dimensions of the square matrices U y W, they will be required later
     OGdimU = len(U[:, 0])
     OGdimW = len(W[:, 0])
 
-    # Initial decompositions of U y W, by using the method of the main algorithm 1
-    UList, UD = decomposition(U, OGdimU, file_output, filename + "_U", txt)
-    WList, WD = decomposition(W, OGdimW, file_output, filename + "_W", txt)
+    # Initial clemens_decomps of U y W, by using the method of the main algorithm 1
+    UList, UD = clemens_decomp(U, OGdimU, file_output, filename + "_U", txt)
+    WList, WD = clemens_decomp(W, OGdimW, file_output, filename + "_W", txt)
 
     # Matrix padding loop: depending of which has the lower dimensions, either U or W square matrices
     # will go from being minDim-dimensional to maxDim-dimensional
@@ -44,7 +43,7 @@ def QuasiU(
     if N1 < N2:
         U = matrix_padding(U, maxDim)
 
-        # Variables: matrix M, its decomposition in matrices TmnList, its original dimensions
+        # Variables: matrix M, its clemens_decomp in matrices TmnList, its original dimensions
         # (OGdimM) and the max dimension present in T
         UList = matrix_padding_TmnList(U, UList, OGdimU, maxDim)
         UD = matrix_padding(UD, maxDim)
@@ -57,7 +56,7 @@ def QuasiU(
     # In D's case, we transfer the values of the 1D array given by svd() to an maxDim-dimensional square matrix
     D = SVD_diagonal_adjusting(D, maxDim)
     # D is decomposed in other diagonal matrices, corresponding to identity matrices D_i for which D_i[i,i] = D[i,i]
-    DList = D_decomposition(D, maxDim, filename, file_output, txt)
+    DList = D_clemens_decomp(D, maxDim, filename, file_output, txt)
 
     ancDim = 0
 

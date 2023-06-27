@@ -34,9 +34,7 @@ def beam_splitter(angle: float, shift: float, dim: int, mode_1: int, mode_2: int
     return T
 
 
-def beam_splitter_reck(
-    angle: float, shift: float, dim: int, mode_1: int, mode_2: int
-) -> NDArray:
+def beam_splitter_reck(angle: float, shift: float, dim: int, mode_1: int, mode_2: int) -> NDArray:
     """Create the beam splitter matrix with reflectivity cos(θ) and phase shift φ
     acting on mode_1 and mode_2.
 

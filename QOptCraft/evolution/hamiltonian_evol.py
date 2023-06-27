@@ -1,11 +1,11 @@
+import numpy as np
 from numpy.typing import NDArray
-from scipy.sparse import spmatrix, lil_matrix
 
 from qoptcraft.basis import get_photon_basis
 from qoptcraft.operators import annihilation, creation
 
 
-def photon_hamiltonian(scattering_matrix: NDArray, photons: int) -> spmatrix:
+def photon_hamiltonian(scattering_matrix: NDArray, photons: int) -> NDArray:
     """Lift the scattering linear optical matrix to a photonic hamiltonian.
 
     Args:
@@ -19,7 +19,7 @@ def photon_hamiltonian(scattering_matrix: NDArray, photons: int) -> spmatrix:
     basis_photon = get_photon_basis(modes, photons)
     dim = len(basis_photon)
 
-    lifted_matrix = lil_matrix((dim, dim), dtype=complex)
+    lifted_matrix = np.zeros((dim, dim), dtype=complex)
 
     for col_img, fock_ in enumerate(basis_photon):
         for row in range(modes):
@@ -32,4 +32,4 @@ def photon_hamiltonian(scattering_matrix: NDArray, photons: int) -> spmatrix:
                 row_img = basis_photon.index(fock)
                 lifted_matrix[row_img, col_img] += coef
 
-    return lifted_matrix.tocsr()
+    return lifted_matrix
