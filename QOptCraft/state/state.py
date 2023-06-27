@@ -76,11 +76,11 @@ class MixedState(State):
         if not np.isclose(1, sum(probs)):
             raise ProbabilityError(sum(probs))
 
-        photons_list = [pure_state.photons for pure_state in pure_states]
+        photons_list = [state.photons for state in pure_states]
         if not all(photons == photons_list[0] for photons in photons_list):
             raise NumberPhotonsError()
 
-        modes_list = [len(pure_state) for pure_state in pure_states]
+        modes_list = [state.modes for state in pure_states]
         if not all(modes == modes_list[0] for modes in modes_list):
             raise NumberModesError()
 

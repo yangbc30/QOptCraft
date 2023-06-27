@@ -9,8 +9,7 @@ from .optical_elements import beam_splitter
 
 
 def clemens_decomposition(unitary: NDArray) -> list[NDArray]:
-    """
-    Given a unitary matrix calculates the Clemens et al. decompositon
+    """Given a unitary matrix calculates the Clemens et al. decompositon
     into beam splitters and phase shifters:
 
     D = L_n ... L_1 · U · R_1.inv ... R_n.inv  =>
@@ -73,8 +72,7 @@ def clemens_decomposition(unitary: NDArray) -> list[NDArray]:
 def _solve_angles(
     unitary: NDArray, mode_1: int, mode_2: int, row: int, col: int, is_odd: bool
 ) -> NDArray:
-    """
-    Solve for the angles that make a certain element of U zero.
+    """Solve for the angles that make a certain element of U zero.
 
     Args:
         unitary (NDArray): the unitary matrix.
@@ -104,8 +102,7 @@ def _U_times_BS_entry(
     col: int,
     is_odd: bool,
 ) -> NDArray:
-    """
-    If is_odd is True, multiply a row of the unitary U times a column of a beamsplitter's inverse.
+    """If is_odd is True, multiply a row of the unitary U times a column of a beamsplitter's inverse.
     If is_odd is False, multiply a row of a beamsplitter times a column of the unitary U.
 
     Args:

@@ -29,6 +29,27 @@ pip install .
 
 ## Quick usage
 
+### Basis
+
+We can get easily get the basis of the unitary algebra
+```python
+from qoptcraft.basis import get_algebra_basis
+
+modes = 2
+photons = 3
+basis_algebra, basis_image_algebra = get_algebra_basis(modes, photons)
+```
+
+or the Fock state basis of the Hilbert space
+```python
+from qoptcraft.basis import get_photon_basis, hilb
+
+photon_basis = get_photon_basis(modes, photons)
+dimension = hilbert_dim(modes, photons)  # should equal len(photon_basis)
+```
+
+### States
+
 We can create pure quantum states by summing Fock states:
 ```python
 from math import sqrt
@@ -39,11 +60,47 @@ in_state = Fock(1, 1, 0, 0)
 bell_state = 1 / sqrt(2) * Fock(1, 0, 1, 0) + 1 / sqrt(2) * Fock(0, 1, 0, 1)
 ```
 
+### States and invariants
+
 To check if transitions between quantum states are forbidden by a linear optical transformation, we simply run
 ```python
 from qoptcraft.invariant import can_transition, photon_invariant
 
 can_transition(in_state, bell_state)
+
+>>> False
+```
+
+The invariant can be calculated from density matrices (calculations use the basis of the algebra)
+To check if transitions between quantum states are forbidden by a linear optical transformation, we simply run
+```python
+from qoptcraft.state import MixedState
+from qoptcraft.invariant import can_transition_basis, photon_invariant_basis
+
+mixed_state = MixedState.from_mixture(pure_states=[in_fock, bell_state], probs=[0.5, 0.5])
+can_transition_basis(mixed_state, bell_state)  # calls the density_matrix attribute of the states
+
+>>> False
+```
+
+### Quantizing linear interferomenters (previously StoU)
+
+We can easily compute the unitary matrix associated with a linear interferometer S and a certain number of photons. There are four different algorithms, `photon_unitary` uses standard quantum mechanics, `photon_unitary_hamiltonian` computes the Hamiltonian of the interferometer first and the last two ones use fast algorithms for the permanent.
+```python
+from qoptcraft.operators import haar_random_unitary
+from qoptcraft.evolution import (
+    photon_unitary,
+    photon_unitary_hamiltonian,
+    photon_unitary_glynn,
+    photon_unitary_ryser,
+)
+
+interferometer = haar_random_unitary(modes)
+
+unitary = photon_unitary(interferometer, photons)
+unitary_from_H = photon_unitary_hamiltonian(interferometer, photons)
+unitary_glynn = photon_unitary_glynn(interferometer, photons)
+unitary_ryser = photon_unitary_ryser(interferometer, photons)    
 
 >>> False
 ```

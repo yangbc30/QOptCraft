@@ -1,3 +1,3 @@
 from pathlib import Path
 
-FOLDER_PATH = Path("examples", "save_basis").resolve()
+FOLDER_PATH = Path("save_basis").resolve()

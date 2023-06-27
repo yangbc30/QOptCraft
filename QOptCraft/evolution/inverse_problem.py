@@ -1,7 +1,3 @@
-# ---------------------------------------------------------------------------------------------------------------------------
-# 					ALGORITHM 3: INVERSE PROBLEM. COMPUTATION OF S FROM OPTICAL SYSTEM EVOLUTION MATRIX
-# ---------------------------------------------------------------------------------------------------------------------------
-
 """Copyright 2021 Daniel Gómez Aguado
 
 Licensed under the Apache License, Version 2.0 (the "License");

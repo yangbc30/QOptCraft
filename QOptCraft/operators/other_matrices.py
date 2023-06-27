@@ -33,13 +33,3 @@ def qft_inv(dim):
             A[i, j] = np.exp(-2.0 * math.pi * 1j / dim * i * j)
 
     return A / np.sqrt(dim)
-
-
-"""
-def RandImU(file_output=True, filename=False, m=False, n=False, txt=False):
-    S = haar_random_unitary(m)
-    ImU = StoU(file_input=False, S=S, file_output=False, filename=False, method=2, n=n, txt=False)[
-        0
-    ]
-    return ImU
-"""

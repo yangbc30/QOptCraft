@@ -88,7 +88,7 @@ def evolution_2(S, photons, vec_base):
         # U·|ket> coeficients' computation by using permaments
         U_ket[i] = (
             mult
-            * permanent(sub_matrix(S, perm_1, perm_2))
+            * permanent_glynn(sub_matrix(S, perm_1, perm_2))
             * complex(np.prod(fact_array(m_array))) ** (-1 / 2)
         )
 

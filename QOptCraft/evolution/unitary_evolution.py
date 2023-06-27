@@ -6,12 +6,12 @@ import numba
 
 from qoptcraft.state import Fock, PureState
 from qoptcraft.basis import get_photon_basis, hilbert_dim
-from qoptcraft.math import logm_3, permanent, permanent_ryser
+from qoptcraft.math import logm_3, permanent_glynn, permanent_ryser
 from qoptcraft.evolution import photon_hamiltonian
 
 
 def photon_unitary(scattering_matrix: NDArray, photons: int) -> NDArray:
-    """Previously known as evolution_3.
+    """Standard evolution given by quantum mechanics.
 
     Args:
         scattering_matrix (NDArray): _description_
@@ -71,7 +71,7 @@ def photon_unitary_hamiltonian(scattering_matrix: NDArray, photons: int) -> NDAr
 
 
 @numba.jit(nopython=True)
-def in_out_photon_matrix_numba(
+def in_out_submatrix_alt(
     matrix: NDArray, fock_in: tuple[int, ...], fock_out: tuple[int, ...]
 ) -> NDArray:
     """
@@ -89,7 +89,7 @@ def in_out_photon_matrix_numba(
         Optical scattering matrix with m modes and n photons.
 
     Todo:
-        Revise this function, doesn't work properly    
+        Revise this function, doesn't work properly
 
     """
     # assert sum(fock_in) == sum(fock_out), "Error: number of photons must be conserved."
@@ -119,9 +119,7 @@ def in_out_photon_matrix_numba(
 
 
 @numba.jit(nopython=True)
-def in_out_submatrix(
-    matrix, fock_in: tuple[int, ...], fock_out: tuple[int, ...]
-):
+def in_out_submatrix(matrix, fock_in: tuple[int, ...], fock_out: tuple[int, ...]):
     """
     Return a matrix with row index 'i' repeated 'row_rep' times
     and column index 'j' repeated 'col_rep' times.
@@ -155,7 +153,7 @@ def in_out_submatrix(
 
 
 # @numba.jit(nopython=True)
-def photon_unitary_permanent(scattering_matrix: NDArray, photons: int) -> NDArray:
+def photon_unitary_glynn(scattering_matrix: NDArray, photons: int) -> NDArray:
     """<S|phi(U)|T> = Per(U_ST) / sqrt(s1! ...sm! t1! ... tm!)"""
     modes = scattering_matrix.shape[0]
     dim = hilbert_dim(modes, photons)
@@ -167,12 +165,12 @@ def photon_unitary_permanent(scattering_matrix: NDArray, photons: int) -> NDArra
             # sub_matrix = in_out_photon_matrix(scattering_matrix, fock_in, fock_out)
             sub_matrix = in_out_submatrix(scattering_matrix, fock_in, fock_out)
             coef = np.prod(factorial(fock_in)) * np.prod(factorial(fock_out))
-            unitary[row, col] = permanent(sub_matrix) / np.sqrt(coef)
+            unitary[row, col] = permanent_glynn(sub_matrix) / np.sqrt(coef)
 
     return unitary  # minus global phase in concordance with the other methods
 
 
-def photon_unitary_permanent_ryser(scattering_matrix: NDArray, photons: int) -> NDArray:
+def photon_unitary_ryser(scattering_matrix: NDArray, photons: int) -> NDArray:
     """<S|phi(U)|T> = Per(U_ST) / sqrt(s1! ...sm! t1! ... tm!)"""
     modes = scattering_matrix.shape[0]
     dim = hilbert_dim(modes, photons)

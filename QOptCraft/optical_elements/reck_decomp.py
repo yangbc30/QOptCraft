@@ -9,8 +9,7 @@ from .optical_elements import beam_splitter_reck
 
 
 def reck_decomposition(unitary: NDArray) -> list[NDArray]:
-    """
-    Given a unitary matrix calculates the Reck et al. decompositon
+    """Given a unitary matrix calculates the Reck et al. decompositon
     into beam splitters and phase shifters:
 
     D = U · BS_1... BS_n  =>  U = D · BS_n.inv ... BS_1.inv
@@ -48,8 +47,7 @@ def reck_decomposition(unitary: NDArray) -> list[NDArray]:
 
 
 def _solve_angles(U: NDArray, row: int, col: int) -> NDArray:
-    """
-    Solve for the angles that make a certain element of U zero.
+    """Solve for the angles that make a certain element of U zero.
 
     Args:
         U (NDArray): the unitary matrix.
@@ -74,8 +72,7 @@ def _U_times_BS_entry(
     row: int,
     col: int,
 ) -> NDArray:
-    """
-    Multiply a row of the unitary U times a column of a beamsplitter's inverse.
+    """Multiply a row of the unitary U times a column of a beamsplitter's inverse.
 
     Args:
         angles (float, float): angles and shift of the beamsplitter
