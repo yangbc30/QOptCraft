@@ -4,7 +4,8 @@ from numpy.testing import assert_allclose
 from qoptcraft._legacy.Phase3_Aux.get_algebra_basis_legacy import (
     matrix_u_basis_generator,
 )
-from qoptcraft.basis import _algebra_basis, _photon_basis
+from qoptcraft.basis.algebra import _algebra_basis
+from qoptcraft.basis.photon import _photon_basis
 
 
 @pytest.mark.parametrize(("modes", "photons"), ((2, 3), (4, 2), (5, 3)))
