@@ -7,7 +7,6 @@ from .quasiunitary import quasiunitary
 from .diagonal_decomp import *
 from .padding import *
 from .with_loss import *
-from qoptcraft._legacy.unitary import *
 
 
 def QuasiU(

@@ -15,7 +15,19 @@ limitations under the License."""
 import numpy as np
 from scipy.linalg import block_diag
 
-from qoptcraft._legacy.mat_inner_product import comparison
+
+def comparison(U, V, name1, name2, acc_d):
+    print(f"\nWe will compare the matrices {name1} and {name2}:")
+
+    prod = mat_inner_product(U - V, U - V)
+
+    print(f"\nThe inner product of the rest between matrices is: {prod}")
+
+    # Onscreen confirmation of equality between the matrices
+    print(f"\nIs it aproximately equal to 0? {np.round(prod,acc_d)==0}")
+
+    # 22 decimal accuracy upon computing the inner product, it can be modified
+    return np.round(prod, acc_d) == 0
 
 
 # By undoing the commentary of line 44, the result of computing S_per_G_per_S+ is printed onscreen
