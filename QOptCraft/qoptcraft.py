@@ -11,18 +11,12 @@ from qoptcraft.basis import get_algebra_basis
 from qoptcraft.entanglement import StateSchmidt
 from qoptcraft.math.logarithms import logm_1, logm_2, logm_3, logm_4, logm_5
 
-from qoptcraft._legacy.input_control import input_control, input_control_ints, input_control_intsDim
 from qoptcraft.entanglement._6_basis_manipulations import *
 from qoptcraft.entanglement._6_schmidt import *
-from qoptcraft._legacy.unitary_decomp import Selements
-from qoptcraft.evolution._2_aux_a_computation_time_evolutions_comparison import StoUEvolComp
-from qoptcraft.evolution._2_aux_b_logarithm_algorithms_equalities import MatLogCompV
-from qoptcraft.evolution._2_aux_c_logarithm_algorithms_timesanderror import MatLogCompTnE
 from qoptcraft.evolution import StoU
 from qoptcraft.evolution.inverse_problem import SfromU
 from qoptcraft.topogonov import topogonov
 from qoptcraft.operators.quasiunitary.builder import QuasiU
-from qoptcraft.operators.other_matrices import *
 
 
 # A function designed for testing qoptcraft's algorithms.

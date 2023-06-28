@@ -5,7 +5,6 @@ from __future__ import annotations
 import logging
 from typing import Self
 from numbers import Number
-from math import isclose
 
 import numpy as np
 from numpy.typing import NDArray, ArrayLike
@@ -106,7 +105,7 @@ class PureState(State):
         density_matrix (NDArray): density matrix of the state.
     """
 
-    def __init__(self, fock_states: tuple[tuple[int, ...]], coefs: ArrayLike) -> None:
+    def __init__(self, fock_states: list[tuple[int, ...]], coefs: ArrayLike) -> None:
         self._assert_inputs(fock_states, coefs)
 
         self.photons: int = sum(fock_states[0])
@@ -161,6 +160,8 @@ class PureState(State):
 
     def __add__(self, other: PureState) -> Self:
         """Tensor product of self with other state."""
+        if other == 0:
+            return self
         if isinstance(other, PureState):
             if self.photons != other.photons:
                 raise NumberPhotonsError()
@@ -185,6 +186,10 @@ class PureState(State):
 
         logging.error(f"Addition not implemented for opperand type {type(other)}")
         raise NotImplementedError
+
+    def __radd__(self, other: PureState) -> Self:
+        """Tensor product of self with other state."""
+        return self + other
 
     def __iadd__(self, other: PureState) -> Self:
         return self + other
@@ -328,21 +333,19 @@ class PureState(State):
         return exp
 
     def creation(self, mode: int) -> Self:
-        fock_created, coef = creation(mode, self.fock_states[0])
-        state = Fock(*fock_created, coef=coef * self.amplitudes[0])
-        for fock, amp in zip(self.fock_states[1:], self.amplitudes[1:], strict=True):
-            fock_created, coef = creation(mode, fock)
-            state += Fock(*fock_created, coef=coef * amp)
+        state = 0
+        for fock, coef in zip(self.fock_states, self.coefs, strict=True):
+            fock_created, coef_creat = creation(mode, fock)
+            state += Fock(*fock_created, coef=coef_creat * coef)
         return state
 
     def annihilation(self, mode: int) -> Self:
-        fock_annihil, coef = annihilation(mode, self.fock_states[0])
-        state = Fock(*fock_annihil, coef=coef * self.amplitudes[0])
-        for fock, amp in zip(self.fock_states[1:], self.amplitudes[1:], strict=True):
-            fock_annihil, coef = annihilation(mode, fock)
-            if coef == 0:
+        state = 0
+        for fock, coef in zip(self.fock_states, self.coefs, strict=True):
+            fock_annih, coef_annih = annihilation(mode, fock)
+            if coef_annih == 0:
                 continue
-            state += Fock(*fock_annihil, coef=coef * amp)
+            state += Fock(*fock_annih, coef=coef_annih * coef)
         return state
 
 
@@ -355,3 +358,7 @@ class Fock(PureState):
 
     def __iter__(self):
         yield from self.fock_states[0]
+
+    def __len__(self):
+        """Number of modes in the fock state."""
+        return len(self.modes)

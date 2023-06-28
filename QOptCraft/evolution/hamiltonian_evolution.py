@@ -1,8 +1,10 @@
 import numpy as np
 from numpy.typing import NDArray
+import scipy as sp
 
 from qoptcraft.basis import get_photon_basis
 from qoptcraft.operators import annihilation, creation
+from qoptcraft.math import logm_3
 
 
 def photon_hamiltonian(scattering_matrix: NDArray, photons: int) -> NDArray:
@@ -33,3 +35,24 @@ def photon_hamiltonian(scattering_matrix: NDArray, photons: int) -> NDArray:
                 lifted_matrix[row_img, col_img] += coef
 
     return lifted_matrix
+
+
+def photon_unitary_hamiltonian(scattering_matrix: NDArray, photons: int) -> NDArray:
+    """Calulate the multiphoton unitary from the scattering matrix of the interferometer
+    through the hamiltonian evolution. First, the hamiltonian is calculated with the logarithm;
+    next, it is evolved with the algebra homomorphism, and finally we exponentiate the evolved
+    hamiltonian to get the lifted unitary.
+
+    Note:
+        Previously known as evolution_3.
+
+    Args:
+        scattering_matrix (NDArray): _description_
+        photons (int): number of photons.
+
+    Returns:
+        NDArray: _description_
+    """
+    S_hamiltonian = logm_3(scattering_matrix)
+    U_hamiltonian = photon_hamiltonian(S_hamiltonian, photons)
+    return sp.linalg.expm(U_hamiltonian)

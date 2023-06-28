@@ -91,16 +91,15 @@ from qoptcraft.operators import haar_random_unitary
 from qoptcraft.evolution import (
     photon_unitary,
     photon_unitary_hamiltonian,
-    photon_unitary_glynn,
-    photon_unitary_ryser,
+    photon_unitary_permanent,
 )
 
 interferometer = haar_random_unitary(modes)
 
 unitary = photon_unitary(interferometer, photons)
 unitary_from_H = photon_unitary_hamiltonian(interferometer, photons)
-unitary_glynn = photon_unitary_glynn(interferometer, photons)
-unitary_ryser = photon_unitary_ryser(interferometer, photons)    
+unitary_glynn = photon_unitary_permanent(S, photons, method="glynn")
+unitary_ryser = photon_unitary_permanent(S, photons, method="ryser")
 
 ```
 

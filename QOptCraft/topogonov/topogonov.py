@@ -7,10 +7,9 @@ from numpy.typing import NDArray
 from scipy.linalg import expm
 
 from qoptcraft.operators import haar_random_unitary
-from qoptcraft.basis import hilbert_dim, get_photon_basis, get_algebra_basis
+from qoptcraft.basis import hilbert_dim, get_algebra_basis
 from qoptcraft.math import gram_schmidt, mat_inner_product, mat_norm, logm_3
-
-from qoptcraft.evolution._2_3rd_evolution_method import evolution_3
+from qoptcraft.evolution import photon_unitary_hamiltonian
 
 
 def toponogov(matrix: NDArray, modes: int, photons: int) -> NDArray:
@@ -31,14 +30,11 @@ def toponogov(matrix: NDArray, modes: int, photons: int) -> NDArray:
     if dim != hilbert_dim(modes, photons):
         raise ValueError(f"Matrix {dim = } doesn't match with {photons = } and {modes = }.")
 
-    S_rand = haar_random_unitary(modes)
-    photon_basis = get_photon_basis(modes, photons)
-
     basis, basis_image = get_algebra_basis(modes, photons)
     basis_image = gram_schmidt(basis_image)
 
-    S_rand = haar_random_unitary(modes)
-    unitary = evolution_3(S_rand, photons, photon_basis)[0]  # initialize approximation U_0
+    scattering_init = haar_random_unitary(modes)
+    unitary = photon_unitary_hamiltonian(scattering_init, photons)  # initial guess
 
     error: float = mat_norm(matrix - unitary)
     error_prev: float = 0
