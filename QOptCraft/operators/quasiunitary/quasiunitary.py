@@ -16,6 +16,9 @@ import numpy as np
 from scipy.linalg import block_diag
 
 
+from qoptcraft.math import mat_inner_product
+
+
 def comparison(U, V, name1, name2, acc_d):
     print(f"\nWe will compare the matrices {name1} and {name2}:")
 

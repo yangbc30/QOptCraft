@@ -3,7 +3,6 @@ from ._version import __version__
 # from . import _legacy
 from . import basis
 
-# from . import entanglement
 from . import evolution
 from . import invariant
 from . import math
