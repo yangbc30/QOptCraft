@@ -5,18 +5,18 @@ from numpy.typing import NDArray
 from scipy.linalg import dft
 
 
-from qoptcraft.operators import haar_random_unitary, qft, qft_inv
-from qoptcraft.evolution import photon_hamiltonian
-from qoptcraft.basis import get_algebra_basis
-from qoptcraft.entanglement import StateSchmidt
-from qoptcraft.math.logarithms import logm_1, logm_2, logm_3, logm_4, logm_5
+from .operators import haar_random_unitary, qft, qft_inv
+from .evolution import photon_hamiltonian
+from .basis import get_algebra_basis
+from .entanglement import StateSchmidt
+from .math.logarithms import logm_1, logm_2, logm_3, logm_4, logm_5
 
-from qoptcraft.entanglement._6_basis_manipulations import *
-from qoptcraft.entanglement._6_schmidt import *
-from qoptcraft.evolution import StoU
-from qoptcraft.evolution.inverse_problem import SfromU
-from qoptcraft.topogonov import topogonov
-from qoptcraft.operators.quasiunitary.builder import QuasiU
+from .entanglement._6_basis_manipulations import *
+from .entanglement._6_schmidt import *
+from .evolution import StoU
+from .evolution.inverse_problem import SfromU
+from .topogonov import topogonov
+from .operators.quasiunitary.builder import QuasiU
 
 
 # A function designed for testing qoptcraft's algorithms.
