@@ -49,7 +49,7 @@ repository = "https://gitlab.tel.uva.es/juagar/qoptcraft"
 
 [tool.setuptools]
 platforms = ["unix", "linux", "osx", "cygwin", "win32"]
-packages = ["qoptcraft"]  # optional
+# packages = ["qoptcraft"]  # optional
 
 [tool.setuptools.dynamic]
 version = {attr = "qoptcraft._version.__version__"}
