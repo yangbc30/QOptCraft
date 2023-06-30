@@ -40,4 +40,5 @@ def quasiunitary(S, totalDim, acc_d):
     I2 = -1 * np.identity(int(totalDim / 2), dtype=complex)
     G = block_diag(I1, I2)
     S_per_G_per_S = S.dot(G.dot(np.transpose(np.conj(S))))
+    S_per_G_per_S = S @ G @ S.conj().T
     return comparison(S_per_G_per_S, G, "S_per_G_per_S", "G", acc_d)

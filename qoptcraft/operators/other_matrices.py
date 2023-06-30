@@ -1,17 +1,15 @@
+"""
+--------------------
+       LEGACY
+--------------------
+"""
 import math
 
 import numpy as np
-import scipy as sp
 
 
 def RotMat(N, offset):
     return np.eye(N, k=offset) + np.eye(N, k=-(N - offset))
-
-
-# This function below generates random non-unitary matrices. It is useful in the design of
-# quasiunitary S matrices with loss
-def RandM(N1, N2):
-    return (sp.randn(N1, N2) + 1j * sp.randn(N1, N2)) / sp.sqrt(2.0)
 
 
 # Creation of Quantum Fourier transformation matrices

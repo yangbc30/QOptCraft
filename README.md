@@ -29,18 +29,17 @@ pip install .
 
 ## Quick usage
 
-### Clemens and Reck decompositions
+### Clemens and Reck decompositions
 
-
+We can decompose any unitary into beamsplitters and phase shifters:
 ```python
-from qoptcraft.optical_elements import clemens_decomposition
+from qoptcraft.optical_elements import clemens_decomposition, reck_decomposition
 
 modes = 4
 unitary = haar_random_unitary(modes)
 left, diag, right = clemens_decomposition(unitary)
 diag, right = reck_decomposition(unitary)
 ```
-
 
 ### Basis
 
@@ -96,17 +95,9 @@ can_transition(mixed_state, bell_state, method="basis")
 >>> False
 ```
 
-### Quantizing linear interferomenters (previously StoU)
+### Quantizing linear interferomenters
 
-We can easily compute the unitary matrix associated with a linear interferometer S and a certain number of photons. There are four different algorithms, `photon_unitary` uses standard quantum mechanics, `photon_unitary_hamiltonian` computes the Hamiltonian of the interferometer first and the last two ones use fast algorithms for the permanent.
-
-```python
-from qoptcraft.evolution import photon_unitary_permanent
-from qoptcraft.optical_elements import beam_splitter
-
-bs = beam_splitter(angle=2, shift=0, dim=4, mode_1=1, mode_2=2)
-photonic_bs = photon_unitary_permanent(bs, photons=3, method="ryser")
-```
+We can easily compute the unitary matrix associated with a linear interferometer S and a certain number of photons. There are four different methods to compute the unitary: `'heisenberg'`, `'hamiltonian'`, `'permanent glynn'` and `'permanent ryser'`.
 
 ```python
 from qoptcraft.operators import haar_random_unitary
@@ -119,9 +110,25 @@ unitary_glynn = photon_unitary(S, photons, method="permanent glynn")
 unitary_ryser = photon_unitary(S, photons, method="permanent ryser")
 ```
 
-## References
+We can apply this function to a 50:50 beamsplitter to recover the Hong-Ou-Mandel matrix
 
-...
+```python
+from numpy import pi as PI
+from qoptcraft.optical_elements import beam_splitter
+
+bs_matrix = beam_splitter(angle=PI/4, shift=0, dim=2, mode_1=0, mode_2=1, convention="clemens")
+hong_ou_mandel = photon_unitary(bs_matrix, photons=3, method="heisenberg")
+```
+
+
+### Approximating a unitary with linear optics (Topogonov)
+```python
+from qoptcraft.operators import qft
+from qoptcraft.topogonov import topogonov
+
+unitary = qft(6)
+approx_unitary, error = toponogov(unitary, modes, photons)
+```
 
 
 ## Citing
@@ -131,6 +138,27 @@ qoptcraft is the work of Daniel Gómez Aguado and Pablo V. Parellada.
 If you are doing research using qoptcraft, please cite our paper:
 
     Daniel Gómez Aguado et al. qoptcraft: A Python package for the design and study of linear optical quantum systems. 2023. https://doi.org/10.1016/j.cpc.2022.108511
+
+
+## References
+
+[1] W. R. Clements, P. C. Humphreys, B. J. Metcalf, W. S. Kolthammer, and I. A. Walsmley, ”Optimal Design for Universal Multiport Interferometers”, Optica 3, 1460 (2016).
+
+[2] J. Skaar, J. C. García Escartín, and H. Landro, ”Quantum mechanical description of linear optic”, American Journal of Physics 72, 1385 (2004).
+
+[3] S. Scheel, ”Permanents in linear optics network”, Acta Physica Slovaca 58, 675 (2008).
+
+[4] ”Permanents and Ryser’s algorithm”, numbersandshapes.net.
+
+[5] J. C. García Escartín, V. Gimeno, and J. J. Moyano-Fern ´andez, ”Multiple photon effective Hamiltonians in linear quantum optical networks”, Optics Communications 430 (2019) 434–439.
+
+[6] J. C. García Escartín, V. Gimeno, and J. J. Moyano Fern ´andez, ”A method to determine which quantum operations can be realized with linear optics with a constructive implementation recipe”, Physical Review A 100, 022301 (2019).
+
+[7] J. C. García Escartín and J. J. Moyano Fern ´andez, ”Optimal approximation to unitary quantum operators with linear optics”, arXiv:2011.15048v1 [quant-ph].
+
+[8] N. Tischler, C. Rockstuhl, and K. Slowik, ”Quantum Optical Realization of Arbitrary Linear Transformations Allowing for Loss and Gain”, Physical Review X 8, 021017 (2018).
+
+[9] T. A. Loring, ”Computing a logarithm of a unitary matrix with general spectrum”, Numerical Linear Algebra wth Applications, 21 (6) 744–760 (2014).
 
 
 ## Contributing
@@ -143,8 +171,6 @@ If you are new to contributing to open source, [this guide](https://opensource.g
 ## License
 
 This software is under the [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/).
-
-
 
 
 # OLD README
