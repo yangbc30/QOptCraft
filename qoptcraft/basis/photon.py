@@ -1,4 +1,5 @@
 <<<<<<< HEAD:QOptCraft/basis/photon.py
+<<<<<<< HEAD:QOptCraft/basis/photon.py
 import pickle
 
 import numpy as np
@@ -87,6 +88,8 @@ def state_in_basis(fock_list: BasisPhoton, amplitudes: ArrayLike, basis: BasisPh
 
     return state
 =======
+=======
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/basis/photon.py
 import pickle
 
 import numpy as np
@@ -174,4 +177,7 @@ def state_in_basis(fock_list: BasisPhoton, amplitudes: ArrayLike, basis: BasisPh
         raise ValueError("Probabilites don't add to 1. Check if vectors can be found in basis.")
 
     return state
+<<<<<<< HEAD:QOptCraft/basis/photon.py
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/basis/photon.py
+=======
 >>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/basis/photon.py

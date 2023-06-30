@@ -1,3 +1,4 @@
+<<<<<<< HEAD:QOptCraft/evolution/hamiltonian_evolution.py
 <<<<<<<< HEAD:qoptcraft/evolution/photon_hamiltonian.py
 import numpy as np
 from numpy.typing import NDArray
@@ -35,6 +36,8 @@ def photon_hamiltonian(scattering_matrix: NDArray, photons: int) -> NDArray:
 
     return lifted_matrix
 ========
+=======
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/evolution/hamiltonian_evolution.py
 import numpy as np
 from numpy.typing import NDArray
 import scipy as sp
@@ -93,4 +96,7 @@ def photon_unitary_hamiltonian(scattering_matrix: NDArray, photons: int) -> NDAr
     S_hamiltonian = logm_3(scattering_matrix)
     U_hamiltonian = photon_hamiltonian(S_hamiltonian, photons)
     return sp.linalg.expm(U_hamiltonian)
+<<<<<<< HEAD:QOptCraft/evolution/hamiltonian_evolution.py
 >>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/evolution/hamiltonian_evolution.py
+=======
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/evolution/hamiltonian_evolution.py

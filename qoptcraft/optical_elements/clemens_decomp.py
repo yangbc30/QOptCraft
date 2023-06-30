@@ -1,4 +1,5 @@
 <<<<<<< HEAD:QOptCraft/optical_elements/clemens_decomp.py
+<<<<<<< HEAD:QOptCraft/optical_elements/clemens_decomp.py
 """Decompose a unitary into beamsplitters following Clemens et al.
 """
 
@@ -127,6 +128,8 @@ def _U_times_BS_entry(
 
     return np.array([dot_prod.real, dot_prod.imag])
 =======
+=======
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/optical_elements/clemens_decomp.py
 """Decompose a unitary into beamsplitters following Clemens et al.
 """
 
@@ -253,4 +256,7 @@ def _U_times_BS_entry(
         dot_prod = np.exp(1j * φ) * np.sin(θ) * U[mode_1, col] + np.cos(θ) * U[mode_2, col]
 
     return np.array([dot_prod.real, dot_prod.imag])
+<<<<<<< HEAD:QOptCraft/optical_elements/clemens_decomp.py
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/optical_elements/clemens_decomp.py
+=======
 >>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/optical_elements/clemens_decomp.py

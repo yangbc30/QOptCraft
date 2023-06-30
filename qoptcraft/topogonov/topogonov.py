@@ -1,4 +1,5 @@
 <<<<<<< HEAD:QOptCraft/topogonov/topogonov.py
+<<<<<<< HEAD:QOptCraft/topogonov/topogonov.py
 """Use Topogonov's theorem to get a scattering matrix that approximates
 a given unitary.
 """
@@ -56,6 +57,8 @@ def toponogov(matrix: NDArray, modes: int, photons: int) -> NDArray:
 
     return unitary
 =======
+=======
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/topogonov/topogonov.py
 """Use Topogonov's theorem to get a scattering matrix that approximates
 a given unitary.
 """
@@ -112,4 +115,7 @@ def toponogov(matrix: NDArray, modes: int, photons: int) -> NDArray:
         error = mat_norm(matrix - unitary)
 
     return unitary
+<<<<<<< HEAD:QOptCraft/topogonov/topogonov.py
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/topogonov/topogonov.py
+=======
 >>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/topogonov/topogonov.py

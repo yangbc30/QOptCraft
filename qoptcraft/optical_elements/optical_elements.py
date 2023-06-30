@@ -1,4 +1,5 @@
 <<<<<<< HEAD:QOptCraft/optical_elements/optical_elements.py
+<<<<<<< HEAD:QOptCraft/optical_elements/optical_elements.py
 """Beamsplitters as defined in Clemens et al. and in Reck et al., respectively.
 """
 import numpy as np
@@ -105,6 +106,8 @@ def _beam_splitter_chernikov(
     T[mode_2, mode_2] = np.cos(angle)
     return T
 =======
+=======
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/optical_elements/optical_elements.py
 """Beamsplitters as defined in Clemens et al. and in Reck et al., respectively.
 """
 
@@ -190,4 +193,7 @@ def phase_shifter(shift: float, dim: int, mode: int) -> NDArray:
     matrix = np.eye(dim, dtype=np.complex64)
     matrix[mode, mode] = np.exp(1j * shift)
     return matrix
+<<<<<<< HEAD:QOptCraft/optical_elements/optical_elements.py
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/optical_elements/optical_elements.py
+=======
 >>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/optical_elements/optical_elements.py

@@ -1,4 +1,5 @@
 <<<<<<< HEAD:QOptCraft/optical_elements/reck_decomp.py
+<<<<<<< HEAD:QOptCraft/optical_elements/reck_decomp.py
 """Decompose a unitary into beamsplitters following Reck et al.
 """
 
@@ -88,6 +89,8 @@ def _U_times_BS_entry(
     dot_prod = U[row, row] * np.exp(1j * φ) * np.cos(θ) - U[row, col] * np.sin(θ)
     return np.array([dot_prod.real, dot_prod.imag])
 =======
+=======
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/optical_elements/reck_decomp.py
 """Decompose a unitary into beamsplitters following Reck et al.
 """
 
@@ -176,4 +179,7 @@ def _U_times_BS_entry(
     # U[row, row] * BS_(row, col)[row,col] + U[row, col] * BS_(row, col)[col,col]
     dot_prod = U[row, row] * np.exp(1j * φ) * np.cos(θ) - U[row, col] * np.sin(θ)
     return np.array([dot_prod.real, dot_prod.imag])
+<<<<<<< HEAD:QOptCraft/optical_elements/reck_decomp.py
+>>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/optical_elements/reck_decomp.py
+=======
 >>>>>>> d41662bbef5ea1a918e17800a5bf945002d43f0c:qoptcraft/optical_elements/reck_decomp.py
