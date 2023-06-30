@@ -28,7 +28,7 @@ def get_photon_basis(modes: int, photons: int) -> BasisPhoton:
             basis = pickle.load(f)
 
     except EOFError:
-        basis = _photon_basis(modes, photons)
+        basis = photon_basis(modes, photons)
         with basis_path.open("wb") as f:
             pickle.dump(basis, f)
         print(f"Basis saved in {basis_path}.")
@@ -36,7 +36,7 @@ def get_photon_basis(modes: int, photons: int) -> BasisPhoton:
     return basis
 
 
-def _photon_basis(modes: int, photons: int) -> BasisPhoton:
+def photon_basis(modes: int, photons: int) -> BasisPhoton:
     """Given a number of photons and modes, generate the basis of the Hilbert space.
 
     Args:
@@ -52,8 +52,8 @@ def _photon_basis(modes: int, photons: int) -> BasisPhoton:
         return [(photons,)]
 
     new_basis = []
-    for n in range(photons + 1):
-        basis = _photon_basis(modes - 1, photons - n)
+    for n in range(photons, -1, -1):
+        basis = photon_basis(modes - 1, photons - n)
         for vector in basis:
             new_basis.append((n, *vector))
     return new_basis

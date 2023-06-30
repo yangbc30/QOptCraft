@@ -7,15 +7,10 @@ from qoptcraft.optical_elements import clemens_decomposition, reck_decomposition
 from qoptcraft.operators import haar_random_unitary
 
 
-interferometer = haar_random_unitary(4)
-left_clemens, diag_clemenes, right_clemens = clemens_decomposition(interferometer)
-diag_reck, right_reck = reck_decomposition(interferometer)
-
-
 @pytest.mark.parametrize(("modes"), (3, 5, 6))
 def test_diag_clemens(modes):
-    interferometer = haar_random_unitary(modes)
-    left, diag, right = clemens_decomposition(interferometer)
+    unitary = haar_random_unitary(modes)
+    left, diag, right = clemens_decomposition(unitary)
     assert_allclose(
         diag - np.diag(np.diag(diag)),
         np.zeros((modes, modes)),

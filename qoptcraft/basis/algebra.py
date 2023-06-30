@@ -45,7 +45,7 @@ def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlge
             basis_image = pickle.load(f)
 
     except EOFError:
-        basis, basis_image = _algebra_basis(modes, photons)
+        basis, basis_image = algebra_basis(modes, photons)
         with basis_path.open("wb") as f:
             pickle.dump(basis, f)
         with basis_image_path.open("wb") as f:
@@ -55,7 +55,7 @@ def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlge
     return basis, basis_image
 
 
-def _algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]:
+def algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]:
     """Generate the basis for the algebra and image algebra."""
     basis = []
     basis_image = []

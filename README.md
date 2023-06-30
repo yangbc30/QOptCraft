@@ -29,17 +29,17 @@ pip install .
 
 ## Quick usage
 
-### Clemens decomposition
+### Clemens and Reck decompositions
 
 
 ```python
-from qoptcraft.basis import get_algebra_basis
+from qoptcraft.optical_elements import clemens_decomposition
 
-modes = 2
-photons = 3
-basis_algebra, basis_image_algebra = get_algebra_basis(modes, photons)
+modes = 4
+unitary = haar_random_unitary(modes)
+left, diag, right = clemens_decomposition(unitary)
+diag, right = reck_decomposition(unitary)
 ```
-
 
 
 ### Basis
@@ -55,7 +55,7 @@ basis_algebra, basis_image_algebra = get_algebra_basis(modes, photons)
 
 or the Fock state basis of the Hilbert space
 ```python
-from qoptcraft.basis import get_photon_basis, hilb
+from qoptcraft.basis import get_photon_basis, hilbert_dim
 
 photon_basis = get_photon_basis(modes, photons)
 dimension = hilbert_dim(modes, photons)  # should equal len(photon_basis)
@@ -79,7 +79,7 @@ To check if transitions between quantum states are forbidden by a linear optical
 ```python
 from qoptcraft.invariant import can_transition, photon_invariant
 
-can_transition(in_state, bell_state)
+can_transition(in_state, bell_state, method="reduced")
 
 >>> False
 ```
@@ -88,10 +88,10 @@ The invariant can be calculated from density matrices (calculations use the basi
 To check if transitions between quantum states are forbidden by a linear optical transformation, we simply run
 ```python
 from qoptcraft.state import MixedState
-from qoptcraft.invariant import can_transition_basis, photon_invariant_basis
+from qoptcraft.invariant import can_transition, photon_invariant
 
 mixed_state = MixedState.from_mixture(pure_states=[in_fock, bell_state], probs=[0.5, 0.5])
-can_transition_basis(mixed_state, bell_state)  # calls the density_matrix attribute of the states
+can_transition(mixed_state, bell_state, method="basis")
 
 >>> False
 ```
@@ -110,17 +110,13 @@ photonic_bs = photon_unitary_permanent(bs, photons=3, method="ryser")
 
 ```python
 from qoptcraft.operators import haar_random_unitary
-from qoptcraft.evolution import (
-    photon_unitary,
-    photon_unitary_hamiltonian,
-    photon_unitary_permanent,
-)
+from qoptcraft.evolution import photon_unitary
 
 interferometer = haar_random_unitary(modes)
-unitary = photon_unitary(interferometer, photons)
-unitary_from_H = photon_unitary_hamiltonian(interferometer, photons)
-unitary_glynn = photon_unitary_permanent(S, photons, method="glynn")
-unitary_ryser = photon_unitary_permanent(S, photons, method="ryser")
+unitary_heisenberg = photon_unitary(interferometer, photons, method="heisenberg")
+unitary_hamiltonian = photon_unitary(interferometer, photons, method="hamiltonian")
+unitary_glynn = photon_unitary(S, photons, method="permanent glynn")
+unitary_ryser = photon_unitary(S, photons, method="permanent ryser")
 ```
 
 ## References

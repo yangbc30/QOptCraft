@@ -11,11 +11,11 @@ from qoptcraft.evolution import photon_unitary
 
 
 phaseshifter = np.array([[np.exp(1j * 0.5), 0], [0, 1]])
-lifted_phaseshifter = np.diag([1, np.exp(1j * 0.5), np.exp(1j * 0.5 * 2), np.exp(1j * 0.5 * 3)])
+lifted_phaseshifter = np.diag([np.exp(1j * 0.5 * 3), np.exp(1j * 0.5 * 2), np.exp(1j * 0.5), 1])
 
 beamsplitter = beam_splitter(np.pi / 4, 0, 2, 0, 1)
 hong_ou_mandel = np.array(
-    [[0.5, 1 / np.sqrt(2), 0.5], [-1 / np.sqrt(2), 0, 1 / np.sqrt(2)], [0.5, -1 / np.sqrt(2), 0.5]]
+    [[0.5, -1 / np.sqrt(2), 0.5], [1 / np.sqrt(2), 0, -1 / np.sqrt(2)], [0.5, 1 / np.sqrt(2), 0.5]]
 )
 
 
@@ -32,6 +32,23 @@ def test_unitarity(matrix: NDArray, photons: int, method: str):
     photonic_matrix = photon_unitary(matrix, photons, method)
     dim = photonic_matrix.shape[0]
     assert_allclose(np.eye(dim), photonic_matrix @ photonic_matrix.conj().T, atol=1e-7)
+
+
+@pytest.mark.parametrize(
+    ("matrix", "method"),
+    (
+        (haar_random_unitary(2), "heisenberg"),
+        (haar_random_unitary(3), "hamiltonian"),
+        (haar_random_unitary(4), "permanent glynn"),
+        (haar_random_unitary(5), "permanent ryser"),
+    ),
+)
+def test_one_photon(matrix: NDArray, method: str):
+    photonic_matrix = photon_unitary(matrix, 1, method)
+    try:
+        assert_allclose(matrix, photonic_matrix, atol=1e-7, verbose=False)
+    except AssertionError:
+        assert_allclose(matrix, -photonic_matrix, atol=1e-7, verbose=False)
 
 
 @pytest.mark.parametrize(

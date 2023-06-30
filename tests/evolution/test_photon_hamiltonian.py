@@ -3,8 +3,6 @@ from pathlib import Path
 import pytest
 from numpy.testing import assert_allclose
 
-import qoptcraft as qoc
-from qoptcraft.config import SAVE_DATA_PATH
 from qoptcraft.evolution import photon_hamiltonian
 from qoptcraft.basis import get_photon_basis
 from qoptcraft.basis.algebra import (
@@ -13,9 +11,6 @@ from qoptcraft.basis.algebra import (
     image_sym_matrix,
     image_antisym_matrix,
 )
-
-
-qoc.config.SAVE_DATA_PATH = Path("tests", "save_basis").resolve()
 
 
 @pytest.mark.parametrize(("modes", "photons"), ((3, 2), (2, 1), (3, 5)))
