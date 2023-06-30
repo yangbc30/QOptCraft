@@ -5,33 +5,39 @@ from numpy.typing import NDArray
 import numba
 
 
-@numba.jit(nopython=True)
-def permanent_glynn(matrix: NDArray) -> Number:
+def permanent(matrix: NDArray, method: str = "glynn") -> Number:
+    """Returns the permanent of a matrix using the Ryser formula in Gray ordering.
+
+    Args:
+        matrix (NDArray): A square matrix
+        method (str): method to calculate the permanent. Options are 'glynn' and 'ryser'.
+            Defaults to 'glynn'.
+
+    Returns:
+        Number: the permanent of the matrix
     """
-    Returns the permanent of a matrix using the Ryser formula in Gray ordering.
+    if method == "glynn":
+        return _permanent_glynn(matrix)
+    if method == "ryser":
+        return _permanent_ryser(matrix)
+    raise ValueError("Supported options for the permanent are 'glynn' and 'ryser'.")
 
-    Parameters
-    ----------
-    matrix : NDArray
-        A square matrix
 
-    Returns
-    -------
-    float or complex : the permanent of the matrix
+@numba.jit(nopython=True)
+def _permanent_glynn(matrix: NDArray) -> Number:
+    """Returns the permanent of a matrix using the Ryser formula in Gray ordering.
 
-    References
-    ----------
-    The code is based off a Python 2 code from user 'xnor' found in
-    https://codegolf.stackexchange.com/questions/97060/calculate-the-permanent-as-quickly-as-possible
+    References:
+        [1] The code is based off a Python 2 code from user 'xnor' found in
+        https://codegolf.stackexchange.com/questions/97060/calculate-the-permanent-as-quickly-as-possible
 
-    Glynn algorithm for the permanent
-    http://library.isical.ac.in:8080/jspui/bitstream/10263/3603/1/TH73.pdf
+        [2] Glynn algorithm for the permanent
+        http://library.isical.ac.in:8080/jspui/bitstream/10263/3603/1/TH73.pdf
 
-    Gray code used in the algorithm
-    https://en.wikipedia.org/wiki/Gray_code
+        [3] Gray code used in the algorithm https://en.wikipedia.org/wiki/Gray_code
 
-    This algorithm is also re-implemented in The-Walrus library
-    https://github.com/XanaduAI/thewalrus/blob/master/thewalrus/_permanent.py
+        [4] This algorithm is also re-implemented in The-Walrus library
+        https://github.com/XanaduAI/thewalrus/blob/master/thewalrus/_permanent.py
     """
     dim = len(matrix)
     if dim == 0:
@@ -70,35 +76,24 @@ def permanent_glynn(matrix: NDArray) -> Number:
 
 
 @numba.jit(nopython=True)
-def permanent_ryser(matrix: NDArray) -> Number:
-    """
-    Returns the permanent of a matrix using the Ryser formula in Gray ordering.
+def _permanent_ryser(matrix: NDArray) -> Number:
+    """Returns the permanent of a matrix using the Ryser formula in Gray ordering.
 
-    Parameters
-    ----------
-    matrix : NDArray
-        A square matrix
+    References:
+        [1] The code is based off a Python 2 code from user 'xnor' found in
+        https://codegolf.stackexchange.com/questions/97060/calculate-the-permanent-as-quickly-as-possible
 
-    Returns
-    -------
-    float or complex : the permanent of the matrix
+        [2] Ryser formula with Gray code:
+        Nijenhuis, Albert; Wilf, Herbert S. (1978), Combinatorial Algorithms, Academic Press.
 
-    References
-    ----------
-    The code is based off a Python 2 code from user 'xnor' found in
-    https://codegolf.stackexchange.com/questions/97060/calculate-the-permanent-as-quickly-as-possible
+        [3] Ryser formula
+        https://en.wikipedia.org/wiki/Computing_the_permanent#Ryser_formula
 
-    Ryser formula with Gray code:
-    Nijenhuis, Albert; Wilf, Herbert S. (1978), Combinatorial Algorithms, Academic Press.
+        [4] Gray code used in the algorithm
+        https://en.wikipedia.org/wiki/Gray_code
 
-    Ryser formula
-    https://en.wikipedia.org/wiki/Computing_the_permanent#Ryser_formula
-
-    Gray code used in the algorithm
-    https://en.wikipedia.org/wiki/Gray_code
-
-    This algorithm is also re-implemented in The-Walrus library
-    https://github.com/XanaduAI/thewalrus/blob/master/thewalrus/_permanent.py
+        [5] This algorithm is also re-implemented in The-Walrus library
+        https://github.com/XanaduAI/thewalrus/blob/master/thewalrus/_permanent.py
     """
     dim = len(matrix)
     if dim == 0:

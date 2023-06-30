@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from qoptcraft.basis import _photon_basis
+from qoptcraft.basis.photon import _photon_basis
 
 
 PHOTONS_1 = 3

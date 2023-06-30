@@ -5,10 +5,10 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.optimize import fsolve
 
-from .optical_elements import beam_splitter_reck
+from .optical_elements import beam_splitter
 
 
-def reck_decomposition(unitary: NDArray) -> list[NDArray]:
+def reck_decomposition(unitary: NDArray) -> tuple[NDArray, list[NDArray]]:
     """Given a unitary matrix calculates the Reck et al. decompositon
     into beam splitters and phase shifters:
 
@@ -38,12 +38,12 @@ def reck_decomposition(unitary: NDArray) -> list[NDArray]:
 
             # We calculate the beamsplitter angles phi y theta
             angle, shift = _solve_angles(unitary, row, col)
-            R = beam_splitter_reck(angle, shift, dim, mode_1=row, mode_2=col)
-            unitary = unitary @ R
-            bs_list.append(R.conj().T)
-    D = unitary
+            right = beam_splitter(angle, shift, dim, mode_1=row, mode_2=col, convention="reck")
+            unitary = unitary @ right
+            bs_list.append(right.conj().T)
+    diag = unitary
     bs_list.reverse()
-    return [D] + bs_list
+    return diag, bs_list
 
 
 def _solve_angles(U: NDArray, row: int, col: int) -> NDArray:

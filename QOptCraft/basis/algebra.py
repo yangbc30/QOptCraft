@@ -4,8 +4,8 @@ import warnings
 from scipy.sparse import spmatrix, csr_matrix, lil_matrix
 
 from .photon import get_photon_basis, BasisPhoton
-from .config import FOLDER_PATH
 from qoptcraft.operators import creation, annihilation
+from qoptcraft import config
 
 
 BasisAlgebra = list[spmatrix]
@@ -31,7 +31,7 @@ def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlge
     Returns:
         BasisAlgebra, BasisAlgebra: basis of the algebra and the image algebra.
     """
-    folder_path = FOLDER_PATH / f"m={modes} n={photons}"
+    folder_path = config.SAVE_DATA_PATH / f"m={modes} n={photons}"
     folder_path.mkdir(parents=True, exist_ok=True)
 
     basis_path = folder_path / "algebra.pkl"

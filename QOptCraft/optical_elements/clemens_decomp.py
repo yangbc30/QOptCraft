@@ -8,7 +8,7 @@ from scipy.optimize import fsolve
 from .optical_elements import beam_splitter
 
 
-def clemens_decomposition(unitary: NDArray) -> list[NDArray]:
+def clemens_decomposition(unitary: NDArray) -> tuple[list[NDArray], NDArray, list[NDArray]]:
     """Given a unitary matrix calculates the Clemens et al. decompositon
     into beam splitters and phase shifters:
 
@@ -31,8 +31,8 @@ def clemens_decomposition(unitary: NDArray) -> list[NDArray]:
     assert unitary.shape[0] == unitary.shape[1], "The matrix is not square"
     dim = unitary.shape[0]
 
-    Right_list = []
-    Lelft_list = []
+    right_list = []
+    lelft_list = []
 
     for i in range(1, dim):
         if (i % 2) == 1:
@@ -45,9 +45,9 @@ def clemens_decomposition(unitary: NDArray) -> list[NDArray]:
 
                 # We calculate the beamsplitter angles phi y theta
                 angle, shift = _solve_angles(unitary, mode_1, mode_2, row, col, is_odd=True)
-                R = beam_splitter(angle, shift, dim, mode_1, mode_2)
+                R = beam_splitter(angle, shift, dim, mode_1, mode_2, convention="clemens")
                 unitary = unitary @ R.conj().T
-                Right_list.append(R)
+                right_list.append(R)
         else:
             for j in range(1, i + 1):
                 # substract 1 to all indices to match the paper with python arrays
@@ -58,15 +58,15 @@ def clemens_decomposition(unitary: NDArray) -> list[NDArray]:
 
                 # We calculate the beamsplitter angles phi y theta
                 angle, shift = _solve_angles(unitary, mode_1, mode_2, row, col, is_odd=False)
-                L = beam_splitter(angle, shift, dim, mode_1, mode_2)
-                unitary = L @ unitary
-                Lelft_list.append(L.conj().T)
-    D = unitary
+                left = beam_splitter(angle, shift, dim, mode_1, mode_2, convention="clemens")
+                unitary = left @ unitary
+                lelft_list.append(left.conj().T)
+    diag = unitary
 
-    Right_list.reverse()  # save as [R_n, ..., R_1]
+    right_list.reverse()  # save as [R_n, ..., R_1]
     # Lelft_list = [L_1.inv, ... L_n.inv]
 
-    return Lelft_list + [D] + Right_list
+    return lelft_list, diag, right_list
 
 
 def _solve_angles(
@@ -102,8 +102,9 @@ def _U_times_BS_entry(
     col: int,
     is_odd: bool,
 ) -> NDArray:
-    """If is_odd is True, multiply a row of the unitary U times a column of a beamsplitter's inverse.
-    If is_odd is False, multiply a row of a beamsplitter times a column of the unitary U.
+    """If is_odd is True, multiply a row of the unitary U times a column of a
+    beamsplitter's inverse. If is_odd is False, multiply a row of a beamsplitter
+    times a column of the unitary U.
 
     Args:
         angles (float, float): angles and shift of the beamsplitter

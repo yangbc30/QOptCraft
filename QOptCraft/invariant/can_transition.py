@@ -1,12 +1,36 @@
-"""Module docstrings.
+"""Check if a transition violates the necessary criterion
+of the invariant conservation.
 """
 import numpy as np
 
 from qoptcraft.state import State, PureState
-from .invariant import photon_invariant, photon_invariant_full, photon_invariant_basis
+from .invariant import photon_invariant_reduced, photon_invariant_no_basis, photon_invariant_basis
 
 
-def can_transition(state_in: PureState, state_out: PureState) -> bool:
+def can_transition(state_in: State, state_out: State, method: str = "basis") -> bool:
+    """Photonic invariant for a given state.
+
+    Args:
+        state_in (State): input state of the optical circuit.
+        state_out (State): desired output state of the optical circuit.
+        method (str): method to calculate the invariant. Options are 'reduced',
+            'full', 'basis'. Default is 'basis'.
+
+    Returns:
+        float: invariant.
+    """
+    if method == "basis":
+        return can_transition_basis(state_in, state_out)
+    if not isinstance(state_in, PureState) or not isinstance(state_out, PureState):
+        raise ValueError("Non pure states only accept method basis.")
+    if method == "reduced":
+        return can_transition_reduced(state_in, state_out)
+    if method == "no basis":
+        return can_transition_no_basis(state_in, state_out)
+    raise ValueError("Options for 'method' are 'reduced', 'no basis' or 'basis'.")
+
+
+def can_transition_reduced(state_in: PureState, state_out: PureState) -> bool:
     """Check if we cannot transition from an input state to an output state
     through an optical network. Calculations are done with the reduced invariant,
     which is faster and more efficient.
@@ -25,14 +49,14 @@ def can_transition(state_in: PureState, state_out: PureState) -> bool:
     assert state_in.photons == state_out.photons, "Number of photons don't coincide."
     assert state_in.modes == state_out.modes, "Number of modes don't coincide."
 
-    in_invariant = photon_invariant(state_in)
-    out_invariant = photon_invariant(state_out)
+    in_invariant = photon_invariant_reduced(state_in)
+    out_invariant = photon_invariant_reduced(state_out)
 
     print(f"In reduced invariant = {in_invariant} \t Out reduced invariant = {out_invariant}")
     return np.isclose(in_invariant, out_invariant)
 
 
-def can_transition_full(state_in: PureState, state_out: PureState) -> bool:
+def can_transition_no_basis(state_in: PureState, state_out: PureState) -> bool:
     """Check if we cannot transition from an input state to an output state
     through an optical network. Calculations are done without a basis of the Hilbert space,
     so they are faster and more efficient.
@@ -51,8 +75,8 @@ def can_transition_full(state_in: PureState, state_out: PureState) -> bool:
     assert state_in.photons == state_out.photons, "Number of photons don't coincide."
     assert state_in.modes == state_out.modes, "Number of modes don't coincide."
 
-    in_invariant = photon_invariant_full(state_in)
-    out_invariant = photon_invariant_full(state_out)
+    in_invariant = photon_invariant_no_basis(state_in)
+    out_invariant = photon_invariant_no_basis(state_out)
 
     print(f"In full invariant = {in_invariant} \t Out full invariant = {out_invariant}")
     return np.isclose(in_invariant, out_invariant)

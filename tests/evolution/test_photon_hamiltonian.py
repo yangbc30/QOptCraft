@@ -3,6 +3,8 @@ from pathlib import Path
 import pytest
 from numpy.testing import assert_allclose
 
+import qoptcraft as qoc
+from qoptcraft.config import SAVE_DATA_PATH
 from qoptcraft.evolution import photon_hamiltonian
 from qoptcraft.basis import get_photon_basis
 from qoptcraft.basis.algebra import (
@@ -13,9 +15,12 @@ from qoptcraft.basis.algebra import (
 )
 
 
+qoc.config.SAVE_DATA_PATH = Path("tests", "save_basis").resolve()
+
+
 @pytest.mark.parametrize(("modes", "photons"), ((3, 2), (2, 1), (3, 5)))
 def test_sym_hamiltonian(modes, photons) -> None:
-    photon_basis = get_photon_basis(modes, photons, folder_path=Path("tests"))
+    photon_basis = get_photon_basis(modes, photons)
     for mode_1 in range(modes):
         for mode_2 in range(mode_1 + 1):
             sym = sym_matrix(mode_1, mode_2, modes)
@@ -27,7 +32,7 @@ def test_sym_hamiltonian(modes, photons) -> None:
 
 @pytest.mark.parametrize(("modes", "photons"), ((3, 2), (2, 1), (3, 5)))
 def test_antisym_hamiltonian(modes, photons) -> None:
-    photon_basis = get_photon_basis(modes, photons, folder_path=Path("tests"))
+    photon_basis = get_photon_basis(modes, photons)
     for mode_1 in range(modes):
         for mode_2 in range(mode_1):
             matrix = antisym_matrix(mode_1, mode_2, modes)

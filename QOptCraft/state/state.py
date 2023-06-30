@@ -172,16 +172,13 @@ class PureState(State):
             fock_states = list(set(self.fock_states) | set(other.fock_states))
             for fock in fock_states:
                 try:
-                    idx_self = self.fock_states.index(fock)
-                    coefs.append(self.coefs[idx_self])
+                    coefs.append(self._coef_fock(fock))
                     try:
-                        idx_other = other.fock_states.index(fock)
-                        coefs[-1] += other.coefs[idx_other]
+                        coefs[-1] += other._coef_fock(fock)
                     except ValueError:
                         continue
                 except ValueError:
-                    idx_other = other.fock_states.index(fock)
-                    coefs.append(other.coefs[idx_other])
+                    coefs.append(other._coef_fock(fock))
             return PureState(fock_states, coefs)
 
         logging.error(f"Addition not implemented for opperand type {type(other)}")
@@ -290,6 +287,16 @@ class PureState(State):
                     state[j] = self.amplitudes[i]
         return state
 
+    def amp_fock(self, fock: tuple[int, ...]) -> Number:
+        """Get the amplitude of a certain fock state in the basis."""
+        index = self.fock_states.index(fock)
+        return self.amplitudes[index]
+
+    def _coef_fock(self, fock: tuple[int, ...]) -> Number:
+        """Get the coefficient of a certain fock state in the basis."""
+        index = self.fock_states.index(fock)
+        return self.coefs[index]
+
     def coefs_in_basis(self) -> NDArray:
         """Provide the coefs of the state in the fock basis."""
         if self.basis is None:
@@ -326,8 +333,7 @@ class PureState(State):
                 fock_, coef_ = creation(mode_creat, fock_)
                 coef *= coef_
                 try:
-                    j = self.fock_states.index(fock_)
-                    exp += coef * (self.amplitudes[j].conjugate()).real
+                    exp += coef * (self.amp_fock(fock_).conjugate()).real
                 except ValueError:
                     continue
         return exp
@@ -361,4 +367,4 @@ class Fock(PureState):
 
     def __len__(self):
         """Number of modes in the fock state."""
-        return len(self.modes)
+        return self.modes

@@ -9,7 +9,7 @@ from scipy.linalg import expm
 from qoptcraft.operators import haar_random_unitary
 from qoptcraft.basis import hilbert_dim, get_algebra_basis
 from qoptcraft.math import gram_schmidt, mat_inner_product, mat_norm, logm_3
-from qoptcraft.evolution import photon_unitary_hamiltonian
+from qoptcraft.evolution import photon_unitary
 
 
 def toponogov(matrix: NDArray, modes: int, photons: int) -> NDArray:
@@ -34,7 +34,7 @@ def toponogov(matrix: NDArray, modes: int, photons: int) -> NDArray:
     basis_image = gram_schmidt(basis_image)
 
     scattering_init = haar_random_unitary(modes)
-    unitary = photon_unitary_hamiltonian(scattering_init, photons)  # initial guess
+    unitary = photon_unitary(scattering_init, photons, "hamiltonian")  # initial guess
 
     error: float = mat_norm(matrix - unitary)
     error_prev: float = 0

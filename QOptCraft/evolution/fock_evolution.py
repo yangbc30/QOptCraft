@@ -3,22 +3,55 @@ from numpy.typing import NDArray
 from scipy.special import factorial
 import numba
 
-from qoptcraft.basis import get_photon_basis, hilbert_dim, BasisPhoton
-from qoptcraft.math import permanent_glynn, permanent_ryser
+from qoptcraft.state import Fock, PureState
+from qoptcraft.basis import get_photon_basis, BasisPhoton
+from qoptcraft.math import permanent
 
 
-def photon_unitary_permanent(
-    scattering_matrix: NDArray, photons: int, method: str = "glynn"
-) -> NDArray:
-    """<S|phi(U)|T> = Per(U_ST) / sqrt(s1! ...sm! t1! ... tm!)"""
-    modes = scattering_matrix.shape[0]
-    dim = hilbert_dim(modes, photons)
-    unitary = np.empty((dim, dim), dtype=np.complex128)
-    photon_basis = get_photon_basis(modes, photons)
+def fock_evolution(
+    scattering_matrix: NDArray, fock_in: tuple[int, ...], method="permanent glynn"
+) -> PureState:
+    """Evolution of a single Fock state using the definition given by basic
+    quantum mechanics.
 
-    for col, fock_in in enumerate(photon_basis):
-        unitary[:, col] = fock_evolution_permanent(scattering_matrix, fock_in, method, photon_basis)
-    return unitary
+    Args:
+        scattering_matrix (NDArray): _description_
+        fock_in (Fock): _description_
+        method (str): method to calculate the evolution of the Fock state. Options are
+            'heisenberg', 'permanent glynn' or 'permanent ryser'. Default is 'permanent glynn'.
+
+    Returns:
+        PureState: _description_
+    """
+    if method == "heisenberg":
+        return fock_evolution_heisenberg(scattering_matrix, fock_in)
+    if method.split()[0] == "permanent":
+        return fock_evolution_permanent(scattering_matrix, fock_in, method=method.split()[1])
+    raise ValueError("Options for method are 'heisenberg', 'permanent glynn' or 'permanent ryser'.")
+
+
+def fock_evolution_heisenberg(scattering_matrix: NDArray, fock_in: tuple[int, ...]) -> PureState:
+    """Evolution of a single Fock state using the definition given by basic
+    quantum mechanics.
+
+    Args:
+        scattering_matrix (NDArray): _description_
+        fock_in (Fock): _description_
+
+    Returns:
+        PureState: _description_
+    """
+    modes = len(fock_in)
+
+    state_out: PureState = Fock(*([0] * modes))
+    for mode_2 in range(modes):
+        for _ in range(fock_in[mode_2]):
+            state_aux = state_out
+            state_out = scattering_matrix[0, mode_2] * state_aux.creation(0)
+            for mode_1 in range(1, modes):
+                state_out += scattering_matrix[mode_1, mode_2] * state_aux.creation(mode_1)
+    coef = np.prod(factorial(fock_in))
+    return state_out / np.sqrt(coef)
 
 
 def fock_evolution_permanent(
@@ -37,22 +70,17 @@ def fock_evolution_permanent(
     Returns:
         PureState: _description_
     """
+    if len(fock_in) != scattering_matrix.shape[0]:
+        raise ValueError("Dimension of scattering_matrix and number of modes don't match.")
     if photon_basis is None:
         photon_basis = get_photon_basis(len(fock_in), sum(fock_in))
     dim = len(photon_basis)
     state_out = np.empty(dim, dtype=np.complex128)
 
-    if method == "glynn":
-        permanent = permanent_glynn
-    elif method == "ryser":
-        permanent = permanent_ryser
-    else:
-        raise ValueError("Method argument only supports options 'glynn' and 'ryser'.")
-
     for row, fock_out in enumerate(photon_basis):
         sub_matrix = in_out_submatrix(scattering_matrix, fock_in, fock_out)
         coef = np.prod(factorial(fock_in)) * np.prod(factorial(fock_out))
-        state_out[row] = permanent(sub_matrix) / np.sqrt(coef)
+        state_out[row] = permanent(sub_matrix, method=method) / np.sqrt(coef)
     return state_out
 
 

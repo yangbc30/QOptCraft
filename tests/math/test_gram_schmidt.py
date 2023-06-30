@@ -37,8 +37,8 @@ BASIS_4 = [
 ]
 
 
-@pytest.mark.parametrize(("basis"), ((BASIS_1), (BASIS_2), (BASIS_3), (BASIS_4)))
-def gram_schmidt(basis: list[np.ndarray]) -> None:
+@pytest.mark.parametrize(("basis"), (BASIS_1, BASIS_2, BASIS_3, BASIS_4))
+def test_gram_schmidt(basis: list[np.ndarray]) -> None:
     orth_basis = gram_schmidt(basis)
 
     for matrix_1 in orth_basis:

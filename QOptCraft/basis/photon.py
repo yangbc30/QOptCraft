@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 from numpy.typing import NDArray, ArrayLike
 
-from .config import FOLDER_PATH
+from qoptcraft import config
 
 
 BasisPhoton = list[tuple[int, ...]]
@@ -21,7 +21,7 @@ def get_photon_basis(modes: int, photons: int) -> BasisPhoton:
     Returns:
         BasisPhoton: basis of the Hilbert space.
     """
-    folder_path = FOLDER_PATH / f"m={modes} n={photons}"
+    folder_path = config.SAVE_DATA_PATH / f"m={modes} n={photons}"
     folder_path.mkdir(parents=True, exist_ok=True)
     basis_path = folder_path / "photon.pkl"
     basis_path.touch()

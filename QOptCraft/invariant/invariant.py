@@ -8,7 +8,29 @@ from qoptcraft.math import mat_inner_product, mat_norm, gram_schmidt
 from qoptcraft.basis import get_algebra_basis
 
 
-def photon_invariant(state: PureState) -> float:
+def photon_invariant(state: State, method: str = "basis") -> float:
+    """Photonic invariant for a given state.
+
+    Args:
+        state (State): a photonic quantum state.
+        method (str): method to calculate the invariant. Options are 'reduced',
+            'no basis', 'basis'. Default is 'basis'.
+
+    Returns:
+        float: invariant.
+    """
+    if method == "basis":
+        return photon_invariant_basis(state)
+    if not isinstance(state, PureState):
+        raise ValueError("Non pure states only accept method basis.")
+    if method == "reduced":
+        return photon_invariant_reduced(state)
+    if method == "no basis":
+        return photon_invariant_no_basis(state)
+    raise ValueError("Options for 'method' are 'reduced', 'no basis' or 'basis'.")
+
+
+def photon_invariant_reduced(state: PureState) -> float:
     """Calculate the reduced photonic invariant for a given state without using the
     Hilbert space basis.
 
@@ -30,7 +52,7 @@ def photon_invariant(state: PureState) -> float:
     return invariant.real
 
 
-def photon_invariant_full(state: PureState) -> float:
+def photon_invariant_no_basis(state: PureState) -> float:
     """Calculate the photonic invariant for a given state without using the
     Hilbert space basis.
 
@@ -43,7 +65,7 @@ def photon_invariant_full(state: PureState) -> float:
     Returns:
         float: invariant.
     """
-    invariant = photon_invariant(state)
+    invariant = photon_invariant_reduced(state)
     modes = state.modes
     photons = state.photons
     C1 = (modes * photons + 1) * fact(modes) * fact(photons) / fact(modes + photons)

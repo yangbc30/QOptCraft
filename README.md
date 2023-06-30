@@ -29,6 +29,19 @@ pip install .
 
 ## Quick usage
 
+### Clemens decomposition
+
+
+```python
+from qoptcraft.basis import get_algebra_basis
+
+modes = 2
+photons = 3
+basis_algebra, basis_image_algebra = get_algebra_basis(modes, photons)
+```
+
+
+
 ### Basis
 
 We can get easily get the basis of the unitary algebra
@@ -60,7 +73,7 @@ in_state = Fock(1, 1, 0, 0)
 bell_state = 1 / sqrt(2) * Fock(1, 0, 1, 0) + 1 / sqrt(2) * Fock(0, 1, 0, 1)
 ```
 
-### States and invariants
+### Invariants
 
 To check if transitions between quantum states are forbidden by a linear optical transformation, we simply run
 ```python
@@ -86,6 +99,15 @@ can_transition_basis(mixed_state, bell_state)  # calls the density_matrix attrib
 ### Quantizing linear interferomenters (previously StoU)
 
 We can easily compute the unitary matrix associated with a linear interferometer S and a certain number of photons. There are four different algorithms, `photon_unitary` uses standard quantum mechanics, `photon_unitary_hamiltonian` computes the Hamiltonian of the interferometer first and the last two ones use fast algorithms for the permanent.
+
+```python
+from qoptcraft.evolution import photon_unitary_permanent
+from qoptcraft.optical_elements import beam_splitter
+
+bs = beam_splitter(angle=2, shift=0, dim=4, mode_1=1, mode_2=2)
+photonic_bs = photon_unitary_permanent(bs, photons=3, method="ryser")
+```
+
 ```python
 from qoptcraft.operators import haar_random_unitary
 from qoptcraft.evolution import (
@@ -95,12 +117,10 @@ from qoptcraft.evolution import (
 )
 
 interferometer = haar_random_unitary(modes)
-
 unitary = photon_unitary(interferometer, photons)
 unitary_from_H = photon_unitary_hamiltonian(interferometer, photons)
 unitary_glynn = photon_unitary_permanent(S, photons, method="glynn")
 unitary_ryser = photon_unitary_permanent(S, photons, method="ryser")
-
 ```
 
 ## References
