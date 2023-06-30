@@ -111,13 +111,15 @@ class PureState(State):
         self.photons: int = sum(fock_states[0])
         self.modes: int = len(fock_states[0])
 
-        sorted_inputs = sorted(zip(fock_states, coefs, strict=True), key=lambda pair: pair[0])
+        sorted_inputs = sorted(
+            zip(fock_states, coefs, strict=True), key=lambda pair: pair[0], reverse=True
+        )
         self.fock_states, coefs = zip(*sorted_inputs, strict=True)
         self.coefs = np.array(coefs)
 
         sum_coefs = np.real(self.coefs @ self.coefs.conj())
         self.amplitudes = np.array(coefs) / np.sqrt(sum_coefs)
-        self.probabilites: NDArray = self.amplitudes * self.amplitudes.conj()
+        self.probabilites: NDArray = np.abs(self.amplitudes) ** 2
 
         self.basis: tuple[tuple[int, ...]] | None = None
 
@@ -327,13 +329,13 @@ class PureState(State):
         else:
             for i, fock in enumerate(self.fock_states):
                 fock_, coef_ = annihilation(mode_annih, fock)
-                if coef_ == 0:  # not really necessary to check this
-                    continue  # since it will raise a ValueError below
+                # if coef_ == 0:  # not really necessary to check this
+                # continue  # since it will raise a ValueError below
                 coef = self.amplitudes[i] * coef_
                 fock_, coef_ = creation(mode_creat, fock_)
                 coef *= coef_
                 try:
-                    exp += coef * (self.amp_fock(fock_).conjugate()).real
+                    exp += coef * self.amp_fock(fock_).conjugate()
                 except ValueError:
                     continue
         return exp

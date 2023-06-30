@@ -8,7 +8,8 @@ from .invariant import photon_invariant_reduced, photon_invariant_no_basis, phot
 
 
 def can_transition(state_in: State, state_out: State, method: str = "basis") -> bool:
-    """Photonic invariant for a given state.
+    """Check if we cannot transition from an input state to an output state
+    through an optical network.
 
     Args:
         state_in (State): input state of the optical circuit.
@@ -52,7 +53,9 @@ def can_transition_reduced(state_in: PureState, state_out: PureState) -> bool:
     in_invariant = photon_invariant_reduced(state_in)
     out_invariant = photon_invariant_reduced(state_out)
 
-    print(f"In reduced invariant = {in_invariant} \t Out reduced invariant = {out_invariant}")
+    print(
+        f"In reduced invariant = {in_invariant:.7f} \t Out reduced invariant = {out_invariant:.7f}"
+    )
     return np.isclose(in_invariant, out_invariant)
 
 
@@ -78,7 +81,7 @@ def can_transition_no_basis(state_in: PureState, state_out: PureState) -> bool:
     in_invariant = photon_invariant_no_basis(state_in)
     out_invariant = photon_invariant_no_basis(state_out)
 
-    print(f"In full invariant = {in_invariant} \t Out full invariant = {out_invariant}")
+    print(f"In full invariant = {in_invariant:.7f} \t Out full invariant = {out_invariant:.7f}")
     return np.isclose(in_invariant, out_invariant)
 
 
