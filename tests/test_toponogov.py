@@ -4,7 +4,7 @@ from numpy.testing import assert_allclose
 import pytest
 
 from qoptcraft.operators import qft
-from qoptcraft.topogonov import toponogov
+from qoptcraft.toponogov import toponogov
 from qoptcraft.basis import hilbert_dim
 
 

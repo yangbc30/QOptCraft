@@ -118,6 +118,8 @@ class PureState(State):
         self.coefs = np.array(coefs)
 
         sum_coefs = np.sum(np.abs(self.coefs) ** 2)
+        if sum_coefs == 0:
+            print(f"{sum_coefs = }, {fock_states = }, {coefs = }")
         self.amplitudes = np.array(coefs) / np.sqrt(sum_coefs)
         self.probabilites: NDArray = np.abs(self.amplitudes) ** 2
 

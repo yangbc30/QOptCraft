@@ -34,6 +34,7 @@ pip install .
 We can decompose any unitary into beamsplitters and phase shifters:
 ```python
 from qoptcraft.optical_elements import clemens_decomposition, reck_decomposition
+from qoptcraft.operators import haar_random_unitary
 
 modes = 4
 unitary = haar_random_unitary(modes)
@@ -68,7 +69,7 @@ from math import sqrt
 
 from qoptcraft.state import Fock
 
-in_state = Fock(1, 1, 0, 0)
+in_fock = Fock(1, 1, 0, 0)
 bell_state = 1 / sqrt(2) * Fock(1, 0, 1, 0) + 1 / sqrt(2) * Fock(0, 1, 0, 1)
 ```
 
@@ -78,7 +79,7 @@ To check if transitions between quantum states are forbidden by a linear optical
 ```python
 from qoptcraft.invariant import can_transition, photon_invariant
 
-can_transition(in_state, bell_state, method="reduced")
+can_transition(in_fock, bell_state, method="reduced")
 
 >>> False
 ```
@@ -103,11 +104,13 @@ We can easily compute the unitary matrix associated with a linear interferometer
 from qoptcraft.operators import haar_random_unitary
 from qoptcraft.evolution import photon_unitary
 
+modes = 2
+photons = 3
 interferometer = haar_random_unitary(modes)
 unitary_heisenberg = photon_unitary(interferometer, photons, method="heisenberg")
 unitary_hamiltonian = photon_unitary(interferometer, photons, method="hamiltonian")
-unitary_glynn = photon_unitary(S, photons, method="permanent glynn")
-unitary_ryser = photon_unitary(S, photons, method="permanent ryser")
+unitary_glynn = photon_unitary(interferometer, photons, method="permanent glynn")
+unitary_ryser = photon_unitary(interferometer, photons, method="permanent ryser")
 ```
 
 We can apply this function to a 50:50 beamsplitter to recover the Hong-Ou-Mandel matrix
@@ -126,8 +129,10 @@ hong_ou_mandel = photon_unitary(bs_matrix, photons=3, method="heisenberg")
 from qoptcraft.operators import qft
 from qoptcraft.topogonov import topogonov
 
+modes = 3
+photons = 2
 unitary = qft(6)
-approx_unitary, error = toponogov(unitary, modes, photons)
+approx_unitary, error = topogonov(unitary, modes, photons)
 ```
 
 
