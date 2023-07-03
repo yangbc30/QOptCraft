@@ -74,7 +74,8 @@ To check if transitions between quantum states are forbidden by a linear optical
 from qoptcraft.invariant import can_transition, photon_invariant
 
 can_transition(in_fock, bell_state, method="reduced")
-
+```
+```console
 >>> False
 ```
 
@@ -86,7 +87,8 @@ from qoptcraft.invariant import can_transition, photon_invariant
 
 mixed_state = MixedState.from_mixture(pure_states=[in_fock, bell_state], probs=[0.5, 0.5])
 can_transition(mixed_state, bell_state, method="basis")
-
+```
+```console
 >>> False
 ```
 
