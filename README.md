@@ -16,15 +16,9 @@ Create and activate a new conda environment
 conda create --name test python==3.11
 conda activate test
 ```
-Then clone the optimized branch from the GitLab repository
+Install with `pip`:
 ```console
-git clone -b optimized https://github.tel.uva.es/juagar/qoptcraft.git
-```
-Finally, step inside the qoptcraft folder and do a local install
-With `pip`:
-```console
-cd qoptcraft
-pip install .
+pip install git+https://github.tel.uva.es/juagar/qoptcraft.git@optimized
 ```
 
 ## Quick usage
