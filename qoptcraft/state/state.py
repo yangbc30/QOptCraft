@@ -117,7 +117,7 @@ class PureState(State):
         self.fock_states, coefs = zip(*sorted_inputs, strict=True)
         self.coefs = np.array(coefs)
 
-        sum_coefs = np.real(self.coefs @ self.coefs.conj())
+        sum_coefs = np.sum(np.abs(self.coefs) ** 2)
         self.amplitudes = np.array(coefs) / np.sqrt(sum_coefs)
         self.probabilites: NDArray = np.abs(self.amplitudes) ** 2
 
