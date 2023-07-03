@@ -15,7 +15,7 @@ from ..math.logarithms import logm_1, logm_2, logm_3, logm_4, logm_5
 # from .entanglement._6_basis_manipulations import *
 # from .entanglement._6_schmidt import *
 # from ..evolution import StoU
-from ..topogonov import topogonov
+from ..toponogov import toponogov
 from ..operators.quasiunitary.builder import QuasiU
 
 
