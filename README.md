@@ -16,6 +16,11 @@ Create and activate a new conda environment
 conda create --name test python==3.11
 conda activate test
 ```
+Clone the repository
+```console
+git clone -b optimized https://github.tel.uva.es/juagar/qoptcraft.git
+```
+
 Install with `pip`:
 ```console
 pip install git+https://github.tel.uva.es/juagar/qoptcraft.git@optimized
