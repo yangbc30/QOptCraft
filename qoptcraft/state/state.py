@@ -8,6 +8,7 @@ from numbers import Number
 
 import numpy as np
 from numpy.typing import NDArray, ArrayLike
+import scipy
 
 from qoptcraft.basis import get_photon_basis
 from qoptcraft.operators import creation, annihilation
@@ -42,11 +43,17 @@ class MixedState(State):
 
     def __init__(
         self,
-        density_matrix: NDArray,
+        density_matrix: NDArray | scipy.sparse.spmatrix,
         modes: int,
         photons: int,
     ) -> None:
-        if not np.allclose(density_matrix, density_matrix.conj().T):
+        def is_hermitian(density_matrix, rtol: float = 1e-5, atol: float = 1e-8):
+            """Reimplement numpy isclose for spare matrices"""
+            mat_1 = density_matrix
+            mat_2 = density_matrix.conj().T
+            return abs(mat_1 - mat_2).max() <= atol + rtol * abs(mat_2).max()
+
+        if not is_hermitian(density_matrix):
             raise NotHermitianError()
         self.density_matrix = density_matrix
         self.photons = photons
@@ -114,13 +121,15 @@ class PureState(State):
         sorted_inputs = sorted(
             zip(fock_states, coefs, strict=True), key=lambda pair: pair[0], reverse=True
         )
+        # sorted_inputs = [pair for pair in sorted_inputs if not np.isclose(pair[1], 0)]
         self.fock_states, coefs = zip(*sorted_inputs, strict=True)
         self.coefs = np.array(coefs)
 
         sum_coefs = np.sum(np.abs(self.coefs) ** 2)
         if sum_coefs == 0:
-            print(f"{sum_coefs = }, {fock_states = }, {coefs = }")
-        self.amplitudes = np.array(coefs) / np.sqrt(sum_coefs)
+            self.amplitudes = self.coefs
+        else:
+            self.amplitudes = np.array(coefs) / np.sqrt(sum_coefs)
         self.probabilites: NDArray = np.abs(self.amplitudes) ** 2
 
         self.basis: tuple[tuple[int, ...]] | None = None
@@ -139,6 +148,11 @@ class PureState(State):
             NumberModesError: Not all states have the same number of modes.
             ProbabilityError: Probabilities don't add up to 1.
         """
+        for fock in fock_states:
+            for i in fock:
+                if i < 0:
+                    raise ValueError(f"Invalid fock state {fock}")
+
         photons_list = [sum(fock_state) for fock_state in fock_states]
         if not all(photons == photons_list[0] for photons in photons_list):
             raise NumberPhotonsError()
@@ -161,6 +175,47 @@ class PureState(State):
     def __repr__(self) -> str:
         """Representation of the state."""
         return str(self)
+
+    def __eq__(self, other: PureState) -> bool:
+        """Compare if two pure states are equal."""
+        if isinstance(other, PureState):
+            if self.photons != other.photons or self.modes != other.modes:
+                return False
+            if self.fock_states != other.fock_states:
+                fock_diff = set(self.fock_states).symmetric_difference(other.fock_states)
+                print(f"Unequal fock states. Difference in fock states = {fock_diff}.")
+                return False
+            if not np.allclose(self.amplitudes, other.amplitudes):
+                print("Amplitudes differ")
+                return False
+            return True
+        return False
+
+    def isclose(self, other: PureState, atol: float = 1e-3, rtol=1e-05) -> bool:
+        """Compare if two pure states are equal."""
+        if isinstance(other, PureState):
+            if self.photons != other.photons or self.modes != other.modes:
+                return False
+            fock_states = list(set(self.fock_states) | set(other.fock_states))
+            for fock in fock_states:
+                try:
+                    coef_self = np.abs(self._coef_fock(fock))
+                    try:
+                        coef_other = np.abs(other._coef_fock(fock))
+                        if not np.isclose(coef_self, coef_other, atol=atol, rtol=rtol):
+                            print(f"{fock = }, {coef_self = }, {coef_other = }")
+                            return False
+                    except ValueError:
+                        if not np.isclose(coef_self, 0, atol=atol, rtol=rtol):
+                            print(f"{fock = }, {coef_self = }, coef_other = 0")
+                            return False
+                except ValueError:
+                    coef_other = np.abs(other._coef_fock(fock))
+                    if not np.isclose(coef_other, 0, atol=atol, rtol=rtol):
+                        print(f"{fock = }, coef_self = 0, {coef_other = }")
+                        return False
+            return True
+        raise ValueError("other is not PureState")
 
     def __add__(self, other: PureState) -> Self:
         """Tensor product of self with other state."""
@@ -260,18 +315,6 @@ class PureState(State):
             state = state * self
         return state
 
-    def __eq__(self, other: PureState) -> bool:
-        """Compare if two pure states are equal."""
-        if isinstance(other, PureState):
-            if self.photons != other.photons or self.modes != other.modes:
-                return False
-            if self.fock_states != other.fock_states:
-                return False
-            if not np.allclose(self.amplitudes, other.amplitudes):
-                return False
-            return True
-        return False
-
     @property
     def density_matrix(self):
         """Density matrix of the pure state in a certain basis."""
@@ -332,7 +375,7 @@ class PureState(State):
             for i, fock in enumerate(self.fock_states):
                 fock_, coef_ = annihilation(mode_annih, fock)
                 # if coef_ == 0:  # not really necessary to check this
-                # continue  # since it will raise a ValueError below
+                ##### continue  # since it will raise a ValueError below
                 coef = self.amplitudes[i] * coef_
                 fock_, coef_ = creation(mode_creat, fock_)
                 coef *= coef_

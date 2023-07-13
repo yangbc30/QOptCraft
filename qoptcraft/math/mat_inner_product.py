@@ -11,7 +11,7 @@ from scipy.sparse import spmatrix
 Matrix = NDArray | spmatrix
 
 
-def mat_inner_product(matrix_1: Matrix, matrix_2: Matrix) -> Number:
+def hs_inner_product(matrix_1: Matrix, matrix_2: Matrix) -> Number:
     """Hilbert-Schmidt product of two matrices.
 
     Args:
@@ -24,16 +24,30 @@ def mat_inner_product(matrix_1: Matrix, matrix_2: Matrix) -> Number:
     Returns:
         Number: scalar value of the product.
     """
-    if isinstance(matrix_1, spmatrix):
-        matrix_1 = matrix_1.toarray()
-    if isinstance(matrix_2, spmatrix):
-        matrix_2 = matrix_2.toarray()
-    res = matrix_1.conj().T @ matrix_2 + matrix_2.conj().T @ matrix_1
-    assert not np.isnan(res.trace()), f"Nan trace. {matrix_1 = }\n\n {matrix_2 = }"
-    return 0.5 * res.trace()
+    result = (matrix_1.conj().T @ matrix_2).trace()
+    # assert not np.isnan(result), "Matrix inner product is not a number."
+    return result
 
 
-def mat_norm(matrix: Matrix) -> float:
+def hs_scalar_product(matrix_1: Matrix, matrix_2: Matrix) -> Number:
+    """Hilbert-Schmidt product of two matrices.
+
+    Args:
+        matrix_1 (Matrix): first matrix
+        matrix_2 (Matrix): second matrix
+
+    Raises:
+        ValueError: Matrix type is not array or scipy sparse.
+
+    Returns:
+        Number: scalar value of the product.
+    """
+    result = 0.5 * (matrix_1.conj().T @ matrix_2 + matrix_2.conj().T @ matrix_1).trace()
+    # assert not np.isnan(result), "Matrix inner product is not a number."
+    return result
+
+
+def hs_norm(matrix: Matrix) -> float:
     """Hilbert-Schmidt norm of a matrix
 
     Args:
@@ -42,4 +56,4 @@ def mat_norm(matrix: Matrix) -> float:
     Returns:
         Number: _description_
     """
-    return np.sqrt(np.real(mat_inner_product(matrix, matrix)))
+    return np.sqrt(np.real(hs_inner_product(matrix, matrix)))

@@ -31,7 +31,7 @@ def get_photon_basis(modes: int, photons: int) -> BasisPhoton:
         basis = photon_basis(modes, photons)
         with basis_path.open("wb") as f:
             pickle.dump(basis, f)
-        print(f"Basis saved in {basis_path}.")
+        print(f"Photon basis saved in {basis_path}.")
 
     return basis
 

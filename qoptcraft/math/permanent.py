@@ -1,3 +1,4 @@
+from typing import Literal
 from numbers import Number
 
 import numpy as np
@@ -5,7 +6,7 @@ from numpy.typing import NDArray
 import numba
 
 
-def permanent(matrix: NDArray, method: str = "glynn") -> Number:
+def permanent(matrix: NDArray, method: Literal["glynn", "ryser"] = "glynn") -> Number:
     """Returns the permanent of a matrix using the Ryser formula in Gray ordering.
 
     Args:

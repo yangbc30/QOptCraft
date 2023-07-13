@@ -16,13 +16,13 @@ import numpy as np
 from scipy.linalg import block_diag
 
 
-from qoptcraft.math import mat_inner_product
+from qoptcraft.math import hs_scalar_product
 
 
 def comparison(U, V, name1, name2, acc_d):
     print(f"\nWe will compare the matrices {name1} and {name2}:")
 
-    prod = mat_inner_product(U - V, U - V)
+    prod = hs_scalar_product(U - V, U - V)
 
     print(f"\nThe inner product of the rest between matrices is: {prod}")
 

@@ -128,16 +128,16 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
         exp_5A = expm(logm_5A)
 
         # We compare logm(A) with logm_3/4/5(A). Normally, they should not be equivalent
-        inner_prod_1 = mat_norm(exp_1A - A)
-        inner_prod_2 = mat_norm(exp_2A - A)
-        inner_prod_3 = mat_norm(exp_3A - A)
-        inner_prod_4 = mat_norm(exp_4A - A)
-        inner_prod_5 = mat_norm(exp_5A - A)
+        inner_prod_1 = hs_norm(exp_1A - A)
+        inner_prod_2 = hs_norm(exp_2A - A)
+        inner_prod_3 = hs_norm(exp_3A - A)
+        inner_prod_4 = hs_norm(exp_4A - A)
+        inner_prod_5 = hs_norm(exp_5A - A)
 
         # MICROSOFT EXCEL COMPATIBILITY
         if exp == 1:
             # Deviation from unitarity
-            dev = mat_norm(np.transpose(np.conj(A)).dot(A) - np.identity(i))
+            dev = hs_norm(np.transpose(np.conj(A)).dot(A) - np.identity(i))
 
             scores_time = {
                 "N": f"{i}",
@@ -160,7 +160,7 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
 
         else:
             # Deviation from unitarity
-            dev = mat_norm(np.transpose(np.conj(A)).dot(A) - np.identity(np.power(2, i)))
+            dev = hs_norm(np.transpose(np.conj(A)).dot(A) - np.identity(np.power(2, i)))
 
             scores_time = {
                 "N": f"{np.power(2,i)}",

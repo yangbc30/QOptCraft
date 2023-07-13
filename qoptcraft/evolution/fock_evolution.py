@@ -1,3 +1,5 @@
+from typing import Literal
+
 import numpy as np
 from numpy.typing import NDArray
 from scipy.special import factorial
@@ -9,7 +11,9 @@ from qoptcraft.math import permanent
 
 
 def fock_evolution(
-    scattering_matrix: NDArray, fock_in: tuple[int, ...], method="permanent glynn"
+    scattering_matrix: NDArray,
+    fock_in: tuple[int, ...],
+    method: Literal["heisenberg", "permanent glynn", "permanent ryser"] = "permanent glynn",
 ) -> PureState:
     """Evolution of a single Fock state using the definition given by basic
     quantum mechanics.

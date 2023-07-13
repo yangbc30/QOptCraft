@@ -1,13 +1,17 @@
 """Check if a transition violates the necessary criterion
 of the invariant conservation.
 """
+from typing import Literal
+
 import numpy as np
 
 from qoptcraft.state import State, PureState
 from .invariant import photon_invariant_reduced, photon_invariant_no_basis, photon_invariant_basis
 
 
-def can_transition(state_in: State, state_out: State, method: str = "basis") -> bool:
+def can_transition(
+    state_in: State, state_out: State, method: Literal["reduced", "no basis", "basis"] = "basis"
+) -> bool:
     """Check if we cannot transition from an input state to an output state
     through an optical network.
 

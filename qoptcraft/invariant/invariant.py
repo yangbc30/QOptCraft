@@ -4,7 +4,7 @@ import numpy as np
 from scipy.special import factorial as fact
 
 from qoptcraft.state import State, PureState
-from qoptcraft.math import mat_inner_product, mat_norm, gram_schmidt
+from qoptcraft.math import hs_scalar_product, hs_norm, gram_schmidt_generator
 from qoptcraft.basis import get_algebra_basis
 
 
@@ -87,10 +87,9 @@ def photon_invariant_basis(state: State) -> tuple[float, float]:
         tuple[float, float]: tangent and orthogonal invariants.
     """
     basis_img_algebra = get_algebra_basis(state.modes, state.photons)[1]
-    orthonormal_basis = gram_schmidt(basis_img_algebra)
     coefs = []
-    for basis_matrix in orthonormal_basis:
-        coefs.append(mat_inner_product(1j * state.density_matrix, basis_matrix))
+    for basis_matrix in gram_schmidt_generator(basis_img_algebra):
+        coefs.append(hs_scalar_product(1j * state.density_matrix, basis_matrix))
     tangent = sum(np.abs(coefs) ** 2)
-    orthogonal = mat_norm(state.density_matrix) ** 2 - tangent
+    orthogonal = hs_norm(state.density_matrix) ** 2 - tangent
     return tangent, orthogonal

@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from numpy.testing import assert_almost_equal
 
-from qoptcraft.math import gram_schmidt, mat_inner_product
+from qoptcraft.math import gram_schmidt, hs_scalar_product
 
 
 BASIS_1 = [
@@ -44,6 +44,6 @@ def test_gram_schmidt(basis: list[np.ndarray]) -> None:
     for matrix_1 in orth_basis:
         for matrix_2 in orth_basis:
             if (matrix_1 == matrix_2).all():
-                assert_almost_equal(mat_inner_product(matrix_1, matrix_2), 1)
+                assert_almost_equal(hs_scalar_product(matrix_1, matrix_2), 1)
             else:
-                assert_almost_equal(mat_inner_product(matrix_1, matrix_2), 0)
+                assert_almost_equal(hs_scalar_product(matrix_1, matrix_2), 0)

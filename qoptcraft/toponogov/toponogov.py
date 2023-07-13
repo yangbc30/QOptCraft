@@ -8,7 +8,7 @@ from scipy.linalg import expm
 
 from qoptcraft.operators import haar_random_unitary
 from qoptcraft.basis import hilbert_dim, get_algebra_basis
-from qoptcraft.math import gram_schmidt, mat_inner_product, mat_norm, logm_3
+from qoptcraft.math import gram_schmidt, hs_scalar_product, hs_norm, logm_3
 from qoptcraft.evolution import photon_unitary
 
 
@@ -36,7 +36,7 @@ def toponogov(matrix: NDArray, modes: int, photons: int, seed: int = None) -> tu
     scattering_init = haar_random_unitary(modes, seed=seed)
     unitary = photon_unitary(scattering_init, photons, "hamiltonian")  # initial guess
 
-    error: float = mat_norm(matrix - unitary)
+    error: float = hs_norm(matrix - unitary)
     error_prev: float = 0
 
     while np.abs(error - error_prev) > 1e-8:
@@ -45,11 +45,11 @@ def toponogov(matrix: NDArray, modes: int, photons: int, seed: int = None) -> tu
 
         log_projected = np.zeros_like(unitary)  # Initialize to 0
         for basis_matrix in basis_image:
-            coef = mat_inner_product(log_unitary, basis_matrix)
+            coef = hs_scalar_product(log_unitary, basis_matrix)
             log_projected += coef * basis_matrix
 
         unitary = unitary.dot(expm(log_projected))
 
         error_prev = error
-        error = mat_norm(matrix - unitary)
+        error = hs_norm(matrix - unitary)
     return unitary, error

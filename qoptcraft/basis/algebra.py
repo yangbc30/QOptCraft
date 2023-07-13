@@ -1,7 +1,8 @@
 import pickle
 import warnings
 
-from scipy.sparse import spmatrix, csr_matrix, lil_matrix
+import numpy as np
+from scipy.sparse import spmatrix, lil_matrix
 
 from .photon import get_photon_basis, BasisPhoton
 from qoptcraft.operators import creation, annihilation
@@ -50,7 +51,7 @@ def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlge
             pickle.dump(basis, f)
         with basis_image_path.open("wb") as f:
             pickle.dump(basis_image, f)
-        print(f"Basis saved in {folder_path}")
+        print(f"Algebra basis saved in {folder_path}")
 
     return basis, basis_image
 
@@ -79,7 +80,7 @@ def algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]
 
 def sym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
     """Create the element of the algebra i/2(|j><k| + |k><j|)."""
-    matrix = csr_matrix((dim, dim), dtype="complex64")
+    matrix = np.zeros((dim, dim), dtype=np.complex128)
     matrix[mode_1, mode_2] = 0.5j
     matrix[mode_2, mode_1] += 0.5j
     return matrix
@@ -87,17 +88,16 @@ def sym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
 
 def antisym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
     """Create the element of the algebra 1/2(|j><k| - |k><j|)."""
-    matrix = csr_matrix((dim, dim), dtype="complex64")
+    matrix = np.zeros((dim, dim), dtype=np.complex128)
     matrix[mode_1, mode_2] = 0.5
     matrix[mode_2, mode_1] = -0.5
-
     return matrix
 
 
 def image_sym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spmatrix:
     """Image of the symmetric basis matrix by the lie algebra homomorphism."""
     dim = len(photon_basis)
-    matrix = lil_matrix((dim, dim), dtype="complex64")  # * efficient format for loading data
+    matrix = lil_matrix((dim, dim), dtype=np.complex128)  # * efficient format for loading data
 
     for col, fock_ in enumerate(photon_basis):
         if fock_[mode_1] != 0:
@@ -116,7 +116,7 @@ def image_sym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spm
 def image_antisym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spmatrix:
     """Image of the antisymmetric basis matrix by the lie algebra homomorphism."""
     dim = len(photon_basis)
-    matrix = lil_matrix((dim, dim), dtype="complex64")
+    matrix = lil_matrix((dim, dim), dtype=np.complex128)
 
     for col, fock_ in enumerate(photon_basis):
         if fock_[mode_1] != 0:

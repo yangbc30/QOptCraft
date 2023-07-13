@@ -32,7 +32,7 @@ def clemens_decomposition(unitary: NDArray) -> tuple[list[NDArray], NDArray, lis
     dim = unitary.shape[0]
 
     right_list = []
-    lelft_list = []
+    left_list = []
 
     for i in range(1, dim):
         if (i % 2) == 1:
@@ -60,13 +60,13 @@ def clemens_decomposition(unitary: NDArray) -> tuple[list[NDArray], NDArray, lis
                 angle, shift = _solve_angles(unitary, mode_1, mode_2, row, col, is_odd=False)
                 left = beam_splitter(angle, shift, dim, mode_1, mode_2, convention="clemens")
                 unitary = left @ unitary
-                lelft_list.append(left.conj().T)
+                left_list.append(left.conj().T)
     diag = unitary
 
     right_list.reverse()  # save as [R_n, ..., R_1]
-    # Lelft_list = [L_1.inv, ... L_n.inv]
+    # left_list = [L_1.inv, ... L_n.inv]
 
-    return lelft_list, diag, right_list
+    return left_list, diag, right_list
 
 
 def _solve_angles(

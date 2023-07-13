@@ -20,7 +20,7 @@ import numpy as np
 def comparison(U, V, name1, name2, acc_d):
     print(f"\nWe will compare the matrices {name1} and {name2}:")
 
-    prod = mat_inner_product(U - V, U - V)
+    prod = hs_scalar_product(U - V, U - V)
 
     print(f"\nThe inner product of the rest between matrices is: {prod}")
 
@@ -34,7 +34,7 @@ def comparison(U, V, name1, name2, acc_d):
 # We modify too the comparison() function so it doesn't print text onscreen.
 # For multiple comparisons it is more convenient (see main algorithm 2a)
 def comparison_noprint(U, V):
-    prod = mat_inner_product(U - V, U - V)
+    prod = hs_scalar_product(U - V, U - V)
 
     # 22 decimal accuracy upon computing the inner product, it can be modified
     return np.round(prod, 22) == 0

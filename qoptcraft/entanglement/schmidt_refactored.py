@@ -1,5 +1,5 @@
-"""Calculate Schmidt rank.
-
+"""Measurement via computing the Schmidt rank of Fock states vectors after
+passing a quantum through a given linear optics circuit (StateSchmidt()).
 Note:
     The refactoring of this module is a work in progress.
 

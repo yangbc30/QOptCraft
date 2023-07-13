@@ -1,3 +1,5 @@
+from typing import Literal
+
 import numpy as np
 from numpy.typing import NDArray
 import scipy as sp
@@ -8,7 +10,13 @@ from .photon_hamiltonian import photon_hamiltonian
 from .fock_evolution import fock_evolution_heisenberg, fock_evolution_permanent
 
 
-def photon_unitary(scattering_matrix: NDArray, photons: int, method="permanent glynn") -> NDArray:
+def photon_unitary(
+    scattering_matrix: NDArray,
+    photons: int,
+    method: Literal[
+        "heisenberg", "hamiltonian", "permanent glynn", "permanent ryser"
+    ] = "permanent glynn",
+) -> NDArray:
     """Unitary matrix of a linear interferometer with a number of photons as input.
 
     Args:
