@@ -21,9 +21,7 @@ def reck_decomposition(unitary: NDArray) -> tuple[NDArray, list[NDArray]]:
         list[NDArray]: list of matrices that decompose U in the order of the decomposition
 
     References:
-        The algorithm can be found in [1]_.
-
-        .. [1] Reck et al., "Experimental realization of any discrete unitary operator"
+        [1] Reck et al., "Experimental realization of any discrete unitary operator"
             Phys. Rev. Lett. 73, 58, 1994. https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.73.58
     """
 

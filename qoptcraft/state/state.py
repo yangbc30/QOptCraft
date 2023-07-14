@@ -248,9 +248,11 @@ class PureState(State):
         return self + other
 
     def __iadd__(self, other: PureState) -> Self:
+        """Inplace addition of states."""
         return self + other
 
     def __sub__(self, other: PureState) -> Self:
+        """Substraction of states."""
         if isinstance(other, PureState):
             if self.photons != other.photons:
                 raise NumberPhotonsError()
@@ -265,6 +267,7 @@ class PureState(State):
         return self
 
     def __isub__(self, other: PureState) -> Self:
+        """Inplace substraction of states."""
         return self - other
 
     def __mul__(self, other: PureState | Number) -> Self:
@@ -385,7 +388,15 @@ class PureState(State):
                     continue
         return exp
 
-    def creation(self, mode: int) -> Self:
+    def creation(self, mode: int) -> PureState:
+        """Creation of a photon in a certain mode.
+
+        Args:
+            mode (int): mode in which to create.
+
+        Returns:
+            PureState: created state.
+        """
         state = 0
         for fock, coef in zip(self.fock_states, self.coefs, strict=True):
             fock_created, coef_creat = creation(mode, fock)
@@ -393,6 +404,14 @@ class PureState(State):
         return state
 
     def annihilation(self, mode: int) -> Self:
+        """Annihilation of a photon in a certain mode.
+
+        Args:
+            mode (int): mode in which to annihilate.
+
+        Returns:
+            PureState: created state.
+        """
         state = 0
         for fock, coef in zip(self.fock_states, self.coefs, strict=True):
             fock_annih, coef_annih = annihilation(mode, fock)
@@ -410,6 +429,7 @@ class Fock(PureState):
         return f"{self.fock_states[0]}"
 
     def __iter__(self):
+        """Iterate the photons of the Fock state."""
         yield from self.fock_states[0]
 
     def __len__(self):

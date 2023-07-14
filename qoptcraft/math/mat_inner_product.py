@@ -51,9 +51,9 @@ def hs_norm(matrix: Matrix) -> float:
     """Hilbert-Schmidt norm of a matrix
 
     Args:
-        matrix (Matrix): _description_
+        matrix (Matrix): a matrix.
 
     Returns:
-        Number: _description_
+        Number: the norm.
     """
     return np.sqrt(np.real(hs_inner_product(matrix, matrix)))

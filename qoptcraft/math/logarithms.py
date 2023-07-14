@@ -1,95 +1,118 @@
 """Logarithms of matrices.
 
-Todo:
-    Reference papers of each logarithm.
-
+References:
+    Algorithms can be found in
+        T.A. Loring, Numer. Linear Algebra Appl. 21 (6) (2014) 744-760.
+        https://arxiv.org/abs/1203.6151
 """
+from typing import Literal
+
 import numpy as np
 from numpy.linalg import inv
 from numpy.typing import NDArray
 from scipy.linalg import logm, schur, sqrtm
 
 
-def logm_1(matrix: NDArray) -> NDArray:
-    """Logarithm of matrix.
+def log_matrix(
+    matrix: NDArray,
+    method: Literal[
+        "diagonalization", "symmetrized", "schur", "polar", "newton"
+    ] = "diagonalization",
+) -> NDArray:
+    """Logarithm of matrix via symmetrized diagonalization.
 
     Args:
         matrix (NDArray): square matrix.
 
     Returns:
-        NDArray: logarithm.
+        NDArray: matrix logarithm.
     """
-    dim = len(matrix)
+    if method == "diagonalization":
+        return log_matrix_diag(matrix)
+    if method == "symmetrized":
+        return log_matrix_sym(matrix)
+    if method == "schur":
+        return log_matrix_schur(matrix)
+    if method == "polar":
+        return log_matrix_polar_schur(matrix)
+    if method == "newton":
+        return log_matrix_newton_schur(matrix)
+    raise ValueError(
+        "Values for method are 'diagonalization', 'symmetrized', 'schur', 'polar' or 'newton'."
+    )
+
+
+def log_matrix_diag(matrix: NDArray) -> NDArray:
+    """Logarithm of matrix via symmetrized diagonalization.
+
+    Args:
+        matrix (NDArray): square matrix.
+
+    Returns:
+        NDArray: matrix logarithm.
+    """
     eigenvalues, eigenvectors = np.linalg.eig(matrix)
-    diagonal = np.zeros((dim, dim), dtype=complex)
-    for i in range(dim):
-        diagonal[i, i] = eigenvalues[i] / np.abs(eigenvalues[i])
-    H = eigenvectors.dot(logm(diagonal).dot(np.linalg.inv(eigenvectors)))
-    return 0.5 * (H + np.transpose(np.conj(H)))
+    diagonal = eigenvalues / np.abs(eigenvalues)
+    log_matrix = eigenvectors @ np.diag(logm(diagonal)) @ inv(eigenvectors)
+    return (log_matrix + log_matrix.conj().T) / 2
 
 
-def logm_2(matrix: NDArray) -> NDArray:
-    """Logarithm of matrix.
+def log_matrix_sym(matrix: NDArray) -> NDArray:
+    """Symmetrized logarithm of matrix.
 
     Args:
         matrix (NDArray): square matrix.
 
     Returns:
-        NDArray: logarithm.
+        NDArray: matrix logarithm.
     """
-    return 0.5 * (logm(matrix) + np.transpose(np.conj(logm(matrix))))
+    log_matrix = logm(matrix)
+    return (log_matrix + log_matrix.conj().T) / 2
 
 
-def logm_3(matrix: NDArray) -> NDArray:
-    """Logarithm of matrix using Schur's decomposition.
+def log_matrix_schur(matrix: NDArray) -> NDArray:
+    """Logarithm of matrix using Schur's decomposition. Used to diagonalize
+    nearly unitary matrices.
 
     Args:
         matrix (NDArray): square matrix.
 
     Returns:
-        NDArray: logarithm.
+        NDArray: matrix logarithm.
     """
     U, Q = schur(matrix)
-    dim = len(matrix)
-    D = np.zeros((dim, dim), dtype=complex)
-    for i in range(dim):
-        D[i, i] = U[i, i] / abs(U[i, i])
-    log = Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
-    return log
+    diag = np.diag(U) / np.abs(np.diag(U))
+    return Q @ logm(diag) @ Q.conj().T
 
 
-def logm_4(matrix: NDArray) -> NDArray:
-    """Logarithm of matrix using Schur's decomposition.
+def log_matrix_polar_schur(matrix: NDArray) -> NDArray:
+    """Logarithm of matrix using Polar and Schur's decomposition. Used to
+    diagonalize nearly unitary matrices.
 
     Args:
         matrix (NDArray): square matrix.
 
     Returns:
-        NDArray: logarithm.
+        NDArray: matrix logarithm.
     """
-    V = matrix.dot(inv(sqrtm(np.transpose(np.conj(matrix)).dot(matrix))))
+    V = matrix @ inv(sqrtm(matrix.conj().T @ matrix))  # TODO: use SVD
     U, Q = schur(V)
-    dim = len(matrix)
-    D = np.zeros((dim, dim), dtype=complex)
-    for i in range(dim):
-        D[i, i] = U[i, i] / abs(U[i, i])
-    return Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
+    diag = np.diag(U) / np.abs(np.diag(U))
+    return Q @ logm(diag) @ Q.conj().T
 
 
-def logm_5(matrix: NDArray) -> NDArray:
-    """Logarithm of matrix using Schur's decomposition.
+def log_matrix_newton_schur(matrix: NDArray) -> NDArray:
+    """Logarithm of matrix using Schur's decomposition. Used to diagonalize
+    nearly unitary matrices.
 
     Args:
         matrix (NDArray): square matrix.
 
     Returns:
-        NDArray: logarithm.
+        NDArray: matrix logarithm.
     """
-    V1 = (matrix + np.transpose(np.conj(inv(matrix)))) / 2.0
-    V = (V1 + np.transpose(np.conj(inv(V1)))) / 2.0
+    V1 = (matrix + inv(matrix).conj().T) / 2
+    V = (V1 + inv(V1).conj().T) / 2
     U, Q = schur(V)
-    dim = len(matrix)
-    D = np.zeros((dim, dim), dtype=complex)
-    for i in range(dim):
-        D[i, i] = U[i, i] / abs(U[i, i])
-    return Q.dot(logm(D).dot(np.transpose(np.conj(Q))))
+    diag = np.diag(U) / np.abs(np.diag(U))
+    return Q @ logm(diag) @ Q.conj().T

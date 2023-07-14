@@ -5,7 +5,7 @@ from numpy.typing import NDArray
 import scipy as sp
 
 from qoptcraft.basis import get_photon_basis, hilbert_dim
-from qoptcraft.math import logm_3
+from qoptcraft.math import log_matrix
 from .photon_hamiltonian import photon_hamiltonian
 from .fock_evolution import fock_evolution_heisenberg, fock_evolution_permanent
 
@@ -75,7 +75,7 @@ def photon_unitary_hamiltonian(scattering_matrix: NDArray, photons: int) -> NDAr
     Returns:
         NDArray: _description_
     """
-    S_hamiltonian = logm_3(scattering_matrix)
+    S_hamiltonian = log_matrix(scattering_matrix, method="schur")  # ? Best method??
     U_hamiltonian = photon_hamiltonian(S_hamiltonian, photons)
     return sp.linalg.expm(U_hamiltonian)
 

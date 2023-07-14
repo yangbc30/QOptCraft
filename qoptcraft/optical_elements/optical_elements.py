@@ -16,8 +16,6 @@ def phase_shifter(shift: float, dim: int, mode: int) -> NDArray:
         ndarray: the matrix of the phase shifter.
 
     References:
-        The matrix can be found in [1].
-
         [1] Clements et al., "An Optimal Design for Universal Multiport
             Interferometers" arXiv, 2007. https://arxiv.org/pdf/1603.08788.pdf
     """

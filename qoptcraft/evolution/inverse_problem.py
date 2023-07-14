@@ -18,14 +18,14 @@ def scattering_from_unitary(unitary: NDArray, modes: int, photons: int) -> NDArr
     of PRA 100, 022301 (2019).
 
     Args:
-        unitary (NDArray): _description_
-        modes (int): _description_
-        photons (int): _description_
+        unitary (NDArray): unitary matrix.
+        modes (int): number of modes in the optical system.
+        photons (int): number of photons.
 
     Returns:
-        NDArray: _description_
+        NDArray: optical scattering matrix that maps to the given unitary.
     """
-    coefs = _inverse_equations(unitary, modes, photons)
+    coefs = _solution_coefs(unitary, modes, photons)
     basis, _ = get_algebra_basis(modes, photons)
 
     basis_array = np.array(basis)
@@ -71,34 +71,38 @@ def scattering_from_unitary(unitary: NDArray, modes: int, photons: int) -> NDArr
     return scattering
 
 
-def _inverse_equations(unitary: NDArray, modes: int, photons: int) -> NDArray:
-    """_summary_
-
-    Args:
-        unitary (NDArray): _description_
-        modes (int): _description_
-        photons (int): _description_
+def _solution_coefs(unitary: NDArray, modes: int, photons: int) -> NDArray:
+    """Coefficients that solve the system of equations that the unitary must satisfy.
 
     Returns:
-        NDArray: _description_
+        NDArray: matrix with the coefficients that solve the system.
     """
     _, basis_image = get_algebra_basis(modes, photons)
     sol_coefs = []
     for basis_matrix in basis_image:
-        eq_matrix = _equation_adjoint(modes, basis_image)
+        eq_matrix = _equation_matrix(modes, basis_image)
         eq_matrix_sym = sympy.Matrix(eq_matrix).T
         reduced_matrix, pivots = eq_matrix_sym.rref()  # reduced row echelon form
         if len(pivots) > modes**2:
             raise InconsistentEquations(len(pivots), modes**2)
         else:
-            # Linear independent equations
+            # If linear independent equations
             indep_term = adjoint_evol(basis_matrix, unitary).ravel()
             solution = np.linalg.solve(eq_matrix[pivots, :], indep_term[pivots, ...])
             sol_coefs.append(solution)
     return np.vstack(sol_coefs, dtype=np.complex128)  # array with sol_coefs elements as rows
 
 
-def _equation_adjoint(modes: int, basis_image: BasisAlgebra) -> NDArray:
+def _equation_matrix(modes: int, basis_image: BasisAlgebra) -> NDArray:
+    """Matrix of the system of equations.
+
+    Args:
+        modes (int): number of modes in the optical system.
+        basis_image (BasisAlgebra): basis of the image algebra.
+
+    Returns:
+        NDArray: matrix of the system of equations.
+    """
     dim = basis_image[0].shape[0]
     eq_matrix = np.empty((dim**2, modes**2), dtype=np.complex128)
     for k in range(dim):

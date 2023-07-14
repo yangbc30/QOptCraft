@@ -22,10 +22,8 @@ def clemens_decomposition(unitary: NDArray) -> tuple[list[NDArray], NDArray, lis
         list[NDArray]: list of matrices that decompose U in the order of the decomposition
 
     References:
-        The algorithm can be found in [1]_.
-
-    .. [1] Clements et al., "An Optimal Design for Universal Multiport
-        Interferometers" arXiv, 2007. https://arxiv.org/pdf/1603.08788.pdf
+        [1] Clements et al., "An Optimal Design for Universal Multiport
+            Interferometers" arXiv, 2007. https://arxiv.org/pdf/1603.08788.pdf
     """
 
     assert unitary.shape[0] == unitary.shape[1], "The matrix is not square"
