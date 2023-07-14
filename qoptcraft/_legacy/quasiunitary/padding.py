@@ -44,10 +44,13 @@ def matrix_padding_TmnList(M, TmnList, OGdimM, maxDim):
     return TmnListExp
 
 
-# Creates the matrix version of the 1D-array containing D's diagonal values
 def SVD_diagonal_adjusting(M, maxDim):
-    D = np.zeros((maxDim, maxDim), dtype=complex)
+    return np.append((M, [1] * (maxDim - len(M))))
 
+
+# Creates the matrix version of the 1D-array containing D's diagonal values
+def SVD_diagonal_adjusting_alt(M, maxDim):
+    D = np.zeros((maxDim, maxDim), dtype=complex)
     for i in range(0, len(M)):
         D[i, i] = M[i]
 

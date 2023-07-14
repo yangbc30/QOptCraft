@@ -129,7 +129,7 @@ def in_out_submatrix_alt(
     Returns:
         (n, n) array: Optical scattering matrix with m modes and n photons.
 
-    Todo:
+    TODO:
         Revise this function, doesn't work properly
     """
     # assert sum(fock_in) == sum(fock_out), "Error: number of photons must be conserved."

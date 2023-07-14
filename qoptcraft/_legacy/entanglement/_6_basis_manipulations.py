@@ -16,46 +16,39 @@ import numpy as np
 
 
 def expand_basis(state):
+    """Takes the state from the "photonic" Hilbert space (with a total of n photons)
+    to a (n+1)^m Hilbert space
     """
-    Takes the state from the "photonic" Hilbert space (with a total of n photons) to a (n+1)^m Hilbert space
-    """
-
     n = int(np.sum(state))
     m = len(state)
     state_larger_space = np.array([1])  # Initializing the state for the Kronecker product
     for i in range(m):  # Iterates through all the subsystems (modes)
         qudit_i = np.zeros(n + 1)  # i-th qudit (n+1-dimensional system from 0 to n photons)
         qudit_i[int(state[i])] = 1
-
         state_larger_space = np.kron(
             state_larger_space, qudit_i
         )  # Composite system with one additional qudit at each round
-
     return state_larger_space
 
 
 def large_basis(state, n, m):
+    """Takes the state from the "photonic" Hilbert space (with a total of n photons)
+    to a (n+1)^m Hilbert space  ##MODIFIED FOR subsets of total number photons
     """
-    Takes the state from the "photonic" Hilbert space (with a total of n photons) to a (n+1)^m Hilbert space  ##MODIFIED FOR subsets of total number photons
-    """
-
     state_larger_space = np.array([1])  # Initializing the state
     for i in range(m):  # Iterates through all the subsystems (modes)
         qudit_i = np.zeros(n + 1)  # i-th qudit (n+1-dimensional system from 0 to n photons)
         qudit_i[int(state[i])] = 1
-
         state_larger_space = np.kron(
             state_larger_space, qudit_i
         )  # Composite system with one additional qudit at each round
-
     return state_larger_space
 
 
 def leading_terms(state, ratio):
+    """This function determines how many states are left relevant, for a particular
+    ratio of precision
     """
-    This function determines how many states are left relevant, for a particular ratio of precision
-    """
-
     return (
         np.cumsum(np.flip(np.sort(np.abs(state) ** 2))) < ratio
     ).sum() + 1  # prob of each state growing in order

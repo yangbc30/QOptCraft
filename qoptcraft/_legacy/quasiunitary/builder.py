@@ -4,9 +4,25 @@ import numpy as np
 
 from qoptcraft.optical_elements import clemens_decomp
 from .quasiunitary import quasiunitary
-from .diagonal_decomp import *
 from .padding import *
 from .with_loss import *
+
+
+def SVD_diagonal_adjusting(M, maxDim):
+    return np.append((M, [1] * (maxDim - len(M))))
+
+
+def D_decomposition(M, dim):
+    DList = np.zeros((dim, dim, dim), dtype=complex)
+
+    for i in range(0, dim):
+        I = np.identity(dim, dtype=complex)
+        # Matrix D_i creation consists on replacing the identity
+        # matrix element [i,i] for D_i of the original matrix D (here, M)
+        I[i, i] = M[i, i]
+        DList[i, :, :] = I
+    return DList
+
 
 
 def quasiunitary(S, totalDim, acc_d):

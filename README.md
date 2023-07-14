@@ -124,6 +124,18 @@ bs_matrix = beam_splitter(angle=PI/4, shift=0, dim=2, mode_1=0, mode_2=1, conven
 hong_ou_mandel = photon_unitary(bs_matrix, photons=3, method="heisenberg")
 ```
 
+### Retrieve the linear optical scattering matrix from the quantized unitary
+If a given unitary matrix comes from a linear optical scattering matrix, we can retrieve it
+```python
+from qoptcraft import haar_random_unitary, photon_unitary, scattering_from_unitary
+
+modes = 3
+photons = 2
+S = haar_random_unitary(modes)
+U = photon_unitary(S, photons)
+S_rebuilt = scattering_from_unitary(U, modes, photons)
+```
+If this scattering matrix doesn't exist, it will raise an `InconsistentEquations` error.
 ### Approximating a unitary with linear optics (Topogonov)
 ```python
 from qoptcraft.operators import qft

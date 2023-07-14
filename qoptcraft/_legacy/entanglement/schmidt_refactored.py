@@ -165,7 +165,7 @@ def schmidt_entanglement(
     state_prob_amplitudes = arrays[array_sep[0] : array_sep[1]]
     modes_per_partition = np.array(arrays[array_sep[1] : array_sep[2]], dtype=int)[0]
 
-    for i, fock in enumerate(state_basis_vectors):
+    for i, _fock in enumerate(state_basis_vectors):
         if len(state_basis_vectors[i].shape) < 2:
             basis_vectors = np.array([state_basis_vectors[i]])
             prob_amplitudes = np.array([state_prob_amplitudes[i]])
@@ -175,8 +175,8 @@ def schmidt_entanglement(
 
         input_state = state_in_basis(basis_vectors, prob_amplitudes, vec_base)
         output_state = np.matmul(U_input, input_state.T)
-        pre_entanglement = schmidt_rank_vector(input_state, vec_base, list(modes_per_partition))
-        post_entanglement = schmidt_rank_vector(output_state, vec_base, list(modes_per_partition))
+        schmidt_rank_vector(input_state, vec_base, list(modes_per_partition))
+        schmidt_rank_vector(output_state, vec_base, list(modes_per_partition))
 
         vec_base_leading, output_state_leading = state_leading_terms(output_state, vec_base)
         vec_base_fidelity, output_state_fidelity = state_leading_fidelity(
@@ -184,19 +184,15 @@ def schmidt_entanglement(
         )
         short = state_in_basis(vec_base_fidelity, output_state_fidelity, vec_base)
 
-        post_entanglement_leading = schmidt_rank_vector(
-            output_state_leading, vec_base_leading, list(modes_per_partition)
-        )
-        post_entanglement_fidelity = schmidt_rank_vector(
-            short, vec_base_fidelity, list(modes_per_partition)
-        )
+        schmidt_rank_vector(output_state_leading, vec_base_leading, list(modes_per_partition))
+        schmidt_rank_vector(short, vec_base_fidelity, list(modes_per_partition))
 
         # these are generated without the need for a function, but the current way it is better organised
         # vec_base_fidelity=vec_base[np.argsort(np.abs(output_state)**2)[-leading_terms(output_state,fidelity):]] # se ordenan los pesos de mayor a menor
         # output_state_fidelity=output_state[np.argsort(np.abs(output_state)**2)[-leading_terms(output_state,fidelity):]]
 
         weights = np.round(abs(output_state_leading) ** 2, 3)
-        balance = min(weights) / max(weights)
+        min(weights) / max(weights)
 
         weights_f = np.round(abs(output_state_fidelity) ** 2, 3)
-        balance_f = min(weights_f) / max(weights_f)
+        min(weights_f) / max(weights_f)

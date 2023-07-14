@@ -2,6 +2,7 @@
 TODO: Implement the quasiunitary decomposition.
 """
 
+
 def quasiunitary_decomp():
     """
     References:

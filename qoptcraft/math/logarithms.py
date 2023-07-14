@@ -52,8 +52,8 @@ def log_matrix_diag(matrix: NDArray) -> NDArray:
         NDArray: matrix logarithm.
     """
     eigenvalues, eigenvectors = np.linalg.eig(matrix)
-    diagonal = eigenvalues / np.abs(eigenvalues)
-    log_matrix = eigenvectors @ np.diag(logm(diagonal)) @ inv(eigenvectors)
+    diag = np.diag(eigenvalues / np.abs(eigenvalues))
+    log_matrix = eigenvectors @ logm(diag) @ inv(eigenvectors)
     return (log_matrix + log_matrix.conj().T) / 2
 
 
@@ -81,7 +81,7 @@ def log_matrix_schur(matrix: NDArray) -> NDArray:
         NDArray: matrix logarithm.
     """
     U, Q = schur(matrix)
-    diag = np.diag(U) / np.abs(np.diag(U))
+    diag = np.diag(np.diag(U) / np.abs(np.diag(U)))
     return Q @ logm(diag) @ Q.conj().T
 
 
@@ -97,7 +97,7 @@ def log_matrix_polar_schur(matrix: NDArray) -> NDArray:
     """
     V = matrix @ inv(sqrtm(matrix.conj().T @ matrix))  # TODO: use SVD
     U, Q = schur(V)
-    diag = np.diag(U) / np.abs(np.diag(U))
+    diag = np.diag(np.diag(U) / np.abs(np.diag(U)))
     return Q @ logm(diag) @ Q.conj().T
 
 
@@ -114,5 +114,5 @@ def log_matrix_newton_schur(matrix: NDArray) -> NDArray:
     V1 = (matrix + inv(matrix).conj().T) / 2
     V = (V1 + inv(V1).conj().T) / 2
     U, Q = schur(V)
-    diag = np.diag(U) / np.abs(np.diag(U))
+    diag = np.diag(np.diag(U) / np.abs(np.diag(U)))
     return Q @ logm(diag) @ Q.conj().T
