@@ -22,7 +22,7 @@ def forbidden_transition(
             'full', 'basis'. Default is 'basis'.
 
     Returns:
-        float: invariant.
+        bool: True if the transition is forbidden. True if it is not.
     """
     if method == "basis":
         return forbidden_transition_basis(state_in, state_out)
@@ -49,7 +49,7 @@ def forbidden_transition_reduced(state_in: PureState, state_out: PureState) -> b
         state_out (State): desired output state of the optical circuit.
 
     Returns:
-        bool: False if the transition is impossible. True if it is possible.
+        bool: True if the transition is forbidden. True if it is not.
     """
     assert state_in.photons == state_out.photons, "Number of photons don't coincide."
     assert state_in.modes == state_out.modes, "Number of modes don't coincide."
@@ -77,7 +77,7 @@ def forbidden_transition_no_basis(state_in: PureState, state_out: PureState) -> 
         state_out (State): desired output state of the optical circuit.
 
     Returns:
-        bool: False if the transition is impossible. True if it is possible.
+        bool: True if the transition is forbidden. True if it is not.
     """
     assert state_in.photons == state_out.photons, "Number of photons don't coincide."
     assert state_in.modes == state_out.modes, "Number of modes don't coincide."
@@ -102,7 +102,7 @@ def forbidden_transition_basis(state_in: State, state_out: State) -> bool:
         state_out (State): desired output state of the optical circuit.
 
     Returns:
-        bool: False if the transition is impossible. True if it is possible.
+        bool: True if the transition is forbidden. True if it is not.
     """
     assert state_in.photons == state_out.photons, "Number of photons don't coincide."
     assert state_in.modes == state_out.modes, "Number of modes don't coincide."
