@@ -24,55 +24,26 @@ import numpy as np
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#											FACTORIAL COMPUTATION FUNCTIONS
+#											RECOMPOSITION OF MATRIX U FUNCTIONS
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
-# Factorial of a natural number computation
-def recur_factorial(n):
+def U_recomposition_Reck(D,TmnList,N):
 
-	if n == 1.0:
+	# We explore TmnList in reverse order
+	cont=int(N*(N-1)/2)-1 
 
-	    return n
+	# The matrix given after the rebuild. We declare it equal to the diagonal D matrix as its initial value:
+	U_init=D
 
-	elif n==0.0:
+	# We explore TmnList in reverse order as declared, computing
+	# inverse operations with each matrix:
+	for i in range(N-1,0,-1):
+			
+		for j in range(0,i): 
 
-		return 1.0
+			U_init=U_init.dot(np.transpose(np.conj(TmnList[cont,:,:])))
 
-	elif n < 0.0:
+			cont-=1
 
-	    return ("NA")
-
-	else:
-		
-	    return n*recur_factorial(n-1)
-
-
-# Factorial computation for all values of an array
-def fact_array(array):
-
-	array_2=np.array([array])
-
-	array_fact=np.apply_along_axis(recur_factorial,0,array_2)
-
-	return array_fact
-
-
-# Combinatory computation (modes, photons)
-def comb_evol(num_elements,num_dim):
-	'''
-	num_elements=n, num_dim=m
-	Computes the combinatory of (m+n-1,n). Variables given so the user only needs to know n and m.
-	'''
-
-	sol=int(recur_factorial(num_elements+num_dim-1)/(recur_factorial(num_elements)*recur_factorial(num_dim-1)))
-
-	return sol
-
-
-# Combinatory computation 
-def comb_evol_no_reps(num_elements,num_dim):
-
-	sol=int(recur_factorial(num_elements)/(recur_factorial(num_dim)*recur_factorial(num_elements-num_dim)))
-
-	return sol
+	return U_init

@@ -12,13 +12,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.'''
 
-from .input_control import *
-from .mat_inner_product import *
-from .optic_devices import *
-from .read_matrix import *
-from .recur_factorial import *
-from .unitary import *
-from .write_initial_matrix import *
-from .photon_comb_basis import *
+from ._2_1st_evolution_method import *
+from .ryser_permanent import *
+from ._2_2nd_evolution_method import *
+from ._2_3rd_evolution_method import *
+from ._2_creation_and_destruction_operators import *
+from ._2_logarithm_algorithms import *
+from ._2_photon_input import *
 
-__all__ = ["Main_Code","Phase1_Aux","Phase2_Aux","Phase3_Aux","Phase4_Aux","Phase5_Aux","Phase6_Aux"]
+__all__ = [s for s in dir()]

@@ -24,55 +24,26 @@ import numpy as np
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#											FACTORIAL COMPUTATION FUNCTIONS
+#											CREATION AND ANNIHILATION OPERATORS
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
-# Factorial of a natural number computation
-def recur_factorial(n):
+# We define the operators a (annihilation) and a_dagger (creator):
+def a(num_vec,array,mult):
 
-	if n == 1.0:
+	n=array[num_vec]
 
-	    return n
+	mult*=np.sqrt(n)
+	array[num_vec]=n-1
 
-	elif n==0.0:
-
-		return 1.0
-
-	elif n < 0.0:
-
-	    return ("NA")
-
-	else:
-		
-	    return n*recur_factorial(n-1)
+	return array, mult
 
 
-# Factorial computation for all values of an array
-def fact_array(array):
+def a_dagger(num_vec,array,mult):
 
-	array_2=np.array([array])
+	n=array[num_vec]
 
-	array_fact=np.apply_along_axis(recur_factorial,0,array_2)
+	mult*=np.sqrt(n+1)
+	array[num_vec]=n+1
 
-	return array_fact
-
-
-# Combinatory computation (modes, photons)
-def comb_evol(num_elements,num_dim):
-	'''
-	num_elements=n, num_dim=m
-	Computes the combinatory of (m+n-1,n). Variables given so the user only needs to know n and m.
-	'''
-
-	sol=int(recur_factorial(num_elements+num_dim-1)/(recur_factorial(num_elements)*recur_factorial(num_dim-1)))
-
-	return sol
-
-
-# Combinatory computation 
-def comb_evol_no_reps(num_elements,num_dim):
-
-	sol=int(recur_factorial(num_elements)/(recur_factorial(num_dim)*recur_factorial(num_elements-num_dim)))
-
-	return sol
+	return array, mult

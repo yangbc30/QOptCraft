@@ -22,57 +22,37 @@ limitations under the License.'''
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
+import cmath
+
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#											FACTORIAL COMPUTATION FUNCTIONS
+#												OPTIC DEVICE FUNCTIONS
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
-# Factorial of a natural number computation
-def recur_factorial(n):
+def Tmn(theta,phi,N,m,n):
 
-	if n == 1.0:
+	T=np.identity(N,dtype=complex) # First declaration of the matrix
 
-	    return n
+	# We add the additional elements to our identity matrix in
+	# the dimensions m, n (which correspond to the interaction)
+	T[m,m]=cmath.exp(phi*1j)*cmath.cos(theta) # cos, sin in radians
+	T[m,n]=-cmath.sin(theta) # cos, sin in radians
+	T[n,m]=cmath.exp(phi*1j)*cmath.sin(theta) # cos, sin in radians
+	T[n,n]=cmath.cos(theta) # cos, sin in radians
 
-	elif n==0.0:
-
-		return 1.0
-
-	elif n < 0.0:
-
-	    return ("NA")
-
-	else:
-		
-	    return n*recur_factorial(n-1)
+	return T
 
 
-# Factorial computation for all values of an array
-def fact_array(array):
+def TmnReck(theta,phi,N,m,n):
 
-	array_2=np.array([array])
+	T=np.identity(N,dtype=complex) # First declaration of the matrix
 
-	array_fact=np.apply_along_axis(recur_factorial,0,array_2)
+	# We add the additional elements to our identity matrix in
+	# the dimensions m, n (which correspond to the interaction)
+	T[m,m]=cmath.exp(phi*1j)*cmath.sin(theta) # cos, sin in radians
+	T[m,n]=cmath.exp(phi*1j)*cmath.cos(theta) # cos, sin in radians
+	T[n,m]=cmath.cos(theta) # cos, sin in radians
+	T[n,n]=-cmath.sin(theta) # cos, sin in radians
 
-	return array_fact
-
-
-# Combinatory computation (modes, photons)
-def comb_evol(num_elements,num_dim):
-	'''
-	num_elements=n, num_dim=m
-	Computes the combinatory of (m+n-1,n). Variables given so the user only needs to know n and m.
-	'''
-
-	sol=int(recur_factorial(num_elements+num_dim-1)/(recur_factorial(num_elements)*recur_factorial(num_dim-1)))
-
-	return sol
-
-
-# Combinatory computation 
-def comb_evol_no_reps(num_elements,num_dim):
-
-	sol=int(recur_factorial(num_elements)/(recur_factorial(num_dim)*recur_factorial(num_elements-num_dim)))
-
-	return sol
+	return T

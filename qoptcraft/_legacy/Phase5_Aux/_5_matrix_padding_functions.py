@@ -24,55 +24,55 @@ import numpy as np
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#											FACTORIAL COMPUTATION FUNCTIONS
+#										MATRIX (AND THEIR LISTS) PADDING FUNCTIONS
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
-# Factorial of a natural number computation
-def recur_factorial(n):
+# Extends the size of an square matrix to the maximum dimension maxDim given
+def matrix_padding(M,maxDim):
 
-	if n == 1.0:
+	# Array to be added as column 
+	column_to_be_added = np.zeros(len(M), dtype=complex) 
 
-	    return n
+	# Adding column to numpy array
+	for i in range (0,maxDim-len(M)):
 
-	elif n==0.0:
+		M = np.column_stack((M, column_to_be_added))
 
-		return 1.0
+	for i in range (len(M),maxDim):
 
-	elif n < 0.0:
+		# Array to be added as row
+		row_to_be_added = np.zeros(maxDim, dtype=complex)
+		row_to_be_added[i]=1.0
 
-	    return ("NA")
+		M = np.vstack((M, row_to_be_added))
 
-	else:
+	return M
+
+
+# Akin to the previous functions, but extends the size of a list of matrices
+def matrix_padding_TmnList(M,TmnList,OGdimM,maxDim):
 		
-	    return n*recur_factorial(n-1)
+	TmnListExp=np.zeros((int(OGdimM*(OGdimM-1)/2),maxDim,maxDim), dtype=complex)
+
+	for cont in range (0,int(OGdimM*(OGdimM-1)/2)):
+
+		TmnListExp[cont,:,:]=matrix_padding(TmnList[cont,:,:],maxDim)
+
+	return TmnListExp
 
 
-# Factorial computation for all values of an array
-def fact_array(array):
+# Creates the matrix version of the 1D-array containing D's diagonal values
+def SVD_diagonal_adjusting(M,maxDim):
 
-	array_2=np.array([array])
+	D=np.zeros((maxDim,maxDim), dtype=complex)
 
-	array_fact=np.apply_along_axis(recur_factorial,0,array_2)
+	for i in range (0,len(M)):
 
-	return array_fact
+		D[i,i]=M[i]
 
+	for i in range (len(M),maxDim):
 
-# Combinatory computation (modes, photons)
-def comb_evol(num_elements,num_dim):
-	'''
-	num_elements=n, num_dim=m
-	Computes the combinatory of (m+n-1,n). Variables given so the user only needs to know n and m.
-	'''
+		D[i,i]=1.0
 
-	sol=int(recur_factorial(num_elements+num_dim-1)/(recur_factorial(num_elements)*recur_factorial(num_dim-1)))
-
-	return sol
-
-
-# Combinatory computation 
-def comb_evol_no_reps(num_elements,num_dim):
-
-	sol=int(recur_factorial(num_elements)/(recur_factorial(num_dim)*recur_factorial(num_elements-num_dim)))
-
-	return sol
+	return D

@@ -19,60 +19,69 @@ limitations under the License.'''
 
 # ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
 
+import math
+
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 
+# SciPy instalation: in the cmd: 'py -m pip install scipy'
+import scipy as sp
+
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#											FACTORIAL COMPUTATION FUNCTIONS
+#								CREATION OF MULTIPLE TYPES OF MATRICES (INCLUDING UNITARY AND QFT)
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
-# Factorial of a natural number computation
-def recur_factorial(n):
+def haar_measure(N):
 
-	if n == 1.0:
+	#https://arxiv.org/pdf/math-ph/0609050.pdf
+	z = (sp.randn(N,N) + 1j*sp.randn(N,N))/sp.sqrt(2.0)
 
-	    return n
+	q,r = np.linalg.qr(z) # QR factorization
 
-	elif n==0.0:
+	d = sp.diagonal(r)
 
-		return 1.0
+	ph = d/sp.absolute(d)
 
-	elif n < 0.0:
-
-	    return ("NA")
-
-	else:
-		
-	    return n*recur_factorial(n-1)
+	q = sp.multiply(q,ph,q)
+	
+	return q
 
 
-# Factorial computation for all values of an array
-def fact_array(array):
+def matrix_generation_general_auto(N1,N2):
 
-	array_2=np.array([array])
+	U = (sp.randn(N1,N2) + 1j*sp.randn(N1,N2))/sp.sqrt(2.0)
 
-	array_fact=np.apply_along_axis(recur_factorial,0,array_2)
-
-	return array_fact
+	return U
 
 
-# Combinatory computation (modes, photons)
-def comb_evol(num_elements,num_dim):
-	'''
-	num_elements=n, num_dim=m
-	Computes the combinatory of (m+n-1,n). Variables given so the user only needs to know n and m.
-	'''
+# We create a modification of our function dft_matrix(), which doesn't ask for a N input but it is given as
+# a parameter for the function instead. It is more convenient for loops running in an interval of dimensions, 
+# as well as not printing text onscreen for a better performance
+def dft_matrix_auto(N):
 
-	sol=int(recur_factorial(num_elements+num_dim-1)/(recur_factorial(num_elements)*recur_factorial(num_dim-1)))
+	omega=np.exp(-2.0*math.pi*1j/float(N))
 
-	return sol
+	A=np.zeros((N,N),dtype=complex)
+
+	for i in range(N):
+
+		for j in range(N):
+
+			A[i,j]=omega**(i*j)
+
+	return A
 
 
-# Combinatory computation 
-def comb_evol_no_reps(num_elements,num_dim):
+def qft_matrix_auto(N):
 
-	sol=int(recur_factorial(num_elements)/(recur_factorial(num_dim)*recur_factorial(num_elements-num_dim)))
+	A=np.zeros((N,N),dtype=complex)
 
-	return sol
+	for i in range(N):
+
+		for j in range(N):
+
+			A[i,j]=np.exp(-2.0*math.pi*1j/float(N)*i*j)
+
+	return A/np.sqrt(N)

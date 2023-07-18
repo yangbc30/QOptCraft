@@ -24,55 +24,64 @@ import numpy as np
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#											FACTORIAL COMPUTATION FUNCTIONS
+#												PHOTON INPUT FUNCTIONS
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
-# Factorial of a natural number computation
-def recur_factorial(n):
+# General number of photons input
+def photon_introd(m):
 
-	if n == 1.0:
+	while True:
 
-	    return n
+		try:
 
-	elif n==0.0:
+			n=int(input("\nNumber of photons? "))
 
-		return 1.0
+			if n<1:
 
-	elif n < 0.0:
+				print("The given value is not valid due to needing at least 1 photon.\n")
 
-	    return ("NA")
+			else:
 
-	else:
-		
-	    return n*recur_factorial(n-1)
+				break
 
+		except ValueError:
 
-# Factorial computation for all values of an array
-def fact_array(array):
+			print("The given value is not valid (it is not an integer number).\n")
 
-	array_2=np.array([array])
+	# This array is created in order to conserve compatibility with the introduction of an specific photon distribution
+	photons=np.zeros(m)	
 
-	array_fact=np.apply_along_axis(recur_factorial,0,array_2)
+	photons[0]=n
 
-	return array_fact
-
-
-# Combinatory computation (modes, photons)
-def comb_evol(num_elements,num_dim):
-	'''
-	num_elements=n, num_dim=m
-	Computes the combinatory of (m+n-1,n). Variables given so the user only needs to know n and m.
-	'''
-
-	sol=int(recur_factorial(num_elements+num_dim-1)/(recur_factorial(num_elements)*recur_factorial(num_dim-1)))
-
-	return sol
+	return photons, n
 
 
-# Combinatory computation 
-def comb_evol_no_reps(num_elements,num_dim):
+# Input of an specific distribution of photons within m modes
+def photon_introd_one_input(m):
 
-	sol=int(recur_factorial(num_elements)/(recur_factorial(num_dim)*recur_factorial(num_elements-num_dim)))
+	photons=np.zeros(m,dtype=float)
 
-	return sol
+	while True:
+
+		try:
+
+			for k in range(m):
+
+				n=int(input(f"\nIntroduce the number of photons in the mode {k}: "))
+
+				while n<0:
+
+					print("The given value is not valid due to being negative.\n")
+
+					n=int(input(f"\nIntroduce the number of photons in the mode {k}: "))
+
+				photons[k]=n
+
+			break
+
+		except ValueError:
+
+			print("The given value is not valid (it is not an integer number).\n")
+
+	return photons
