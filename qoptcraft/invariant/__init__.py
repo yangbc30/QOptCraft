@@ -4,9 +4,9 @@ from .invariant import (
     photon_invariant_reduced,
     photon_invariant_basis,
 )
-from .can_transition import (
-    can_transition,
-    can_transition_reduced,
-    can_transition_no_basis,
-    can_transition_basis,
+from .forbidden_transition import (
+    forbidden_transition,
+    forbidden_transition_reduced,
+    forbidden_transition_no_basis,
+    forbidden_transition_basis,
 )

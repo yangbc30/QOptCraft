@@ -76,25 +76,25 @@ bell_state = 1 / sqrt(2) * Fock(1, 0, 1, 0) + 1 / sqrt(2) * Fock(0, 1, 0, 1)
 
 To check if transitions between quantum states are forbidden by a linear optical transformation, we simply run
 ```python
-from qoptcraft.invariant import can_transition, photon_invariant
+from qoptcraft.invariant import forbidden_transition, photon_invariant
 
-can_transition(in_fock, bell_state, method="reduced")
+forbidden_transition(in_fock, bell_state, method="reduced")
 ```
 ```console
->>> False
+>>> True
 ```
 
 The invariant can be calculated from density matrices (calculations use the basis of the algebra)
 To check if transitions between quantum states are forbidden by a linear optical transformation, we simply run
 ```python
 from qoptcraft.state import MixedState
-from qoptcraft.invariant import can_transition, photon_invariant
+from qoptcraft.invariant import forbidden_transition, photon_invariant
 
 mixed_state = MixedState.from_mixture(pure_states=[in_fock, bell_state], probs=[0.5, 0.5])
-can_transition(mixed_state, bell_state, method="basis")
+forbidden_transition(mixed_state, bell_state, method="basis")
 ```
 ```console
->>> False
+>>> True
 ```
 
 ### Quantizing linear interferomenters

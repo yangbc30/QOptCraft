@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 
 from qoptcraft.state import PureState, State, MixedState, Fock
-from qoptcraft.invariant import can_transition, photon_invariant
+from qoptcraft.invariant import forbidden_transition, photon_invariant
 
 
 IN_FOCK = Fock(1, 1, 0, 0)
@@ -23,8 +23,8 @@ HONG_HU_MANDEL_OUTPUT = PureState([[2, 0], [0, 2]], [1 / np.sqrt(2), 1 / np.sqrt
         (HONG_HU_MANDEL_INPUT, HONG_HU_MANDEL_OUTPUT, True),
     ),
 )
-def test_can_transition_reduced(in_state: State, out_state: State, result: bool) -> None:
-    test_result = can_transition(in_state, out_state, method="reduced")
+def test_forbidden_transition_reduced(in_state: State, out_state: State, result: bool) -> None:
+    test_result = forbidden_transition(in_state, out_state, method="reduced")
     assert result == test_result
 
 
@@ -35,8 +35,8 @@ def test_can_transition_reduced(in_state: State, out_state: State, result: bool)
         (HONG_HU_MANDEL_INPUT, HONG_HU_MANDEL_OUTPUT, True),
     ),
 )
-def test_can_transition_no_basis(in_state: State, out_state: State, result: bool) -> None:
-    test_result = can_transition(in_state, out_state, method="no basis")
+def test_forbidden_transition_no_basis(in_state: State, out_state: State, result: bool) -> None:
+    test_result = forbidden_transition(in_state, out_state, method="no basis")
     assert result == test_result
 
 
@@ -49,8 +49,8 @@ def test_can_transition_no_basis(in_state: State, out_state: State, result: bool
         (MIXED_STATE, MIXED_STATE, True),
     ),
 )
-def test_can_transition_basis(in_state: State, out_state: State, result: bool) -> None:
-    test_result = can_transition(in_state, out_state, method="basis")
+def test_forbidden_transition_basis(in_state: State, out_state: State, result: bool) -> None:
+    test_result = forbidden_transition(in_state, out_state, method="basis")
     assert result == test_result
 
 
