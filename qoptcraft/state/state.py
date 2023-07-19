@@ -55,6 +55,8 @@ class MixedState(State):
 
         if not is_hermitian(density_matrix):
             raise NotHermitianError()
+        if not np.isclose(density_matrix.trace(), 1):
+            raise ValueError("Density matrix trace is not 1.")
         self.density_matrix = density_matrix
         self.photons = photons
         self.modes = modes

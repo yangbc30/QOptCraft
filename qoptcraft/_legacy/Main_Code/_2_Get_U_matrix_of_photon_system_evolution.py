@@ -1,8 +1,8 @@
 # ---------------------------------------------------------------------------------------------------------------------------
-#									ALGORITHM 2: N-PHOTON OPTICAL SYSTEM EVOLUTION
+# 									ALGORITHM 2: N-PHOTON OPTICAL SYSTEM EVOLUTION
 # ---------------------------------------------------------------------------------------------------------------------------
 
-'''Copyright 2021 Daniel Gómez Aguado
+"""Copyright 2021 Daniel Gómez Aguado
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.'''
+limitations under the License."""
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#													LIBRARIES REQUIRED
+# 													LIBRARIES REQUIRED
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
@@ -35,7 +35,6 @@ import numpy as np
 # ----------FILE MANAGEMENT:----------
 
 # File opening
-from io import open 
 
 from ..read_matrix import read_matrix_from_txt
 
@@ -47,7 +46,6 @@ from ..recur_factorial import comb_evol
 
 # ----------SYSTEM:----------
 
-import sys
 
 
 # ----------UNITARY MATRIX CONDITION----------
@@ -62,7 +60,6 @@ from ..input_control import input_control, input_control_ints
 
 # ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
 
-from ..Phase2_Aux._2_photon_input import photon_introd
 
 from ..Phase2_Aux._2_1st_evolution_method import evolution
 
@@ -77,304 +74,288 @@ from ..photon_comb_basis import photon_combs_generator
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-#														MAIN CODE
+# 														MAIN CODE
 # ---------------------------------------------------------------------------------------------------------------------------
 
 
-def iHStoiHU(file_input=True,iH_S=False,file_output=True,filename=False,n=False,acc_d=3,txt=False,vec_base=[[False,False],[False,False]]):
+def iHStoiHU(
+    file_input=True,
+    iH_S=False,
+    file_output=True,
+    filename=False,
+    n=False,
+    acc_d=3,
+    txt=False,
+    vec_base=[[False, False], [False, False]],
+):
+    # Initial input control
+    n = input_control_ints(n, "n", 1)
 
-	# Initial input control
-	n=input_control_ints(n,"n",1)
+    # ----------iH_S MATRIX OF THE SYSTEM INPUT:----------
 
+    # Load S matrix
+    if file_input is True:
+        iH_S = read_matrix_from_txt(filename)
 
-	# ----------iH_S MATRIX OF THE SYSTEM INPUT:----------
+    m = len(iH_S[:, 0])
 
-	# Load S matrix
-	if file_input==True:
+    if txt is True:
+        print("\niH_S MATRIX OF THE SYSTEM INPUT:\n")
 
-		iH_S=read_matrix_from_txt(filename)
+        print("\nInput matrix iH_S:\n")
 
-	m=len(iH_S[:,0])
+        print(np.round(iH_S, acc_d))
 
-	if txt==True:
+        print(f"\nDimensions: {m} x {m}\n")
 
-		print("\niH_S MATRIX OF THE SYSTEM INPUT:\n")
+    # ----------NUMBER OF PHOTONS INPUT---------
 
-		print("\nInput matrix iH_S:\n")
+    photons = np.zeros(m)
 
-		print(np.round(iH_S,acc_d))
+    photons[0] = n
 
-		print(f"\nDimensions: {m} x {m}\n")
+    # We load the combinations with the same amount of photons in order to create the vector basis
+    if np.array(vec_base)[0, 0]:
+        if txt:
+            print("\nLoaded an external array for the Fock basis.")
 
+    else:
+        vec_base = photon_combs_generator(m, photons)
 
-	# ----------NUMBER OF PHOTONS INPUT---------
+    if file_output is True:
+        # We save the vector basis
+        vec_base_file = open(f"m_{m}_n_{n}_vec_base.txt", "w")
 
-	photons=np.zeros(m)	
+        np.savetxt(vec_base_file, vec_base, fmt="(%e)", delimiter=",")
 
-	photons[0]=n
+        vec_base_file.close()
 
-	# We load the combinations with the same amount of photons in order to create the vector basis
-	if np.array(vec_base)[0,0]:
+    # Resulting U matrix's dimensions:
+    M = comb_evol(n, m)
 
-		if txt:
-			print("\nLoaded an external array for the Fock basis.")
+    t = time.process_time_ns()
 
-	else:
+    iH_U = iH_U_operator(file_output, filename, iH_S, m, M, vec_base)
 
-		vec_base=photon_combs_generator(m,photons)
+    # ----------TOTAL TIME REQUIRED:----------
 
-	if file_output==True:
+    t_inc = time.process_time_ns() - t
 
-		# We save the vector basis
-		vec_base_file=open(f"m_{m}_n_{n}_vec_base.txt","w")
+    print(f"\niHStoiHU: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
 
-		np.savetxt(vec_base_file,vec_base,fmt="(%e)",delimiter=",")
+    return iH_U, vec_base
 
-		vec_base_file.close()
 
-	# Resulting U matrix's dimensions:
-	M=comb_evol(n,m)
+def StoU(
+    file_input=True,
+    S=False,
+    file_output=True,
+    filename=False,
+    method=2,
+    n=False,
+    acc_d=3,
+    txt=False,
+    vec_base=[False, False],
+):
+    """
+    Loads .txt files containing an unitary matrix (the so-called scattering matrix S). Depending on the total number of photons within the modes, a different evolution matrix U will be obtained.
+    Information is displayed on-screen.
+    """
 
-	t=time.process_time_ns()
+    if txt is True:
+        print("\n\n================================================================")
+        print("||| EVOLUTION OF A PHOTON SYSTEM GIVEN A SCATTERING MATRIX S |||")
+        print("================================================================\n\n")
 
-	iH_U=iH_U_operator(file_output,filename,iH_S,m,M,vec_base)
+    # Input control: in case there is something wrong with given inputs, it is notified on-screen
+    file_input, filename, newfile, acc_d = input_control(
+        2, file_input, S, file_output, filename, True, acc_d
+    )
 
+    if type(method) is not int:
+        print("\nWARNING: invalid method input (needs to be int).")
 
-	# ----------TOTAL TIME REQUIRED:----------
+        while True:
+            try:
+                method = int(
+                    input(
+                        "\nInput '0' (or any other number not mentioned afterwards) for computation following the quantum mechanical description\nInput '1' for computing by the standard permanents method\nInput '2' for computing by the Ryser permanents method\nInput '3' for the Hamiltonian computation method\n"
+                    )
+                )
 
-	t_inc=time.process_time_ns()-t
+                break
 
-	print(f"\niHStoiHU: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+            except ValueError:
+                print("The given value is not valid.\n")
 
-	return iH_U, vec_base
+    # Initial input control
+    n = input_control_ints(n, "n", 1)
 
+    # ----------S MATRIX OF THE SYSTEM INPUT:----------
 
-def StoU(file_input=True,S=False,file_output=True,filename=False,method=2,n=False,acc_d=3,txt=False,vec_base=[False,False]):
-	"""
-	Loads .txt files containing an unitary matrix (the so-called scattering matrix S). Depending on the total number of photons within the modes, a different evolution matrix U will be obtained.
-	Information is displayed on-screen.
-	"""
+    # Load S matrix
+    if file_input is True:
+        S = read_matrix_from_txt(filename)
 
-	if txt==True:
+    m = len(S[:, 0])
 
-		print("\n\n================================================================")
-		print("||| EVOLUTION OF A PHOTON SYSTEM GIVEN A SCATTERING MATRIX S |||")
-		print("================================================================\n\n")
+    if txt is True:
+        print("\nS MATRIX OF THE SYSTEM INPUT:\n")
 
-	# Input control: in case there is something wrong with given inputs, it is notified on-screen
-	file_input, filename, newfile, acc_d=input_control(2,file_input,S,file_output,filename,True,acc_d)
+        print("\nInput matrix S:\n")
 
-	if type(method) is not int:
+        print(np.round(S, acc_d))
 
-		print(f"\nWARNING: invalid method input (needs to be int).")
+        print(f"\nDimensions: {m} x {m}\n")
 
-		while True:
+        # ----------UNITARY CHECK FOR MATRIX S:----------
 
-			try:
+        print("\n\n\n\nUNITARY CHECK FOR MATRIX S:\n")
 
-				method=int(input("\nInput '0' (or any other number not mentioned afterwards) for computation following the quantum mechanical description\nInput '1' for computing by the standard permanents method\nInput '2' for computing by the Ryser permanents method\nInput '3' for the Hamiltonian computation method\n"))
+        cond = unitary(S, m, filename, acc_d)
 
-				break
+        # In case S is not unitary, the user is advised of the possible lack of value in the results
+        # (see also last section: VERIFICATION OF THE PROGRAM'S SUCCESS)
+        if cond is False:
+            print("\nResults will be computed, albeit S (" + filename + ") is not unitary.\n")
 
-			except ValueError:
+    # ----------NUMBER OF PHOTONS INPUT---------
 
-				print("The given value is not valid.\n")
+    photons = np.zeros(m)
 
-	# Initial input control
-	n=input_control_ints(n,"n",1)
+    photons[0] = n
 
-	
-	# ----------S MATRIX OF THE SYSTEM INPUT:----------
+    # We load the combinations with the same amount of photons in order to create the vector basis
+    if np.array(vec_base)[0, 0]:
+        if txt:
+            print("\nLoaded an external array for the Fock basis.")
 
-	# Load S matrix
-	if file_input==True:
+    else:
+        vec_base = photon_combs_generator(m, photons)
 
-		S=read_matrix_from_txt(filename)
+    if file_output is True:
+        # We save the vector basis
+        vec_base_file = open(f"m_{m}_n_{n}_vec_base.txt", "w")
 
-	m=len(S[:,0])
+        np.savetxt(vec_base_file, vec_base, fmt="(%e)", delimiter=",")
 
-	if txt==True:
+        vec_base_file.close()
 
-		print("\nS MATRIX OF THE SYSTEM INPUT:\n")
+    # ----------COMPUTATION BY THE CHOSEN METHOD:----------
 
-		print("\nInput matrix S:\n")
+    if txt is True:
+        print("\n\nPhase2: beginning of the computation...")
 
-		print(np.round(S,acc_d))
+    # Beginning of time measurement
+    t = time.process_time_ns()
 
-		print(f"\nDimensions: {m} x {m}\n")
+    # The first two algorithms were design with compatibility with just a photon vector (see the function)
+    # photon_introd_one_input() in '_2_photon_input.py'). Thus, it is necesary to execute a loop involving
+    # all the basis, and compute values such as M which the third algorithm does by default
+    if method != 3:
+        M = len(vec_base)
 
+        U = np.zeros((M, M), dtype=complex)
 
-		# ----------UNITARY CHECK FOR MATRIX S:----------
+        t_inc = 0
 
-		print("\n\n\n\nUNITARY CHECK FOR MATRIX S:\n")
+        for i in range(M):
+            if method == 1:
+                U[i], t_inc_aux = evolution_2(S, vec_base[i], vec_base)
 
-		cond=unitary(S,m,filename,acc_d)
+            elif method == 2:
+                U[i], t_inc_aux = evolution_2_ryser(S, vec_base[i], vec_base)
 
-		# In case S is not unitary, the user is advised of the possible lack of value in the results
-		# (see also last section: VERIFICATION OF THE PROGRAM'S SUCCESS)
-		if cond==False:
+            else:
+                method = 0  # readjust so the default method is associated to '0' in the output's filename
 
-			print("\nResults will be computed, albeit S ("+filename+") is not unitary.\n")
+                U[i], t_inc_aux = evolution(S, vec_base[i], vec_base)
 
+            t_inc += t_inc_aux
 
-	# ----------NUMBER OF PHOTONS INPUT---------
+        U = np.transpose(U)
 
-	photons=np.zeros(m)	
+    elif method == 3:
+        U, t_inc = evolution_3(S, photons, vec_base, file_output, filename)
 
-	photons[0]=n
+    print(f"\nComputation time of chosen method {method} (in seconds): {float(t_inc/(10**9))}")
 
-	# We load the combinations with the same amount of photons in order to create the vector basis
-	if np.array(vec_base)[0,0]:
+    # ----------STORAGE OF THE U EVOLUTION MATRIX COEFICIENTS AND PROBABILITIES:----------
 
-		if txt:
-			print("\nLoaded an external array for the Fock basis.")
+    if file_output is True:
+        # Storage in text of the resulting matrix U
+        coefs_file = open(filename + f"_m_{m}_n_{n}_coefs_method_{method}.txt", "w")
 
-	else:
+        # Storage in text of the probability matrix, which comprehends the probabilities of
+        # obtaining each photon distribution from another, in the corresponding cell
+        probs_file = open(filename + f"_m_{m}_n_{n}_probs_method_{method}.txt", "w")
 
-		vec_base=photon_combs_generator(m,photons)
+        np.savetxt(coefs_file, U, delimiter=",")
+        np.savetxt(probs_file, np.real(np.multiply(np.conj(U), U)), delimiter=",", fmt="(%e)")
 
-	if file_output==True:
+    # ----------VERIFICATION OF THE PROGRAM'S SUCCESS:----------
 
-		# We save the vector basis
-		vec_base_file=open(f"m_{m}_n_{n}_vec_base.txt","w")
+    # We have supposedly found a solution, whose validity is subject to the next loop
 
-		np.savetxt(vec_base_file,vec_base,fmt="(%e)",delimiter=",")
+    if txt is True:
+        # ----------UNITARY CHECK FOR MATRIX U:----------
 
-		vec_base_file.close()
+        print("\n\n\n\n\nUNITARY CHECK FOR MATRIX U:\n")
 
-	
-	# ----------COMPUTATION BY THE CHOSEN METHOD:----------
+        cond = unitary(U, len(U), "U", acc_d)
 
-	if txt==True:
+        if cond is False:
+            print("\nS (" + filename + ")'s corresponding evolution U is not unitary.\n")
 
-		print("\n\nPhase2: beginning of the computation...")
+        else:
+            print("The resulting matrix is unitary.")
 
-	# Beginning of time measurement
-	t=time.process_time_ns()
+    # Further check: we initialise a variable 'sol'
+    sol = True
 
-	# The first two algorithms were design with compatibility with just a photon vector (see the function)
-	# photon_introd_one_input() in '_2_photon_input.py'). Thus, it is necesary to execute a loop involving
-	# all the basis, and compute values such as M which the third algorithm does by default
-	if method!=3:
+    for i in range(len(vec_base[:, 0])):
+        # We compute the probability sum for each U|vector_inicial>
+        sum_probs = np.sum(np.real(np.multiply(np.conj(U), U))[:, i])
 
-		M=len(vec_base)
+        # Condition which invalidates the solution: the sum of the probabilities given for each U|vector_inicial> is not 1.0
+        if np.round(sum_probs, 10) != 1.0:
+            sol = False
 
-		U=np.zeros((M,M),dtype=complex)
+            break
 
-		t_inc=0
+    if sol is True:
+        if txt is True:
+            print("\n\nProgram successfully executed.\n")
 
-		for i in range(M):
+            print("\nOutput evolution matrix:")
+            print(np.round(U, acc_d))
 
-			if method==1:
+        if file_output is True:
+            probs_file.write(
+                "\nFor all columns, the sum of probabilities is practically equal to 1.0. "
+            )
 
-				U[i],t_inc_aux=evolution_2(S,vec_base[i],vec_base)
+    else:
+        if txt is True:
+            print(
+                "\nThere are discrepances in the sum of probabilities for at least one column. Was the input matrix really unitary?\n"
+            )
 
-			elif method==2:
+        if file_output is True:
+            # Warning of the program's failure
+            probs_file.write(
+                "\nThe sum of probabilities is not equal to 1.0 for at least one of the columns of U.\nThere has been a problem with the input.\n"
+            )
 
-				U[i],t_inc_aux=evolution_2_ryser(S,vec_base[i],vec_base)
+    if file_output is True:
+        coefs_file.close()
 
-			else:
+        probs_file.close()
 
-				method=0 # readjust so the default method is associated to '0' in the output's filename
+    # ----------TOTAL TIME REQUIRED:----------
 
-				U[i],t_inc_aux=evolution(S,vec_base[i],vec_base)
+    t_inc = time.process_time_ns() - t
 
-			t_inc+=t_inc_aux
+    print(f"\nStoU: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
 
-		U=np.transpose(U)
-
-	elif method==3:
-
-		U,t_inc=evolution_3(S,photons,vec_base,file_output,filename)
-
-	print(f"\nComputation time of chosen method {method} (in seconds): {float(t_inc/(10**9))}")
-
-
-	# ----------STORAGE OF THE U EVOLUTION MATRIX COEFICIENTS AND PROBABILITIES:----------
-
-	if file_output==True:
-
-		# Storage in text of the resulting matrix U
-		coefs_file=open(filename+f"_m_{m}_n_{n}_coefs_method_{method}.txt","w")
-
-		# Storage in text of the probability matrix, which comprehends the probabilities of
-		# obtaining each photon distribution from another, in the corresponding cell
-		probs_file=open(filename+f"_m_{m}_n_{n}_probs_method_{method}.txt","w")
-
-		np.savetxt(coefs_file,U,delimiter=",")
-		np.savetxt(probs_file,np.real(np.multiply(np.conj(U),U)),delimiter=",",fmt="(%e)")
-
-
-	# ----------VERIFICATION OF THE PROGRAM'S SUCCESS:----------
-
-	# We have supposedly found a solution, whose validity is subject to the next loop
-
-	if txt==True:
-
-		# ----------UNITARY CHECK FOR MATRIX U:----------
-
-		print("\n\n\n\n\nUNITARY CHECK FOR MATRIX U:\n")
-
-		cond=unitary(U,len(U),"U",acc_d)
-
-		if cond==False:
-
-			print("\nS ("+filename+")'s corresponding evolution U is not unitary.\n")
-
-		else:
-
-			print("The resulting matrix is unitary.")
-
-	# Further check: we initialise a variable 'sol'
-	sol=True
-
-	for i in range(len(vec_base[:,0])):
-
-		# We compute the probability sum for each U|vector_inicial>
-		sum_probs=np.sum(np.real(np.multiply(np.conj(U),U))[:,i])
-
-		# Condition which invalidates the solution: the sum of the probabilities given for each U|vector_inicial> is not 1.0
-		if np.round(sum_probs,10)!=1.0:
-
-			sol=False
-
-			break
-
-	if sol==True:
-
-		if txt==True:
-
-			print("\n\nProgram successfully executed.\n")
-
-			print("\nOutput evolution matrix:")
-			print(np.round(U,acc_d))
-
-		if file_output==True:
-
-			probs_file.write(f"\nFor all columns, the sum of probabilities is practically equal to 1.0. ") 
-
-	else:
-
-		if txt==True:
-
-			print("\nThere are discrepances in the sum of probabilities for at least one column. Was the input matrix really unitary?\n")
-
-		if file_output==True:
-
-			# Warning of the program's failure
-			probs_file.write("\nThe sum of probabilities is not equal to 1.0 for at least one of the columns of U.\nThere has been a problem with the input.\n")
-
-	if file_output==True:
-
-		coefs_file.close()
-
-		probs_file.close()
-
-
-	# ----------TOTAL TIME REQUIRED:----------
-
-	t_inc=time.process_time_ns()-t
-
-	print(f"\nStoU: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
-
-	return U, vec_base
+    return U, vec_base

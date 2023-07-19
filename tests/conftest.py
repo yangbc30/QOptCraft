@@ -9,7 +9,10 @@ import qoptcraft as qoc
 
 
 SAVE_DATA_PATH = qoc.config.SAVE_DATA_PATH = Path("tests", "save_basis").resolve()
-shutil.rmtree(SAVE_DATA_PATH)
+try:
+    shutil.rmtree(SAVE_DATA_PATH)
+except FileNotFoundError:
+    ...
 
 
 @pytest.fixture

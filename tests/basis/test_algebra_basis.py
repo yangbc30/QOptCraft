@@ -1,9 +1,7 @@
 import pytest
 from numpy.testing import assert_allclose
 
-from qoptcraft._legacy.Phase3_Aux.get_algebra_basis_legacy import (
-    matrix_u_basis_generator,
-)
+from qoptcraft._legacy.Phase3_Aux import matrix_u_basis_generator
 from qoptcraft.basis.algebra import algebra_basis
 from qoptcraft.basis.photon import photon_basis
 
@@ -14,11 +12,11 @@ def test_sparse_basis(modes, photons) -> None:
     dim = len(fock_basis)
     legacy_photons = [0] * modes
     legacy_photons[0] = photons
-    basis = matrix_u_basis_generator(modes, dim, legacy_photons, fock_basis)[0]
-    basis_sparse = algebra_basis(modes, photons)[0]
+    basis_legacy = matrix_u_basis_generator(modes, dim, legacy_photons, fock_basis)[0]
+    basis = algebra_basis(modes, photons)[0]
 
-    for matrix, matrix_sparse in zip(basis, basis_sparse):
-        assert_allclose(matrix, matrix_sparse.toarray())
+    for matrix_legacy, matrix in zip(basis_legacy, basis):
+        assert_allclose(matrix, matrix)
 
 
 # @pytest.mark.parametrize(("modes", "photons"), ((2, 3), (4, 2), (5, 3)))

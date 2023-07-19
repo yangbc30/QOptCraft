@@ -35,7 +35,6 @@ import numpy as np
 # ----------FILE MANAGEMENT:----------
 
 # File opening
-from io import open 
 
 from ..read_matrix import read_matrix_from_txt
 
@@ -82,11 +81,11 @@ from ..Phase5_Aux.quasiunitary import *
 
 def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,N1=False,N2=False,acc_anc=8,acc_d=3,txt=False):
 	"""
-	Creates/loads .txt files containing a quasiunitary matrix and decomposes them into linear optics devices plus the remaining diagonal, taking additional loss modes into account. 
+	Creates/loads .txt files containing a quasiunitary matrix and decomposes them into linear optics devices plus the remaining diagonal, taking additional loss modes into account.
 	Information is displayed on-screen.
 	"""
 
-	if txt==True:
+	if txt is True:
 
 		print("==========================================================")
 		print("||| SCATTERING MATRIX S CREATOR WITH (OR WITHOUT) LOSS |||")
@@ -95,21 +94,21 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 	# Input control: in case there is something wrong with given inputs, it is notified on-screen
 	file_input, filename, newfile, acc_d=input_control(5,file_input,T,file_output,filename,True,acc_d,newfile)
 
-	if newfile==True:
+	if newfile is True:
 
 		N1=input_control_ints(N1,"N1",1)
-		
+
 		N2=input_control_ints(N2,"N2",1)
 
-	if acc_anc<0 or type(acc_anc) is not int: 
+	if acc_anc<0 or type(acc_anc) is not int:
 
 		if acc_anc<0:
 
-			print(f"\nWARNING: a value higher than 0 for acc_anc, the precision of finding ancilla modes, is required.")
+			print("\nWARNING: a value higher than 0 for acc_anc, the precision of finding ancilla modes, is required.")
 
 		elif type(acc_anc) is not int:
 
-			print(f"\nWARNING: invalid acc_anc ancilla precision input (needs to be int and equal or higher than 0).")
+			print("\nWARNING: invalid acc_anc ancilla precision input (needs to be int and equal or higher than 0).")
 
 		# This variable corresponds to the ancilla decimal precision. It applies to the comparisons for finding photon loss
 		# In the .txt files, results contain all possible decimals
@@ -118,7 +117,7 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 
 	# ----------INITIAL MATRIX INPUT:----------
 
-	if txt==True:
+	if txt is True:
 
 		print("\nINITIAL MATRIX INPUT:\n")
 
@@ -131,15 +130,15 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 	t=time.process_time_ns()
 
 	# If a new matrix is created, there are two options: either just create an array, or save it into a .txt file
-	if newfile==True:
+	if newfile is True:
 
 		# A new file containing an N1xN2-dimensional unitary matrix U is created
 		# so it can be used in other processes
 		T=RandM(file_output,filename,N1,N2,txt)
 
-	elif file_input==True:
+	elif file_input is True:
 
-		# Loading T 
+		# Loading T
 		T=read_matrix_from_txt(filename)
 
 		# Input matrix T's dimensions N1 and N2, from its rows and columns respectively
@@ -147,7 +146,7 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 
 		N2=len(T[0,:])
 
-	if txt==True:
+	if txt is True:
 
 		print("\nInput matrix T:\n")
 
@@ -160,13 +159,13 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 
 	# We find the higher and lower dimension of the matrix (or minimum and maximum as there are only two)
 	# They will be required in the algorithm
-	minDim=np.min([N1,N2])
+	np.min([N1,N2])
 	maxDim=np.max([N1,N2])
 
 	# An specific method of numpy.linalg (np.linalg in our case) is required for the singular value decomposition
 	U,D,W=np.linalg.svd(T)
 
-	if txt==True:
+	if txt is True:
 
 		print("\n\nThe singular value decomposition of T in the matrices U, D, W has been computed.\n")
 
@@ -178,7 +177,7 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 	UList, UD=U_decomposition(U,OGdimU,file_output,filename+"_U",txt)
 	WList, WD=U_decomposition(W,OGdimW,file_output,filename+"_W",txt)
 
-	# Matrix padding loop: depending of which has the lower dimensions, either U or W square matrices 
+	# Matrix padding loop: depending of which has the lower dimensions, either U or W square matrices
 	# will go from being minDim-dimensional to maxDim-dimensional
 
 	if N1<N2:
@@ -223,7 +222,7 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 	# Total dimensions for all quasiunitary S matrices
 	totalDim=2*(maxDim+ancDim)
 
-	if txt==True:
+	if txt is True:
 
 		print("\n\n\n\n\nS MATRIX GENERATION:\n")
 
@@ -231,7 +230,7 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 		print(f"\nNumber of required ancilla modes ancDim = {ancDim}")
 		print(f"\nTotal dimension of the resulting matrix totalDim = {totalDim}")
 
-	# S matrices building: SU, SD and SW correspond to only the transformations of 
+	# S matrices building: SU, SD and SW correspond to only the transformations of
 	# U, W and D componentes respectively. By multiplying those three S is obtained
 
 	SU=S_U_W_composition(U,maxDim,ancDim)
@@ -246,7 +245,7 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 
 	# ----------STORAGE OF MATRICES SU, SD, SW, S IN FILES:----------
 
-	if file_output==True:
+	if file_output is True:
 
 		SU_file=open(filename+"_SU.txt","w")
 
@@ -279,7 +278,7 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 
 	S_cut=S[:int(totalDim/2),:int(totalDim/2)]
 
-	if file_output==True:
+	if file_output is True:
 
 		S_cut_file=open(filename+"_S.txt","w")
 
@@ -287,20 +286,20 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 
 		S_cut_file.close()
 
-		if txt==True:
+		if txt is True:
 
-			print(f"\nThe resulting quasiunitary matrix S has been storaged in the file '"+filename+"_S_quasiunitary.txt'.")
-			print(f"\nIts components SU, SD y SW have been storaged in the '"+filename+"_SU.txt', '"+filename+"_SW.txt' y '"+filename+"_SD.txt' files respectively.")
+			print("\nThe resulting quasiunitary matrix S has been storaged in the file '"+filename+"_S_quasiunitary.txt'.")
+			print("\nIts components SU, SD y SW have been storaged in the '"+filename+"_SU.txt', '"+filename+"_SW.txt' y '"+filename+"_SD.txt' files respectively.")
 			print(f"\nFinally, a submatrix S corresponding to the first {maxDim+ancDim} rows and columns, compatible with the following algorithms, has been storaged in the file '"+filename+"_S.txt'.")
 
-	if txt==True:
+	if txt is True:
 
-		print(f"\nThe S matrix with loss has been obtained.")
-	
+		print("\nThe S matrix with loss has been obtained.")
+
 
 	# ----------MULTIPLE CHECKS FOR THE SU, SD, SW, S MATRICES OBTAINED:----------
 
-	if txt==True:
+	if txt is True:
 
 		print("\n\nSU, SD, SW, S MATRICES OBTAINED:\n")
 
@@ -319,20 +318,20 @@ def QuasiU(file_input=True,T=False,file_output=True,filename=False,newfile=True,
 
 	# ----------QUASIUNITARY CHECK FOR MATRIX S:----------
 
-	if txt==True:
+	if txt is True:
 
 		print("\n\n\n\n\nQUASIUNITARY CHECK FOR MATRIX S:\n")
 
 		cond=quasiunitary(S,totalDim,"S",acc_d)
 
-		if cond==False:
+		if cond is False:
 
 			print("\nThe algorithm found a problem with this result. It's advised to try running it again with a higher decimal accuracy for finding ancilla modes.\n")
 
 
 	# ----------UNITARY CHECK FOR SUBMATRIX S[:{int(totalDim/2)},:{int(totalDim/2)}]:----------
 
-	if txt==True:
+	if txt is True:
 
 		print(f"\n\n\n\n\nUNITARY CHECK FOR SUBMATRIX S[:{int(totalDim/2)},:{int(totalDim/2)}]:\n")
 
