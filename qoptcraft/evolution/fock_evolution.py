@@ -14,18 +14,18 @@ def fock_evolution(
     scattering_matrix: NDArray,
     fock_in: tuple[int, ...],
     method: Literal["heisenberg", "permanent glynn", "permanent ryser"] = "permanent glynn",
-) -> PureState:
+) -> NDArray:
     """Evolution of a single Fock state using the definition given by basic
     quantum mechanics.
 
     Args:
-        scattering_matrix (NDArray): _description_
-        fock_in (Fock): _description_
+        scattering_matrix (NDArray): scattering matrix of a linear optical interferometer.
+        fock_in (Fock): fock state to evolve.
         method (str): method to calculate the evolution of the Fock state. Options are
             'heisenberg', 'permanent glynn' or 'permanent ryser'. Default is 'permanent glynn'.
 
     Returns:
-        PureState: _description_
+        NDArray: fock state given in the photon basis.
     """
     if method == "heisenberg":
         return fock_evolution_heisenberg(scattering_matrix, fock_in)
@@ -34,16 +34,16 @@ def fock_evolution(
     raise ValueError("Options for method are 'heisenberg', 'permanent glynn' or 'permanent ryser'.")
 
 
-def fock_evolution_heisenberg(scattering_matrix: NDArray, fock_in: tuple[int, ...]) -> PureState:
+def fock_evolution_heisenberg(scattering_matrix: NDArray, fock_in: tuple[int, ...]) -> NDArray:
     """Evolution of a single Fock state using the definition given by basic
     quantum mechanics.
 
     Args:
-        scattering_matrix (NDArray): _description_
-        fock_in (Fock): _description_
+        scattering_matrix (NDArray): scattering matrix of a linear optical interferometer.
+        fock_in (Fock): fock state to evolve.
 
     Returns:
-        PureState: _description_
+        NDArray: fock state given in the photon basis.
     """
     modes = len(fock_in)
 
@@ -61,18 +61,20 @@ def fock_evolution_heisenberg(scattering_matrix: NDArray, fock_in: tuple[int, ..
 def fock_evolution_permanent(
     scattering_matrix: NDArray,
     fock_in: tuple[int, ...],
-    method: str = "glynn",
+    method: Literal["glynn", "ryser"] = "glynn",
     photon_basis: BasisPhoton = None,
 ) -> NDArray:
     """Evolution of a single Fock state using the definition given by basic
     quantum mechanics.
 
     Args:
-        scattering_matrix (NDArray): _description_
-        fock_in (Fock): _description_
+        scattering_matrix (NDArray): scattering matrix of a linear optical interferometer.
+        fock_in (Fock): fock state to evolve.
+        method (str): method to compute the permanent. Must be 'glynn' or 'ryser'.
+            Defaults to 'glynn'.
 
     Returns:
-        PureState: _description_
+        NDArray: fock state given in the photon basis.
     """
     if len(fock_in) != scattering_matrix.shape[0]:
         raise ValueError("Dimension of scattering_matrix and number of modes don't match.")
@@ -89,7 +91,7 @@ def fock_evolution_permanent(
 
 
 @numba.jit(nopython=True)
-def in_out_submatrix(matrix, fock_in: tuple[int, ...], fock_out: tuple[int, ...]):
+def in_out_submatrix(matrix, fock_in: tuple[int, ...], fock_out: tuple[int, ...]) -> NDArray:
     """Return a matrix with row index 'i' repeated 'row_rep' times
     and column index 'j' repeated 'col_rep' times.
 
@@ -113,43 +115,4 @@ def in_out_submatrix(matrix, fock_in: tuple[int, ...], fock_out: tuple[int, ...]
         for _ in range(fock_out[mode]):
             final_matrix[row, :] = interm_matrix[mode, :]
             row += 1
-    return final_matrix
-
-
-@numba.jit(nopython=True)
-def in_out_submatrix_alt(
-    matrix: NDArray, fock_in: tuple[int, ...], fock_out: tuple[int, ...]
-) -> NDArray:
-    """Return a matrix with row index 'i' repeated 'row_rep' times
-    and column index 'j' repeated 'col_rep' times.
-
-    Args:
-        matrix ((m, m) array): Linear optical scattering matrix with m modes.
-
-    Returns:
-        (n, n) array: Optical scattering matrix with m modes and n photons.
-
-    TODO:
-        Revise this function, doesn't work properly
-    """
-    # assert sum(fock_in) == sum(fock_out), "Error: number of photons must be conserved."
-    photons = sum(fock_in)
-    final_matrix = np.empty((photons, photons), dtype=np.complex128)
-    in_photon_count = 0
-    in_photon_idx = 0
-    cumulative_in_fock = np.cumsum(np.array(fock_in))
-    cumulative_out_fock = np.cumsum(np.array(fock_out))
-
-    for i in range(photons):
-        while cumulative_in_fock[in_photon_idx] <= in_photon_count:
-            in_photon_idx += 1
-        out_photon_idx = 0
-        out_photon_count = 0
-        for j in range(photons):
-            while cumulative_out_fock[out_photon_idx] <= out_photon_count:
-                out_photon_idx += 1
-            final_matrix[i, j] = matrix[in_photon_idx, out_photon_idx]
-            out_photon_count += 1
-        in_photon_count += 1
-
     return final_matrix

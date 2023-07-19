@@ -20,13 +20,13 @@ def photon_unitary(
     """Unitary matrix of a linear interferometer with a number of photons as input.
 
     Args:
-        scattering_matrix (NDArray): _description_
-        fock_in (Fock): _description_
+        scattering_matrix (NDArray): scattering matrix of a linear optical interferometer.
+        photons (int): number of photons.
         method (str): method to calculate the multiphoton unitary. Options are 'heisenberg',
             'hamiltonian', 'permanent glynn' or 'permanent ryser'. Default is 'permanent glynn'.
 
     Returns:
-        PureState: _description_
+        NDArray: image of the scattering matrix through the photonic homomorphism.
     """
     if method.split()[0] == "permanent":
         return photon_unitary_permanent(scattering_matrix, photons, method=method.split()[1])
@@ -43,11 +43,11 @@ def photon_unitary_heisenberg(scattering_matrix: NDArray, photons: int) -> NDArr
     """Standard evolution given by quantum mechanics.
 
     Args:
-        scattering_matrix (NDArray): _description_
+        scattering_matrix (NDArray): scattering matrix of a linear optical interferometer.
         photons (int): number of photons.
 
     Returns:
-        NDArray: _description_
+        NDArray: image of the scattering matrix through the photonic homomorphism.
     """
     modes = scattering_matrix.shape[0]
     dim = hilbert_dim(modes, photons)
@@ -60,20 +60,15 @@ def photon_unitary_heisenberg(scattering_matrix: NDArray, photons: int) -> NDArr
 
 
 def photon_unitary_hamiltonian(scattering_matrix: NDArray, photons: int) -> NDArray:
-    """Calulate the multiphoton unitary from the scattering matrix of the interferometer
-    through the hamiltonian evolution. First, the hamiltonian is calculated with the logarithm;
-    next, it is evolved with the algebra homomorphism, and finally we exponentiate the evolved
-    hamiltonian to get the lifted unitary.
-
-    Note:
-        Previously known as evolution_3.
+    """ "Unitary matrix of a linear interferometer with a number of photons as input.
+    Calculated by evolving the hamiltonian of the interferometer.
 
     Args:
-        scattering_matrix (NDArray): _description_
+        scattering_matrix (NDArray): scattering matrix of a linear optical interferometer.
         photons (int): number of photons.
 
     Returns:
-        NDArray: _description_
+        NDArray: image of the scattering matrix through the photonic homomorphism.
     """
     S_hamiltonian = log_matrix(scattering_matrix, method="schur")  # ? Best method??
     U_hamiltonian = photon_hamiltonian(S_hamiltonian, photons)
@@ -83,7 +78,20 @@ def photon_unitary_hamiltonian(scattering_matrix: NDArray, photons: int) -> NDAr
 def photon_unitary_permanent(
     scattering_matrix: NDArray, photons: int, method: str = "glynn"
 ) -> NDArray:
-    """<S|phi(U)|T> = Per(U_ST) / sqrt(s1! ...sm! t1! ... tm!)"""
+    """Unitary matrix of a linear interferometer with a number of photons as input.
+    Calculated using permanents:
+
+    <S|phi(U)|T> = Per(U_ST) / sqrt(s1! ...sm! t1! ... tm!)
+
+    Args:
+        scattering_matrix (NDArray): scattering matrix of a linear optical interferometer.
+        photons (int): number of photons.
+        method (str): method to calculate the permanent. Options are 'glynn' and 'ryser'.
+            Defaults to 'glynn'.
+
+    Returns:
+        NDArray: image of the scattering matrix through the photonic homomorphism.
+    """
     modes = scattering_matrix.shape[0]
     dim = hilbert_dim(modes, photons)
     unitary = np.empty((dim, dim), dtype=np.complex128)

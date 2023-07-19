@@ -2,15 +2,15 @@ import numpy as np
 from numpy.typing import NDArray
 
 
-def random_quasiunitary(shape: tuple, seed=None) -> NDArray:
+def random_quasiunitary(shape: tuple, seed: int | None = None) -> NDArray:
     """Create a random quasiunitary matrix.
 
     Args:
-        shape (tuple): _description_
-        seed (_type_, optional): _description_. Defaults to None.
+        shape (tuple): dimensions of the matrix.
+        seed (int, optional): seed to calculate the random unitary. Defaults to None.
 
     Returns:
-        NDArray: _description_
+        NDArray: matrix of the quasiunitary.
     """
     dim_1, dim_2 = shape[0], shape[1]
     rng = np.random.default_rng() if seed is None else np.random.default_rng(seed)
