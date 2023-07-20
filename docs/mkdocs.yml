@@ -3,7 +3,7 @@ site_description: "A package for the design and study of linear optical quantum 
 site_dir: public
 
 repo_url: https://github.com/pablovegan/QOptCraft
-repo_name: juagar/qoptcraft
+repo_name: pablovegan/QOptCraft
 docs_dir: ./
 watch: [../README.md, ../qoptcraft]
 
