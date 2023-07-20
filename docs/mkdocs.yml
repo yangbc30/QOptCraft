@@ -10,7 +10,12 @@ watch: [../README.md, ../qoptcraft]
 nav:
   - Introduction: index.md
   - API documentation: reference/  # defer documentation to the gen-files and literate-nav plugins
-  - Examples: examples/*
+  - Examples:
+      - Article examples: examples/article.ipynb
+      - Creating states: examples/state.ipynb
+      - Photonic homomorphism: examples/evolution.ipynb
+      - Optical decomposition: examples/toponogov.ipynb
+      - Toponogov approximation: examples/toponogov.ipynb
 
 theme:
   features:
