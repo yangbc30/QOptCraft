@@ -1,6 +1,6 @@
 # QOptCraft
 [![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://pablovegan.github.io/QOptCraft/)
-[![License: Apache 2.0](https://img.shields.io/github/license/saltstack/salt)](https://www.apache.org/licenses/LICENSE-2.0)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)](https://github.com/charliermarsh/ruff)
 [![black](https://img.shields.io/badge/code%20style-black-black)](https://github.com/psf/black)
 
@@ -14,17 +14,13 @@ Documentation and examples can be found [here](https://pablovegan.github.io/QOpt
 ## Installation
 Create and activate a new conda environment
 ```console
-conda create --name test python==3.11
+conda create --name quantum python==3.11
 conda activate test
-```
-Clone the repository
-```console
-git clone -b optimized https://github.tel.uva.es/juagar/qoptcraft.git
 ```
 
 Install with `pip`:
 ```console
-pip install git+https://github.tel.uva.es/juagar/qoptcraft.git@optimized
+pip install qoptcraft
 ```
 
 ## Quick usage
@@ -137,15 +133,15 @@ U = photon_unitary(S, photons)
 S_rebuilt = scattering_from_unitary(U, modes, photons)
 ```
 If this scattering matrix doesn't exist, it will raise an `InconsistentEquations` error.
-### Approximating a unitary with linear optics (Topogonov)
+### Approximating a unitary with linear optics (Toponogov)
 ```python
 from qoptcraft.operators import qft
-from qoptcraft.topogonov import topogonov
+from qoptcraft.toponogov import toponogov
 
 modes = 3
 photons = 2
 unitary = qft(6)
-approx_unitary, error = topogonov(unitary, modes, photons)
+approx_unitary, error = toponogov(unitary, modes, photons)
 ```
 
 
