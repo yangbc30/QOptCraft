@@ -1,9 +1,8 @@
 site_name: QOptCraft documentation
 site_description: "A package for the design and study of linear optical quantum systems."
-site_url: https://namespace.gitlab.io
 site_dir: public
 
-repo_url: https://gitlab.tel.uva.es/juagar/qoptcraft
+repo_url: https://github.com/pablovegan/QOptCraft
 repo_name: juagar/qoptcraft
 docs_dir: ./
 watch: [../README.md, ../qoptcraft]
