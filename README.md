@@ -1,5 +1,5 @@
 # QOptCraft
-
+[![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://pablovegan.github.io/QOptCraft/)
 [![License: Apache 2.0](https://img.shields.io/github/license/saltstack/salt)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)](https://github.com/charliermarsh/ruff)
 [![black](https://img.shields.io/badge/code%20style-black-black)](https://github.com/psf/black)
@@ -7,8 +7,9 @@
 
 A Python package for the design and study of linear optical quantum systems.
 
-## Documentation and examples
-Documentation and examples can be found in [...] 
+## Documentation
+Documentation and examples can be found [here](https://pablovegan.github.io/QOptCraft/).
+
 
 ## Installation
 Create and activate a new conda environment
