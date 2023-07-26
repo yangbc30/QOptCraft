@@ -8,6 +8,8 @@
 
 A Python package for the design and study of linear optical quantum systems.
 
+This repository is a mirror of https://gitlab.tel.uva.es/juagar/qoptcraft.
+
 ## Documentation
 Documentation and examples can be found [here](https://pablovegan.github.io/QOptCraft/).
 
