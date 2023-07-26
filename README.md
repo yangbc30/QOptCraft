@@ -145,10 +145,20 @@ unitary = qft(6)
 approx_unitary, error = toponogov(unitary, modes, photons)
 ```
 
+### Version 1.1
+
+Functions from the version 1.1 of QOptCraft can be accessed from the submodule `_legacy`
+```python
+from qoptcraft._legacy import *
+```
+
+
+## Authors
+
+Versions 1.0 and 1.1 were developed by Daniel Gómez Aguado (gomezaguado99@gmail.com), 2021. Update to version 2.0 has been developed by Pablo V. Parellada (pablo.veganzones@uva.es), 2023.
+
 
 ## Citing
-
-QOptCraft is the work of Daniel Gómez Aguado (gomezaguado99@gmail.com) and Pablo V. Parellada (pablo.veganzones@uva.es). 
 
 If you are doing research using qoptcraft, please cite our paper:
 

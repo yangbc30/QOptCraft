@@ -1,5 +1,7 @@
 """Module docstrings.
 """
+from typing import Literal
+
 import numpy as np
 from scipy.special import factorial as fact
 
@@ -8,7 +10,9 @@ from qoptcraft.math import hs_scalar_product, gram_schmidt_generator
 from qoptcraft.basis import get_algebra_basis
 
 
-def photon_invariant(state: State, method: str = "basis") -> float:
+def photon_invariant(
+    state: State, method: Literal["basis", "no basis", "reduced"] = "basis"
+) -> float:
     """Photonic invariant for a given state.
 
     Args:

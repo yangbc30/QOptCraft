@@ -11,6 +11,7 @@ authors = [
   {name = "Pablo V. Parellada", email = "pablo.veganzones@uva.es"}
 ]
 maintainers = [
+  {name = "Daniel Gómez Aguado", email = "gomezaguado99@gmail.com"},
   {name = "Pablo V. Parellada", email = "pablo.veganzones@uva.es"}
 ]
 description = """A package for the design and study of linear optical quantum systems.
