@@ -17,7 +17,7 @@ Documentation and examples can be found [here](https://pablovegan.github.io/QOpt
 ## Installation
 Create and activate a new conda environment
 ```console
-conda create --name quantum python==3.11
+conda create --name test python==3.11
 conda activate test
 ```
 
