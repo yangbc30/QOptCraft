@@ -4,11 +4,8 @@
 from numbers import Number
 
 import numpy as np
-from numpy.typing import NDArray
-from scipy.sparse import spmatrix
 
-
-Matrix = NDArray | spmatrix
+from .matrix_type import Matrix
 
 
 def hs_inner_product(matrix_1: Matrix, matrix_2: Matrix) -> Number:
@@ -44,6 +41,8 @@ def hs_scalar_product(matrix_1: Matrix, matrix_2: Matrix) -> Number:
     """
     result = 0.5 * (matrix_1.conj().T @ matrix_2 + matrix_2.conj().T @ matrix_1).trace()
     # assert not np.isnan(result), "Matrix inner product is not a number."
+    if isinstance(result, np.matrix):
+        return result.item()
     return result
 
 

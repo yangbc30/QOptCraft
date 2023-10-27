@@ -47,7 +47,6 @@ from ..recur_factorial import comb_evol
 # ----------SYSTEM:----------
 
 
-
 # ----------UNITARY MATRIX CONDITION----------
 
 from ..unitary import *

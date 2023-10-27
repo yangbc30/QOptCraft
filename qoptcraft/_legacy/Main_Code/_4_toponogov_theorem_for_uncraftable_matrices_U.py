@@ -50,7 +50,6 @@ from ..read_matrix import read_matrix_from_txt
 # ----------SYSTEM:----------
 
 
-
 # ----------INITIAL MATRIX GENERATOR:----------
 
 from ..write_initial_matrix import haar_measure

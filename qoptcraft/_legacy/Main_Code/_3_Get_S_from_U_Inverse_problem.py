@@ -42,7 +42,6 @@ from ..read_matrix import read_matrix_from_txt
 # ----------SYSTEM:----------
 
 
-
 # ----------COMBINATORY:----------
 
 from ..recur_factorial import *

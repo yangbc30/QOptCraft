@@ -32,6 +32,12 @@ def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlge
     Returns:
         BasisAlgebra, BasisAlgebra: basis of the algebra and the image algebra.
     """
+    warnings.warn(
+        "get_algebra_basis is deprecated. Use the new function get_image_algebra_basis.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
     folder_path = config.SAVE_DATA_PATH / f"m={modes} n={photons}"
     folder_path.mkdir(parents=True, exist_ok=True)
 
@@ -76,6 +82,58 @@ def algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]
             basis_image.append(image_antisym_matrix(mode_1, mode_2, photon_basis))
 
     return basis, basis_image
+
+
+def get_image_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]:
+    """Return a basis for the Hilbert space with n photons and m modes.
+    If the basis was saved retrieve it, otherwise the function creates
+    and saves the basis to a file.
+
+    Args:
+        photons (int): number of photons.
+        modes (int): number of modes.
+
+    Returns:
+        BasisAlgebra, BasisAlgebra: basis of the algebra and the image algebra.
+    """
+    folder_path = config.SAVE_DATA_PATH / f"m={modes} n={photons}"
+    folder_path.mkdir(parents=True, exist_ok=True)
+
+    basis_image_path = folder_path / "image_algebra.pkl"
+    basis_image_path.touch()  # create file if it doesn't exist
+    try:
+        with basis_image_path.open("rb") as f:
+            basis_image = pickle.load(f)
+    except EOFError:
+        basis_image = image_algebra_basis(modes, photons)
+        with basis_image_path.open("wb") as f:
+            pickle.dump(basis_image, f)
+        print(f"Image algebra basis saved in {folder_path}")
+
+    return basis_image
+
+
+def unitary_algebra_basis(dim: int) -> BasisAlgebra:
+    basis = []
+    for i in range(dim):
+        basis.append(sym_matrix(i, i, dim))
+        for j in range(i):
+            basis.append(sym_matrix(i, j, dim))
+            basis.append(antisym_matrix(i, j, dim))
+    return basis
+
+
+def image_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]:
+    """Generate the basis for the algebra and image algebra."""
+    basis = []
+    photon_basis = get_photon_basis(modes, photons)
+
+    for i in range(modes):
+        basis.append(image_sym_matrix(i, i, photon_basis))
+        for j in range(i):
+            basis.append(image_sym_matrix(i, j, photon_basis))
+            basis.append(image_antisym_matrix(i, j, photon_basis))
+    return basis
 
 
 def sym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:

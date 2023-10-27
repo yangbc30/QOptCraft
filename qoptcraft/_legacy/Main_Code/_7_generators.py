@@ -37,7 +37,6 @@ import numpy as np
 # File opening
 
 
-
 # ----------INITIAL MATRIX GENERATOR:----------
 
 from ..write_initial_matrix import *

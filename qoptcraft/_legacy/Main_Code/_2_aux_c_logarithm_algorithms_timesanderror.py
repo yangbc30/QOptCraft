@@ -56,7 +56,6 @@ import xlsxwriter
 # ----------DFT MATRIX GENERATOR:----------
 
 
-
 # ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
 
 from ..Phase2_Aux._2_logarithm_algorithms import *

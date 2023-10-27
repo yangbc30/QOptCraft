@@ -33,7 +33,6 @@ import numpy as np
 # ----------SYSTEM:----------
 
 
-
 # ----------COMBINATORY:----------
 
 from ..recur_factorial import comb_evol

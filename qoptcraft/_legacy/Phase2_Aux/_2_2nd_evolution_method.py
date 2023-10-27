@@ -149,7 +149,6 @@ def m_inverse(array):
     cont = 0
 
     for i in range(N):
-
         # We explore the array, each time comparing it with a different value
         for _j in range(int(np.real(array)[i])):
             m_array_inv[cont] = i

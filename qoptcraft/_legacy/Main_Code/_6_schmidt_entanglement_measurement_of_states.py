@@ -49,9 +49,7 @@ from ..read_matrix import read_matrix_from_txt, read_matrix_from_txt_general
 # ----------SYSTEM:----------
 
 
-
 # ----------INITIAL MATRIX GENERATOR:----------
-
 
 
 # ----------COMBINATORY:----------
@@ -65,8 +63,6 @@ from ..input_control import input_control
 
 
 # ----------ALGORITHM 2: AUXILIAR FUNCTIONS:----------
-
-
 
 
 # ----------PHOTON COMB BASIS:----------
