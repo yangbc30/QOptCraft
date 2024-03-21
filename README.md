@@ -195,7 +195,7 @@ If you are new to contributing to open source, [this guide](https://opensource.g
 
 ## Acknowledgment
 
-The development of the code for the version 2.0 has been supported by the European Union.-Next Generation UE/MICIU/Plan de Recuperacion, Transformacion y Resiliencia/Junta de Castilla y Leon"
+The development of the code for the version 2.0 has been supported by the European Union.-Next Generation UE/MICIU/Plan de Recuperación, Transformación y Resiliencia/Junta de Castilla y León.
 
 
 ## License
