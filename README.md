@@ -193,7 +193,7 @@ to discuss what you would like to change. Also, make sure to update tests as app
 
 If you are new to contributing to open source, [this guide](https://opensource.guide/how-to-contribute/) helps explain why, what, and how to get involved.
 
-## Acknowledgment: 
+## Acknowledgment
 
 The development of the code for the version 2.0 has been supported by the European Union.-Next Generation UE/MICIU/Plan de Recuperacion, Transformacion y Resiliencia/Junta de Castilla y Leon"
 
