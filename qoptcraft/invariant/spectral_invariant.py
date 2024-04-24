@@ -2,8 +2,9 @@ from qoptcraft.state import State
 from typing import Literal
 
 import numpy as np
+from numpy.typing import NDArray
 
-from qoptcraft.basis import basis_image_orthonormal, basis_complement_image_orthonormal
+from qoptcraft.basis import basis_image_orthonormal
 from qoptcraft.math import Matrix, hs_scalar_product
 
 
@@ -22,7 +23,7 @@ def projection_density(state: State, subspace: Literal["image", "complement"]) -
 
 def spectral_invariant(
     state: State, subspace: Literal["image", "complement", "full"]
-) -> tuple[float, float]:
+) -> NDArray:
     """Calculate the photonic invariant for a given state.
 
     Args:

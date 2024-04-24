@@ -51,6 +51,7 @@ def log_matrix_diag(matrix: NDArray) -> NDArray:
     Returns:
         NDArray: matrix logarithm.
     """
+
     eigenvalues, eigenvectors = np.linalg.eig(matrix)
     diag = np.diag(eigenvalues / np.abs(eigenvalues))
     log_matrix = eigenvectors @ logm(diag) @ inv(eigenvectors)

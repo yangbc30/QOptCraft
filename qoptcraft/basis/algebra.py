@@ -173,6 +173,8 @@ def image_sym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spm
 
 def image_antisym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spmatrix:
     """Image of the antisymmetric basis matrix by the lie algebra homomorphism."""
+    if mode_1 == mode_2:
+        raise ValueError("Antisymmetric matrix cannot have equal modes.")
     dim = len(photon_basis)
     matrix = lil_matrix((dim, dim), dtype=np.complex128)
 

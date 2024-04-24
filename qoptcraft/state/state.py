@@ -362,6 +362,15 @@ class PureState(State):
                     state[j] = self.coefs[i]
         return state
 
+    def dot(self, other: PureState) -> complex:
+        prod = 0
+        for i, fock_self in enumerate(self.fock_states):
+            try:
+                prod += self.amplitudes[i] * other.amp_fock(fock_self).conjugate()
+            except ValueError:
+                continue
+        return round(prod, 7)
+
     def exp_photons(self, mode_creat: int, mode_annih: int) -> float:
         r"""Compute the expecation value of $a^\dagger_i a_j$.
 
