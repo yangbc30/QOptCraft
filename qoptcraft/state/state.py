@@ -128,7 +128,7 @@ class PureState(State):
         self.coefs = np.array(coefs)
 
         sum_coefs = np.sum(np.abs(self.coefs) ** 2)
-        if sum_coefs == 0:
+        if sum_coefs == 1:
             self.amplitudes = self.coefs
         else:
             self.amplitudes = np.array(coefs) / np.sqrt(sum_coefs)
@@ -221,7 +221,7 @@ class PureState(State):
 
     def __add__(self, other: PureState) -> Self:
         """Tensor product of self with other state."""
-        if other == 0:
+        if isinstance(other, Vacuum):
             return self
         if isinstance(other, PureState):
             if self.photons != other.photons:
@@ -255,6 +255,8 @@ class PureState(State):
 
     def __sub__(self, other: PureState) -> Self:
         """Substraction of states."""
+        if isinstance(other, Vacuum):
+            return self
         if isinstance(other, PureState):
             if self.photons != other.photons:
                 raise NumberPhotonsError()
@@ -265,8 +267,7 @@ class PureState(State):
         raise NotImplementedError
 
     def __neg__(self) -> Self:
-        self.coefs = -self.coefs
-        return self
+        return PureState(self.fock_states, -self.coefs)
 
     def __isub__(self, other: PureState) -> Self:
         """Inplace substraction of states."""
@@ -363,10 +364,23 @@ class PureState(State):
         return state
 
     def dot(self, other: PureState) -> complex:
+        if isinstance(other, Vacuum):
+            return 0
         prod = 0
         for i, fock_self in enumerate(self.fock_states):
             try:
                 prod += self.amplitudes[i] * other.amp_fock(fock_self).conjugate()
+            except ValueError:
+                continue
+        return round(prod, 7)
+
+    def dot_coefs(self, other: PureState) -> complex:
+        if isinstance(other, Vacuum):
+            return 0
+        prod = 0
+        for i, fock_self in enumerate(self.fock_states):
+            try:
+                prod += self.coefs[i] * other._coef_fock(fock_self).conjugate()
             except ValueError:
                 continue
         return round(prod, 7)
@@ -408,7 +422,7 @@ class PureState(State):
         Returns:
             PureState: created state.
         """
-        state = 0
+        state = Vacuum()
         for fock, coef in zip(self.fock_states, self.coefs, strict=True):
             fock_created, coef_creat = creation(mode, fock)
             state += Fock(*fock_created, coef=coef_creat * coef)
@@ -423,7 +437,7 @@ class PureState(State):
         Returns:
             PureState: created state.
         """
-        state = 0
+        state = Vacuum()
         for fock, coef in zip(self.fock_states, self.coefs, strict=True):
             fock_annih, coef_annih = annihilation(mode, fock)
             if coef_annih == 0:
@@ -446,3 +460,34 @@ class Fock(PureState):
     def __len__(self):
         """Number of modes in the fock state."""
         return self.modes
+
+
+class Vacuum(State):
+
+    def __repr__(self) -> str:
+        return "Vacuum"
+
+    def __str__(self) -> str:
+        return "Vacuum"
+
+    def creation(self, mode: int) -> PureState:
+        """Creation of a photon in a certain mode.
+
+        Args:
+            mode (int): mode in which to create.
+
+        Returns:
+            PureState: created state.
+        """
+        return self
+
+    def annihilation(self, mode: int) -> Self:
+        """Annihilation of a photon in a certain mode.
+
+        Args:
+            mode (int): mode in which to annihilate.
+
+        Returns:
+            PureState: created state.
+        """
+        return self

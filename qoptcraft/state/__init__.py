@@ -1,1 +1,1 @@
-from .state import State, MixedState, PureState, Fock
+from .state import State, MixedState, PureState, Fock, Vacuum

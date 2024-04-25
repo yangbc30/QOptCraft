@@ -12,7 +12,7 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.special import comb
 
-from qoptcraft.state import State, PureState
+from qoptcraft.state import State, PureState, Vacuum
 from qoptcraft.math import hs_scalar_product, gram_schmidt_generator
 from qoptcraft.basis import get_algebra_basis
 
@@ -40,7 +40,7 @@ def moments_invariant(state: PureState, order: int) -> NDArray:
     return invariant
 
 
-def moment_element(state: PureState, modes_annih: int, modes_creat: int) -> float:
+def moment_element(state: PureState | Vacuum, modes_annih: int, modes_creat: int) -> float:
     r"""Compute the expecation value of $a^\dagger_i a_j$.
 
     Args:
@@ -50,14 +50,11 @@ def moment_element(state: PureState, modes_annih: int, modes_creat: int) -> floa
     Returns:
         float: expectation value.
     """
+    state.coefs = state.amplitudes
     state_copy = state
-
-    for mode in modes_annih:
-        state = state.creation(mode)
     for mode in modes_creat:
+        state = state.creation(mode)
+    for mode in modes_annih:
         state = state.annihilation(mode)
 
-    print(f"{state_copy = }")
-    print(f"{state = }")
-
-    return state_copy.dot(state)
+    return state_copy.dot_coefs(state)
