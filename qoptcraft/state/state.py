@@ -424,8 +424,16 @@ class PureState(State):
         """
         state = Vacuum()
         for fock, coef in zip(self.fock_states, self.coefs, strict=True):
-            fock_created, coef_creat = creation(mode, fock)
-            state += Fock(*fock_created, coef=coef_creat * coef)
+            fock_ = list(fock)
+            modes = len(fock)
+            if mode + 1 > modes:
+                fock_ = fock_ + (mode - modes)*[0] + [1]
+                coef_creat = 1
+            else:
+                photons = fock[mode]
+                coef_creat = np.sqrt(photons + 1)
+                fock_[mode] = photons + 1
+            state += Fock(*fock_, coef=coef_creat * coef)
         return state
 
     def annihilation(self, mode: int) -> Self:
@@ -437,12 +445,18 @@ class PureState(State):
         Returns:
             PureState: created state.
         """
+        if mode + 1 > self.modes:
+            return Vacuum()
+
         state = Vacuum()
         for fock, coef in zip(self.fock_states, self.coefs, strict=True):
-            fock_annih, coef_annih = annihilation(mode, fock)
-            if coef_annih == 0:
+            photons = fock[mode]
+            coef_annih = np.sqrt(photons)
+            fock_ = list(fock)
+            fock_[mode] = photons - 1
+            if coef_annih == 0 or sum(fock_) == 0:
                 continue
-            state += Fock(*fock_annih, coef=coef_annih * coef)
+            state += Fock(*fock_, coef=coef_annih * coef)
         return state
 
 
@@ -479,7 +493,9 @@ class Vacuum(State):
         Returns:
             PureState: created state.
         """
-        return self
+        if mode == 0:
+            return Fock(1)
+        return Fock(*(mode*[0]), 1)
 
     def annihilation(self, mode: int) -> Self:
         """Annihilation of a photon in a certain mode.

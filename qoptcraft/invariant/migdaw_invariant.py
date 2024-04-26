@@ -4,17 +4,13 @@ References:
     Migdał et al. Multiphoton states related via linear optics.
     https://arxiv.org/abs/1403.3069
 """
-from typing import Literal, Generator
-import itertools
-from copy import deepcopy
+from itertools import combinations_with_replacement
 
 import numpy as np
 from numpy.typing import NDArray
 from scipy.special import comb
 
-from qoptcraft.state import State, PureState, Vacuum
-from qoptcraft.math import hs_scalar_product, gram_schmidt_generator
-from qoptcraft.basis import get_algebra_basis
+from qoptcraft.state import PureState, Vacuum
 
 
 def moments_invariant(state: PureState, order: int) -> NDArray:
@@ -34,8 +30,8 @@ def moments_invariant(state: PureState, order: int) -> NDArray:
     matrix_dim = int(comb(modes, order, repetition=True))
     invariant = np.zeros((matrix_dim, matrix_dim))
 
-    for i, modes_annih in enumerate(itertools.combinations_with_replacement(range(modes), order)):
-        for j, modes_creat in enumerate(itertools.combinations_with_replacement(range(modes), order)):
+    for i, modes_annih in enumerate(combinations_with_replacement(range(modes), order)):
+        for j, modes_creat in enumerate(combinations_with_replacement(range(modes), order)):
             invariant[i,j] = moment_element(state, modes_annih, modes_creat)
     return invariant
 
