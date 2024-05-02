@@ -17,9 +17,6 @@ from qoptcraft.state import PureState, Vacuum
 def migdaw_invariant(state: PureState, order: int) -> NDArray:
     """Calculate the k-th order correlator of a pure state.
 
-    Note:
-        Calculations without using the basis are much faster and memory efficient.
-
     Args:
         state (State): a photonic quantum state.
         order (int): order k of the correlator.
