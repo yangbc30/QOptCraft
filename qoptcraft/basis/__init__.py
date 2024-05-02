@@ -9,3 +9,4 @@ from .algebra import (
 )
 from .algebra_orthonormal import basis_image_orthonormal, basis_complement_image_orthonormal
 from .hilbert_dimension import hilbert_dim
+from .projection import projection_density

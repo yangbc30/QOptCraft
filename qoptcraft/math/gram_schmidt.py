@@ -1,5 +1,7 @@
 """Stable Gram-Schmidt algorithm.
 """
+from collections.abc import Generator
+
 from numpy.typing import NDArray
 from scipy.sparse import spmatrix
 
@@ -34,7 +36,7 @@ def gram_schmidt(basis: list[spmatrix] | list[NDArray]) -> list[spmatrix] | list
     return orth_basis
 
 
-def gram_schmidt_generator(basis: list[spmatrix] | list[NDArray]) -> list[spmatrix] | list[NDArray]:
+def gram_schmidt_generator(basis: list[spmatrix] | list[NDArray]) -> Generator:
     """Gram-Schmidt algorithm to orthonormalize a basis.
 
     Note:

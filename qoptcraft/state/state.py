@@ -1,5 +1,6 @@
 """Implement a class to describe a pure state photonic state.
 """
+
 from __future__ import annotations
 
 import logging
@@ -427,7 +428,7 @@ class PureState(State):
             fock_ = list(fock)
             modes = len(fock)
             if mode + 1 > modes:
-                fock_ = fock_ + (mode - modes)*[0] + [1]
+                fock_ = fock_ + (mode - modes) * [0] + [1]
                 coef_creat = 1
             else:
                 photons = fock[mode]
@@ -495,7 +496,7 @@ class Vacuum(State):
         """
         if mode == 0:
             return Fock(1)
-        return Fock(*(mode*[0]), 1)
+        return Fock(*(mode * [0]), 1)
 
     def annihilation(self, mode: int) -> Self:
         """Annihilation of a photon in a certain mode.

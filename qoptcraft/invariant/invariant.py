@@ -1,5 +1,6 @@
 """Module docstrings.
 """
+
 from typing import Literal
 
 import numpy as np

@@ -5,6 +5,7 @@ References:
         T.A. Loring, Numer. Linear Algebra Appl. 21 (6) (2014) 744-760.
         https://arxiv.org/abs/1203.6151
 """
+
 from typing import Literal
 
 import numpy as np

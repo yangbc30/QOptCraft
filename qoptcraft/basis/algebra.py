@@ -84,7 +84,7 @@ def algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]
     return basis, basis_image
 
 
-def get_image_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]:
+def get_image_algebra_basis(modes: int, photons: int) -> BasisAlgebra:
     """Return a basis for the Hilbert space with n photons and m modes.
     If the basis was saved retrieve it, otherwise the function creates
     and saves the basis to a file.

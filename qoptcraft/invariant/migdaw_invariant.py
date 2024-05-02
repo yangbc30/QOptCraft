@@ -4,6 +4,7 @@ References:
     Migdał et al. Multiphoton states related via linear optics.
     https://arxiv.org/abs/1403.3069
 """
+
 from itertools import combinations_with_replacement
 
 import numpy as np
@@ -13,7 +14,7 @@ from scipy.special import comb
 from qoptcraft.state import PureState, Vacuum
 
 
-def moments_invariant(state: PureState, order: int) -> NDArray:
+def migdaw_invariant(state: PureState, order: int) -> NDArray:
     """Calculate the k-th order correlator of a pure state.
 
     Note:
@@ -28,15 +29,15 @@ def moments_invariant(state: PureState, order: int) -> NDArray:
     """
     modes = state.modes
     matrix_dim = int(comb(modes, order, repetition=True))
-    invariant = np.zeros((matrix_dim, matrix_dim))
+    invariant = np.zeros((matrix_dim, matrix_dim), dtype=np.complex64)
 
     for i, modes_annih in enumerate(combinations_with_replacement(range(modes), order)):
         for j, modes_creat in enumerate(combinations_with_replacement(range(modes), order)):
-            invariant[i,j] = moment_element(state, modes_annih, modes_creat)
-    return invariant
+            invariant[i, j] = migdaw_element(state, modes_annih, modes_creat)
+    return np.linalg.eigvals(invariant)
 
 
-def moment_element(state: PureState | Vacuum, modes_annih: int, modes_creat: int) -> float:
+def migdaw_element(state: PureState | Vacuum, modes_annih: int, modes_creat: int) -> float:
     r"""Compute the expecation value of $a^\dagger_i a_j$.
 
     Args:

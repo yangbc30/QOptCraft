@@ -2,6 +2,7 @@
 of the Lie algebra u(M), where M is the dimension of the Hilbert space
 of states with n photons and m modes.
 """
+
 import numpy as np
 from numpy.typing import NDArray
 from scipy.sparse import spmatrix

@@ -1,6 +1,7 @@
 """The conftest.py file allows us to initialise test functions
 that can be repeatedly used across several tests.
 """
+
 import shutil
 from pathlib import Path
 import pytest

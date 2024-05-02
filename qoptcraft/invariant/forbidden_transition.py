@@ -1,6 +1,7 @@
 """Check if a transition violates the necessary criterion
 of the invariant conservation.
 """
+
 from typing import Literal
 
 import numpy as np

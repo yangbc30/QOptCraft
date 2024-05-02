@@ -1,5 +1,6 @@
 """Beamsplitters as defined in Clemens et al. and in Reck et al., respectively.
 """
+
 import numpy as np
 from numpy.typing import NDArray
 
