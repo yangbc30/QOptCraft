@@ -19,6 +19,7 @@ warnings.filterwarnings(
     ),
 )
 
+SQRT_2_INV = 1 / np.sqrt(2)
 
 def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]:
     """Return a basis for the Hilbert space with n photons and m modes.
@@ -129,7 +130,7 @@ def image_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAl
     photon_basis = get_photon_basis(modes, photons)
 
     for i in range(modes):
-        basis.append(image_sym_matrix(i, i, photon_basis))
+        basis.append(image_photon_number(i, photon_basis))
         for j in range(i):
             basis.append(image_sym_matrix(i, j, photon_basis))
             basis.append(image_antisym_matrix(i, j, photon_basis))
@@ -139,17 +140,27 @@ def image_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAl
 def sym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
     """Create the element of the algebra i/2(|j><k| + |k><j|)."""
     matrix = np.zeros((dim, dim), dtype=np.complex128)
-    matrix[mode_1, mode_2] = 0.5j
-    matrix[mode_2, mode_1] += 0.5j
+    matrix[mode_1, mode_2] = SQRT_2_INV * 1j
+    matrix[mode_2, mode_1] += SQRT_2_INV * 1j
     return matrix
 
 
 def antisym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
     """Create the element of the algebra 1/2(|j><k| - |k><j|)."""
     matrix = np.zeros((dim, dim), dtype=np.complex128)
-    matrix[mode_1, mode_2] = 0.5
-    matrix[mode_2, mode_1] = -0.5
+    matrix[mode_1, mode_2] = SQRT_2_INV
+    matrix[mode_2, mode_1] = -SQRT_2_INV
     return matrix
+
+
+def image_photon_number(mode: int, photon_basis: BasisPhoton) -> spmatrix:
+    """Image of the symmetric basis matrix by the lie algebra homomorphism."""
+    dim = len(photon_basis)
+    matrix = lil_matrix((dim, dim), dtype=np.complex128)  # * efficient format for loading data
+
+    for i, fock in enumerate(photon_basis):
+            matrix[i, i] = 1j * fock[mode]
+    return matrix.tocsr()
 
 
 def image_sym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spmatrix:
@@ -161,12 +172,12 @@ def image_sym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spm
         if fock_[mode_1] != 0:
             fock, coef = annihilation(mode_1, fock_)
             fock, coef_ = creation(mode_2, fock)
-            matrix[photon_basis.index(fock), col] = 0.5j * coef * coef_
+            matrix[photon_basis.index(fock), col] = SQRT_2_INV * 1j * coef * coef_
 
         if fock_[mode_2] != 0:
             fock, coef = annihilation(mode_2, fock_)
             fock, coef_ = creation(mode_1, fock)
-            matrix[photon_basis.index(fock), col] += 0.5j * coef * coef_
+            matrix[photon_basis.index(fock), col] += SQRT_2_INV * 1j * coef * coef_
 
     return matrix.tocsr()
 
@@ -182,11 +193,11 @@ def image_antisym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) ->
         if fock_[mode_1] != 0:
             fock, coef = annihilation(mode_1, fock_)
             fock, coef_ = creation(mode_2, fock)
-            matrix[photon_basis.index(fock), col] = -0.5 * coef * coef_
+            matrix[photon_basis.index(fock), col] = -SQRT_2_INV * coef * coef_
 
         if fock_[mode_2] != 0:
             fock, coef = annihilation(mode_2, fock_)
             fock, coef_ = creation(mode_1, fock)
-            matrix[photon_basis.index(fock), col] += 0.5 * coef * coef_
+            matrix[photon_basis.index(fock), col] += SQRT_2_INV * coef * coef_
 
     return matrix.tocsr()
