@@ -9,7 +9,7 @@ from itertools import combinations_with_replacement
 
 import numpy as np
 from numpy.typing import NDArray
-from scipy.special import comb
+from scipy.special import comb, factorial
 
 from qoptcraft.state import PureState, Vacuum
 
@@ -31,24 +31,30 @@ def migdaw_invariant(state: PureState, order: int) -> NDArray:
     for i, modes_annih in enumerate(combinations_with_replacement(range(modes), order)):
         for j, modes_creat in enumerate(combinations_with_replacement(range(modes), order)):
             invariant[i, j] = migdaw_element(state, modes_annih, modes_creat)
-    return np.linalg.eigvals(invariant)
+    print(f"{invariant = }")
+    return np.linalg.eigvals(invariant).round(23)
 
 
-def migdaw_element(state: PureState | Vacuum, modes_annih: int, modes_creat: int) -> float:
+def migdaw_element(state: PureState | Vacuum, modes_annih: tuple[int,...], modes_creat: tuple[int,...]) -> float:
     r"""Compute the expecation value of $a^\dagger_i a_j$.
 
     Args:
-        mode_creat (int): mode where we apply the creation operator.
-        mode_annih (int): mode where we apply the annihilation operator.
+        mode_creat (tuple[int,...]): mode where we apply the creation operator.
+        mode_annih (tuple[int,...]): mode where we apply the annihilation operator.
 
     Returns:
         float: expectation value.
     """
     state.coefs = state.amplitudes
     state_copy = state
+
+    annih_exponents = np.array([modes_annih.count(mode) for mode in range(state.modes)])
+    creat_exponents = np.array([modes_creat.count(mode) for mode in range(state.modes)])
+    coef = np.sqrt(np.prod(factorial(annih_exponents)) * np.prod(factorial(creat_exponents)))
+
     for mode in modes_creat:
         state = state.creation(mode)
     for mode in modes_annih:
         state = state.annihilation(mode)
 
-    return state_copy.dot_coefs(state)
+    return state_copy.dot_coefs(state) / coef

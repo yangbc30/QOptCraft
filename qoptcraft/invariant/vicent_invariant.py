@@ -65,5 +65,5 @@ def _vicent_invariant_matrix(state_matrix: NDArray, algebra_basis: BasisAlgebra)
             commutator_i = basis_i @ state_matrix - state_matrix @ basis_i
             commutator_j = basis_j @ state_matrix - state_matrix @ basis_j
             invariant[i, j] = np.trace(commutator_i @ commutator_j)
-    # print(f"{invariant = }")
+    print(f"{invariant.round(23) = }")
     return invariant
