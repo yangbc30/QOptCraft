@@ -1,5 +1,6 @@
 """Stable Gram-Schmidt algorithm.
 """
+
 from collections.abc import Generator
 
 from numpy.typing import NDArray

@@ -35,7 +35,9 @@ def migdaw_invariant(state: PureState, order: int) -> NDArray:
     return np.linalg.eigvals(invariant).round(23)
 
 
-def migdaw_element(state: PureState | Vacuum, modes_annih: tuple[int,...], modes_creat: tuple[int,...]) -> float:
+def migdaw_element(
+    state: PureState | Vacuum, modes_annih: tuple[int, ...], modes_creat: tuple[int, ...]
+) -> float:
     r"""Compute the expecation value of $a^\dagger_i a_j$.
 
     Args:

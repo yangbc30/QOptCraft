@@ -14,4 +14,4 @@ from .spectral_invariant import spectral_invariant, projection_density
 
 from .migdaw_invariant import migdaw_invariant
 
-from .vicent_invariant import vicent_invariant
+from .vicent_invariant import vicent_invariant, vicent_matricial_invariant

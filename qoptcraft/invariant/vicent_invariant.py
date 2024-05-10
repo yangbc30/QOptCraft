@@ -13,7 +13,7 @@ from qoptcraft.state import PureState
 from qoptcraft.basis import get_image_algebra_basis, projection_density, BasisAlgebra
 
 
-def vicent_invariant(state: PureState, order: tuple[int,int,int] = (1,0,0)) -> NDArray:
+def vicent_invariant(state: PureState, order: tuple[int, int, int] = (1, 0, 0)) -> NDArray:
     """Calculate Vicent's invariant, which uses the commutators of (projected) density matrices
     with the basis of passive linear optical Hamiltonians.
 
@@ -66,4 +66,42 @@ def _vicent_invariant_matrix(state_matrix: NDArray, algebra_basis: BasisAlgebra)
             commutator_j = basis_j @ state_matrix - state_matrix @ basis_j
             invariant[i, j] = np.trace(commutator_i @ commutator_j)
     print(f"{invariant.round(23) = }")
+    return invariant
+
+
+def vicent_matricial_invariant(
+    state: PureState, order: tuple[int, int, int] = (1, 0, 0)
+) -> NDArray:
+    """Calculate Vicent's invariant, which uses the commutators of (projected) density matrices
+        with the basis of passive linear optical Hamiltonians.
+
+        Args:
+            state (State): a photonic quantum state.
+            order (tuple[int,int,int]): The first integer: exponent of M(state_t); second: exponent
+                of M(state_o); third: exponent of M(state).
+    llo
+        Returns:
+            NDArray: spectrum of the total matrix.
+    """
+
+    algebra_basis = get_image_algebra_basis(state.modes, state.photons)
+
+    if order[0] == 1:
+        density_tangent = projection_density(state, subspace="image")
+        invariant = _vicent_matricial_invariant_matrix(density_tangent, algebra_basis)
+    if order[1] == 1:
+        density_orthogonal = projection_density(state, subspace="complement")
+        invariant = _vicent_matricial_invariant_matrix(density_orthogonal, algebra_basis)
+    if order[2] == 1:
+        invariant = _vicent_matricial_invariant_matrix(state.density_matrix, algebra_basis)
+    return np.linalg.eigvals(invariant).round(15)
+
+
+def _vicent_matricial_invariant_matrix(
+    state_matrix: NDArray, algebra_basis: BasisAlgebra
+) -> NDArray:
+    invariant = np.zeros_like(state_matrix)
+
+    for basis_i in algebra_basis:
+        invariant += basis_i @ basis_i @ state_matrix
     return invariant

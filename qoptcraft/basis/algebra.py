@@ -21,6 +21,7 @@ warnings.filterwarnings(
 
 SQRT_2_INV = 1 / np.sqrt(2)
 
+
 def get_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAlgebra]:
     """Return a basis for the Hilbert space with n photons and m modes.
     If the basis was saved retrieve it, otherwise the function creates
@@ -159,7 +160,7 @@ def image_photon_number(mode: int, photon_basis: BasisPhoton) -> spmatrix:
     matrix = lil_matrix((dim, dim), dtype=np.complex128)  # * efficient format for loading data
 
     for i, fock in enumerate(photon_basis):
-            matrix[i, i] = 1j * fock[mode]
+        matrix[i, i] = 1j * fock[mode]
     return matrix.tocsr()
 
 

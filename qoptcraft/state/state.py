@@ -99,6 +99,10 @@ class MixedState(State):
 
         return cls(density_matrix, modes_list[0], photons_list[0])
 
+    def evolution(self, unitary: NDArray) -> Self:
+        new_density = unitary @ self.density_matrix @ unitary.T.conj()
+        return MixedState(new_density, self.modes, self.photons)
+
 
 class PureState(State):
     """A pure quantum state.
@@ -322,6 +326,10 @@ class PureState(State):
             state = state * self
         return state
 
+    def conj(self) -> Self:
+        """State with conjugated coefficients."""
+        return PureState(self.fock_states, self.coefs.conj())
+
     @property
     def density_matrix(self):
         """Density matrix of the pure state in a certain basis."""
@@ -459,6 +467,25 @@ class PureState(State):
                 continue
             state += Fock(*fock_, coef=coef_annih * coef)
         return state
+
+    def evolution(self, unitary: NDArray) -> Self:
+        "Evolve the state with a unitary."
+        if self.basis is None:
+            self.basis = get_photon_basis(self.modes, self.photons)
+        count = 0
+        amp_list = list(self.amplitudes)
+        for i, state in enumerate(self.basis):
+            if state not in self.fock_states:
+                amp_list.insert(i + count, 0)
+                count += 1
+        new_amps = unitary @ np.array(amp_list)
+        new_amps_wo_zeros = []
+        new_fock = []
+        for fock, amp in zip(self.basis, new_amps, strict=True):
+            if amp != 0:
+                new_amps_wo_zeros.append(amp)
+                new_fock.append(fock)
+        return PureState(new_fock, new_amps_wo_zeros)
 
 
 class Fock(PureState):
