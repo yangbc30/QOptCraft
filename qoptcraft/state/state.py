@@ -341,7 +341,7 @@ class PureState(State):
         if self.basis is None:
             self.basis = get_photon_basis(self.modes, self.photons)
 
-        state = np.zeros(len(self.basis), dtype=complex)
+        state = np.zeros(len(self.basis), dtype=np.complex64)
 
         for i, fock in enumerate(self.fock_states):
             for j, basis_fock in enumerate(self.basis):
@@ -364,7 +364,7 @@ class PureState(State):
         if self.basis is None:
             self.basis = get_photon_basis(self.modes, self.photons)
 
-        state = np.zeros(len(self.basis), dtype=complex)
+        state = np.zeros(len(self.basis), dtype=np.complex64)
 
         for i, fock in enumerate(self.fock_states):
             for j, basis_fock in enumerate(self.basis):
@@ -472,13 +472,11 @@ class PureState(State):
         "Evolve the state with a unitary."
         if self.basis is None:
             self.basis = get_photon_basis(self.modes, self.photons)
-        count = 0
-        amp_list = list(self.amplitudes)
-        for i, state in enumerate(self.basis):
-            if state not in self.fock_states:
-                amp_list.insert(i + count, 0)
-                count += 1
-        new_amps = unitary @ np.array(amp_list)
+        amps_vector = np.zeros(len(self.basis), dtype=np.complex64)
+        for amp, fock in zip(self.amplitudes, self.fock_states, strict=True):
+            idx = self.basis.index(fock)
+            amps_vector[idx] = amp
+        new_amps = unitary @ amps_vector
         new_amps_wo_zeros = []
         new_fock = []
         for fock, amp in zip(self.basis, new_amps, strict=True):
