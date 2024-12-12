@@ -140,6 +140,7 @@ class PureState(State):
         self.probabilites: NDArray = np.abs(self.amplitudes) ** 2
 
         self.basis: tuple[tuple[int, ...]] | None = None
+        self._density_matrix: NDArray | scipy.sparse.spmatrix | None = None
 
     @staticmethod
     def _assert_inputs(fock_states: tuple[tuple[int, ...]], amplitudes: ArrayLike) -> None:
@@ -333,8 +334,11 @@ class PureState(State):
     @property
     def density_matrix(self):
         """Density matrix of the pure state in a certain basis."""
-        state_in_basis = self.state_in_basis()
-        return np.outer(state_in_basis, state_in_basis.conj().T)
+        if self._density_matrix is None:
+            state_in_basis = self.state_in_basis()
+            self._density_matrix = np.outer(state_in_basis, state_in_basis.conj().T)
+            return self._density_matrix
+        return self._density_matrix
 
     def state_in_basis(self) -> NDArray:
         """Output the state vector in the Fock basis."""
@@ -472,13 +476,11 @@ class PureState(State):
         "Evolve the state with a unitary."
         if self.basis is None:
             self.basis = get_photon_basis(self.modes, self.photons)
-        count = 0
-        amp_list = list(self.amplitudes)
-        for i, state in enumerate(self.basis):
-            if state not in self.fock_states:
-                amp_list.insert(i + count, 0)
-                count += 1
-        new_amps = unitary @ np.array(amp_list)
+        amps_vector = np.zeros(len(self.basis), dtype=np.complex64)
+        for amp, fock in zip(self.amplitudes, self.fock_states, strict=True):
+            idx = self.basis.index(fock)
+            amps_vector[idx] = amp
+        new_amps = unitary @ amps_vector
         new_amps_wo_zeros = []
         new_fock = []
         for fock, amp in zip(self.basis, new_amps, strict=True):

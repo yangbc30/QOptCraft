@@ -13,6 +13,26 @@ from qoptcraft.state import PureState
 from qoptcraft.basis import get_image_algebra_basis, projection_density, BasisAlgebra
 
 
+def two_basis_invariant(state: PureState) -> NDArray:
+    """Calculate M_ij = Tr(O_iO_j rho).
+
+    Args:
+        state (State): a photonic quantum state.
+
+    Returns:
+        NDArray: spectrum of the total matrix.
+    """
+
+    algebra_basis = get_image_algebra_basis(state.modes, state.photons)
+    dim = len(algebra_basis)
+    invariant = np.zeros((dim, dim), dtype=np.complex64)
+    for i, basis_i in enumerate(algebra_basis):
+        for j, basis_j in enumerate(algebra_basis):
+            invariant[i, j] = np.trace(basis_i @ basis_j @ state.density_matrix)
+
+    return np.linalg.eigvals(invariant).round(23)
+
+
 def vicent_invariant(state: PureState, order: tuple[int, int, int] = (1, 0, 0)) -> NDArray:
     """Calculate Vicent's invariant, which uses the commutators of (projected) density matrices
     with the basis of passive linear optical Hamiltonians.
@@ -30,12 +50,12 @@ def vicent_invariant(state: PureState, order: tuple[int, int, int] = (1, 0, 0)) 
     invariant = np.identity(len(algebra_basis), dtype=np.complex64)
 
     if order[0] != 0:
-        density_tangent = projection_density(state, subspace="image")
+        density_tangent = projection_density(state, subspace="image", orthonormal=False)
         # print(f"{density_tangent = }")
         invariant_tangent = _vicent_invariant_matrix(density_tangent, algebra_basis)
         invariant @= matrix_power(invariant_tangent, order[0])
     if order[1] != 0:
-        density_orthogonal = projection_density(state, subspace="complement")
+        density_orthogonal = projection_density(state, subspace="complement", orthonormal=False)
         # print(f"{density_orthogonal = }")
         invariant_orthogonal = _vicent_invariant_matrix(density_orthogonal, algebra_basis)
         invariant @= matrix_power(invariant_orthogonal, order[1])
@@ -61,12 +81,12 @@ def _vicent_invariant_matrix(state_matrix: NDArray, algebra_basis: BasisAlgebra)
     invariant = np.zeros((dim, dim), dtype=np.complex64)
 
     for i, basis_i in enumerate(algebra_basis):
+        commutator_i = basis_i @ state_matrix - state_matrix @ basis_i
         for j, basis_j in enumerate(algebra_basis):
-            commutator_i = basis_i @ state_matrix - state_matrix @ basis_i
             commutator_j = basis_j @ state_matrix - state_matrix @ basis_j
             invariant[i, j] = np.trace(commutator_i @ commutator_j)
     print(f"{invariant.round(23) = }")
-    return invariant
+    return - invariant  # minus accounts for the i factors in the basis_i, basis_j
 
 
 def vicent_matricial_invariant(
@@ -87,10 +107,10 @@ def vicent_matricial_invariant(
     algebra_basis = get_image_algebra_basis(state.modes, state.photons)
 
     if order[0] == 1:
-        density_tangent = projection_density(state, subspace="image")
+        density_tangent = projection_density(state, subspace="image", orthonormal=False)
         invariant = _vicent_matricial_invariant_matrix(density_tangent, algebra_basis)
     if order[1] == 1:
-        density_orthogonal = projection_density(state, subspace="complement")
+        density_orthogonal = projection_density(state, subspace="complement", orthonormal=False)
         invariant = _vicent_matricial_invariant_matrix(density_orthogonal, algebra_basis)
     if order[2] == 1:
         invariant = _vicent_matricial_invariant_matrix(state.density_matrix, algebra_basis)

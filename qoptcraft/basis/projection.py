@@ -3,12 +3,15 @@ from typing import Literal
 
 import numpy as np
 
-from qoptcraft.basis import basis_image_orthonormal
+from qoptcraft.basis import basis_image_orthonormal, get_image_algebra_basis
 from qoptcraft.math import Matrix, hs_scalar_product
 
 
-def projection_density(state: State, subspace: Literal["image", "complement"]) -> Matrix:
-    basis_image = basis_image_orthonormal(state.modes, state.photons)
+def projection_density(state: State, subspace: Literal["image", "complement"], orthonormal: bool = False) -> Matrix:
+    if orthonormal:
+        basis_image = basis_image_orthonormal(state.modes, state.photons)
+    else:
+        basis_image = get_image_algebra_basis(state.modes, state.photons)
     matrix = 1j * state.density_matrix
     projection_image = np.zeros_like(matrix)
     for basis_matrix in basis_image:

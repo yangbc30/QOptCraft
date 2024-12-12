@@ -6,7 +6,7 @@ from collections.abc import Generator
 from numpy.typing import NDArray
 from scipy.sparse import spmatrix
 
-from .mat_inner_product import hs_scalar_product, hs_norm
+from .norms import hs_scalar_product, hs_norm
 
 
 def gram_schmidt(basis: list[spmatrix] | list[NDArray]) -> list[spmatrix] | list[NDArray]:

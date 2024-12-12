@@ -17,14 +17,14 @@ def spectral_invariant(state: State, subspace: Literal["image", "complement", "f
         tuple[float, float]: tangent invariant.
     """
     if subspace == "image":
-        projection = projection_density(state, subspace="image")
+        projection = projection_density(state, subspace="image", orthonormal=False)
         return np.linalg.eigvals(projection)
     elif subspace == "complement":
-        projection = projection_density(state, subspace="complement")
+        projection = projection_density(state, subspace="complement", orthonormal=False)
         return np.linalg.eigvals(projection)
     elif subspace == "full":
-        projection_image = projection_density(state, subspace="image")
-        projection_complement = projection_density(state, subspace="complement")
+        projection_image = projection_density(state, subspace="image", orthonormal=False)
+        projection_complement = projection_density(state, subspace="complement", orthonormal=False)
         spectrum_image = np.linalg.eigvals(projection_image)
         spectrum_complement = np.linalg.eigvals(projection_complement)
         return np.concatenate((spectrum_image, spectrum_complement))
