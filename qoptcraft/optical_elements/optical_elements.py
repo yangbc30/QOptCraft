@@ -1,6 +1,8 @@
 """Beamsplitters as defined in Clemens et al. and in Reck et al., respectively.
 """
 
+from typing import Literal
+
 import numpy as np
 from numpy.typing import NDArray
 
@@ -26,7 +28,12 @@ def phase_shifter(shift: float, dim: int, mode: int) -> NDArray:
 
 
 def beam_splitter(
-    angle: float, shift: float, dim: int, mode_1: int, mode_2: int, convention: str = "clemens"
+    angle: float,
+    shift: float,
+    dim: int,
+    mode_1: int,
+    mode_2: int,
+    convention: Literal["clemens", "reck", "chernikov"] = "clemens",
 ) -> NDArray:
     """Create the beam splitter matrix with reflectivity cos(θ) and phase shift φ
     acting on mode_1 and mode_2.

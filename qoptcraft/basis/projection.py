@@ -7,7 +7,9 @@ from qoptcraft.basis import basis_image_orthonormal, get_image_algebra_basis
 from qoptcraft.math import Matrix, hs_scalar_product
 
 
-def projection_density(state: State, subspace: Literal["image", "complement"], orthonormal: bool = False) -> Matrix:
+def projection_density(
+    state: State, subspace: Literal["image", "complement"], orthonormal: bool = False
+) -> Matrix:
     """Project a state onto the linear optical subalgebra or its complement.
 
     Args:
