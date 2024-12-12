@@ -5,6 +5,7 @@ from numbers import Number
 from itertools import permutations
 
 import numpy as np
+from numpy.typing import NDArray
 
 from .matrix_type import Matrix
 
@@ -76,7 +77,7 @@ def hs_norm(matrix: Matrix) -> float:
     return np.sqrt(np.real(hs_inner_product(matrix, matrix)))
 
 
-def eigenvalue_distance(matrix_1: Matrix, matrix_2: Matrix) -> float:
+def min_permutation_distance(vector_1: NDArray, vector_2: NDArray) -> float:
     """Hilbert-Schmidt norm of a matrix
 
     Args:
@@ -86,12 +87,9 @@ def eigenvalue_distance(matrix_1: Matrix, matrix_2: Matrix) -> float:
     Returns:
         Number: the minimum (among all permutations) euclidean distance between the eigenvalues.
     """
-    eig_1 = np.linalg.eigvalsh(matrix_1)
-    eig_2 = np.linalg.eigvalsh(matrix_2)
     min_norm = np.inf
-    for eig_2_perm in permutations(eig_2):
-        norm = np.linalg.norm(eig_1 - eig_2_perm)
+    for vector_2_perm in permutations(vector_2):
+        norm = np.linalg.norm(vector_1 - vector_2_perm)
         if norm < min_norm:
             min_norm = norm
     return min_norm
-
