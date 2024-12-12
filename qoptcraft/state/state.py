@@ -345,7 +345,7 @@ class PureState(State):
         if self.basis is None:
             self.basis = get_photon_basis(self.modes, self.photons)
 
-        state = np.zeros(len(self.basis), dtype=complex)
+        state = np.zeros(len(self.basis), dtype=np.complex64)
 
         for i, fock in enumerate(self.fock_states):
             for j, basis_fock in enumerate(self.basis):
@@ -368,7 +368,7 @@ class PureState(State):
         if self.basis is None:
             self.basis = get_photon_basis(self.modes, self.photons)
 
-        state = np.zeros(len(self.basis), dtype=complex)
+        state = np.zeros(len(self.basis), dtype=np.complex64)
 
         for i, fock in enumerate(self.fock_states):
             for j, basis_fock in enumerate(self.basis):
