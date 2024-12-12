@@ -8,6 +8,17 @@ from qoptcraft.math import Matrix, hs_scalar_product
 
 
 def projection_density(state: State, subspace: Literal["image", "complement"], orthonormal: bool = False) -> Matrix:
+    """Project a state onto the linear optical subalgebra or its complement.
+
+    Args:
+        state (State): a photonic quantum state.
+        subspace (str): "image" or "complement".
+        orthonormal (bool, optional): if true, it orthonormalizes the basis of linear optical hamiltonians
+            before projecting onto it. Defaults to False.
+
+    Returns:
+        Matrix: the projected density matrix.
+    """
     if orthonormal:
         basis_image = basis_image_orthonormal(state.modes, state.photons)
     else:
