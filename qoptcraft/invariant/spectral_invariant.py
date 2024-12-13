@@ -8,7 +8,7 @@ from qoptcraft.basis import projection_density
 
 
 def spectral_invariant(
-    state: State, subspace: Literal["image", "complement", "full"], orthonormal=False
+    state: State, subspace: Literal["image", "complement", "full"] = "image", orthonormal=False
 ) -> NDArray:
     """Calculate the photonic invariant for a given state.
 
