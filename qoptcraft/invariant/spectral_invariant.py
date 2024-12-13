@@ -7,7 +7,9 @@ from numpy.typing import NDArray
 from qoptcraft.basis import projection_density
 
 
-def spectral_invariant(state: State, subspace: Literal["image", "complement", "full"]) -> NDArray:
+def spectral_invariant(
+    state: State, subspace: Literal["image", "complement", "full"], orthonormal=False
+) -> NDArray:
     """Calculate the photonic invariant for a given state.
 
     Args:
@@ -17,14 +19,16 @@ def spectral_invariant(state: State, subspace: Literal["image", "complement", "f
         tuple[float, float]: tangent invariant.
     """
     if subspace == "image":
-        projection = projection_density(state, subspace="image", orthonormal=False)
+        projection = projection_density(state, subspace="image", orthonormal=orthonormal)
         return np.linalg.eigvals(projection)
     elif subspace == "complement":
-        projection = projection_density(state, subspace="complement", orthonormal=False)
+        projection = projection_density(state, subspace="complement", orthonormal=orthonormal)
         return np.linalg.eigvals(projection)
     elif subspace == "full":
-        projection_image = projection_density(state, subspace="image", orthonormal=False)
-        projection_complement = projection_density(state, subspace="complement", orthonormal=False)
+        projection_image = projection_density(state, subspace="image", orthonormal=orthonormal)
+        projection_complement = projection_density(
+            state, subspace="complement", orthonormal=orthonormal
+        )
         spectrum_image = np.linalg.eigvals(projection_image)
         spectrum_complement = np.linalg.eigvals(projection_complement)
         return np.concatenate((spectrum_image, spectrum_complement))

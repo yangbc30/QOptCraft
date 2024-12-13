@@ -15,12 +15,14 @@ def projection_density(
     Args:
         state (State): a photonic quantum state.
         subspace (str): "image" or "complement".
-        orthonormal (bool, optional): if true, it orthonormalizes the basis of linear optical hamiltonians
-            before projecting onto it. Defaults to False.
+        orthonormal (bool, optional): if true, it orthonormalizes the basis of linear optical
+            hamiltonians before projecting onto it. Defaults to False.
 
     Returns:
         Matrix: the projected density matrix.
     """
+    if subspace != "image" or subspace != "complement":
+        raise ValueError("Supported options for the subspace are 'image' and 'complement'.")
     if orthonormal:
         basis_image = basis_image_orthonormal(state.modes, state.photons)
     else:
@@ -31,6 +33,6 @@ def projection_density(
         projection_image += hs_scalar_product(basis_matrix, matrix) * basis_matrix
     if subspace == "image":
         return projection_image
-    if subspace == "complement":
+    if subspace == "complement" and orthonormal is True:
         return matrix - projection_image
-    raise ValueError("Supported options for the subspace are 'image' and 'complement'.")
+    raise ValueError("The complement invariant only makes sense if the basis is orthonormal.")
