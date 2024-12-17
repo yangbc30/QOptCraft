@@ -59,4 +59,4 @@ def migdaw_element(
     for mode in modes_annih:
         state = state.annihilation(mode)
 
-    return state_copy.dot_coefs(state) / coef
+    return state_copy._dot_coefs(state) / coef

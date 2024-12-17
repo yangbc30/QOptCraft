@@ -1,10 +1,10 @@
-from qoptcraft.state import State
 from typing import Literal
 
 import numpy as np
 from numpy.typing import NDArray
 
-from qoptcraft.basis import projection_density
+from qoptcraft.state import State
+from .projection import projection_density
 
 
 def spectral_invariant(

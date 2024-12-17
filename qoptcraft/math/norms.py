@@ -2,7 +2,6 @@
 """
 
 from numbers import Number
-from itertools import permutations
 
 import numpy as np
 from numpy.typing import NDArray
@@ -81,11 +80,11 @@ def min_permutation_distance(vector_1: NDArray, vector_2: NDArray) -> float:
     """Hilbert-Schmidt norm of a matrix
 
     Args:
-        matrix_1 (Matrix): a hermitian matrix.
-        matrix_2 (Matrix): another hermitian matrix.
+        vector_1 (NDArray): a vector of unordered eigenvalues.
+        vector_2 (NDArray): another vector of unordered eigenvalues.
 
     Returns:
-        Number: the minimum (among all permutations) euclidean distance between the eigenvalues.
+        float: the minimum (among all permutations) euclidean distance between the eigenvalues.
     """
     vector_1.sort()
     vector_2.sort()

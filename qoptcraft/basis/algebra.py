@@ -5,7 +5,7 @@ import numpy as np
 from scipy.sparse import spmatrix, lil_matrix
 
 from .photon import get_photon_basis, BasisPhoton
-from qoptcraft.operators import creation, annihilation
+from qoptcraft.operators import creation_fock, annihilation_fock
 from qoptcraft import config
 
 
@@ -171,13 +171,13 @@ def image_sym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spm
 
     for col, fock_ in enumerate(photon_basis):
         if fock_[mode_1] != 0:
-            fock, coef = annihilation(mode_1, fock_)
-            fock, coef_ = creation(mode_2, fock)
+            fock, coef = annihilation_fock(mode_1, fock_)
+            fock, coef_ = creation_fock(mode_2, fock)
             matrix[photon_basis.index(fock), col] = SQRT_2_INV * 1j * coef * coef_
 
         if fock_[mode_2] != 0:
-            fock, coef = annihilation(mode_2, fock_)
-            fock, coef_ = creation(mode_1, fock)
+            fock, coef = annihilation_fock(mode_2, fock_)
+            fock, coef_ = creation_fock(mode_1, fock)
             matrix[photon_basis.index(fock), col] += SQRT_2_INV * 1j * coef * coef_
 
     return matrix.tocsr()
@@ -192,13 +192,13 @@ def image_antisym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) ->
 
     for col, fock_ in enumerate(photon_basis):
         if fock_[mode_1] != 0:
-            fock, coef = annihilation(mode_1, fock_)
-            fock, coef_ = creation(mode_2, fock)
+            fock, coef = annihilation_fock(mode_1, fock_)
+            fock, coef_ = creation_fock(mode_2, fock)
             matrix[photon_basis.index(fock), col] = -SQRT_2_INV * coef * coef_
 
         if fock_[mode_2] != 0:
-            fock, coef = annihilation(mode_2, fock_)
-            fock, coef_ = creation(mode_1, fock)
+            fock, coef = annihilation_fock(mode_2, fock_)
+            fock, coef_ = creation_fock(mode_1, fock)
             matrix[photon_basis.index(fock), col] += SQRT_2_INV * coef * coef_
 
     return matrix.tocsr()

@@ -3,8 +3,11 @@
 
 from math import sqrt
 
+from numba import jit
 
-def creation(mode: int, fock: tuple[int]) -> tuple[tuple[int, ...], float]:
+
+@jit(nopython=True)
+def creation_fock(mode: int, fock: tuple[int]) -> tuple[tuple[int, ...], float]:
     """Creation operator acting on a specific mode. Modifies state in-place.
 
     Args:
@@ -21,7 +24,8 @@ def creation(mode: int, fock: tuple[int]) -> tuple[tuple[int, ...], float]:
     return tuple(fock), coef
 
 
-def annihilation(mode: int, fock: tuple[int, ...]) -> tuple[tuple[int, ...], float]:
+@jit(nopython=True)
+def annihilation_fock(mode: int, fock: tuple[int, ...]) -> tuple[tuple[int, ...], float]:
     """Annihilation operator acting on a specific mode.
 
     Args:

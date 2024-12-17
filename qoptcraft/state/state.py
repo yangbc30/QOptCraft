@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Self
+from typing import Self, Literal
 from numbers import Number
 
 import numpy as np
@@ -12,7 +12,7 @@ from numpy.typing import NDArray, ArrayLike
 import scipy
 
 from qoptcraft.basis import get_photon_basis
-from qoptcraft.operators import creation, annihilation
+from qoptcraft.operators import creation_fock, annihilation_fock
 from ._exceptions import (
     ProbabilityError,
     PureStateLengthError,
@@ -377,6 +377,7 @@ class PureState(State):
         return state
 
     def dot(self, other: PureState) -> complex:
+        "Compute the overlap of two pure states."
         if isinstance(other, Vacuum):
             return 0
         prod = 0
@@ -387,7 +388,7 @@ class PureState(State):
                 continue
         return round(prod, 7)
 
-    def dot_coefs(self, other: PureState) -> complex:
+    def _dot_coefs(self, other: PureState) -> complex:
         if isinstance(other, Vacuum):
             return 0
         prod = 0
@@ -414,11 +415,11 @@ class PureState(State):
                 exp += self.probabilites[i] * fock[mode_creat]
         else:
             for i, fock in enumerate(self.fock_states):
-                fock_, coef_ = annihilation(mode_annih, fock)
+                fock_, coef_ = annihilation_fock(mode_annih, fock)
                 # if coef_ == 0:  # not really necessary to check this
                 ##### continue  # since it will raise a ValueError below
                 coef = self.amplitudes[i] * coef_
-                fock_, coef_ = creation(mode_creat, fock_)
+                fock_, coef_ = creation_fock(mode_creat, fock_)
                 coef *= coef_
                 try:
                     exp += coef * self.amp_fock(fock_).conjugate()
@@ -473,7 +474,7 @@ class PureState(State):
         return state
 
     def evolution(self, unitary: NDArray) -> Self:
-        "Evolve the state with a unitary."
+        "Evolve the state with a quantum unitary."
         if self.basis is None:
             self.basis = get_photon_basis(self.modes, self.photons)
         amps_vector = np.zeros(len(self.basis), dtype=np.complex64)
@@ -504,6 +505,8 @@ class Fock(PureState):
     def __len__(self):
         """Number of modes in the fock state."""
         return self.modes
+
+    def evolution(self, scattering: NDArray) -> State: ...
 
 
 class Vacuum(State):

@@ -1,5 +1,7 @@
 import pickle
 
+from numba import jit
+
 from qoptcraft import config
 
 
@@ -34,6 +36,7 @@ def get_photon_basis(modes: int, photons: int) -> BasisPhoton:
         print(f"Photon basis saved in {basis_path}.")
 
     return basis
+
 
 
 def photon_basis(modes: int, photons: int) -> BasisPhoton:

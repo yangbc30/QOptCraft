@@ -10,7 +10,8 @@ from numpy.typing import NDArray
 from numpy.linalg import matrix_power
 
 from qoptcraft.state import PureState
-from qoptcraft.basis import get_image_algebra_basis, projection_density, BasisAlgebra
+from qoptcraft.basis import get_image_algebra_basis, BasisAlgebra
+from .projection import projection_density
 
 
 def two_basis_invariant(state: PureState) -> NDArray:
