@@ -23,6 +23,10 @@ Install with `pip`:
 ```console
 pip install qoptcraft
 ```
+or, for the latest version,
+```console
+pip install git+https://github.tel.uva.es/juagar/qoptcraft.git
+```
 
 ## Quick usage
 
