@@ -506,8 +506,6 @@ class Fock(PureState):
         """Number of modes in the fock state."""
         return self.modes
 
-    def evolution(self, scattering: NDArray) -> State: ...
-
 
 class Vacuum(State):
 
