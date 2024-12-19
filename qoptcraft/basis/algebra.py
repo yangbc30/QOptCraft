@@ -141,6 +141,9 @@ def image_algebra_basis(modes: int, photons: int) -> tuple[BasisAlgebra, BasisAl
 def sym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
     """Create the element of the algebra i/2(|j><k| + |k><j|)."""
     matrix = np.zeros((dim, dim), dtype=np.complex128)
+    if mode_1 == mode_2:
+        matrix[mode_1, mode_1] = 1j
+        return matrix
     matrix[mode_1, mode_2] = SQRT_2_INV * 1j
     matrix[mode_2, mode_1] += SQRT_2_INV * 1j
     return matrix
@@ -168,6 +171,14 @@ def image_sym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spm
     """Image of the symmetric basis matrix by the lie algebra homomorphism."""
     dim = len(photon_basis)
     matrix = lil_matrix((dim, dim), dtype=np.complex128)  # * efficient format for loading data
+
+    if mode_1 == mode_2:
+        for col, fock_ in enumerate(photon_basis):
+            if fock_[mode_1] != 0:
+                fock, coef = annihilation_fock(mode_1, fock_)
+                fock, coef_ = creation_fock(mode_2, fock)
+                matrix[photon_basis.index(fock), col] = 1j * coef * coef_
+        return matrix.tocsr()
 
     for col, fock_ in enumerate(photon_basis):
         if fock_[mode_1] != 0:
