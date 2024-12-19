@@ -14,6 +14,13 @@ from .spectral_invariant import spectral_invariant
 
 from .migdaw_invariant import migdaw_invariant
 
-from .vicent_invariant import vicent_invariant, vicent_matricial_invariant, two_basis_invariant
+from .vicent_invariant import (
+    vicent_invariant,
+    vicent_matricial_invariant,
+    two_basis_invariant,
+    covariance_invariant,
+)
 
 from .projection import projection_density
+
+from .operators import invariant_operator

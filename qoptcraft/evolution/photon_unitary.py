@@ -4,7 +4,7 @@ import numpy as np
 from numpy.typing import NDArray
 import scipy as sp
 
-from qoptcraft.basis import get_photon_basis, hilbert_dim
+from qoptcraft.basis import photon_basis, hilbert_dim
 from qoptcraft.math import log_matrix
 from .photon_hamiltonian import photon_hamiltonian
 from .fock_evolution import fock_evolution_heisenberg, fock_evolution_permanent
@@ -52,7 +52,7 @@ def photon_unitary_heisenberg(scattering_matrix: NDArray, photons: int) -> NDArr
     modes = scattering_matrix.shape[0]
     dim = hilbert_dim(modes, photons)
     unitary = np.zeros((dim, dim), dtype=np.complex64)
-    photon_basis = get_photon_basis(modes, photons)
+    photon_basis = photon_basis(modes, photons)
 
     for col, fock_in in enumerate(photon_basis):
         unitary[:, col] = fock_evolution_heisenberg(scattering_matrix, fock_in).state_in_basis()
@@ -95,7 +95,7 @@ def photon_unitary_permanent(
     modes = scattering_matrix.shape[0]
     dim = hilbert_dim(modes, photons)
     unitary = np.empty((dim, dim), dtype=np.complex128)
-    photon_basis = get_photon_basis(modes, photons)
+    photon_basis = photon_basis(modes, photons)
 
     for col, fock_in in enumerate(photon_basis):
         unitary[:, col] = fock_evolution_permanent(scattering_matrix, fock_in, method, photon_basis)

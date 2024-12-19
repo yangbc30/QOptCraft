@@ -6,7 +6,6 @@ from math import sqrt
 from numba import jit
 
 
-@jit(nopython=True)
 def creation_fock(mode: int, fock: tuple[int]) -> tuple[tuple[int, ...], float]:
     """Creation operator acting on a specific mode. Modifies state in-place.
 
@@ -24,7 +23,6 @@ def creation_fock(mode: int, fock: tuple[int]) -> tuple[tuple[int, ...], float]:
     return tuple(fock), coef
 
 
-@jit(nopython=True)
 def annihilation_fock(mode: int, fock: tuple[int, ...]) -> tuple[tuple[int, ...], float]:
     """Annihilation operator acting on a specific mode.
 

@@ -7,12 +7,14 @@ from numpy.typing import NDArray
 from scipy.linalg import expm
 
 from qoptcraft.operators import haar_random_unitary
-from qoptcraft.basis import hilbert_dim, get_algebra_basis
+from qoptcraft.basis import hilbert_dim, image_algebra_basis
 from qoptcraft.math import gram_schmidt, hs_scalar_product, hs_norm, log_matrix
 from qoptcraft.evolution import photon_unitary
 
 
-def toponogov(matrix: NDArray, modes: int, photons: int, seed: int = None) -> tuple[NDArray, float]:
+def toponogov(
+    matrix: NDArray, modes: int, photons: int, seed: int | None = None
+) -> tuple[NDArray, float]:
     """Use Topogonov's theorem to approximate a given unitary using linear optics.
 
     Args:
@@ -30,7 +32,7 @@ def toponogov(matrix: NDArray, modes: int, photons: int, seed: int = None) -> tu
     if dim != hilbert_dim(modes, photons):
         raise ValueError(f"Matrix {dim = } doesn't match with {photons = } and {modes = }.")
 
-    basis, basis_image = get_algebra_basis(modes, photons)
+    basis_image = image_algebra_basis(modes, photons)
     basis_image = gram_schmidt(basis_image)
 
     scattering_init = haar_random_unitary(modes, seed=seed)

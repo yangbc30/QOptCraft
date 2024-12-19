@@ -11,7 +11,7 @@ import numpy as np
 from numpy.typing import NDArray, ArrayLike
 import scipy
 
-from qoptcraft.basis import get_photon_basis
+from qoptcraft.basis import photon_basis
 from qoptcraft.operators import creation_fock, annihilation_fock
 from ._exceptions import (
     ProbabilityError,
@@ -343,7 +343,7 @@ class PureState(State):
     def state_in_basis(self) -> NDArray:
         """Output the state vector in the Fock basis."""
         if self.basis is None:
-            self.basis = get_photon_basis(self.modes, self.photons)
+            self.basis = photon_basis(self.modes, self.photons)
 
         state = np.zeros(len(self.basis), dtype=np.complex64)
 
@@ -366,7 +366,7 @@ class PureState(State):
     def coefs_in_basis(self) -> NDArray:
         """Provide the coefs of the state in the fock basis."""
         if self.basis is None:
-            self.basis = get_photon_basis(self.modes, self.photons)
+            self.basis = photon_basis(self.modes, self.photons)
 
         state = np.zeros(len(self.basis), dtype=np.complex64)
 
@@ -476,7 +476,7 @@ class PureState(State):
     def evolution(self, unitary: NDArray) -> Self:
         "Evolve the state with a quantum unitary."
         if self.basis is None:
-            self.basis = get_photon_basis(self.modes, self.photons)
+            self.basis = photon_basis(self.modes, self.photons)
         amps_vector = np.zeros(len(self.basis), dtype=np.complex64)
         for amp, fock in zip(self.amplitudes, self.fock_states, strict=True):
             idx = self.basis.index(fock)

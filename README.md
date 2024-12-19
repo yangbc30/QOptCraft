@@ -47,18 +47,19 @@ diag, right = reck_decomposition(unitary)
 
 We can get easily get the basis of the unitary algebra
 ```python
-from qoptcraft.basis import get_algebra_basis
+from qoptcraft.basis import unitary_algebra_basis, image_algebra_basis
 
 modes = 2
 photons = 3
-basis_algebra, basis_image_algebra = get_algebra_basis(modes, photons)
+basis_algebra = unitary_algebra_basis(modes)
+basis_image_algebra = image_algebra_basis(modes, photons)
 ```
 
 or the Fock state basis of the Hilbert space
 ```python
-from qoptcraft.basis import get_photon_basis, hilbert_dim
+from qoptcraft.basis import photon_basis, hilbert_dim
 
-photon_basis = get_photon_basis(modes, photons)
+photon_basis = photon_basis(modes, photons)
 dimension = hilbert_dim(modes, photons)  # should equal len(photon_basis)
 ```
 

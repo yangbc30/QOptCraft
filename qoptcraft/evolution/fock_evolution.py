@@ -6,7 +6,7 @@ from scipy.special import factorial
 import numba
 
 from qoptcraft.state import Fock, PureState
-from qoptcraft.basis import get_photon_basis, BasisPhoton
+from qoptcraft.basis import photon_basis, BasisPhoton
 from qoptcraft.math import permanent
 
 
@@ -79,7 +79,7 @@ def fock_evolution_permanent(
     if len(fock_in) != scattering_matrix.shape[0]:
         raise ValueError("Dimension of scattering_matrix and number of modes don't match.")
     if photon_basis is None:
-        photon_basis = get_photon_basis(len(fock_in), sum(fock_in))
+        photon_basis = photon_basis(len(fock_in), sum(fock_in))
     dim = len(photon_basis)
     state_out = np.empty(dim, dtype=np.complex128)
 

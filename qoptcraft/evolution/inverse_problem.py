@@ -3,7 +3,7 @@ import sympy
 from numpy.typing import NDArray
 
 from qoptcraft.operators import adjoint_evol
-from qoptcraft.basis import get_algebra_basis, BasisAlgebra
+from qoptcraft.basis import unitary_algebra_basis, image_algebra_basis, BasisAlgebra
 from qoptcraft.basis.algebra import sym_matrix, antisym_matrix
 
 
@@ -26,7 +26,7 @@ def scattering_from_unitary(unitary: NDArray, modes: int, photons: int) -> NDArr
         NDArray: optical scattering matrix that maps to the given unitary.
     """
     coefs = _solution_coefs(unitary, modes, photons)
-    basis, _ = get_algebra_basis(modes, photons)
+    basis = unitary_algebra_basis(modes, photons)
 
     basis_array = np.array(basis)
 
@@ -77,7 +77,7 @@ def _solution_coefs(unitary: NDArray, modes: int, photons: int) -> NDArray:
     Returns:
         NDArray: matrix with the coefficients that solve the system.
     """
-    _, basis_image = get_algebra_basis(modes, photons)
+    basis_image = image_algebra_basis(modes, photons)
     sol_coefs = []
     for basis_matrix in basis_image:
         eq_matrix = _equation_matrix(modes, basis_image)

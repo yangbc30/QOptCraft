@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.typing import NDArray
 
-from qoptcraft.basis import get_photon_basis
+from qoptcraft.basis import photon_basis
 from qoptcraft.operators import annihilation_fock, creation_fock
 
 
@@ -16,7 +16,7 @@ def photon_hamiltonian(scattering_hamiltonian: NDArray, photons: int) -> NDArray
         spmatrix: hamiltonian lifted to the Hilbert space of m modes and n photons.
     """
     modes = scattering_hamiltonian.shape[0]
-    basis_photon = get_photon_basis(modes, photons)
+    basis_photon = photon_basis(modes, photons)
     dim = len(basis_photon)
 
     lifted_matrix = np.zeros((dim, dim), dtype=complex)

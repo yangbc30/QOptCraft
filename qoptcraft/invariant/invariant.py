@@ -8,7 +8,7 @@ from scipy.special import factorial as fact
 
 from qoptcraft.state import State, PureState
 from qoptcraft.math import hs_scalar_product, gram_schmidt_generator
-from qoptcraft.basis import get_algebra_basis
+from qoptcraft.basis import image_algebra_basis
 
 
 def photon_invariant(
@@ -91,7 +91,7 @@ def photon_invariant_basis(state: State) -> tuple[float, float]:
     Returns:
         tuple[float, float]: tangent invariant.
     """
-    basis_img_algebra = get_algebra_basis(state.modes, state.photons)[1]
+    basis_img_algebra = image_algebra_basis(state.modes, state.photons)
     coefs = []
     for basis_matrix in gram_schmidt_generator(basis_img_algebra):
         coefs.append(hs_scalar_product(1j * state.density_matrix, basis_matrix))
