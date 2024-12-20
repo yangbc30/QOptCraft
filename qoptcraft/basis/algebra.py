@@ -75,16 +75,16 @@ def image_algebra_basis(modes: int, photons: int, cache: bool = True) -> BasisAl
         BasisAlgebra: _description_
     """
     basis = []
-    photon_basis = photon_basis(modes, photons)
+    photonic_basis = photon_basis(modes, photons)
 
     if cache:
         return _saved_image_algebra_basis(modes, photons)
 
     for i in range(modes):
-        basis.append(image_photon_number(i, photon_basis))
+        basis.append(image_photon_number(i, photonic_basis))
         for j in range(i):
-            basis.append(image_sym_matrix(i, j, photon_basis))
-            basis.append(image_antisym_matrix(i, j, photon_basis))
+            basis.append(image_sym_matrix(i, j, photonic_basis))
+            basis.append(image_antisym_matrix(i, j, photonic_basis))
     return basis
 
 
@@ -107,19 +107,19 @@ def antisym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
     return matrix
 
 
-def image_photon_number(mode: int, photon_basis: BasisPhoton) -> spmatrix:
+def image_photon_number(mode: int, photonic_basis: BasisPhoton) -> spmatrix:
     """Image of the symmetric basis matrix by the lie algebra homomorphism."""
-    dim = len(photon_basis)
+    dim = len(photonic_basis)
     matrix = lil_matrix((dim, dim), dtype=np.complex128)  # * efficient format for loading data
 
-    for i, fock in enumerate(photon_basis):
+    for i, fock in enumerate(photonic_basis):
         matrix[i, i] = 1j * fock[mode]
     return matrix.tocsr()
 
 
-def image_sym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spmatrix:
+def image_sym_matrix(mode_1: int, mode_2: int, photonic_basis: BasisPhoton) -> spmatrix:
     """Image of the symmetric basis matrix by the lie algebra homomorphism."""
-    dim = len(photon_basis)
+    dim = len(photonic_basis)
     matrix = lil_matrix((dim, dim), dtype=np.complex128)  # * efficient format for loading data
 
     if mode_1 == mode_2:
@@ -127,36 +127,36 @@ def image_sym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spm
             "Modes should be different. For mode_1 == mode_2 use image_photon_number()."
         )
 
-    for col, fock_ in enumerate(photon_basis):
+    for col, fock_ in enumerate(photonic_basis):
         if fock_[mode_1] != 0:
             fock, coef = annihilation_fock(mode_1, fock_)
             fock, coef_ = creation_fock(mode_2, fock)
-            matrix[photon_basis.index(fock), col] = SQRT_2_INV * 1j * coef * coef_
+            matrix[photonic_basis.index(fock), col] = SQRT_2_INV * 1j * coef * coef_
 
         if fock_[mode_2] != 0:
             fock, coef = annihilation_fock(mode_2, fock_)
             fock, coef_ = creation_fock(mode_1, fock)
-            matrix[photon_basis.index(fock), col] += SQRT_2_INV * 1j * coef * coef_
+            matrix[photonic_basis.index(fock), col] += SQRT_2_INV * 1j * coef * coef_
 
     return matrix.tocsr()
 
 
-def image_antisym_matrix(mode_1: int, mode_2: int, photon_basis: BasisPhoton) -> spmatrix:
+def image_antisym_matrix(mode_1: int, mode_2: int, photonic_basis: BasisPhoton) -> spmatrix:
     """Image of the antisymmetric basis matrix by the lie algebra homomorphism."""
     if mode_1 == mode_2:
         raise ValueError("Antisymmetric matrix cannot have equal modes.")
-    dim = len(photon_basis)
+    dim = len(photonic_basis)
     matrix = lil_matrix((dim, dim), dtype=np.complex128)
 
-    for col, fock_ in enumerate(photon_basis):
+    for col, fock_ in enumerate(photonic_basis):
         if fock_[mode_1] != 0:
             fock, coef = annihilation_fock(mode_1, fock_)
             fock, coef_ = creation_fock(mode_2, fock)
-            matrix[photon_basis.index(fock), col] = -SQRT_2_INV * coef * coef_
+            matrix[photonic_basis.index(fock), col] = -SQRT_2_INV * coef * coef_
 
         if fock_[mode_2] != 0:
             fock, coef = annihilation_fock(mode_2, fock_)
             fock, coef_ = creation_fock(mode_1, fock)
-            matrix[photon_basis.index(fock), col] += SQRT_2_INV * coef * coef_
+            matrix[photonic_basis.index(fock), col] += SQRT_2_INV * coef * coef_
 
     return matrix.tocsr()
