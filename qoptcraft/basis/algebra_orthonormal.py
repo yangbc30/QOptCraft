@@ -7,13 +7,13 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.sparse import spmatrix
 
-from .algebra import get_image_algebra_basis, unitary_algebra_basis
+from .algebra import image_algebra_basis, unitary_algebra_basis
 from .hilbert_dimension import hilbert_dim
 from qoptcraft.math import gram_schmidt, hs_scalar_product, hs_norm
 
 
 def basis_image_orthonormal(modes: int, photons: int) -> list[spmatrix] | list[NDArray]:
-    basis_image = get_image_algebra_basis(modes, photons)
+    basis_image = image_algebra_basis(modes, photons)
     return gram_schmidt(basis_image)
 
 

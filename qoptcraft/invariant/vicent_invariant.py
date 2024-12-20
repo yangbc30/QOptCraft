@@ -10,7 +10,7 @@ from numpy.typing import NDArray
 from numpy.linalg import matrix_power
 
 from qoptcraft.state import PureState
-from qoptcraft.basis import get_image_algebra_basis, BasisAlgebra
+from qoptcraft.basis import image_algebra_basis, BasisAlgebra
 from .projection import projection_density
 
 
@@ -24,12 +24,37 @@ def two_basis_invariant(state: PureState) -> NDArray:
         NDArray: spectrum of the total matrix.
     """
 
-    algebra_basis = get_image_algebra_basis(state.modes, state.photons)
+    algebra_basis = image_algebra_basis(state.modes, state.photons)
     dim = len(algebra_basis)
     invariant = np.zeros((dim, dim), dtype=np.complex64)
     for i, basis_i in enumerate(algebra_basis):
         for j, basis_j in enumerate(algebra_basis):
             invariant[i, j] = np.trace(basis_i @ basis_j @ state.density_matrix)
+
+    return np.linalg.eigvals(invariant).round(23)
+
+
+def covariance_invariant(state: PureState) -> NDArray:
+    """Calculate M_ij = Tr(O_iO_j rho).
+
+    Args:
+        state (State): a photonic quantum state.
+
+    Returns:
+        NDArray: spectrum of the total matrix.
+    """
+
+    algebra_basis = image_algebra_basis(state.modes, state.photons)
+    dim = len(algebra_basis)
+    invariant = np.zeros((dim, dim), dtype=np.complex64)
+    for i, basis_i in enumerate(algebra_basis):
+        for j, basis_j in enumerate(algebra_basis):
+            invariant[i, j] = np.trace(basis_i @ state.density_matrix) * np.trace(
+                basis_j @ state.density_matrix
+            )
+            invariant[i, j] -= 0.5 * np.trace(
+                (basis_i @ basis_j + basis_j @ basis_i) @ state.density_matrix
+            )
 
     return np.linalg.eigvals(invariant).round(23)
 
@@ -47,7 +72,7 @@ def vicent_invariant(state: PureState, order: tuple[int, int, int] = (1, 0, 0)) 
         NDArray: spectrum of the total matrix.
     """
 
-    algebra_basis = get_image_algebra_basis(state.modes, state.photons)
+    algebra_basis = image_algebra_basis(state.modes, state.photons)
     invariant = np.identity(len(algebra_basis), dtype=np.complex64)
 
     if order[0] != 0:
@@ -105,7 +130,7 @@ def vicent_matricial_invariant(
             NDArray: spectrum of the total matrix.
     """
 
-    algebra_basis = get_image_algebra_basis(state.modes, state.photons)
+    algebra_basis = image_algebra_basis(state.modes, state.photons)
 
     if order[0] == 1:
         density_tangent = projection_density(state, subspace="image", orthonormal=False)

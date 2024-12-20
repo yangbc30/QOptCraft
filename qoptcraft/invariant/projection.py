@@ -3,7 +3,7 @@ from typing import Literal
 import numpy as np
 
 from qoptcraft.state import State
-from qoptcraft.basis import basis_image_orthonormal, get_image_algebra_basis
+from qoptcraft.basis import basis_image_orthonormal, image_algebra_basis
 from qoptcraft.math import Matrix, hs_scalar_product
 
 
@@ -26,7 +26,7 @@ def projection_density(
     if orthonormal:
         basis_image = basis_image_orthonormal(state.modes, state.photons)
     else:
-        basis_image = get_image_algebra_basis(state.modes, state.photons)
+        basis_image = image_algebra_basis(state.modes, state.photons)
     matrix = 1j * state.density_matrix
     projection_image = np.zeros_like(matrix)
     for basis_matrix in basis_image:
