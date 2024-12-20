@@ -27,6 +27,6 @@ def invariant_operator(modes: int, photons: int, order: int) -> Matrix:
             for idx in indices:
                 matrix @= coef * image_basis[idx]
             invariant += coef * matrix
-        print(f"{indices = }, {coef = }, {matrix = }")
+        # print(f"{indices = }, {coef = }, {matrix = }")
 
     return invariant
