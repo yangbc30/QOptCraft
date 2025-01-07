@@ -52,9 +52,9 @@ def photon_unitary_heisenberg(scattering_matrix: NDArray, photons: int) -> NDArr
     modes = scattering_matrix.shape[0]
     dim = hilbert_dim(modes, photons)
     unitary = np.zeros((dim, dim), dtype=np.complex64)
-    photon_basis = photon_basis(modes, photons)
+    photonic_basis = photon_basis(modes, photons)
 
-    for col, fock_in in enumerate(photon_basis):
+    for col, fock_in in enumerate(photonic_basis):
         unitary[:, col] = fock_evolution_heisenberg(scattering_matrix, fock_in).state_in_basis()
     return unitary
 
@@ -95,8 +95,8 @@ def photon_unitary_permanent(
     modes = scattering_matrix.shape[0]
     dim = hilbert_dim(modes, photons)
     unitary = np.empty((dim, dim), dtype=np.complex128)
-    photon_basis = photon_basis(modes, photons)
+    photonic_basis = photon_basis(modes, photons)
 
-    for col, fock_in in enumerate(photon_basis):
-        unitary[:, col] = fock_evolution_permanent(scattering_matrix, fock_in, method, photon_basis)
+    for col, fock_in in enumerate(photonic_basis):
+        unitary[:, col] = fock_evolution_permanent(scattering_matrix, fock_in, method, photonic_basis)
     return unitary

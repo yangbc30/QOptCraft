@@ -1,4 +1,4 @@
-from .photon import photon_basis, photon_basis, BasisPhoton
+from .photon import photon_basis, BasisPhoton
 from .algebra import (
     BasisAlgebra,
     unitary_algebra_basis,

@@ -59,7 +59,7 @@ or the Fock state basis of the Hilbert space
 ```python
 from qoptcraft.basis import photon_basis, hilbert_dim
 
-photon_basis = photon_basis(modes, photons)
+photonic_basis = photon_basis(modes, photons)
 dimension = hilbert_dim(modes, photons)  # should equal len(photon_basis)
 ```
 

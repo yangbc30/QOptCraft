@@ -62,7 +62,7 @@ def fock_evolution_permanent(
     scattering_matrix: NDArray,
     fock_in: tuple[int, ...],
     method: Literal["glynn", "ryser"] = "glynn",
-    photon_basis: BasisPhoton = None,
+    photonic_basis: BasisPhoton = None,
 ) -> NDArray:
     """Evolution of a single Fock state using the definition given by basic
     quantum mechanics.
@@ -78,12 +78,12 @@ def fock_evolution_permanent(
     """
     if len(fock_in) != scattering_matrix.shape[0]:
         raise ValueError("Dimension of scattering_matrix and number of modes don't match.")
-    if photon_basis is None:
-        photon_basis = photon_basis(len(fock_in), sum(fock_in))
-    dim = len(photon_basis)
+    if photonic_basis is None:
+        photonic_basis = photon_basis(len(fock_in), sum(fock_in))
+    dim = len(photonic_basis)
     state_out = np.empty(dim, dtype=np.complex128)
 
-    for row, fock_out in enumerate(photon_basis):
+    for row, fock_out in enumerate(photonic_basis):
         sub_matrix = in_out_submatrix(scattering_matrix, fock_in, fock_out)
         coef = np.prod(factorial(fock_in)) * np.prod(factorial(fock_out))
         state_out[row] = permanent(sub_matrix, method=method) / np.sqrt(coef)

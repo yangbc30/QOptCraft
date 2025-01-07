@@ -2,12 +2,12 @@ from itertools import product
 
 import numpy as np
 
-from qoptcraft.basis import unitary_algebra_basis, image_algebra_basis, hilbert_dim
+from qoptcraft.state import State
+from qoptcraft.basis import unitary_algebra_basis, image_algebra_basis
 from qoptcraft.math import Matrix
 
 
-def invariant_operator(modes: int, photons: int, order: int) -> Matrix:
-    """These operators are multiples of the identity."""
+def scalar_invariant(state: State, modes: int, photons: int, order: int) -> Matrix:
 
     scattering_basis = unitary_algebra_basis(modes)
     image_basis = image_algebra_basis(modes, photons)
@@ -18,16 +18,13 @@ def invariant_operator(modes: int, photons: int, order: int) -> Matrix:
             matrix @= scattering_basis[i]
         return np.trace(matrix)
 
-    dim = hilbert_dim(modes, photons)
-    invariant = np.zeros((dim, dim), dtype=np.complex64)
+    invariant = 0
 
     for indices in product(*[list(range(modes * modes))] * order):
-        matrix = np.eye(dim, dtype=np.complex128)
         coef = coefficient(indices)
         if coef != 0:
             for idx in indices:
-                matrix @= image_basis[idx]
-            invariant += coef * matrix
-        # print(f"{indices = }, {coef = }, {matrix = }")
+                coef *= np.trace(image_basis[idx] @ state.density_matrix)
+            invariant += coef
 
     return invariant
