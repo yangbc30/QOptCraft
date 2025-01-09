@@ -36,14 +36,14 @@ def invariant_operator(modes: int, photons: int, order: int) -> Matrix:
     return invariant
 
 
-def scalar_invariant(state: State, modes: int, photons: int, order: int) -> Matrix:
+def scalar_invariant(state: State, order: int) -> Matrix:
 
-    scattering_basis = unitary_algebra_basis(modes)
-    image_basis = image_algebra_basis(modes, photons)
+    scattering_basis = unitary_algebra_basis(state.modes)
+    image_basis = image_algebra_basis(state.modes, state.photons)
 
     invariant = 0
 
-    for indices in product(*[list(range(modes * modes))] * order):
+    for indices in product(*[list(range(state.modes ** 2))] * order):
         coef = invariant_coef(indices, scattering_basis)
         if coef != 0:
             for idx in indices:
