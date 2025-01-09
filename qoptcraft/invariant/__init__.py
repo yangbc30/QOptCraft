@@ -23,4 +23,9 @@ from .vicent_invariant import (
 
 from .projection import projection_density
 
-from .generalized_invariants import scalar_invariant, invariant_operator, invariant_coef, scalar_invariant_from_matrix
+from .generalized_invariants import (
+    scalar_invariant,
+    invariant_operator,
+    invariant_coef,
+    scalar_invariant_from_matrix,
+)

@@ -43,7 +43,7 @@ def scalar_invariant(state: State, order: int) -> Matrix:
 
     invariant = 0
 
-    for indices in product(*[list(range(state.modes ** 2))] * order):
+    for indices in product(*[list(range(state.modes**2))] * order):
         coef = invariant_coef(indices, scattering_basis)
         if coef != 0:
             for idx in indices:

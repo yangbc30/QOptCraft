@@ -98,5 +98,7 @@ def photon_unitary_permanent(
     photonic_basis = photon_basis(modes, photons)
 
     for col, fock_in in enumerate(photonic_basis):
-        unitary[:, col] = fock_evolution_permanent(scattering_matrix, fock_in, method, photonic_basis)
+        unitary[:, col] = fock_evolution_permanent(
+            scattering_matrix, fock_in, method, photonic_basis
+        )
     return unitary
