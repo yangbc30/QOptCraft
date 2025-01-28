@@ -349,7 +349,7 @@ class PureState(State):
 
         for i, fock in enumerate(self.fock_states):
             for j, basis_fock in enumerate(self.basis):
-                if fock == basis_fock:
+                if tuple(fock) == basis_fock:
                     state[j] = self.amplitudes[i]
         return state
 
