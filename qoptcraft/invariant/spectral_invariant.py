@@ -20,10 +20,10 @@ def spectral_invariant(
     """
     if subspace == "image":
         projection = projection_density(state, subspace="image", orthonormal=orthonormal)
-        return np.linalg.eigvals(projection)
+        return np.linalg.eigvals(projection).imag * 1j
     elif subspace == "complement":
         projection = projection_density(state, subspace="complement", orthonormal=orthonormal)
-        return np.linalg.eigvals(projection)
+        return np.linalg.eigvals(projection).imag * 1j
     elif subspace == "full":
         projection_image = projection_density(state, subspace="image", orthonormal=orthonormal)
         projection_complement = projection_density(
