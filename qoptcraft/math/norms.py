@@ -86,6 +86,6 @@ def min_permutation_distance(vector_1: NDArray, vector_2: NDArray) -> float:
     Returns:
         float: the minimum (among all permutations) euclidean distance between the eigenvalues.
     """
-    vector_1.sort()
-    vector_2.sort()
+    vector_1 = vector_1[np.argsort(np.absolute(vector_1))]
+    vector_2 = vector_2[np.argsort(np.absolute(vector_2))]
     return np.linalg.norm(vector_1 - vector_2)
