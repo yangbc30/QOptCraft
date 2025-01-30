@@ -80,12 +80,12 @@ def min_permutation_distance(vector_1: NDArray, vector_2: NDArray) -> float:
     """Hilbert-Schmidt norm of a matrix
 
     Args:
-        vector_1 (NDArray): a vector of unordered eigenvalues.
-        vector_2 (NDArray): another vector of unordered eigenvalues.
+        vector_1 (NDArray): a vector of unordered real eigenvalues.
+        vector_2 (NDArray): another vector of unordered real eigenvalues.
 
     Returns:
         float: the minimum (among all permutations) euclidean distance between the eigenvalues.
     """
-    vector_1 = vector_1[np.argsort(np.absolute(vector_1))]
-    vector_2 = vector_2[np.argsort(np.absolute(vector_2))]
+    vector_1.sort()
+    vector_2.sort()
     return np.linalg.norm(vector_1 - vector_2)
