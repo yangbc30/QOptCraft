@@ -19,6 +19,8 @@ from .vicent_invariant import (
     vicent_matricial_invariant,
     two_basis_invariant,
     covariance_invariant,
+    m1_invariant,
+    m2_invariant
 )
 
 from .projection import projection_density
@@ -28,4 +30,7 @@ from .generalized_invariants import (
     invariant_operator,
     invariant_coef,
     scalar_invariant_from_matrix,
+    invariant_operator_traces,
+    invariant_operator_commutator,
+    invariant_operator_nested_commutator
 )

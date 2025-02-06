@@ -34,8 +34,51 @@ def two_basis_invariant(state: PureState) -> NDArray:
     return np.linalg.eigvals(invariant).round(23)
 
 
+def m1_invariant(state: PureState) -> NDArray:
+    """Calculate M1 = Tr(O_i rho)Tr(O_j rho).
+
+    Args:
+        state (State): a photonic quantum state.
+
+    Returns:
+        NDArray: spectrum of the total matrix.
+    """
+
+    algebra_basis = image_algebra_basis(state.modes, state.photons)
+    dim = len(algebra_basis)
+    invariant = np.zeros((dim, dim), dtype=np.complex64)
+    for i, basis_i in enumerate(algebra_basis):
+        for j, basis_j in enumerate(algebra_basis):
+            invariant[i, j] = np.trace(basis_i @ state.density_matrix) * np.trace(
+                basis_j @ state.density_matrix
+            )
+
+    return np.linalg.eigvals(invariant).round(23)
+
+
+def m2_invariant(state: PureState) -> NDArray:
+    """Calculate M2 = Tr(O_iO_j + O_jO_i rho).
+
+    Args:
+        state (State): a photonic quantum state.
+
+    Returns:
+        NDArray: spectrum of the total matrix.
+    """
+
+    algebra_basis = image_algebra_basis(state.modes, state.photons)
+    dim = len(algebra_basis)
+    invariant = np.zeros((dim, dim), dtype=np.complex64)
+    for i, basis_i in enumerate(algebra_basis):
+        for j, basis_j in enumerate(algebra_basis):
+            invariant[i, j] = 0.5 * np.trace(
+                (basis_i @ basis_j + basis_j @ basis_i) @ state.density_matrix
+            )
+
+    return np.linalg.eigvals(invariant).round(23)
+
 def covariance_invariant(state: PureState) -> NDArray:
-    """Calculate M_ij = Tr(O_iO_j rho).
+    """Calculate M_ij = Tr(O_i rho)Tr(O_j rho) - 0.5 Tr(O_iO_j + O_jO_i rho).
 
     Args:
         state (State): a photonic quantum state.
