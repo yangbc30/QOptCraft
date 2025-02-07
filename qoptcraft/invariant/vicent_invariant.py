@@ -10,11 +10,11 @@ from numpy.typing import NDArray
 from numpy.linalg import matrix_power
 
 from qoptcraft.state import PureState
-from qoptcraft.basis import image_algebra_basis, BasisAlgebra
+from qoptcraft.basis import image_algebra_basis, BasisAlgebra, basis_image_orthonormal
 from .projection import projection_density
 
 
-def two_basis_invariant(state: PureState) -> NDArray:
+def two_basis_invariant(state: PureState, orthonormal=False) -> NDArray:
     """Calculate M_ij = Tr(O_iO_j rho).
 
     Args:
@@ -24,7 +24,10 @@ def two_basis_invariant(state: PureState) -> NDArray:
         NDArray: spectrum of the total matrix.
     """
 
-    algebra_basis = image_algebra_basis(state.modes, state.photons)
+    if orthonormal:
+        algebra_basis = basis_image_orthonormal(state.modes, state.photons)
+    else:
+        algebra_basis = image_algebra_basis(state.modes, state.photons)
     dim = len(algebra_basis)
     invariant = np.zeros((dim, dim), dtype=np.complex64)
     for i, basis_i in enumerate(algebra_basis):
@@ -34,7 +37,7 @@ def two_basis_invariant(state: PureState) -> NDArray:
     return np.linalg.eigvals(invariant).round(23)
 
 
-def m1_invariant(state: PureState) -> NDArray:
+def m1_invariant(state: PureState, orthonormal=False) -> NDArray:
     """Calculate M1 = Tr(O_i rho)Tr(O_j rho).
 
     Args:
@@ -44,7 +47,10 @@ def m1_invariant(state: PureState) -> NDArray:
         NDArray: spectrum of the total matrix.
     """
 
-    algebra_basis = image_algebra_basis(state.modes, state.photons)
+    if orthonormal:
+        algebra_basis = basis_image_orthonormal(state.modes, state.photons)
+    else:
+        algebra_basis = image_algebra_basis(state.modes, state.photons)
     dim = len(algebra_basis)
     invariant = np.zeros((dim, dim), dtype=np.complex64)
     for i, basis_i in enumerate(algebra_basis):
@@ -56,7 +62,7 @@ def m1_invariant(state: PureState) -> NDArray:
     return np.linalg.eigvals(invariant).round(23)
 
 
-def m2_invariant(state: PureState) -> NDArray:
+def m2_invariant(state: PureState, orthonormal=False) -> NDArray:
     """Calculate M2 = Tr(O_iO_j + O_jO_i rho).
 
     Args:
@@ -66,7 +72,10 @@ def m2_invariant(state: PureState) -> NDArray:
         NDArray: spectrum of the total matrix.
     """
 
-    algebra_basis = image_algebra_basis(state.modes, state.photons)
+    if orthonormal:
+        algebra_basis = basis_image_orthonormal(state.modes, state.photons)
+    else:
+        algebra_basis = image_algebra_basis(state.modes, state.photons)
     dim = len(algebra_basis)
     invariant = np.zeros((dim, dim), dtype=np.complex64)
     for i, basis_i in enumerate(algebra_basis):
@@ -77,7 +86,7 @@ def m2_invariant(state: PureState) -> NDArray:
 
     return np.linalg.eigvals(invariant).round(23)
 
-def covariance_invariant(state: PureState) -> NDArray:
+def covariance_invariant(state: PureState, orthonormal=False) -> NDArray:
     """Calculate M_ij = Tr(O_i rho)Tr(O_j rho) - 0.5 Tr(O_iO_j + O_jO_i rho).
 
     Args:
@@ -87,7 +96,10 @@ def covariance_invariant(state: PureState) -> NDArray:
         NDArray: spectrum of the total matrix.
     """
 
-    algebra_basis = image_algebra_basis(state.modes, state.photons)
+    if orthonormal:
+        algebra_basis = basis_image_orthonormal(state.modes, state.photons)
+    else:
+        algebra_basis = image_algebra_basis(state.modes, state.photons)
     dim = len(algebra_basis)
     invariant = np.zeros((dim, dim), dtype=np.complex64)
     for i, basis_i in enumerate(algebra_basis):
@@ -102,7 +114,7 @@ def covariance_invariant(state: PureState) -> NDArray:
     return np.linalg.eigvals(invariant).round(23)
 
 
-def vicent_invariant(state: PureState, order: tuple[int, int, int] = (1, 0, 0)) -> NDArray:
+def vicent_invariant(state: PureState, order: tuple[int, int, int] = (1, 0, 0), orthonormal=False) -> NDArray:
     """Calculate Vicent's invariant, which uses the commutators of (projected) density matrices
     with the basis of passive linear optical Hamiltonians.
 
@@ -115,21 +127,22 @@ def vicent_invariant(state: PureState, order: tuple[int, int, int] = (1, 0, 0)) 
         NDArray: spectrum of the total matrix.
     """
 
-    algebra_basis = image_algebra_basis(state.modes, state.photons)
+    if orthonormal:
+        algebra_basis = basis_image_orthonormal(state.modes, state.photons)
+    else:
+        algebra_basis = image_algebra_basis(state.modes, state.photons)
+
     invariant = np.identity(len(algebra_basis), dtype=np.complex64)
 
     if order[0] != 0:
-        density_tangent = projection_density(state, subspace="image", orthonormal=False)
-        # print(f"{density_tangent = }")
+        density_tangent = projection_density(state, subspace="image", orthonormal=orthonormal)
         invariant_tangent = _vicent_invariant_matrix(density_tangent, algebra_basis)
         invariant @= matrix_power(invariant_tangent, order[0])
     if order[1] != 0:
-        density_orthogonal = projection_density(state, subspace="complement", orthonormal=False)
-        # print(f"{density_orthogonal = }")
+        density_orthogonal = projection_density(state, subspace="complement", orthonormal=orthonormal)
         invariant_orthogonal = _vicent_invariant_matrix(density_orthogonal, algebra_basis)
         invariant @= matrix_power(invariant_orthogonal, order[1])
     if order[2] != 0:
-        # print(f"{state.density_matrix = }")
         invariant_density = _vicent_invariant_matrix(state.density_matrix, algebra_basis)
         invariant @= matrix_power(invariant_density, order[2])
 
@@ -159,7 +172,7 @@ def _vicent_invariant_matrix(state_matrix: NDArray, algebra_basis: BasisAlgebra)
 
 
 def vicent_matricial_invariant(
-    state: PureState, order: tuple[int, int, int] = (1, 0, 0)
+    state: PureState, order: tuple[int, int, int] = (1, 0, 0), orthonormal=False
 ) -> NDArray:
     """Calculate Vicent's invariant, which uses the commutators of (projected) density matrices
         with the basis of passive linear optical Hamiltonians.
@@ -173,13 +186,16 @@ def vicent_matricial_invariant(
             NDArray: spectrum of the total matrix.
     """
 
-    algebra_basis = image_algebra_basis(state.modes, state.photons)
+    if orthonormal:
+        algebra_basis = basis_image_orthonormal(state.modes, state.photons)
+    else:
+        algebra_basis = image_algebra_basis(state.modes, state.photons)
 
     if order[0] == 1:
-        density_tangent = projection_density(state, subspace="image", orthonormal=False)
+        density_tangent = projection_density(state, subspace="image", orthonormal=orthonormal)
         invariant = _vicent_matricial_invariant_matrix(density_tangent, algebra_basis)
     if order[1] == 1:
-        density_orthogonal = projection_density(state, subspace="complement", orthonormal=False)
+        density_orthogonal = projection_density(state, subspace="complement", orthonormal=orthonormal)
         invariant = _vicent_matricial_invariant_matrix(density_orthogonal, algebra_basis)
     if order[2] == 1:
         invariant = _vicent_matricial_invariant_matrix(state.density_matrix, algebra_basis)
