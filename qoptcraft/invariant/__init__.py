@@ -29,5 +29,8 @@ from .generalized_invariants import (
     scalar_invariant,
     invariant_operator,
     invariant_coef,
+    invariant_operator_traces,
+    invariant_operator_commutator,
+    invariant_operator_nested_commutator,
     scalar_invariant_from_matrix
 )
