@@ -2,6 +2,7 @@ import pickle
 import warnings
 
 import numpy as np
+from numpy.typing import NDArray
 from scipy.sparse import spmatrix, lil_matrix
 
 from .photon import photon_basis, BasisPhoton
@@ -88,8 +89,8 @@ def image_algebra_basis(modes: int, photons: int, cache: bool = True) -> BasisAl
     return basis
 
 
-def sym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
-    """Create the element of the algebra i/2(|j><k| + |k><j|)."""
+def sym_matrix(mode_1: int, mode_2: int, dim: int) -> NDArray:
+    """Create the element of the algebra i/sqrt(2)(|j><k| + |k><j|)."""
     matrix = np.zeros((dim, dim), dtype=np.complex128)
     if mode_1 == mode_2:
         matrix[mode_1, mode_1] = 1j
@@ -99,8 +100,8 @@ def sym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
     return matrix
 
 
-def antisym_matrix(mode_1: int, mode_2: int, dim: int) -> spmatrix:
-    """Create the element of the algebra 1/2(|j><k| - |k><j|)."""
+def antisym_matrix(mode_1: int, mode_2: int, dim: int) -> NDArray:
+    """Create the element of the algebra 1/sqrt(2)(|j><k| - |k><j|)."""
     matrix = np.zeros((dim, dim), dtype=np.complex128)
     matrix[mode_1, mode_2] = SQRT_2_INV
     matrix[mode_2, mode_1] = -SQRT_2_INV
