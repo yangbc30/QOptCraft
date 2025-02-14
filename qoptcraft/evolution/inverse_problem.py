@@ -1,3 +1,6 @@
+# TODO: fix scattering_from_unitary not giving unitaries
+
+
 import numpy as np
 import sympy
 from numpy.typing import NDArray
@@ -26,7 +29,7 @@ def scattering_from_unitary(unitary: NDArray, modes: int, photons: int) -> NDArr
         NDArray: optical scattering matrix that maps to the given unitary.
     """
     coefs = _solution_coefs(unitary, modes, photons)
-    basis = unitary_algebra_basis(modes, photons)
+    basis = unitary_algebra_basis(modes)
 
     basis_array = np.array(basis)
 
@@ -43,8 +46,9 @@ def scattering_from_unitary(unitary: NDArray, modes: int, photons: int) -> NDArr
         for j in range(modes):
             basis_matrix = sym_matrix(j, j, modes)
             for l in range(modes):
-                ad_matrix = adjoint(basis_matrix)
-                exp_val = np.einsum("i,ij,j->", identity[l, :], ad_matrix, identity[l, :])
+                # ad_matrix = adjoint(basis_matrix)
+                # exp_val = np.einsum("i,ij,j->", identity[l, :], ad_matrix, identity[l, :])
+                exp_val = adjoint(basis_matrix)[l,l]
                 if not np.isclose(exp_val, 0, rtol=1e-5, atol=1e-8):
                     j0, l0 = j, l
                     coef = np.sqrt(-1j * exp_val)

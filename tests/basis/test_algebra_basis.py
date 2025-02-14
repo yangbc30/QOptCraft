@@ -13,7 +13,7 @@ def test_sparse_basis(modes, photons) -> None:
     legacy_photons = [0] * modes
     legacy_photons[0] = photons
     basis_legacy = matrix_u_basis_generator(modes, dim, legacy_photons, fock_basis)[0]
-    basis = unitary_algebra_basis(modes, photons)
+    basis = unitary_algebra_basis(modes)
 
     for matrix_legacy, matrix in zip(basis_legacy, basis):
         assert_allclose(matrix, matrix)
