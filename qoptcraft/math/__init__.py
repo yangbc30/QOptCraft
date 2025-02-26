@@ -9,3 +9,4 @@ from .norms import (
 from .logarithms import log_matrix
 from .permanent import permanent
 from .matrix_type import Matrix
+from .matrix_operations import commutator

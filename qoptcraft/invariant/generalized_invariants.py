@@ -5,8 +5,8 @@ from numpy.typing import NDArray
 
 from qoptcraft.state import State
 
-from qoptcraft.basis import unitary_algebra_basis, image_algebra_basis, hilbert_dim, basis_image_orthonormal
-from qoptcraft.math import Matrix
+from qoptcraft.basis import unitary_algebra_basis, image_algebra_basis, hilbert_dim
+from qoptcraft.math import Matrix, commutator
 
 
 def invariant_coef(indices, scattering_basis):
@@ -20,10 +20,7 @@ def casimir_operator(modes: int, photons: int, order: int, orthonormal=False) ->
     """These operators are multiples of the identity."""
 
     scattering_basis = unitary_algebra_basis(modes)
-    if orthonormal:
-        image_basis = basis_image_orthonormal(modes, photons)
-    else:
-        image_basis = image_algebra_basis(modes, photons)
+    image_basis = image_algebra_basis(modes, photons, orthonormal)
 
     dim = hilbert_dim(modes, photons)
     invariant = np.zeros((dim, dim), dtype=np.complex64)
@@ -43,10 +40,7 @@ def invariant_operator(state: State, order: int, orthonormal=False) -> Matrix:
     """These operators are multiples of the identity."""
 
     scattering_basis = unitary_algebra_basis(state.modes)
-    if orthonormal:
-        image_basis = basis_image_orthonormal(state.modes, state.photons)
-    else:
-        image_basis = image_algebra_basis(state.modes, state.photons)
+    image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)
 
     dim = hilbert_dim(state.modes, state.photons)
     invariant = np.zeros((dim, dim), dtype=np.complex64)
@@ -63,18 +57,11 @@ def invariant_operator(state: State, order: int, orthonormal=False) -> Matrix:
     return np.linalg.eigvals(invariant)
 
 
-def commutator(A, B):
-    return A @ B - B @ A
-
-
 def invariant_operator_commutator(state: State, order: int, orthonormal=False) -> Matrix:
     """These operators are multiples of the identity."""
 
     scattering_basis = unitary_algebra_basis(state.modes)
-    if orthonormal:
-        image_basis = basis_image_orthonormal(state.modes, state.photons)
-    else:
-        image_basis = image_algebra_basis(state.modes, state.photons)
+    image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)
 
     dim = hilbert_dim(state.modes, state.photons)
     invariant = np.zeros((dim, dim), dtype=np.complex64)
@@ -94,10 +81,7 @@ def invariant_operator_nested_commutator(state: State, order: int, orthonormal=F
     """These operators are multiples of the identity."""
 
     scattering_basis = unitary_algebra_basis(state.modes)
-    if orthonormal:
-        image_basis = basis_image_orthonormal(state.modes, state.photons)
-    else:
-        image_basis = image_algebra_basis(state.modes, state.photons)
+    image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)
 
     dim = hilbert_dim(state.modes, state.photons)
     invariant = np.zeros((dim, dim), dtype=np.complex64)
@@ -118,10 +102,7 @@ def invariant_operator_traces(state: State, order: int, orthonormal=False) -> Ma
     """These operators are multiples of the identity."""
 
     scattering_basis = unitary_algebra_basis(state.modes)
-    if orthonormal:
-        image_basis = basis_image_orthonormal(state.modes, state.photons)
-    else:
-        image_basis = image_algebra_basis(state.modes, state.photons)
+    image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)
 
     dim = hilbert_dim(state.modes, state.photons)
     invariant = np.zeros((dim, dim), dtype=np.complex64)
@@ -144,10 +125,7 @@ def invariant_operator_traces(state: State, order: int, orthonormal=False) -> Ma
 def scalar_invariant(state: State, order: int, orthonormal=False) -> Matrix:
 
     scattering_basis = unitary_algebra_basis(state.modes)
-    if orthonormal:
-        image_basis = basis_image_orthonormal(state.modes, state.photons)
-    else:
-        image_basis = image_algebra_basis(state.modes, state.photons)
+    image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)
 
     invariant = 0
 
@@ -164,10 +142,7 @@ def scalar_invariant(state: State, order: int, orthonormal=False) -> Matrix:
 def scalar_invariant_from_matrix(matrix: NDArray, modes: int, photons: int, order: int, orthonormal=False) -> Matrix:
 
     scattering_basis = unitary_algebra_basis(modes)
-    if orthonormal:
-        image_basis = basis_image_orthonormal(modes, photons)
-    else:
-        image_basis = image_algebra_basis(modes, photons)
+    image_basis = image_algebra_basis(modes, photons, orthonormal)
 
     invariant = 0
 

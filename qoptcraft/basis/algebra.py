@@ -6,8 +6,11 @@ from numpy.typing import NDArray
 from scipy.sparse import spmatrix, lil_matrix
 
 from .photon import photon_basis, BasisPhoton
+from .hilbert_dimension import hilbert_dim
 from qoptcraft.operators import creation_fock, annihilation_fock
+from qoptcraft.math import gram_schmidt, hs_scalar_product, hs_norm
 from qoptcraft import config
+
 
 
 BasisAlgebra = list[spmatrix]
@@ -23,7 +26,7 @@ warnings.filterwarnings(
 SQRT_2_INV = 1 / np.sqrt(2)
 
 
-def _saved_image_algebra_basis(modes: int, photons: int) -> BasisAlgebra:
+def _saved_image_algebra_basis(modes: int, photons: int, orthonormal: bool = False) -> BasisAlgebra:
     """Return a basis for the Hilbert space with n photons and m modes.
     If the basis was saved retrieve it, otherwise the function creates
     and saves the basis to a file.
@@ -38,13 +41,14 @@ def _saved_image_algebra_basis(modes: int, photons: int) -> BasisAlgebra:
     folder_path = config.SAVE_DATA_PATH / f"m={modes} n={photons}"
     folder_path.mkdir(parents=True, exist_ok=True)
 
-    basis_image_path = folder_path / "image_algebra.pkl"
+    file_name = "orthonormal_image_algebra.pkl" if orthonormal else "image_algebra.pkl"
+    basis_image_path = folder_path / file_name
     basis_image_path.touch()  # create file if it doesn't exist
     try:
         with basis_image_path.open("rb") as f:
             basis_image = pickle.load(f)
     except EOFError:
-        basis_image = image_algebra_basis(modes, photons, cache=False)
+        basis_image = image_algebra_basis(modes, photons, orthonormal, cache=False)
         with basis_image_path.open("wb") as f:
             pickle.dump(basis_image, f)
         print(f"Image algebra basis saved in {folder_path}")
@@ -63,7 +67,7 @@ def unitary_algebra_basis(dim: int) -> BasisAlgebra:
     return basis
 
 
-def image_algebra_basis(modes: int, photons: int, cache: bool = True) -> BasisAlgebra:
+def image_algebra_basis(modes: int, photons: int, orthonormal: bool = False, cache: bool = True) -> BasisAlgebra:
     """Generate the basis for the algebra and image algebra.
 
     Args:
@@ -79,13 +83,15 @@ def image_algebra_basis(modes: int, photons: int, cache: bool = True) -> BasisAl
     photonic_basis = photon_basis(modes, photons)
 
     if cache:
-        return _saved_image_algebra_basis(modes, photons)
+        return _saved_image_algebra_basis(modes, photons, orthonormal)
 
     for i in range(modes):
         basis.append(image_photon_number(i, photonic_basis))
         for j in range(i):
             basis.append(image_sym_matrix(i, j, photonic_basis))
             basis.append(image_antisym_matrix(i, j, photonic_basis))
+    if orthonormal:
+        return gram_schmidt(basis)
     return basis
 
 
@@ -161,3 +167,30 @@ def image_antisym_matrix(mode_1: int, mode_2: int, photonic_basis: BasisPhoton) 
             matrix[photonic_basis.index(fock), col] += SQRT_2_INV * coef * coef_
 
     return matrix.tocsr()
+
+
+def complement_algebra_basis_orthonormal(modes: int, photons: int, cache: bool = True) -> list[spmatrix] | list[NDArray]:
+    basis_image = image_algebra_basis(modes, photons, orthonormal=True, cache=cache)
+    dim = hilbert_dim(modes, photons)
+    basis_algebra = unitary_algebra_basis(dim)  # length dim * dim
+
+    basis_complement = []
+
+    for i in range(dim * dim):
+        for matrix_image in basis_image:
+            basis_algebra[i] -= hs_scalar_product(matrix_image, basis_algebra[i]) * matrix_image
+
+        if not np.allclose(basis_algebra[i], np.zeros((dim, dim))):
+            basis_complement.append(basis_algebra[i] / hs_norm(basis_algebra[i]))
+
+            for j in range(i + 1, dim * dim):
+                basis_algebra[j] -= (
+                    hs_scalar_product(basis_complement[-1], basis_algebra[j]) * basis_complement[-1]
+                )
+
+    basis_length = len(basis_image) + len(basis_complement)
+    assert (
+        basis_length == dim * dim
+    ), f"Assertion error. Orthonormal basis length is {basis_length} but should be {dim*dim}."
+
+    return basis_complement

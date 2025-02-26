@@ -40,8 +40,6 @@ def scattering_from_unitary(unitary: NDArray, modes: int, photons: int) -> NDArr
                 break
         return np.einsum("k,kij->ij", coefs[index, :], basis_array)
 
-    identity = np.eye(modes)
-
     def get_nonzero_element():
         for j in range(modes):
             basis_matrix = sym_matrix(j, j, modes)

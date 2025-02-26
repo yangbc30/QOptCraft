@@ -3,6 +3,7 @@ from .algebra import (
     BasisAlgebra,
     unitary_algebra_basis,
     image_algebra_basis,
+    complement_algebra_basis_orthonormal
 )
-from .algebra_orthonormal import basis_image_orthonormal, basis_complement_image_orthonormal
 from .hilbert_dimension import hilbert_dim
+from .matrix_from_coefs import image_matrix_from_coefs, hermitian_matrix_from_coefs
