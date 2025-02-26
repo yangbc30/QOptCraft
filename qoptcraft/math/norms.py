@@ -41,6 +41,8 @@ def hs_inner_product(matrix_1: Matrix, matrix_2: Matrix) -> Number:
     """
     result = (matrix_1.conj().T @ matrix_2).trace()
     # assert not np.isnan(result), "Matrix inner product is not a number."
+    if isinstance(result, np.matrix):
+        return result.item()
     return result
 
 
