@@ -44,7 +44,7 @@ def scattering_from_unitary(unitary: NDArray, modes: int, photons: int) -> NDArr
         for j in range(modes):
             basis_matrix = sym_matrix(j, j, modes)
             for l in range(modes):
-                exp_val = adjoint(basis_matrix)[l,l]
+                exp_val = adjoint(basis_matrix)[l, l]
                 if not np.isclose(exp_val, 0, rtol=1e-5, atol=1e-8):
                     j0, l0 = j, l
                     coef = np.sqrt(-1j * exp_val)
@@ -55,13 +55,13 @@ def scattering_from_unitary(unitary: NDArray, modes: int, photons: int) -> NDArr
     scattering = np.zeros((modes, modes), dtype=np.complex128)
     for l in range(modes):
         for j in range(modes):
-            sym_term = adjoint(sym_matrix(j, j0, modes))[l,l0]
+            sym_term = adjoint(sym_matrix(j, j0, modes))[l, l0]
             if j != j0:
                 antisym_term = adjoint(antisym_matrix(j, j0, modes))[l, l0]
                 # ! The factor np.sqrt(2) / 2 is to transform the basis into the one in the paper
                 scattering[l, j] = (antisym_term - 1j * sym_term) / coef * np.sqrt(2) / 2
             else:
-                scattering[l, j] = - 1j * sym_term / coef
+                scattering[l, j] = -1j * sym_term / coef
     return scattering
 
 

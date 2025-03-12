@@ -1,5 +1,4 @@
-"""Decompose a unitary into beamsplitters following Clemens et al.
-"""
+"""Decompose a unitary into beamsplitters following Clemens et al."""
 
 import numpy as np
 from numpy.typing import NDArray

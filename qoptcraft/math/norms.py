@@ -1,5 +1,4 @@
-"""Matrix inner product and norm.
-"""
+"""Matrix inner product and norm."""
 
 from numbers import Number
 

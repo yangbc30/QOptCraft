@@ -1,5 +1,4 @@
-"""Module docstrings.
-"""
+"""Module docstrings."""
 
 from typing import Literal
 

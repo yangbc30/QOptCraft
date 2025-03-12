@@ -1,5 +1,4 @@
-"""Script to copy the examples folder into the docs.
-"""
+"""Script to copy the examples folder into the docs."""
 
 import shutil
 from pathlib import Path

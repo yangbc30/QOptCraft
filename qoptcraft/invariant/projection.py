@@ -37,7 +37,7 @@ def projection_density(
     raise ValueError("The complement invariant only makes sense if the basis is orthonormal.")
 
 
-def projection_coefs(state, orthonormal = False):
+def projection_coefs(state, orthonormal=False):
     image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)
 
     coefs = []

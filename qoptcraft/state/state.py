@@ -1,5 +1,4 @@
-"""Implement a class to describe a pure state photonic state.
-"""
+"""Implement a class to describe a pure state photonic state."""
 
 from __future__ import annotations
 
@@ -133,7 +132,7 @@ class PureState(State):
         self.coefs = np.array(coefs)
 
         sum_coefs = np.sum(np.abs(self.coefs) ** 2)
-        if sum_coefs == 1:
+        if sum_coefs == 1 or sum_coefs == 0:
             self.amplitudes = self.coefs
         else:
             self.amplitudes = np.array(coefs) / np.sqrt(sum_coefs)

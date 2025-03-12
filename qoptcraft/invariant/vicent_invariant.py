@@ -77,6 +77,7 @@ def m2_invariant(state: PureState, orthonormal=False) -> NDArray:
 
     return np.linalg.eigvals(invariant).round(23)
 
+
 def covariance_invariant(state: PureState, orthonormal=False) -> NDArray:
     """Calculate M_ij = Tr(O_i rho)Tr(O_j rho) - 0.5 Tr(O_iO_j + O_jO_i rho).
 
@@ -101,7 +102,9 @@ def covariance_invariant(state: PureState, orthonormal=False) -> NDArray:
     return np.linalg.eigvals(invariant).round(23)
 
 
-def vicent_invariant(state: PureState, order: tuple[int, int, int] = (1, 0, 0), orthonormal=False) -> NDArray:
+def vicent_invariant(
+    state: PureState, order: tuple[int, int, int] = (1, 0, 0), orthonormal=False
+) -> NDArray:
     """Calculate Vicent's invariant, which uses the commutators of (projected) density matrices
     with the basis of passive linear optical Hamiltonians.
 
@@ -123,7 +126,9 @@ def vicent_invariant(state: PureState, order: tuple[int, int, int] = (1, 0, 0), 
         invariant_tangent = _vicent_invariant_matrix(density_tangent, image_basis)
         invariant @= matrix_power(invariant_tangent, order[0])
     if order[1] != 0:
-        density_orthogonal = projection_density(state, subspace="complement", orthonormal=orthonormal)
+        density_orthogonal = projection_density(
+            state, subspace="complement", orthonormal=orthonormal
+        )
         invariant_orthogonal = _vicent_invariant_matrix(density_orthogonal, image_basis)
         invariant @= matrix_power(invariant_orthogonal, order[1])
     if order[2] != 0:
@@ -176,16 +181,16 @@ def vicent_matricial_invariant(
         density_tangent = projection_density(state, subspace="image", orthonormal=orthonormal)
         invariant = _vicent_matricial_invariant_matrix(density_tangent, image_basis)
     if order[1] == 1:
-        density_orthogonal = projection_density(state, subspace="complement", orthonormal=orthonormal)
+        density_orthogonal = projection_density(
+            state, subspace="complement", orthonormal=orthonormal
+        )
         invariant = _vicent_matricial_invariant_matrix(density_orthogonal, image_basis)
     if order[2] == 1:
         invariant = _vicent_matricial_invariant_matrix(state.density_matrix, image_basis)
     return np.linalg.eigvals(invariant).round(15)
 
 
-def _vicent_matricial_invariant_matrix(
-    state_matrix: NDArray, image_basis: BasisAlgebra
-) -> NDArray:
+def _vicent_matricial_invariant_matrix(state_matrix: NDArray, image_basis: BasisAlgebra) -> NDArray:
     invariant = np.zeros_like(state_matrix)
 
     for basis_i in image_basis:

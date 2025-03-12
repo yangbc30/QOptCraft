@@ -1,5 +1,4 @@
-"""Random haar uniform unitary.
-"""
+"""Random haar uniform unitary."""
 
 import numpy as np
 from numpy.typing import NDArray

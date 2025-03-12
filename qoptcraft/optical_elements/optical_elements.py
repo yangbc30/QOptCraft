@@ -1,5 +1,4 @@
-"""Beamsplitters as defined in Clemens et al. and in Reck et al., respectively.
-"""
+"""Beamsplitters as defined in Clemens et al. and in Reck et al., respectively."""
 
 from typing import Literal
 

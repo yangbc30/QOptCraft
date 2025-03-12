@@ -1,5 +1,4 @@
-"""Stable Gram-Schmidt algorithm.
-"""
+"""Stable Gram-Schmidt algorithm."""
 
 from collections.abc import Generator
 
