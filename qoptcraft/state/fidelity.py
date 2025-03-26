@@ -1,5 +1,4 @@
-"""Functions to compute the fidelity between mixed and pure states
-"""
+"""Functions to compute the fidelity between mixed and pure states"""
 
 import numpy as np
 from scipy.linalg import sqrtm

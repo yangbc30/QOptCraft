@@ -20,7 +20,7 @@ from .vicent_invariant import (
     two_basis_invariant,
     covariance_invariant,
     m1_invariant,
-    m2_invariant
+    m2_invariant,
 )
 
 from .projection import projection_density, projection_coefs, hermitian_matrix_from_coefs, projection_coefs
@@ -32,5 +32,5 @@ from .generalized_invariants import (
     invariant_operator_traces,
     invariant_operator_commutator,
     invariant_operator_nested_commutator,
-    scalar_invariant_from_matrix
+    scalar_invariant_from_matrix,
 )

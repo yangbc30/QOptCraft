@@ -1,5 +1,4 @@
-"""Creation and annihilation operators.
-"""
+"""Creation and annihilation operators."""
 
 from math import sqrt
 
