@@ -5,7 +5,7 @@ from numpy.testing import assert_allclose
 
 from qoptcraft.evolution import photon_hamiltonian
 from qoptcraft.basis import photon_basis
-from qoptcraft.basis.algebra import (
+from qoptcraft.basis.algebra_basis import (
     sym_matrix,
     antisym_matrix,
     image_sym_matrix,

@@ -7,7 +7,7 @@ from numpy.typing import NDArray
 
 from qoptcraft.operators import adjoint_evol
 from qoptcraft.basis import unitary_algebra_basis, image_algebra_basis, BasisAlgebra
-from qoptcraft.basis.algebra import sym_matrix, antisym_matrix
+from qoptcraft.basis.algebra_basis import sym_matrix, antisym_matrix
 
 
 class InconsistentEquations(ValueError):

@@ -2,7 +2,7 @@ import pytest
 from numpy.testing import assert_allclose
 
 from qoptcraft._legacy.Phase3_Aux import matrix_u_basis_generator
-from qoptcraft.basis.algebra import unitary_algebra_basis, image_algebra_basis
+from qoptcraft.basis.algebra_basis import unitary_algebra_basis, image_algebra_basis
 from qoptcraft.basis.photon import photon_basis
 
 

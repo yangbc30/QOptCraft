@@ -8,7 +8,7 @@ from .projection import projection_density
 
 
 def spectral_invariant(
-    state: State, subspace: Literal["image", "complement", "full"] = "image", orthonormal=False
+    state: State, subspace: Literal["preimage", "image", "complement", "full"] = "preimage", orthonormal=False
 ) -> NDArray:
     """Calculate the photonic invariant for a given state.
 
@@ -18,7 +18,10 @@ def spectral_invariant(
     Returns:
         tuple[float, float]: tangent invariant.
     """
-    if subspace == "image":
+    if subspace == "preimage":
+        projection = projection_density(state, subspace="preimage", orthonormal=orthonormal)
+        return np.linalg.eigvals(projection).imag
+    elif subspace == "image":
         projection = projection_density(state, subspace="image", orthonormal=orthonormal)
         return np.linalg.eigvals(projection).imag
     elif subspace == "complement":
