@@ -20,19 +20,19 @@ def spectral_invariant(
     """
     if subspace == "preimage":
         projection = projection_density(state, subspace="preimage", orthonormal=orthonormal)
-        return np.linalg.eigvalsh(projection).imag
+        return np.linalg.eigvalsh(-1j*projection)
     elif subspace == "image":
         projection = projection_density(state, subspace="image", orthonormal=orthonormal)
-        return np.linalg.eigvalsh(projection).imag
+        return np.linalg.eigvalsh(-1j*projection)
     elif subspace == "complement":
         projection = projection_density(state, subspace="complement", orthonormal=orthonormal)
-        return np.linalg.eigvalsh(projection).imag
+        return np.linalg.eigvalsh(-1j*projection)
     elif subspace == "full":
         projection_image = projection_density(state, subspace="image", orthonormal=orthonormal)
         projection_complement = projection_density(
             state, subspace="complement", orthonormal=orthonormal
         )
-        spectrum_image = np.linalg.eigvalsh(projection_image)
-        spectrum_complement = np.linalg.eigvalsh(projection_complement)
+        spectrum_image = np.linalg.eigvalsh(-1j*projection_image)
+        spectrum_complement = np.linalg.eigvalsh(-1j*projection_complement)
         return np.concatenate((spectrum_image, spectrum_complement))
     raise ValueError("Supported options for the subspace are 'image', 'complement' and 'full'.")
