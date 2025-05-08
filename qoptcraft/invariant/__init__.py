@@ -33,4 +33,7 @@ from .generalized_invariants import (
     invariant_operator_commutator,
     invariant_operator_nested_commutator,
     scalar_invariant_from_matrix,
+    higher_spectral_invariant
 )
+
+from .self_adjoint_invariant import self_adjoint_projection, invariant_subspaces_nested_commutator

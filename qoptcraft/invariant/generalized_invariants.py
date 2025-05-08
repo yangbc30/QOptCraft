@@ -78,7 +78,7 @@ def invariant_operator_commutator(state: State, order: int, orthonormal=False) -
 
 
 def invariant_operator_nested_commutator(state: State, order: int, orthonormal=False) -> Matrix:
-    """These operators are multiples of the identity."""
+    """Theorem 11."""
 
     scattering_basis = unitary_algebra_basis(state.modes)
     image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)
@@ -87,7 +87,6 @@ def invariant_operator_nested_commutator(state: State, order: int, orthonormal=F
     invariant = np.zeros((dim, dim), dtype=np.complex64)
 
     for indices in product(*[list(range(state.modes * state.modes))] * order):
-        matrix = np.eye(dim, dtype=np.complex128)
         coef = invariant_coef(indices, scattering_basis)
         if coef != 0:
             matrix = commutator(image_basis[indices[0]], state.density_matrix)
@@ -95,7 +94,7 @@ def invariant_operator_nested_commutator(state: State, order: int, orthonormal=F
                 matrix = commutator(image_basis[idx], matrix)
             invariant += coef * matrix
 
-    return np.linalg.eigvals(invariant)
+    return np.linalg.eigvals(1j**order * invariant)
 
 
 def invariant_operator_traces(state: State, order: int, orthonormal=False) -> Matrix:
@@ -135,6 +134,24 @@ def scalar_invariant(state: State, order: int, orthonormal=False) -> Matrix:
             for idx in indices:
                 coef *= np.trace(image_basis[idx] @ state.density_matrix)
             invariant += coef
+
+    return invariant
+
+
+def higher_spectral_invariant(state: State, order: int, orthonormal=False) -> Matrix:
+
+    scattering_basis = unitary_algebra_basis(state.modes)
+    image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)
+
+    invariant = np.zeros_like(scattering_basis[0])
+
+    for indices in product(*[list(range(state.modes**2))] * order):
+        preimage_matrix = np.eye(scattering_basis[0].shape[0], dtype=np.complex64)
+        image_matrix = state.density_matrix
+        for idx in indices:
+            preimage_matrix @= scattering_basis[idx]
+            image_matrix @= image_basis[idx]
+        invariant += np.trace(image_matrix) * preimage_matrix
 
     return invariant
 

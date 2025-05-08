@@ -1,5 +1,6 @@
 import pickle
 import warnings
+import math
 
 import numpy as np
 from numpy.typing import NDArray
@@ -194,3 +195,14 @@ def complement_algebra_basis_orthonormal(modes: int, photons: int, cache: bool =
     ), f"Assertion error. Orthonormal basis length is {basis_length} but should be {dim*dim}."
 
     return basis_complement
+
+
+def hermitian_matrix_from_coefs(coefs):
+
+    dim = math.isqrt(len(coefs))
+
+    hermitian_matrix = np.zeros((dim, dim), dtype=np.complex128)
+
+    for coef, matrix in zip(coefs, unitary_algebra_basis(dim), strict=True):
+        hermitian_matrix += coef * matrix
+    return hermitian_matrix

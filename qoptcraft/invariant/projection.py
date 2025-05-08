@@ -4,7 +4,7 @@ import math
 import numpy as np
 
 from qoptcraft.state import State
-from qoptcraft.basis import image_algebra_basis, unitary_algebra_basis
+from qoptcraft.basis import image_algebra_basis, hermitian_matrix_from_coefs
 from qoptcraft.math import Matrix, hs_scalar_product, hs_inner_product
 
 
@@ -49,14 +49,3 @@ def projection_coefs(state, orthonormal=False):
     for basis_matrix in image_basis:
         coefs.append(hs_inner_product(basis_matrix, matrix))
     return np.array(coefs)
-
-
-def hermitian_matrix_from_coefs(coefs):
-
-    dim = math.isqrt(len(coefs))
-
-    hermitian_matrix = np.zeros((dim, dim), dtype=np.complex128)
-
-    for coef, matrix in zip(coefs, unitary_algebra_basis(dim), strict=True):
-        hermitian_matrix += coef * matrix
-    return hermitian_matrix
