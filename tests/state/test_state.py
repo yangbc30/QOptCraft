@@ -5,7 +5,7 @@ from numpy.testing import assert_allclose
 from scipy.special import factorial
 
 from qoptcraft.basis import BasisPhoton
-from qoptcraft.state import Fock, PureState
+from qoptcraft.state import Fock, PureState, Vacuum
 
 
 @pytest.mark.parametrize(
@@ -32,7 +32,7 @@ def test_equal(state_1: PureState, state_2: PureState, result: bool) -> None:
     ),
 )
 def test_fock_sum(fock_list: BasisPhoton, coefs: ArrayLike) -> None:
-    state_fock = 0
+    state_fock = Vacuum()
     for fock, coef in zip(fock_list, coefs):
         state_fock += coef * Fock(*fock)
     state_pure = PureState(fock_list, coefs)
