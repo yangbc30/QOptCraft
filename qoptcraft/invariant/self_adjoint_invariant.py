@@ -10,7 +10,7 @@ from qoptcraft.invariant import invariant_coef
 
 def invariant_subspaces_nested_commutator(modes, photons, order, orthonormal=False):
     operator = self_adjoint_projection(modes, photons, order, orthonormal=orthonormal)
-    eigenvalues, eigenvectors = np.linalg.eig(operator)
+    eigenvalues, eigenvectors = np.linalg.eigh(operator)
     eigenvectors[:,:] = eigenvectors.T  # eigenvectors will be rows instead of columns
     eigenvalues[:], eigenvectors[:] = zip(*sorted(zip(eigenvalues.round(6), eigenvectors.round(6)), key=lambda p: p[0]))
 

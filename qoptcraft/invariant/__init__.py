@@ -23,7 +23,7 @@ from .vicent_invariant import (
     m2_invariant,
 )
 
-from .projection import projection_density, projection_coefs, hermitian_matrix_from_coefs, projection_coefs
+from .projection import projection_density, projection_coefs
 
 from .generalized_invariants import (
     scalar_invariant,
