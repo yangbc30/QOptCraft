@@ -132,7 +132,7 @@ dmypy.json
 .pyre/
 
 # Notebooks
-pruebas
+examples/pruebas.ipynb
 
 # VSCode
 .vscode
@@ -141,4 +141,5 @@ pruebas
 .pypirc
 
 # Cache
-/examples/save_basis
+/examples/saved_basis
+/tests/saved_basis
