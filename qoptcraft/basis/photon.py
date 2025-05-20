@@ -1,7 +1,5 @@
 import pickle
 
-from numba import jit
-
 from qoptcraft import config
 
 

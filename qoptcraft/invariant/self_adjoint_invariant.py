@@ -3,18 +3,34 @@ from itertools import product, groupby
 import numpy as np
 from numpy.typing import NDArray
 
-from qoptcraft.basis import image_algebra_basis, unitary_algebra_basis, hilbert_dim, hermitian_matrix_from_coefs
+from qoptcraft.basis import (
+    image_algebra_basis,
+    unitary_algebra_basis,
+    hilbert_dim,
+    hermitian_matrix_from_coefs,
+)
 from qoptcraft.math import hs_scalar_product, commutator
 from qoptcraft.invariant import invariant_coef
 
 
-def invariant_subspaces_nested_commutator(modes, photons, order, orthonormal=False):
+def invariant_subspaces_nested_commutator(
+    modes, photons, order, orthonormal: bool = False, cache: bool = True
+):
+
     operator = self_adjoint_projection(modes, photons, order, orthonormal=orthonormal)
     eigenvalues, eigenvectors = np.linalg.eigh(operator)
-    eigenvectors[:,:] = eigenvectors.T  # eigenvectors will be rows instead of columns
-    eigenvalues[:], eigenvectors[:] = zip(*sorted(zip(eigenvalues.round(6), eigenvectors.round(6)), key=lambda p: p[0]))
+    eigenvectors[:, :] = eigenvectors.T  # eigenvectors will be rows instead of columns
+    eigenvalues[:], eigenvectors[:] = zip(
+        *sorted(zip(eigenvalues.round(6), eigenvectors.round(6), strict=True), key=lambda p: p[0]),
+        strict=True,
+    )
 
-    return [[hermitian_matrix_from_coefs(c) for _, c in g] for _, g in groupby(zip(eigenvalues.round(6), eigenvectors.round(6)), key=lambda x: x[0])]
+    return [
+        [hermitian_matrix_from_coefs(c) for _, c in g]
+        for _, g in groupby(
+            zip(eigenvalues.round(6), eigenvectors.round(6), strict=True), key=lambda x: x[0]
+        )
+    ]
 
 
 def self_adjoint_projection(modes, photons, order, orthonormal=False) -> NDArray:
@@ -28,9 +44,11 @@ def self_adjoint_projection(modes, photons, order, orthonormal=False) -> NDArray
     operator_matrix = np.zeros((dim**2, dim**2), dtype=np.complex128)
 
     for i, matrix_1 in enumerate(full_basis):
-        projected_matrix_1 = operator_nested_commutator(matrix_1, order, scattering_basis, image_basis)
+        projected_matrix_1 = operator_nested_commutator(
+            matrix_1, order, scattering_basis, image_basis
+        )
         for j, matrix_2 in enumerate(full_basis):
-            operator_matrix[i,j] = hs_scalar_product(matrix_2, projected_matrix_1)
+            operator_matrix[i, j] = hs_scalar_product(matrix_2, projected_matrix_1)
 
     return operator_matrix
 
