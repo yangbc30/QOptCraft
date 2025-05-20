@@ -10,7 +10,7 @@ from .photon import photon_basis, BasisPhoton
 from .hilbert_dimension import hilbert_dim
 from qoptcraft.operators import creation_fock, annihilation_fock
 from qoptcraft.math import gram_schmidt, hs_scalar_product, hs_norm
-from qoptcraft import config
+from qoptcraft.utils import saved_basis
 
 
 
@@ -27,36 +27,6 @@ warnings.filterwarnings(
 SQRT_2_INV = 1 / np.sqrt(2)
 
 
-def _saved_image_algebra_basis(modes: int, photons: int, orthonormal: bool = False) -> BasisAlgebra:
-    """Return a basis for the Hilbert space with n photons and m modes.
-    If the basis was saved retrieve it, otherwise the function creates
-    and saves the basis to a file.
-
-    Args:
-        photons (int): number of photons.
-        modes (int): number of modes.
-
-    Returns:
-        BasisAlgebra: basis of the image algebra.
-    """
-    folder_path = config.SAVE_DATA_PATH / f"m={modes} n={photons}"
-    folder_path.mkdir(parents=True, exist_ok=True)
-
-    file_name = "orthonormal_image_algebra.pkl" if orthonormal else "image_algebra.pkl"
-    basis_image_path = folder_path / file_name
-    basis_image_path.touch()  # create file if it doesn't exist
-    try:
-        with basis_image_path.open("rb") as f:
-            basis_image = pickle.load(f)
-    except EOFError:
-        basis_image = image_algebra_basis(modes, photons, orthonormal, cache=False)
-        with basis_image_path.open("wb") as f:
-            pickle.dump(basis_image, f)
-        print(f"Image algebra basis saved in {folder_path}")
-
-    return basis_image
-
-
 def unitary_algebra_basis(dim: int) -> BasisAlgebra:
     """Basis of the unitary algebra of dim x dim anti-hermitian matrices."""
     basis = []
@@ -68,6 +38,7 @@ def unitary_algebra_basis(dim: int) -> BasisAlgebra:
     return basis
 
 
+@saved_basis(file_name="image_algebra.pkl")
 def image_algebra_basis(modes: int, photons: int, orthonormal: bool = False, cache: bool = True) -> BasisAlgebra:
     """Generate the basis for the algebra and image algebra.
 
@@ -80,11 +51,10 @@ def image_algebra_basis(modes: int, photons: int, orthonormal: bool = False, cac
     Returns:
         BasisAlgebra: _description_
     """
+    _ = cache  # only used by the decorator @saved_basis
+
     basis = []
     photonic_basis = photon_basis(modes, photons)
-
-    if cache:
-        return _saved_image_algebra_basis(modes, photons, orthonormal)
 
     for i in range(modes):
         basis.append(image_photon_number(i, photonic_basis))

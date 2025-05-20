@@ -11,11 +11,14 @@ from qoptcraft.basis import (
 )
 from qoptcraft.math import hs_scalar_product, commutator
 from qoptcraft.invariant import invariant_coef
+from qoptcraft.utils import saved_basis
 
 
+@saved_basis(file_name="subspaces_nested_commutator.pkl")
 def invariant_subspaces_nested_commutator(
     modes, photons, order, orthonormal: bool = False, cache: bool = True
 ):
+    _ = cache  # only used by the decorator @saved_basis
 
     operator = self_adjoint_projection(modes, photons, order, orthonormal=orthonormal)
     eigenvalues, eigenvectors = np.linalg.eigh(operator)

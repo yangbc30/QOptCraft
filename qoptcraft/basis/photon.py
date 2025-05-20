@@ -1,41 +1,10 @@
-import pickle
-
-from qoptcraft import config
+from qoptcraft.utils import saved_basis
 
 
 BasisPhoton = list[tuple[int, ...]]
 
 
-def _saved_photon_basis(modes: int, photons: int) -> BasisPhoton:
-    """Return a basis for the Hilbert space with n photons and m modes.
-    If the basis was saved retrieve it, otherwise the function creates
-    and saves the basis to a file.
-
-    Args:
-        photons (int): number of photons.
-        modes (int): number of modes.
-
-    Returns:
-        BasisPhoton: basis of the Hilbert space.
-    """
-    folder_path = config.SAVE_DATA_PATH / f"m={modes} n={photons}"
-    folder_path.mkdir(parents=True, exist_ok=True)
-    basis_path = folder_path / "photon.pkl"
-    basis_path.touch()
-
-    try:
-        with basis_path.open("rb") as f:
-            basis = pickle.load(f)
-
-    except EOFError:
-        basis = photon_basis(modes, photons, cache=False)
-        with basis_path.open("wb") as f:
-            pickle.dump(basis, f)
-        print(f"Photon basis saved in {basis_path}.")
-
-    return basis
-
-
+@saved_basis(file_name="photon_basis.pkl")
 def photon_basis(modes: int, photons: int, cache: bool = True) -> BasisPhoton:
     """Given a number of photons and modes, generate the basis of the Hilbert space.
 
@@ -46,9 +15,7 @@ def photon_basis(modes: int, photons: int, cache: bool = True) -> BasisPhoton:
     Returns:
         BasisPhoton: basis of the Hilbert space.
     """
-
-    if cache:
-        return _saved_photon_basis(modes, photons)
+    _ = cache  # only used by the decorator @saved_basis
 
     if photons < 0:
         photons = 0
