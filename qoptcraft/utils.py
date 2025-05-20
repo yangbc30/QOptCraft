@@ -27,13 +27,16 @@ def saved_basis(file_name: str):
                 raise ValueError("Function must be called with 'modes' and 'photons' as first two arguments.") from error
 
             orthonormal = kwargs.get("orthonormal", False)
+            order = kwargs.get("order")
 
             folder_path = config.SAVE_DATA_PATH / f"m={modes} n={photons}"
             folder_path.mkdir(parents=True, exist_ok=True)
 
             # new variable to avoid errors because Python reuses closures
-            file_name_ = "orthonormal_" + file_name if orthonormal else file_name
-            basis_path = folder_path / file_name_
+            file_name_ =  file_name + "_orthonormal" if orthonormal else file_name
+            if order is not None:
+                file_name_ += f"_order_{order}"
+            basis_path = folder_path / (file_name_ + ".pkl")
             basis_path.touch()  # create file if it doesn't exist
             try:
                 with basis_path.open("rb") as f:

@@ -38,7 +38,7 @@ def unitary_algebra_basis(dim: int) -> BasisAlgebra:
     return basis
 
 
-@saved_basis(file_name="image_algebra.pkl")
+@saved_basis(file_name="image_algebra")
 def image_algebra_basis(modes: int, photons: int, orthonormal: bool = False, cache: bool = True) -> BasisAlgebra:
     """Generate the basis for the algebra and image algebra.
 

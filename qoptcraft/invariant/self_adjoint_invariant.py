@@ -14,13 +14,13 @@ from qoptcraft.invariant import invariant_coef
 from qoptcraft.utils import saved_basis
 
 
-@saved_basis(file_name="subspaces_nested_commutator.pkl")
+@saved_basis(file_name="subspaces_nested_commutator")
 def invariant_subspaces_nested_commutator(
-    modes, photons, order, orthonormal: bool = False, cache: bool = True
+    modes, photons, *, order: int, orthonormal: bool = False, cache: bool = True
 ):
     _ = cache  # only used by the decorator @saved_basis
 
-    operator = self_adjoint_projection(modes, photons, order, orthonormal=orthonormal)
+    operator = self_adjoint_projection(modes, photons, order=order, orthonormal=orthonormal)
     eigenvalues, eigenvectors = np.linalg.eigh(operator)
     eigenvectors[:, :] = eigenvectors.T  # eigenvectors will be rows instead of columns
     eigenvalues[:], eigenvectors[:] = zip(
@@ -36,7 +36,7 @@ def invariant_subspaces_nested_commutator(
     ]
 
 
-def self_adjoint_projection(modes, photons, order, orthonormal=False) -> NDArray:
+def self_adjoint_projection(modes, photons, *, order: int, orthonormal=False) -> NDArray:
 
     dim = hilbert_dim(modes, photons)
 

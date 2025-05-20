@@ -25,7 +25,7 @@ def test_self_adjoint_subspace_decomposition(modes: int, photons: int, order: in
     in_state = Fock(photons, *[0] * (modes - 1))
     out_state = in_state.evolution(unitary)
 
-    subspaces = invariant_subspaces_nested_commutator(modes, photons, order)
+    subspaces = invariant_subspaces_nested_commutator(modes, photons, order=order)
 
     for subspace in subspaces:
 

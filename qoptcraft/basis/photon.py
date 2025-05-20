@@ -4,8 +4,8 @@ from qoptcraft.utils import saved_basis
 BasisPhoton = list[tuple[int, ...]]
 
 
-@saved_basis(file_name="photon_basis.pkl")
-def photon_basis(modes: int, photons: int, cache: bool = True) -> BasisPhoton:
+@saved_basis(file_name="photon_basis")
+def photon_basis(modes: int, photons: int, *, cache: bool = True) -> BasisPhoton:
     """Given a number of photons and modes, generate the basis of the Hilbert space.
 
     Args:
