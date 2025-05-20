@@ -1,3 +1,3 @@
 from pathlib import Path
 
-SAVE_DATA_PATH = Path("save_basis").resolve()
+SAVE_DATA_PATH = Path("saved_basis").resolve()
