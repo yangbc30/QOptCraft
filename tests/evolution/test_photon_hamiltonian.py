@@ -10,7 +10,7 @@ from qoptcraft.basis.algebra_basis import (
     antisym_matrix,
     image_sym_matrix,
     image_antisym_matrix,
-    image_photon_number
+    image_photon_number,
 )
 
 

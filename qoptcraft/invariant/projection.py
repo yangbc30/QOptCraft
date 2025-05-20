@@ -11,7 +11,7 @@ from qoptcraft.math import Matrix, hs_scalar_product, hs_inner_product
 def projection_density(
     state: State,
     subspace: list[NDArray] | Literal["preimage", "image", "complement", "full"] = "preimage",
-    orthonormal: bool = False
+    orthonormal: bool = False,
 ) -> Matrix:
     """Project a state onto the linear optical subalgebra or its complement.
 

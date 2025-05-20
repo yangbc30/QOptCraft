@@ -31,7 +31,9 @@ def algebra_hm(matrix, photons: int, orthonormal: bool = False):
         for j in range(i):
             image_matrix += hs_inner_product(matrix, sym_matrix(i, j, modes)) * image_basis[counter]
             counter += 1
-            image_matrix += hs_inner_product(matrix, antisym_matrix(i, j, modes)) * image_basis[counter]
+            image_matrix += (
+                hs_inner_product(matrix, antisym_matrix(i, j, modes)) * image_basis[counter]
+            )
             counter += 1
 
     return image_matrix
