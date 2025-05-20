@@ -22,7 +22,7 @@ def saved_basis(file_name: str):
                     modes = args[0]
                 photons = kwargs.get("photons")
                 if photons is None:
-                    photons = args[0]
+                    photons = args[1]
             except IndexError as error:
                 raise ValueError("Function must be called with 'modes' and 'photons' as first two arguments.") from error
 
