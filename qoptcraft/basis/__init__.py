@@ -4,7 +4,7 @@ from .algebra_basis import (
     unitary_algebra_basis,
     image_algebra_basis,
     complement_algebra_basis_orthonormal,
-    hermitian_matrix_from_coefs
+    hermitian_matrix_from_coefs,
 )
 from .hilbert_dimension import hilbert_dim
 from .algebra_hm import image_matrix_from_coefs, algebra_hm
