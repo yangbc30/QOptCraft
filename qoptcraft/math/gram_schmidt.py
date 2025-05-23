@@ -5,7 +5,7 @@ from collections.abc import Generator
 from numpy.typing import NDArray
 from scipy.sparse import spmatrix
 
-from .norms import hs_scalar_product, hs_norm
+from .norms import hs_inner_product, hs_norm
 
 
 def gram_schmidt(basis: list[spmatrix] | list[NDArray]) -> list[spmatrix] | list[NDArray]:
@@ -32,7 +32,7 @@ def gram_schmidt(basis: list[spmatrix] | list[NDArray]) -> list[spmatrix] | list
     for j in range(dim):
         orth_basis.append(basis[j] / hs_norm(basis[j]))
         for k in range(j + 1, dim):
-            basis[k] = basis[k] - hs_scalar_product(orth_basis[j], basis[k]) * orth_basis[j]
+            basis[k] = basis[k] - hs_inner_product(orth_basis[j], basis[k]) * orth_basis[j]
     return orth_basis
 
 
@@ -61,4 +61,4 @@ def gram_schmidt_generator(basis: list[spmatrix] | list[NDArray]) -> Generator:
         orth_basis.append(basis[j] / hs_norm(basis[j]))
         yield orth_basis[j]
         for k in range(j + 1, dim):
-            basis[k] = basis[k] - hs_scalar_product(orth_basis[j], basis[k]) * orth_basis[j]
+            basis[k] = basis[k] - hs_inner_product(orth_basis[j], basis[k]) * orth_basis[j]
