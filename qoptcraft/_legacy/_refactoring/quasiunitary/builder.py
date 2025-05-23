@@ -24,7 +24,6 @@ def D_decomposition(M, dim):
     return DList
 
 
-
 def quasiunitary(S, totalDim, acc_d):
     I1 = np.identity(int(totalDim / 2), dtype=complex)
     I2 = -1 * np.identity(int(totalDim / 2), dtype=complex)

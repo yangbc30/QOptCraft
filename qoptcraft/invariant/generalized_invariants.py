@@ -122,7 +122,6 @@ def invariant_operator_traces(state: State, order: int, orthonormal=False) -> Ma
 
 
 def scalar_invariant(state: State, order: int, orthonormal=False) -> Matrix:
-
     scattering_basis = unitary_algebra_basis(state.modes)
     image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)
 
@@ -139,7 +138,6 @@ def scalar_invariant(state: State, order: int, orthonormal=False) -> Matrix:
 
 
 def higher_spectral_invariant(state: State, order: int, orthonormal=False) -> Matrix:
-
     scattering_basis = unitary_algebra_basis(state.modes)
     image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)
 
@@ -159,7 +157,6 @@ def higher_spectral_invariant(state: State, order: int, orthonormal=False) -> Ma
 def scalar_invariant_from_matrix(
     matrix: NDArray, modes: int, photons: int, order: int, orthonormal=False
 ) -> Matrix:
-
     scattering_basis = unitary_algebra_basis(modes)
     image_basis = image_algebra_basis(modes, photons, orthonormal)
 

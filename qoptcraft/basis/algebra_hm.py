@@ -40,7 +40,6 @@ def algebra_hm(matrix, photons: int, orthonormal: bool = False):
 
 
 def image_matrix_from_coefs(coefs, modes: int, photons: int, orthonormal: bool = False):
-
     image_basis = image_algebra_basis(modes, photons, orthonormal)
     dim = hilbert_dim(modes, photons)
 

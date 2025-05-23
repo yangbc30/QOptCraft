@@ -123,7 +123,7 @@ def Logm1M(file_input=True, A=False, file_output=True, filename=False, txt=False
         # Total time of execution
         t_inc = time.process_time_ns() - t
 
-        print(f"\nLogm1M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+        print(f"\nLogm1M: total time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")
 
     return logm_1A
 
@@ -178,7 +178,7 @@ def Logm2M(file_input=True, A=False, file_output=True, filename=False, txt=False
         # Total time of execution
         t_inc = time.process_time_ns() - t
 
-        print(f"\nLogm2M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+        print(f"\nLogm2M: total time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")
 
     return logm_2A
 
@@ -245,7 +245,7 @@ def Logm3M(file_input=True, A=False, file_output=True, filename=False, txt=False
         # Total time of execution
         t_inc = time.process_time_ns() - t
 
-        print(f"\nLogm3M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+        print(f"\nLogm3M: total time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")
 
     return logm_3A
 
@@ -315,7 +315,7 @@ def Logm4M(file_input=True, A=False, file_output=True, filename=False, txt=False
         # Total time of execution
         t_inc = time.process_time_ns() - t
 
-        print(f"\nLogm4M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+        print(f"\nLogm4M: total time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")
 
     return logm_4A
 
@@ -387,6 +387,6 @@ def Logm5M(file_input=True, A=False, file_output=True, filename=False, txt=False
         # Total time of execution
         t_inc = time.process_time_ns() - t
 
-        print(f"\nLogm5M: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+        print(f"\nLogm5M: total time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")
 
     return logm_5A

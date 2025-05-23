@@ -325,6 +325,6 @@ def SfromU(
 
     t_inc = time.process_time_ns() - t
 
-    print(f"\nSfromU: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+    print(f"\nSfromU: total time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")
 
     return S

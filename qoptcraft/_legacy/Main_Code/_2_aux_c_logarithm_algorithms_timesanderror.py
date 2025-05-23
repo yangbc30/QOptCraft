@@ -214,7 +214,7 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
             dev = mat_module(np.transpose(np.conj(A)).dot(A) - np.identity(np.power(2, i)))
 
             scores_time = {
-                "N": f"{np.power(2,i)}",
+                "N": f"{np.power(2, i)}",
                 "Deviation": dev,
                 "Algorithm 1": time_1 / (10.0**9),
                 "Algorithm 2": time_2 / (10.0**9),
@@ -223,7 +223,7 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
                 "Algorithm 5": time_5 / (10.0**9),
             }  # your score time data (in seconds)
             scores_error = {
-                "N": f"{np.power(2,i)}",
+                "N": f"{np.power(2, i)}",
                 "Deviation": dev,
                 "Algorithm 1": inner_prod_1,
                 "Algorithm 2": inner_prod_2,
@@ -274,4 +274,4 @@ def MatLogCompTnE(N1=False, N2=False, txt=False, exp=False):
 
     t_inc = time.process_time_ns() - t
 
-    print(f"\nTotal time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+    print(f"\nTotal time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")

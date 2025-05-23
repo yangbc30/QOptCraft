@@ -296,10 +296,10 @@ def Toponogov(
             toponogov_file.write(
                 "\ntoponogov("
                 + filename
-                + f")_{i+1} (separation length from original of {sol_mod[i]}):\n"
+                + f")_{i + 1} (separation length from original of {sol_mod[i]}):\n"
             )
 
-            toponogov_file_2 = open(f"{filename}_toponogov_{i+1}.txt", "w+")
+            toponogov_file_2 = open(f"{filename}_toponogov_{i + 1}.txt", "w+")
 
             np.savetxt(toponogov_file, sol_array[i], delimiter=",")
 
@@ -322,6 +322,6 @@ def Toponogov(
 
     t_inc = time.process_time_ns() - t
 
-    print(f"\nToponogov: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+    print(f"\nToponogov: total time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")
 
     return sol_array

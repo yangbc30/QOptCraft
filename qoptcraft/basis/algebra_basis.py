@@ -9,9 +9,8 @@ from scipy.sparse import spmatrix, lil_matrix
 from .photon import photon_basis, BasisPhoton
 from .hilbert_dimension import hilbert_dim
 from qoptcraft.operators import creation_fock, annihilation_fock
-from qoptcraft.math import gram_schmidt, hs_scalar_product, hs_norm
+from qoptcraft.math import gram_schmidt, hs_inner_product, hs_norm
 from qoptcraft.utils import saved_basis
-
 
 
 BasisAlgebra = list[spmatrix]
@@ -39,7 +38,9 @@ def unitary_algebra_basis(dim: int) -> BasisAlgebra:
 
 
 @saved_basis(file_name="image_algebra")
-def image_algebra_basis(modes: int, photons: int, orthonormal: bool = False, cache: bool = True) -> BasisAlgebra:
+def image_algebra_basis(
+    modes: int, photons: int, orthonormal: bool = False, cache: bool = True
+) -> BasisAlgebra:
     """Generate the basis for the algebra and image algebra.
 
     Args:
@@ -140,7 +141,9 @@ def image_antisym_matrix(mode_1: int, mode_2: int, photonic_basis: BasisPhoton) 
     return matrix.tocsr()
 
 
-def complement_algebra_basis_orthonormal(modes: int, photons: int, cache: bool = True) -> list[spmatrix] | list[NDArray]:
+def complement_algebra_basis_orthonormal(
+    modes: int, photons: int, cache: bool = True
+) -> list[spmatrix] | list[NDArray]:
     basis_image = image_algebra_basis(modes, photons, orthonormal=True, cache=cache)
     dim = hilbert_dim(modes, photons)
     basis_algebra = unitary_algebra_basis(dim)  # length dim * dim
@@ -149,26 +152,25 @@ def complement_algebra_basis_orthonormal(modes: int, photons: int, cache: bool =
 
     for i in range(dim * dim):
         for matrix_image in basis_image:
-            basis_algebra[i] -= hs_scalar_product(matrix_image, basis_algebra[i]) * matrix_image
+            basis_algebra[i] -= hs_inner_product(matrix_image, basis_algebra[i]) * matrix_image
 
         if not np.allclose(basis_algebra[i], np.zeros((dim, dim))):
             basis_complement.append(basis_algebra[i] / hs_norm(basis_algebra[i]))
 
             for j in range(i + 1, dim * dim):
                 basis_algebra[j] -= (
-                    hs_scalar_product(basis_complement[-1], basis_algebra[j]) * basis_complement[-1]
+                    hs_inner_product(basis_complement[-1], basis_algebra[j]) * basis_complement[-1]
                 )
 
     basis_length = len(basis_image) + len(basis_complement)
-    assert (
-        basis_length == dim * dim
-    ), f"Assertion error. Orthonormal basis length is {basis_length} but should be {dim*dim}."
+    assert basis_length == dim * dim, (
+        f"Assertion error. Orthonormal basis length is {basis_length} but should be {dim * dim}."
+    )
 
     return basis_complement
 
 
 def hermitian_matrix_from_coefs(coefs):
-
     dim = math.isqrt(len(coefs))
 
     hermitian_matrix = np.zeros((dim, dim), dtype=np.complex128)

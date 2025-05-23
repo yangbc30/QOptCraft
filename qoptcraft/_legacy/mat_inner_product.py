@@ -46,7 +46,7 @@ def comparison(U, V, name1, name2, acc_d):
     print(f"\nThe inner product of the rest between matrices is: {prod}")
 
     # Onscreen confirmation of equality between the matrices
-    print(f"\nIs it aproximately equal to 0? {np.round(prod,acc_d)==0}")
+    print(f"\nIs it aproximately equal to 0? {np.round(prod, acc_d) == 0}")
 
     # 22 decimal accuracy upon computing the inner product, it can be modified
     return np.round(prod, acc_d) == 0

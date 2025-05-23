@@ -19,7 +19,6 @@ limitations under the License."""
 
 # ----------MATHEMATICAL FUNCTIONS/MATRIX OPERATIONS:----------
 
-
 # NumPy instalation: in the cmd: 'py -m pip install numpy'
 import numpy as np
 

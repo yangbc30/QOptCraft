@@ -202,7 +202,7 @@ def StoUEvolComp(
 
     for cont in range(tries):
         if file_output is True:
-            worksheet = workbook.add_worksheet(f"Attempt {cont+1}")  # add a sheet
+            worksheet = workbook.add_worksheet(f"Attempt {cont + 1}")  # add a sheet
 
         col = 1
 
@@ -289,7 +289,7 @@ def StoUEvolComp(
 
                 if txt is True:
                     print(
-                        f"\nMethod 1): {float(t_inc_1/(10**9))}         Method 2): {float(t_inc_2/(10**9))}         Method 2b): {float(t_inc_2b/(10**9))}         Method 3): {float(t_inc_3/(10**9))}\n\n"
+                        f"\nMethod 1): {float(t_inc_1 / (10**9))}         Method 2): {float(t_inc_2 / (10**9))}         Method 2b): {float(t_inc_2b / (10**9))}         Method 3): {float(t_inc_3 / (10**9))}\n\n"
                     )
 
                 if file_output is True:
@@ -297,7 +297,7 @@ def StoUEvolComp(
                     scores = {
                         "m": f"{k}",
                         "n": f"{j}",
-                        "M": f"{comb_evol(j,k)}",
+                        "M": f"{comb_evol(j, k)}",
                         "Method 1": t_inc_1 / (10.0**9),
                         "Method 2": t_inc_2 / (10.0**9),
                         "Method 2b": t_inc_2b / (10.0**9),
@@ -336,4 +336,4 @@ def StoUEvolComp(
 
     t_inc = time.process_time_ns() - t
 
-    print(f"\nTotal time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+    print(f"\nTotal time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")

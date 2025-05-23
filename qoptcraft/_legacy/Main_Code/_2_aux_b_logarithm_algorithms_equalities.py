@@ -194,4 +194,4 @@ def MatLogCompV(N1=False, N2=False, txt=False, exp=False):
 
     t_inc = time.process_time_ns() - t
 
-    print(f"\nTotal time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+    print(f"\nTotal time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")

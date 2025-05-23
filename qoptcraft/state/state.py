@@ -507,7 +507,6 @@ class Fock(PureState):
 
 
 class Vacuum(State):
-
     def __repr__(self) -> str:
         return "Vacuum"
 

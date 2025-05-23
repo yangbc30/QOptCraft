@@ -140,7 +140,7 @@ def iHStoiHU(
 
     t_inc = time.process_time_ns() - t
 
-    print(f"\niHStoiHU: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+    print(f"\niHStoiHU: total time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")
 
     return iH_U, vec_base
 
@@ -277,7 +277,7 @@ def StoU(
     elif method == 3:
         U, t_inc = evolution_3(S, photons, vec_base, file_output, filename)
 
-    print(f"\nComputation time of chosen method {method} (in seconds): {float(t_inc/(10**9))}")
+    print(f"\nComputation time of chosen method {method} (in seconds): {float(t_inc / (10**9))}")
 
     # ----------STORAGE OF THE U EVOLUTION MATRIX COEFICIENTS AND PROBABILITIES:----------
 
@@ -355,6 +355,6 @@ def StoU(
 
     t_inc = time.process_time_ns() - t
 
-    print(f"\nStoU: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+    print(f"\nStoU: total time of execution (seconds): {float(t_inc / (10 ** (9)))}\n")
 
     return U, vec_base

@@ -346,4 +346,6 @@ def StateSchmidt(
 
     t_inc = time.process_time_ns() - t
 
-    print(f"\nSchmidt entanglement: total time of execution (seconds): {float(t_inc/(10**(9)))}\n")
+    print(
+        f"\nSchmidt entanglement: total time of execution (seconds): {float(t_inc / (10 ** (9)))}\n"
+    )
