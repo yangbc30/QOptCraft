@@ -35,7 +35,7 @@ pip install git+https://github.tel.uva.es/juagar/qoptcraft.git
 We can decompose any unitary into beamsplitters and phase shifters:
 ```python
 from qoptcraft.optical_elements import clemens_decomposition, reck_decomposition
-from qoptcraft.operators import haar_random_unitary
+from qoptcraft.math import haar_random_unitary
 
 modes = 4
 unitary = haar_random_unitary(modes)
@@ -105,7 +105,7 @@ forbidden_transition(mixed_state, bell_state, method="basis")
 We can easily compute the unitary matrix associated with a linear interferometer S and a certain number of photons. There are four different methods to compute the unitary: `'heisenberg'`, `'hamiltonian'`, `'permanent glynn'` and `'permanent ryser'`.
 
 ```python
-from qoptcraft.operators import haar_random_unitary
+from qoptcraft.math import haar_random_unitary
 from qoptcraft.evolution import photon_unitary
 
 modes = 2

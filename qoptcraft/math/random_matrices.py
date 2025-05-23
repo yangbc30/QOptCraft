@@ -1,11 +1,11 @@
 """Random haar uniform unitary."""
 
 import numpy as np
-from numpy.typing import NDArray
 import scipy as sp
+from numpy.typing import NDArray
 
 
-def haar_random_unitary(dim: int, seed: int = None) -> NDArray:
+def haar_random_unitary(dim: int, seed: int | None = None) -> NDArray:
     """Create a random unitary matrix distributed with Haar measure.
 
     Args:
@@ -26,3 +26,12 @@ def haar_random_unitary(dim: int, seed: int = None) -> NDArray:
     D = np.diag(R)  # diag() outputs a 1-D array
     Λ = np.diag(D / np.absolute(D))  # diag() outputs a 2-D array again
     return Q @ Λ @ Q
+
+
+def random_hermitian(dim: int, seed: int | None = None) -> NDArray:
+    """Create a random hermitian matrix from a random Haar unitary."""
+    rng = np.random.default_rng() if seed is None else np.random.default_rng(seed)
+    H = np.diag(rng.normal(0, 1, dim))
+    U = haar_random_unitary(dim, seed)
+    H = U @ H @ U.conj().T
+    return H.round(16)

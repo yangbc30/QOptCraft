@@ -4,7 +4,7 @@ from numpy.random import randint
 import pytest
 
 from qoptcraft.optical_elements import clemens_decomposition, reck_decomposition
-from qoptcraft.operators import haar_random_unitary
+from qoptcraft.math import haar_random_unitary
 
 
 @pytest.mark.parametrize(("modes"), (3, 5, 6))

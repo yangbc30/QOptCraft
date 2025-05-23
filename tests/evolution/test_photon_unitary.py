@@ -5,7 +5,7 @@ from numpy.typing import NDArray
 from numpy.testing import assert_allclose
 import pytest
 
-from qoptcraft.operators import haar_random_unitary
+from qoptcraft.math import haar_random_unitary
 from qoptcraft.optical_elements import beam_splitter
 from qoptcraft.evolution import photon_unitary
 

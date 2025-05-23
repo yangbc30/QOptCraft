@@ -6,10 +6,9 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.linalg import expm
 
-from qoptcraft.operators import haar_random_unitary
 from qoptcraft.basis import hilbert_dim, image_algebra_basis
-from qoptcraft.math import gram_schmidt, hs_scalar_product, hs_norm, log_matrix
 from qoptcraft.evolution import photon_unitary
+from qoptcraft.math import gram_schmidt, haar_random_unitary, hs_norm, hs_scalar_product, log_matrix
 
 
 def toponogov(
