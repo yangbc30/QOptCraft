@@ -3,10 +3,9 @@ from itertools import product
 import numpy as np
 from numpy.typing import NDArray
 
-from qoptcraft.state import State
-
-from qoptcraft.basis import unitary_algebra_basis, image_algebra_basis, hilbert_dim
+from qoptcraft.basis import hilbert_dim, image_algebra_basis, unitary_algebra_basis
 from qoptcraft.math import Matrix, commutator
+from qoptcraft.state import State
 
 
 def invariant_coef(indices, scattering_basis):

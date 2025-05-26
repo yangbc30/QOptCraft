@@ -1,31 +1,44 @@
-from numpy.testing import assert_allclose
+from typing import Literal
 
+from numpy.testing import assert_allclose
 import pytest
 
 from qoptcraft.state import Fock
-from qoptcraft.operators import haar_random_unitary
+from qoptcraft.math import haar_random_unitary
 from qoptcraft.evolution import photon_unitary
-from qoptcraft.invariant import spectral_invariant, invariant_subspaces_nested_commutator
+from qoptcraft.invariant import spectral_invariant, invariant_subspaces
 
 
 @pytest.mark.parametrize(
-    ("modes", "photons", "order"),
+    ("modes", "photons", "invariant_operator", "order"),
     (
-        (2, 2, 2),
-        (2, 3, 2),
-        (3, 3, 2),
-        (2, 3, 3),
-        (3, 3, 3),
+        (2, 2, "nested_commutator", 2),
+        (2, 3, "nested_commutator", 2),
+        (2, 2, "nested_commutator", 3),
+        (3, 3, "nested_commutator", 2),
+        (3, 3, "nested_commutator", 3),
+        (3, 3, "nested_commutator", 4),
+        (2, 2, "higher_order_projection", 2),
+        (2, 2, "higher_order_projection", 3),
+        (2, 3, "higher_order_projection", 3),
+        (3, 3, "higher_order_projection", 2),
+        (3, 3, "higher_order_projection", 3),
+        (3, 3, "higher_order_projection", 4),
     ),
 )
-def test_self_adjoint_subspace_decomposition(modes: int, photons: int, order: int) -> None:
+def test_self_adjoint_subspace_decomposition(
+    modes: int,
+    photons: int,
+    invariant_operator: Literal["higher_order_projection", "nested_commutator"],
+    order: int,
+) -> None:
     scattering = haar_random_unitary(modes)
     unitary = photon_unitary(scattering, photons)
 
     in_state = Fock(photons, *[0] * (modes - 1))
     out_state = in_state.evolution(unitary)
 
-    subspaces = invariant_subspaces_nested_commutator(modes, photons, order=order)
+    subspaces = invariant_subspaces(modes, photons, invariant_operator=invariant_operator, order=order)
 
     for subspace in subspaces:
 

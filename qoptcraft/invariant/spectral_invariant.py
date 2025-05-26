@@ -4,7 +4,8 @@ import numpy as np
 from numpy.typing import NDArray
 
 from qoptcraft.state import State
-from .projection import projection_density
+
+from .projection import higher_order_projection_density, projection_density
 
 
 def spectral_invariant(
@@ -31,4 +32,11 @@ def spectral_invariant(
         return np.concatenate((spectrum_image, spectrum_complement))
 
     projection = projection_density(state, subspace=subspace, orthonormal=orthonormal)
+    return np.linalg.eigvalsh(-1j * projection)
+
+
+def higher_order_spectral_invariant(
+    state: State, order: int, subspace: Literal["preimage", "image"] = "image", orthonormal=False
+) -> NDArray:
+    projection = higher_order_projection_density(state, order, subspace, orthonormal)
     return np.linalg.eigvalsh(-1j * projection)
