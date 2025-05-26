@@ -133,6 +133,7 @@ dmypy.json
 
 # Notebooks
 examples/pruebas.ipynb
+examples/pruebas
 
 # VSCode
 .vscode
