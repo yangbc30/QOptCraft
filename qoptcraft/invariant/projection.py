@@ -5,7 +5,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from qoptcraft.basis import image_algebra_basis, unitary_algebra_basis
-from qoptcraft.math import Matrix, hs_inner_product
+from qoptcraft.math import Matrix, gram_schmidt, hs_inner_product
 from qoptcraft.state import State
 
 
@@ -37,6 +37,8 @@ def projection_density(
         return projection
 
     if isinstance(subspace, list):
+        if orthonormal:
+            subspace = gram_schmidt(subspace)
         projection = np.zeros_like(matrix)
         for basis_matrix in subspace:
             projection += hs_inner_product(basis_matrix, matrix) * basis_matrix
