@@ -1,16 +1,16 @@
-import pickle
-import warnings
 import math
+import warnings
 
 import numpy as np
 from numpy.typing import NDArray
-from scipy.sparse import spmatrix, lil_matrix
+from scipy.sparse import lil_matrix, spmatrix
 
-from .photon import photon_basis, BasisPhoton
-from .hilbert_dimension import hilbert_dim
-from qoptcraft.operators import creation_fock, annihilation_fock
 from qoptcraft.math import gram_schmidt, hs_inner_product, hs_norm
+from qoptcraft.operators import annihilation_fock, creation_fock
 from qoptcraft.utils import saved_basis
+
+from .hilbert_dimension import hilbert_dim
+from .photon import BasisPhoton, photon_basis
 
 
 BasisAlgebra = list[spmatrix]
@@ -46,6 +46,7 @@ def image_algebra_basis(
     Args:
         modes (int): number of modes.
         photons (int): number of photons.
+        orthonormal (bool): if True, the basis is orthonormalized.
         cache (bool, optional): if True uses a cached version of the basis to
             avoid computing it again. Defaults to True.
 
