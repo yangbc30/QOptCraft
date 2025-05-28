@@ -15,7 +15,7 @@ from qoptcraft.math import commutator, hs_inner_product, hs_scalar_product
 from qoptcraft.utils import saved_basis
 
 
-@saved_basis(file_name="subspaces_nested_commutator")
+@saved_basis(file_name="subspaces")
 def invariant_subspaces(
     modes,
     photons,
