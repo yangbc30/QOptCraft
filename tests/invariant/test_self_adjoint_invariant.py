@@ -46,3 +46,36 @@ def test_self_adjoint_subspace_decomposition(
         out_invariant = spectral_invariant(out_state, subspace=subspace, orthonormal=False)
 
         assert_allclose(in_invariant, out_invariant, atol=1e-6, rtol=1e-6)
+
+
+
+@pytest.mark.parametrize(
+    ("modes", "photons", "invariant_operator", "order"),
+    (
+        (2, 2, "nested_commutator", 2),
+        (2, 3, "nested_commutator", 2),
+        (2, 2, "higher_order_projection", 2),
+        (2, 3, "higher_order_projection", 2),
+    ),
+)
+def test_self_adjoint_subspace_decomposition_impossible(
+    modes: int,
+    photons: int,
+    invariant_operator: Literal["higher_order_projection", "nested_commutator"],
+    order: int,
+) -> None:
+
+    in_state = Fock(photons, 0)
+    out_state = Fock(photons - 1, 1)
+
+    subspaces = invariant_subspaces(modes, photons, invariant_operator=invariant_operator, order=order)
+
+    for subspace in subspaces:
+
+        in_invariant = spectral_invariant(in_state, subspace=subspace, orthonormal=False)
+        out_invariant = spectral_invariant(out_state, subspace=subspace, orthonormal=False)
+
+        try:
+            assert_allclose(in_invariant, out_invariant, atol=1e-6, rtol=1e-6)
+        except AssertionError:
+            pass

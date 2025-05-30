@@ -1,5 +1,6 @@
 from itertools import groupby, product
 from typing import Literal
+from pathos.multiprocessing import ProcessingPool, cpu_count
 
 import numpy as np
 from numpy.typing import NDArray
@@ -52,29 +53,30 @@ def self_adjoint_projection(
 ) -> NDArray:
     dim = hilbert_dim(modes, photons)
 
+    if invariant_operator == "nested_commutator":
+        scattering_basis = unitary_algebra_basis(modes)
     image_basis = image_algebra_basis(modes, photons, orthonormal)
     full_basis = unitary_algebra_basis(dim)
 
+    def compute_row(i):
+        matrix = full_basis[i]
+
+        if invariant_operator == "higher_order_projection":
+            projected = operator_higher_order_projection(matrix, modes, order, image_basis)
+        elif invariant_operator == "nested_commutator":
+            projected = operator_nested_commutator(matrix, order, scattering_basis, image_basis)
+        else:
+            raise ValueError(f"Invalid invariant_operator: {invariant_operator}")
+
+        row = np.array([hs_scalar_product(matrix, projected) for matrix in full_basis])
+        return i, row
+
+    with ProcessingPool(nodes=cpu_count()) as pool:
+        parallelized_rows = pool.map(compute_row, range(len(full_basis)))
+
     operator_matrix = np.zeros((dim**2, dim**2), dtype=np.complex128)
-
-    if invariant_operator == "higher_order_projection":
-        for i, matrix_1 in enumerate(full_basis):
-            projected_matrix_1 = operator_higher_order_projection(
-                matrix_1, modes, order, image_basis
-            )
-            for j, matrix_2 in enumerate(full_basis):
-                operator_matrix[i, j] = hs_scalar_product(matrix_2, projected_matrix_1)
-
-    elif invariant_operator == "nested_commutator":
-        scattering_basis = unitary_algebra_basis(modes)
-        for i, matrix_1 in enumerate(full_basis):
-            projected_matrix_1 = operator_nested_commutator(
-                matrix_1, order, scattering_basis, image_basis
-            )
-            # print(f"{projected_matrix_1 = }")
-            for j, matrix_2 in enumerate(full_basis):
-                # ? changing hs_scalar_product to hs_inner_product gives a wrong invariant (??)
-                operator_matrix[i, j] = hs_scalar_product(matrix_2, projected_matrix_1)
+    for i, row in parallelized_rows:
+        operator_matrix[i, :] = row
 
     return operator_matrix
 
