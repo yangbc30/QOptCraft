@@ -1,6 +1,5 @@
 from itertools import groupby, product
 from typing import Literal
-from pathos.multiprocessing import ProcessingPool, cpu_count
 
 import numpy as np
 from numpy.typing import NDArray
@@ -25,10 +24,11 @@ def invariant_subspaces(
     order: int,
     orthonormal: bool = False,
     cache: bool = True,
+    parallelize: bool = True
 ):
     _ = cache  # only used by the decorator @saved_basis
 
-    operator = self_adjoint_projection(modes, photons, invariant_operator, order, orthonormal)
+    operator = self_adjoint_projection(modes, photons, invariant_operator, order, orthonormal, parallelize)
     eigenvalues, eigenvectors = np.linalg.eigh(operator)
     eigenvectors[:, :] = eigenvectors.T  # eigenvectors will be rows instead of columns
     eigenvalues[:], eigenvectors[:] = zip(
@@ -50,6 +50,7 @@ def self_adjoint_projection(
     invariant_operator: Literal["higher_order_projection", "nested_commutator"],
     order: int,
     orthonormal=False,
+    parallelize: bool = True
 ) -> NDArray:
     dim = hilbert_dim(modes, photons)
 
@@ -71,12 +72,17 @@ def self_adjoint_projection(
         row = np.array([hs_scalar_product(matrix, projected) for matrix in full_basis])
         return i, row
 
-    with ProcessingPool(nodes=cpu_count()) as pool:
-        parallelized_rows = pool.map(compute_row, range(len(full_basis)))
-
     operator_matrix = np.zeros((dim**2, dim**2), dtype=np.complex128)
-    for i, row in parallelized_rows:
-        operator_matrix[i, :] = row
+
+    if parallelize:
+        from pathos.multiprocessing import ProcessingPool, cpu_count
+        with ProcessingPool(nodes=cpu_count()) as pool:
+            parallelized_rows = pool.map(compute_row, range(len(full_basis)))
+        for i, row in parallelized_rows:
+            operator_matrix[i, :] = row
+    else:
+        for i in range(len(full_basis)):
+            operator_matrix[i, :] = compute_row(i)[1]  # first output is just i
 
     return operator_matrix
 
