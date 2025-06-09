@@ -5,9 +5,9 @@ import numpy as np
 import sympy
 from numpy.typing import NDArray
 
+from qoptcraft.basis import BasisAlgebra, image_algebra_basis, unitary_algebra_basis
+from qoptcraft.basis.algebra_basis import antisym_matrix, sym_matrix
 from qoptcraft.operators import adjoint_evol
-from qoptcraft.basis import unitary_algebra_basis, image_algebra_basis, BasisAlgebra
-from qoptcraft.basis.algebra_basis import sym_matrix, antisym_matrix
 
 
 class InconsistentEquations(ValueError):
@@ -47,7 +47,7 @@ def scattering_from_unitary(unitary: NDArray, modes: int, photons: int) -> NDArr
                 exp_val = adjoint(basis_matrix)[l, l]
                 if not np.isclose(exp_val, 0, rtol=1e-5, atol=1e-8):
                     j0, l0 = j, l
-                    coef = np.sqrt(-1j * exp_val)
+                    coef = np.sqrt(exp_val)
                     return j0, l0, coef
         raise ValueError("Nonzero element not found.")
 
@@ -59,9 +59,9 @@ def scattering_from_unitary(unitary: NDArray, modes: int, photons: int) -> NDArr
             if j != j0:
                 antisym_term = adjoint(antisym_matrix(j, j0, modes))[l, l0]
                 # ! The factor np.sqrt(2) / 2 is to transform the basis into the one in the paper
-                scattering[l, j] = (antisym_term - 1j * sym_term) / coef * np.sqrt(2) / 2
+                scattering[l, j] = (sym_term - 1j * antisym_term) / coef * np.sqrt(2) / 2
             else:
-                scattering[l, j] = -1j * sym_term / coef
+                scattering[l, j] = sym_term / coef
     return scattering
 
 

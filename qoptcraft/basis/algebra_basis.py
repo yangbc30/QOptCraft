@@ -72,18 +72,22 @@ def sym_matrix(mode_1: int, mode_2: int, dim: int) -> NDArray:
     """Create the element of the algebra i/sqrt(2)(|j><k| + |k><j|)."""
     matrix = np.zeros((dim, dim), dtype=np.complex128)
     if mode_1 == mode_2:
-        matrix[mode_1, mode_1] = 1j
+        matrix[mode_1, mode_1] = 1
         return matrix
-    matrix[mode_1, mode_2] = SQRT_2_INV * 1j
-    matrix[mode_2, mode_1] += SQRT_2_INV * 1j
+    matrix[mode_1, mode_2] = SQRT_2_INV
+    matrix[mode_2, mode_1] = SQRT_2_INV
     return matrix
 
 
 def antisym_matrix(mode_1: int, mode_2: int, dim: int) -> NDArray:
     """Create the element of the algebra 1/sqrt(2)(|j><k| - |k><j|)."""
+    if mode_1 == mode_2:
+        raise ValueError(
+            f"Modes cannot be equal for antisymmetric matrix: {mode_1 = }, {mode_2 = }."
+        )
     matrix = np.zeros((dim, dim), dtype=np.complex128)
-    matrix[mode_1, mode_2] = SQRT_2_INV
-    matrix[mode_2, mode_1] = -SQRT_2_INV
+    matrix[mode_1, mode_2] = SQRT_2_INV * 1j
+    matrix[mode_2, mode_1] = -SQRT_2_INV * 1j
     return matrix
 
 
@@ -93,7 +97,7 @@ def image_photon_number(mode: int, photonic_basis: BasisPhoton) -> spmatrix:
     matrix = lil_matrix((dim, dim), dtype=np.complex128)  # * efficient format for loading data
 
     for i, fock in enumerate(photonic_basis):
-        matrix[i, i] = 1j * fock[mode]
+        matrix[i, i] = fock[mode]
     return matrix.tocsr()
 
 
@@ -111,12 +115,12 @@ def image_sym_matrix(mode_1: int, mode_2: int, photonic_basis: BasisPhoton) -> s
         if fock_[mode_1] != 0:
             fock, coef = annihilation_fock(mode_1, fock_)
             fock, coef_ = creation_fock(mode_2, fock)
-            matrix[photonic_basis.index(fock), col] = SQRT_2_INV * 1j * coef * coef_
+            matrix[photonic_basis.index(fock), col] = SQRT_2_INV * coef * coef_
 
         if fock_[mode_2] != 0:
             fock, coef = annihilation_fock(mode_2, fock_)
             fock, coef_ = creation_fock(mode_1, fock)
-            matrix[photonic_basis.index(fock), col] += SQRT_2_INV * 1j * coef * coef_
+            matrix[photonic_basis.index(fock), col] += SQRT_2_INV * coef * coef_
 
     return matrix.tocsr()
 
@@ -132,12 +136,12 @@ def image_antisym_matrix(mode_1: int, mode_2: int, photonic_basis: BasisPhoton) 
         if fock_[mode_1] != 0:
             fock, coef = annihilation_fock(mode_1, fock_)
             fock, coef_ = creation_fock(mode_2, fock)
-            matrix[photonic_basis.index(fock), col] = -SQRT_2_INV * coef * coef_
+            matrix[photonic_basis.index(fock), col] = -SQRT_2_INV * 1j * coef * coef_
 
         if fock_[mode_2] != 0:
             fock, coef = annihilation_fock(mode_2, fock_)
             fock, coef_ = creation_fock(mode_1, fock)
-            matrix[photonic_basis.index(fock), col] += SQRT_2_INV * coef * coef_
+            matrix[photonic_basis.index(fock), col] += SQRT_2_INV * 1j * coef * coef_
 
     return matrix.tocsr()
 

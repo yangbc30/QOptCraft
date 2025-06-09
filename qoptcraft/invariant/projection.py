@@ -25,7 +25,7 @@ def projection_density(
     Returns:
         Matrix: the projected density matrix.
     """
-    matrix = 1j * state.density_matrix
+    matrix = state.density_matrix
 
     if subspace == "preimage":
         unitary_basis = unitary_algebra_basis(state.modes)
@@ -60,7 +60,7 @@ def projection_coefs(state, orthonormal=False):
     image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)
 
     coefs = []
-    matrix = 1j * state.density_matrix
+    matrix = state.density_matrix
     for basis_matrix in image_basis:
         coefs.append(hs_inner_product(basis_matrix, matrix))
     return np.array(coefs)
@@ -83,7 +83,7 @@ def higher_order_projection_density(
     Returns:
         Matrix: the projected density matrix.
     """
-    density_matrix = 1j * state.density_matrix
+    density_matrix = state.density_matrix
 
     unitary_basis = unitary_algebra_basis(state.modes)
     image_basis = image_algebra_basis(state.modes, state.photons, orthonormal)

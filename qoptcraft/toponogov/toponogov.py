@@ -42,13 +42,13 @@ def toponogov(
 
     while np.abs(error - error_prev) > 1e-8:
         unitary_inv = np.linalg.inv(unitary)
-        log = log_matrix(unitary_inv @ matrix, method="schur")
+        log = -1j * log_matrix(unitary_inv @ matrix, method="schur")
         log_projected = np.zeros_like(unitary)  # Initialize to 0
         for basis_matrix in basis_image:
             coef = hs_scalar_product(log, basis_matrix)
             log_projected += coef * basis_matrix
 
-        unitary = unitary.dot(expm(log_projected))
+        unitary = unitary.dot(expm(1j * log_projected))
 
         error_prev = error
         error = hs_norm(matrix - unitary)
