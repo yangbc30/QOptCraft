@@ -142,4 +142,4 @@ def operator_nested_commutator(matrix, order: int, scattering_basis, image_basis
                 temp_matrix = commutator(image_basis[idx], temp_matrix)
             mapped_matrix += coef * temp_matrix
 
-    return mapped_matrix
+    return 1j**order * mapped_matrix
