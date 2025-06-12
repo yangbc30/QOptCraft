@@ -17,13 +17,17 @@ from qoptcraft.invariant import spectral_invariant, invariant_subspaces
         (2, 2, "nested_commutator", 3),
         (3, 3, "nested_commutator", 2),
         (3, 3, "nested_commutator", 3),
+        (2, 3, "nested_commutator", 4),
         (3, 3, "nested_commutator", 4),
+        (4, 3, "nested_commutator", 4),
         (2, 2, "higher_order_projection", 2),
         (2, 2, "higher_order_projection", 3),
         (2, 3, "higher_order_projection", 3),
         (3, 3, "higher_order_projection", 2),
         (3, 3, "higher_order_projection", 3),
+        (2, 3, "higher_order_projection", 4),
         (3, 3, "higher_order_projection", 4),
+        (4, 3, "higher_order_projection", 4),
     ),
 )
 def test_self_adjoint_subspace_decomposition(
