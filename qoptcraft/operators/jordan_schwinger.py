@@ -1,10 +1,12 @@
 """
-Jordan-Schwinger Mapping Implementation
+Jordan-Schwinger Mapping Implementation - Higher Order Extension
 
 This module implements the Jordan-Schwinger mapping that maps
-Hermitian matrices to quantum operators:
+Hermitian matrices to quantum operators at arbitrary orders:
 
-h_i → Ô_i = Σ_{k,l} (h_i)_{kl} â†_k â_l
+First order:  h_i → Ô_i = Σ_{k,l} (h_i)_{kl} â†_k â_l
+Second order: h_i h_j → Ô_{ij} = Σ_{k,l,m,n} (h_i)_{kl} (h_j)_{mn} â†_k â†_m â_n â_l
+Higher order: (h_1 h_2 ... h_n) → Ô_{1,2,...,n} = Σ_{indices} ∏_i (h_i)_{k_i,l_i} ∏_j â†_{k_j} ∏_j â_{l_j}
 
 The mapping preserves Hermiticity and provides a natural way to
 construct quantum operators from classical matrices. All operators
@@ -14,18 +16,17 @@ Classes:
     JordanSchwingerOperator: Operator created from Jordan-Schwinger mapping
 
 Functions:
-    jordan_schwinger_map: Main function to apply the mapping
+    jordan_schwinger_map: Main function to apply the mapping at any order
     pauli_operators: Generate Pauli operators via Jordan-Schwinger mapping
-    su2_generators: Generate SU(2) generators
-    validate_jordan_schwinger_properties: Validation utilities
 
 Author: QOPTCRAFT Extension  
 License: Compatible with QOPTCRAFT license
 """
 
 import numpy as np
-from typing import Tuple, List, Dict, Optional
+from typing import Tuple, List, Dict, Optional, Union
 from collections import defaultdict
+import itertools
 
 from .quantum_operators import (
     QuantumOperator, CreationOperator, AnnihilationOperator, 
@@ -35,84 +36,116 @@ from .quantum_operators import (
 
 class JordanSchwingerOperator(QuantumOperator):
     """
-    Operator obtained from Jordan-Schwinger mapping.
+    Operator obtained from Jordan-Schwinger mapping of arbitrary order.
     
-    Maps Hermitian matrix h to operator Ô = Σ_{k,l} h_{kl} â†_k â_l.
-    The resulting operator preserves the Hermitian structure and
-    provides a quantum representation of the classical matrix.
+    Maps a product of Hermitian matrices h_1 * h_2 * ... * h_n to operator:
+    Ô = Σ_{k_i,l_i} ∏_i (h_i)_{k_i,l_i} ∏_j â†_{k_j} ∏_j â_{l_j}
     
-    The evolution is implemented by building the operator as a sum
-    of scaled creation-annihilation products, then using the
-    OperatorSum evolution logic.
+    The operator ordering follows the convention:
+    - All creation operators â† come first (left to right as k_1, k_2, ..., k_n)
+    - All annihilation operators â come last (right to left as l_n, l_{n-1}, ..., l_1)
+    
+    This gives the normal-ordered form which is most natural for calculations.
     
     Attributes:
-        h_matrix (np.ndarray): Original Hermitian matrix
-        expression (QuantumOperator): Built operator expression using evolve-based operators
+        h_matrices (List[np.ndarray]): List of Hermitian matrices
+        order (int): Order of the mapping (number of matrices)
+        expression (QuantumOperator): Built operator expression
     """
     
-    def __init__(self, h_matrix: np.ndarray):
+    def __init__(self, h_matrices: Union[np.ndarray, List[np.ndarray]]):
         """
-        Initialize Jordan-Schwinger operator.
+        Initialize Jordan-Schwinger operator of arbitrary order.
         
         Args:
-            h_matrix: Hermitian matrix to map
+            h_matrices: Single Hermitian matrix (order 1) or list of matrices (higher order)
             
         Raises:
-            ValueError: If matrix is not square or not Hermitian
+            ValueError: If matrices are not square, not Hermitian, or incompatible sizes
         """
-        if h_matrix.ndim != 2 or h_matrix.shape[0] != h_matrix.shape[1]:
-            raise ValueError("Input must be a square matrix")
+        # Handle single matrix input
+        if isinstance(h_matrices, np.ndarray):
+            h_matrices = [h_matrices]
         
-        modes = h_matrix.shape[0]
+        if not h_matrices:
+            raise ValueError("At least one matrix must be provided")
+        
+        # Validate all matrices
+        modes = h_matrices[0].shape[0]
+        for i, h_matrix in enumerate(h_matrices):
+            if h_matrix.ndim != 2 or h_matrix.shape[0] != h_matrix.shape[1]:
+                raise ValueError(f"Matrix {i} must be square")
+            if h_matrix.shape[0] != modes:
+                raise ValueError(f"All matrices must have the same size")
+            if not np.allclose(h_matrix, h_matrix.conj().T, atol=1e-12):
+                raise ValueError(f"Matrix {i} must be Hermitian")
+        
         super().__init__(modes)
         
-        if not np.allclose(h_matrix, h_matrix.conj().T, atol=1e-12):
-            raise ValueError("Input matrix must be Hermitian")
-        
-        self.h_matrix = h_matrix.copy()
+        self.h_matrices = [h.copy() for h in h_matrices]
+        self.order = len(h_matrices)
         self.expression = self._build_operator_expression()
     
     def _build_operator_expression(self) -> QuantumOperator:
         """
-        Build the operator expression from the Hermitian matrix.
+        Build the operator expression from the Hermitian matrices.
         
-        The Jordan-Schwinger mapping is:
-        Ô = Σ_{k,l} h_{kl} â†_k â_l
+        For order n, the Jordan-Schwinger mapping is:
+        Ô = Σ_{k_i,l_i} ∏_i (h_i)_{k_i,l_i} â†_{k_1} â†_{k_2} ... â†_{k_n} â_{l_n} ... â_{l_2} â_{l_1}
         
-        For efficiency, diagonal terms h_{kk} are implemented using
-        number operators n̂_k = â†_k â_k, and the entire expression
-        is built as an OperatorSum of scaled terms.
+        The operator is built as a sum of all possible index combinations,
+        with each term being a scaled product of creation and annihilation operators.
         
         Returns:
             QuantumOperator representing the mapped expression
         """
         terms = []
         
-        for k in range(self.modes):
-            for l in range(self.modes):
-                coeff = self.h_matrix[k, l]
-                
-                # Skip negligible coefficients
-                if abs(coeff) < 1e-15:
-                    continue
-                
-                if k == l:
-                    # Diagonal terms: use number operator for efficiency
-                    # h_{kk} â†_k â_k = h_{kk} n̂_k
-                    if abs(coeff) > 1e-15:
-                        term = ScaledOperator(coeff, NumberOperator(k, self.modes))
-                        terms.append(term)
-                else:
-                    # Off-diagonal terms: creation × annihilation
-                    # h_{kl} â†_k â_l
-                    a_dag_k = CreationOperator(k, self.modes)
-                    a_l = AnnihilationOperator(l, self.modes)
-                    product = OperatorProduct([a_dag_k, a_l])
-                    term = ScaledOperator(coeff, product)
-                    terms.append(term)
+        # Generate all possible index combinations
+        # For order n, we need n pairs of indices (k_i, l_i)
+        index_ranges = [range(self.modes) for _ in range(2 * self.order)]
+        
+        for indices in itertools.product(*index_ranges):
+            # Split indices into creation (k) and annihilation (l) parts
+            k_indices = indices[:self.order]  # k_1, k_2, ..., k_n
+            l_indices = indices[self.order:]  # l_1, l_2, ..., l_n
+            
+            # Compute the coefficient: ∏_i (h_i)_{k_i,l_i}
+            coefficient = 1.0
+            for i in range(self.order):
+                coefficient *= self.h_matrices[i][k_indices[i], l_indices[i]]
+            
+            # Skip negligible coefficients
+            if abs(coefficient) < 1e-15:
+                continue
+            
+            # Build the operator product: â†_{k_1} â†_{k_2} ... â†_{k_n} â_{l_n} ... â_{l_2} â_{l_1}
+            operators = []
+            
+            # Add creation operators (left to right: k_1, k_2, ..., k_n)
+            for k in k_indices:
+                operators.append(CreationOperator(k, self.modes))
+            
+            # Add annihilation operators (right to left: l_n, l_{n-1}, ..., l_1)
+            for l in reversed(l_indices):
+                operators.append(AnnihilationOperator(l, self.modes))
+            
+            # Create the operator product
+            if len(operators) == 1:
+                product = operators[0]
+            else:
+                product = OperatorProduct(operators)
+            
+            # Scale by coefficient
+            if abs(coefficient - 1.0) > 1e-15:
+                term = ScaledOperator(coefficient, product)
+            else:
+                term = product
+            
+            terms.append(term)
         
         if not terms:
-            # All coefficients were negligible - return zero operator
+            # All coefficients were negligible
             from .quantum_operators import ScalarOperator
             return ScalarOperator(0, self.modes)
         elif len(terms) == 1:
@@ -140,8 +173,7 @@ class JordanSchwingerOperator(QuantumOperator):
         """
         Convert to matrix representation.
         
-        This could use the base class implementation, but we delegate to
-        the expression for consistency and potential optimizations.
+        This delegates to the expression for consistency.
         """
         return self.expression.to_matrix(basis, state_to_index)
     
@@ -149,30 +181,39 @@ class JordanSchwingerOperator(QuantumOperator):
         """
         Get symbolic representation of the operator.
         
-        Returns a human-readable string showing the operator structure,
-        e.g., "1.000·n_0 - 1.000·n_1 + 0.500·a†_0·a_1 + 0.500·a†_1·a_0"
+        For higher-order operators, this can be quite complex, so we provide
+        a simplified representation showing the order and structure.
         
         Returns:
             String representation of the operator
         """
+        if self.order == 1:
+            # For first order, show detailed form
+            return self._get_first_order_symbolic()
+        else:
+            # For higher order, show summary
+            matrix_names = [f"h_{i+1}" for i in range(self.order)]
+            return f"JS_order_{self.order}({' × '.join(matrix_names)})"
+    
+    def _get_first_order_symbolic(self) -> str:
+        """Get detailed symbolic form for first-order operators."""
+        h_matrix = self.h_matrices[0]
         terms = []
         
         for k in range(self.modes):
             for l in range(self.modes):
-                coeff = self.h_matrix[k, l]
+                coeff = h_matrix[k, l]
                 
                 if abs(coeff) < 1e-15:
                     continue
                 
                 # Format coefficient
                 if abs(coeff.imag) < 1e-15:
-                    # Real coefficient
                     coeff_str = f"{coeff.real:.3f}"
                 else:
-                    # Complex coefficient
                     coeff_str = f"({coeff:.3f})"
                 
-                # Remove unnecessary "1.000·" and "-1.000·" prefixes
+                # Remove unnecessary "1.000·" prefixes
                 if coeff_str == "1.000":
                     coeff_str = ""
                 elif coeff_str == "-1.000":
@@ -184,10 +225,8 @@ class JordanSchwingerOperator(QuantumOperator):
                 
                 # Build term string
                 if k == l:
-                    # Diagonal term: number operator
                     term_str = f"{coeff_str}n_{k}"
                 else:
-                    # Off-diagonal term: creation × annihilation
                     term_str = f"{coeff_str}a†_{k}·a_{l}"
                 
                 terms.append(term_str)
@@ -205,89 +244,71 @@ class JordanSchwingerOperator(QuantumOperator):
         
         return result
     
-    def get_matrix_elements(self) -> Dict[Tuple[int, int], complex]:
-        """
-        Get the matrix elements of the original Hermitian matrix.
-        
-        Returns:
-            Dictionary mapping (k, l) indices to matrix elements h_{kl}
-        """
-        elements = {}
-        for k in range(self.modes):
-            for l in range(self.modes):
-                if abs(self.h_matrix[k, l]) > 1e-15:
-                    elements[(k, l)] = self.h_matrix[k, l]
-        return elements
+    def get_order(self) -> int:
+        """Get the order of the Jordan-Schwinger mapping."""
+        return self.order
     
-    def is_diagonal(self) -> bool:
-        """
-        Check if the original matrix is diagonal.
-        
-        Returns:
-            True if the matrix is diagonal (only n̂_k terms)
-        """
-        off_diagonal = self.h_matrix - np.diag(np.diag(self.h_matrix))
-        return np.allclose(off_diagonal, 0, atol=1e-15)
-    
-    def trace(self, basis: List[Tuple[int, ...]]) -> complex:
-        """
-        Compute the trace of the operator in given basis.
-        
-        Args:
-            basis: Fock basis states
-            
-        Returns:
-            Trace of the operator matrix
-        """
-        matrix = self.to_matrix(basis)
-        return np.trace(matrix)
+    def get_matrices(self) -> List[np.ndarray]:
+        """Get the original Hermitian matrices."""
+        return [h.copy() for h in self.h_matrices]
     
     def __repr__(self) -> str:
-        return f"JordanSchwinger({self.get_symbolic_form()})"
+        return f"JordanSchwinger_{self.order}({self.get_symbolic_form()})"
 
 
-def jordan_schwinger_map(h_matrix: np.ndarray) -> JordanSchwingerOperator:
+def jordan_schwinger_map(h_matrices: Union[np.ndarray, List[np.ndarray]], 
+                        order: Optional[int] = None) -> JordanSchwingerOperator:
     """
-    Apply Jordan-Schwinger mapping to a Hermitian matrix.
+    Apply Jordan-Schwinger mapping to Hermitian matrices of arbitrary order.
     
-    The Jordan-Schwinger mapping provides a natural way to map
-    classical Hermitian matrices to quantum operators:
+    The Jordan-Schwinger mapping generalizes to higher orders:
     
-    h → Ô = Σ_{k,l} h_{kl} â†_k â_l
+    Order 1: h → Ô = Σ_{k,l} h_{kl} â†_k â_l
+    Order 2: h_1 × h_2 → Ô = Σ_{k,l,m,n} (h_1)_{kl} (h_2)_{mn} â†_k â†_m â_n â_l  
+    Order n: h_1 × ... × h_n → Ô = Σ_{indices} ∏_i (h_i)_{k_i,l_i} ∏_j â†_{k_j} ∏_j â_{l_j}
     
     Properties preserved:
-    - Hermiticity: h† = h → Ô† = Ô
-    - Linearity: α·h₁ + β·h₂ → α·Ô₁ + β·Ô₂
-    - Spectrum: Related but not identical due to quantum fluctuations
+    - Hermiticity: if all h_i are Hermitian → Ô† = Ô
+    - Linearity: in each matrix argument
     
     Args:
-        h_matrix: Hermitian matrix to map (modes × modes)
+        h_matrices: Single Hermitian matrix or list of matrices
+        order: Optional order specification (inferred from h_matrices if not given)
         
     Returns:
         JordanSchwingerOperator representing the mapped quantum operator
         
     Raises:
-        ValueError: If matrix is not square or not Hermitian
+        ValueError: If matrices are not square, not Hermitian, or order mismatch
         
-    Example:
-        >>> import numpy as np
-        >>> from qoptcraft.operators import jordan_schwinger_map
-        >>> from qoptcraft.basis import photon_basis
-        >>> 
-        >>> # Pauli-X matrix
+    Examples:
+        >>> # First order (standard Jordan-Schwinger)
         >>> sigma_x = np.array([[0, 1], [1, 0]])
-        >>> js_op = jordan_schwinger_map(sigma_x)
-        >>> print(js_op.get_symbolic_form())
+        >>> js_op1 = jordan_schwinger_map(sigma_x)
+        >>> print(js_op1.get_symbolic_form())
         'a†_0·a_1 + a†_1·a_0'
-        >>> 
-        >>> # Matrix representation in 1-photon basis
-        >>> basis = photon_basis(2, 1)
-        >>> matrix = js_op.to_matrix(basis)
-        >>> print(matrix)
-        [[0. 1.]
-         [1. 0.]]
+        
+        >>> # Second order
+        >>> sigma_z = np.array([[1, 0], [0, -1]])
+        >>> js_op2 = jordan_schwinger_map([sigma_x, sigma_z])  
+        >>> print(js_op2.get_order())
+        2
+        
+        >>> # Explicit order specification
+        >>> js_op3 = jordan_schwinger_map([sigma_x, sigma_x, sigma_z], order=3)
     """
-    return JordanSchwingerOperator(h_matrix)
+    # Handle single matrix input
+    if isinstance(h_matrices, np.ndarray):
+        h_matrices = [h_matrices]
+    
+    # Validate order if specified
+    if order is not None:
+        if order != len(h_matrices):
+            raise ValueError(f"Specified order {order} doesn't match number of matrices {len(h_matrices)}")
+        if order < 1:
+            raise ValueError("Order must be at least 1")
+    
+    return JordanSchwingerOperator(h_matrices)
 
 
 def pauli_operators(modes: int = 2) -> Dict[str, JordanSchwingerOperator]:
@@ -326,227 +347,61 @@ def pauli_operators(modes: int = 2) -> Dict[str, JordanSchwingerOperator]:
     }
 
 
-def su2_generators(modes: int = 2) -> Dict[str, JordanSchwingerOperator]:
+def higher_order_examples():
     """
-    Generate SU(2) generators using Jordan-Schwinger mapping.
-    
-    The SU(2) generators are J_x = σ_x/2, J_y = σ_y/2, J_z = σ_z/2.
-    These satisfy the angular momentum algebra [J_i, J_j] = iε_{ijk}J_k.
-    
-    Args:
-        modes: Number of modes (should be 2)
-        
-    Returns:
-        Dictionary containing SU(2) generators: {'Jx', 'Jy', 'Jz'}
-        
-    Example:
-        >>> su2_ops = su2_generators()
-        >>> jz = su2_ops['Jz']
-        >>> print(jz.get_symbolic_form())
-        '0.500·n_0 - 0.500·n_1'
+    Demonstrate higher-order Jordan-Schwinger mappings with examples.
     """
-    if modes != 2:
-        raise ValueError("SU(2) generators are defined for 2 modes only")
+    print("Higher-Order Jordan-Schwinger Mapping Examples")
+    print("=" * 55)
     
-    # SU(2) generators (Pauli matrices / 2)
-    j_x = 0.5 * np.array([[0, 1], [1, 0]], dtype=complex)
-    j_y = 0.5 * np.array([[0, -1j], [1j, 0]], dtype=complex)
-    j_z = 0.5 * np.array([[1, 0], [0, -1]], dtype=complex)
+    # Define some 2x2 matrices
+    sigma_x = np.array([[0, 1], [1, 0]], dtype=complex)
+    sigma_y = np.array([[0, -1j], [1j, 0]], dtype=complex)
+    sigma_z = np.array([[1, 0], [0, -1]], dtype=complex)
     
-    return {
-        'Jx': jordan_schwinger_map(j_x),
-        'Jy': jordan_schwinger_map(j_y),
-        'Jz': jordan_schwinger_map(j_z)
-    }
-
-
-def coherent_state_displacement(alpha: complex, mode: int, modes: int) -> JordanSchwingerOperator:
-    """
-    Generate displacement operator generator for coherent states using Jordan-Schwinger mapping.
+    print("\nFirst Order (Standard):")
+    print("-" * 25)
+    js1 = jordan_schwinger_map(sigma_x)
+    print(f"σ_x: {js1.get_symbolic_form()}")
     
-    The displacement operator is D(α) = exp(α·a† - α*·a), but here we
-    construct the generator α·a† - α*·a as a Jordan-Schwinger operator.
+    print("\nSecond Order:")
+    print("-" * 15)
+    js2_xx = jordan_schwinger_map([sigma_x, sigma_x])
+    print(f"σ_x × σ_x: {js2_xx.get_symbolic_form()}")
     
-    This creates a matrix representation that can be used with matrix
-    exponentiation to get the full displacement operator.
+    js2_xz = jordan_schwinger_map([sigma_x, sigma_z])
+    print(f"σ_x × σ_z: {js2_xz.get_symbolic_form()}")
     
-    Args:
-        alpha: Complex displacement parameter
-        mode: Mode to displace
-        modes: Total number of modes
-        
-    Returns:
-        JordanSchwingerOperator representing the displacement generator
-        
-    Example:
-        >>> disp_gen = coherent_state_displacement(1+1j, 0, 2)
-        >>> print(disp_gen.get_symbolic_form())
-        # Will show the generator form, not the full exponential
-    """
-    if not (0 <= mode < modes):
-        raise ValueError(f"Mode index {mode} out of range [0, {modes-1}]")
+    print("\nThird Order:")
+    print("-" * 14)
+    js3 = jordan_schwinger_map([sigma_x, sigma_y, sigma_z])
+    print(f"σ_x × σ_y × σ_z: {js3.get_symbolic_form()}")
     
-    # Create matrix representation of displacement generator
-    # For the displacement generator α·a† - α*·a, we need to use
-    # a representation that Jordan-Schwinger can handle
+    print(f"\nOperator properties:")
+    print(f"Order 1 - Order: {js1.get_order()}")
+    print(f"Order 2 - Order: {js2_xx.get_order()}")
+    print(f"Order 3 - Order: {js3.get_order()}")
     
-    # We'll use the fact that for quadrature displacements:
-    # x̂ = (a† + a)/√2, p̂ = i(a† - a)/√2
-    # So α·a† - α*·a can be written in terms of quadratures
-    
-    h_matrix = np.zeros((modes, modes), dtype=complex)
-    
-    # For a displacement in the complex plane, we can decompose:
-    # α = (α.real + i·α.imag)
-    # This creates off-diagonal terms in the Jordan-Schwinger representation
-    
-    # Create a matrix that gives the desired generator when mapped
-    # This is a simplified version - for exact displacement, one would
-    # need to be more careful about the mapping
-    
-    if modes >= 2:
-        # Use off-diagonal elements to create the displacement effect
-        beta = alpha / np.sqrt(2)  # Scaling factor
-        
-        # Create off-diagonal terms that will map to a†a† and aa terms
-        next_mode = (mode + 1) % modes
-        h_matrix[mode, next_mode] = beta
-        h_matrix[next_mode, mode] = np.conj(beta)
-    else:
-        # For single mode, use diagonal displacement
-        h_matrix[mode, mode] = alpha.real
-    
-    return jordan_schwinger_map(h_matrix)
-
-
-def validate_jordan_schwinger_properties(h_matrix: np.ndarray, 
-                                       basis: List[Tuple[int, ...]],
-                                       tolerance: float = 1e-12) -> Dict[str, bool]:
-    """
-    Validate that Jordan-Schwinger mapping preserves expected properties.
-    
-    This function checks various mathematical properties that should be
-    preserved under the Jordan-Schwinger mapping, such as Hermiticity
-    and linearity.
-    
-    Args:
-        h_matrix: Original Hermitian matrix
-        basis: Fock basis for testing
-        tolerance: Numerical tolerance for checks
-        
-    Returns:
-        Dictionary of validation results
-        
-    Example:
-        >>> from qoptcraft.basis import photon_basis
-        >>> sigma_x = np.array([[0, 1], [1, 0]])
-        >>> basis = photon_basis(2, 1)
-        >>> results = validate_jordan_schwinger_properties(sigma_x, basis)
-        >>> print(results['output_hermitian'])
-        True
-    """
-    # Apply mapping
-    js_op = jordan_schwinger_map(h_matrix)
-    js_matrix = js_op.to_matrix(basis)
-    
-    # Check basic properties
-    results = {
-        'input_hermitian': np.allclose(h_matrix, h_matrix.conj().T, atol=tolerance),
-        'output_hermitian': np.allclose(js_matrix, js_matrix.conj().T, atol=tolerance),
-        'output_finite': np.isfinite(js_matrix).all(),
-        'correct_dimension': js_matrix.shape == (len(basis), len(basis)),
-        'evolution_consistent': True  # We'll test this below
-    }
-    
-    # Test evolution consistency
-    try:
-        for state in basis[:min(3, len(basis))]:  # Test a few states
-            evolution_result = js_op.evolve(state)
-            # Should return valid results
-            if not all(isinstance(amp, (int, float, complex)) for amp in evolution_result.values()):
-                results['evolution_consistent'] = False
-                break
-    except Exception:
-        results['evolution_consistent'] = False
-    
-    # Check linearity if we have a 2x2 system
-    if h_matrix.shape[0] == 2:
-        try:
-            h1 = np.array([[1, 0], [0, 0]], dtype=complex)
-            h2 = np.array([[0, 1], [1, 0]], dtype=complex)
-            a, b = 2.0, -1.5
-            
-            # Direct mapping of linear combination
-            js_combined = jordan_schwinger_map(a * h1 + b * h2)
-            combined_matrix = js_combined.to_matrix(basis)
-            
-            # Linear combination of mapped operators
-            js1 = jordan_schwinger_map(h1)
-            js2 = jordan_schwinger_map(h2)
-            
-            # Build linear combination using operator arithmetic
-            linear_combination = ScaledOperator(a, js1).expression + ScaledOperator(b, js2).expression
-            linear_matrix = linear_combination.to_matrix(basis)
-            
-            results['linearity'] = np.allclose(combined_matrix, linear_matrix, atol=tolerance)
-        except Exception:
-            results['linearity'] = False
-    
-    return results
-
-
-def demonstrate_jordan_schwinger():
-    """
-    Demonstrate the Jordan-Schwinger mapping with various examples.
-    
-    This function showcases the main features and validates the implementation
-    with several physical examples.
-    """
-    print("Jordan-Schwinger Mapping Demonstration")
-    print("=" * 50)
-    
-    # Example 1: Pauli matrices
-    print("\n1. Pauli Matrices")
-    print("-" * 20)
-    
-    pauli_ops = pauli_operators()
-    for name, op in pauli_ops.items():
-        print(f"σ_{name}: {op.get_symbolic_form()}")
-    
-    # Example 2: SU(2) generators
-    print("\n2. SU(2) Generators")
-    print("-" * 20)
-    
-    su2_ops = su2_generators()
-    for name, op in su2_ops.items():
-        print(f"{name}: {op.get_symbolic_form()}")
-    
-    # Example 3: Custom matrix
-    print("\n3. Custom Hermitian Matrix")
-    print("-" * 30)
-    
-    custom_matrix = np.array([[1, 0.5+0.2j], [0.5-0.2j, -1]], dtype=complex)
-    custom_op = jordan_schwinger_map(custom_matrix)
-    print(f"Custom matrix:\n{custom_matrix}")
-    print(f"Mapped operator: {custom_op.get_symbolic_form()}")
-    
-    # Example 4: Matrix representation
-    print("\n4. Matrix Representation Test")
-    print("-" * 30)
-    
+    # Test matrix representation if basis is available
     try:
         from qoptcraft.basis import photon_basis
-        basis = photon_basis(2, 1)
+        basis = photon_basis(2, 1)  # 2 modes, 1 photon
         
-        sigma_x = pauli_ops['X']
-        matrix = sigma_x.to_matrix(basis)
+        print(f"\nMatrix representations in basis {basis}:")
         
-        print(f"Basis: {basis}")
-        print(f"σ_X matrix in 1-photon basis:\n{matrix}")
-        print(f"Is Hermitian: {sigma_x.is_hermitian(basis)}")
+        matrix1 = js1.to_matrix(basis)
+        print(f"Order 1 (σ_x):\n{np.round(matrix1, 3)}")
+        
+        matrix2 = js2_xx.to_matrix(basis)
+        print(f"Order 2 (σ_x × σ_x):\n{np.round(matrix2, 3)}")
+        
+        # Check Hermiticity
+        print(f"\nHermiticity check:")
+        print(f"Order 1: {js1.is_hermitian(basis)}")
+        print(f"Order 2: {js2_xx.is_hermitian(basis)}")
         
     except ImportError:
-        print("QOPTCRAFT basis functions not available for full demonstration")
+        print("\nQOPTCRAFT basis functions not available for matrix representation")
 
 
 # Export main functions
@@ -554,8 +409,5 @@ __all__ = [
     'JordanSchwingerOperator',
     'jordan_schwinger_map',
     'pauli_operators',
-    'su2_generators', 
-    'coherent_state_displacement',
-    'validate_jordan_schwinger_properties',
-    'demonstrate_jordan_schwinger'
+    'higher_order_examples'
 ]
