@@ -147,3 +147,4 @@ examples/pruebas
 # Cache
 /examples/saved_basis
 /tests/saved_basis
+/saved_basis

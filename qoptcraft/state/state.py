@@ -102,6 +102,66 @@ class MixedState(State):
         new_density = unitary @ self.density_matrix @ unitary.T.conj()
         return MixedState(new_density, self.modes, self.photons)
 
+    def __repr__(self) -> str:
+        """Return a string representation of the MixedState."""
+        # Get basic properties
+        if hasattr(self.density_matrix, "shape"):
+            dim = self.density_matrix.shape[0]
+        else:
+            # Handle sparse matrices
+            dim = self.density_matrix.get_shape()[0]
+
+        # Calculate eigenvalues for characterization
+        if hasattr(self.density_matrix, "toarray"):
+            # Sparse matrix
+            eigenvals = np.linalg.eigvals(self.density_matrix.toarray())
+        else:
+            # Dense matrix
+            eigenvals = np.linalg.eigvals(self.density_matrix)
+
+        # Sort eigenvalues in descending order and remove near-zero values
+        eigenvals = np.real(eigenvals)  # Should be real for valid density matrix
+        eigenvals = eigenvals[eigenvals > 1e-12]  # Remove numerical zeros
+        eigenvals = np.sort(eigenvals)[::-1]  # Sort descending
+
+        # Calculate purity: Tr(ρ²)
+        if hasattr(self.density_matrix, "toarray"):
+            density_array = self.density_matrix.toarray()
+        else:
+            density_array = self.density_matrix
+
+        purity = np.real(np.trace(density_array @ density_array))
+
+        # Calculate effective rank (number of significant eigenvalues)
+        rank = len(eigenvals)
+
+        # Check if this is effectively a pure state (purity ≈ 1)
+        is_pure_state = np.abs(purity - 1.0) < 1e-10
+
+        # Build the representation string
+        repr_parts = [
+            f"modes={self.modes}",
+            f"photons={self.photons}",
+            f"dim={dim}",
+            f"purity={purity:.4f}",
+        ]
+
+        if is_pure_state:
+            repr_parts.append("pure_state=True")
+        else:
+            repr_parts.append(f"rank={rank}")
+
+            # Add dominant eigenvalues if not too many
+            if rank <= 4:
+                eigenval_str = ", ".join(f"{val:.4f}" for val in eigenvals)
+                repr_parts.append(f"eigenvals=[{eigenval_str}]")
+            elif rank <= 10:
+                # Show first few eigenvalues
+                first_few = ", ".join(f"{val:.4f}" for val in eigenvals[:3])
+                repr_parts.append(f"eigenvals=[{first_few}, ...]")
+
+        return f"MixedState({', '.join(repr_parts)})"
+
 
 class PureState(State):
     """A pure quantum state.
