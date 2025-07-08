@@ -94,9 +94,7 @@ try:
         JordanSchwingerOperator,
         jordan_schwinger_map,
         pauli_operators,
-        su2_generators,
-        coherent_state_displacement,
-        validate_jordan_schwinger_properties
+        generate_all_js_operators,
     )
     _JORDAN_SCHWINGER_AVAILABLE = True
 except ImportError as e:

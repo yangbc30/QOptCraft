@@ -346,62 +346,47 @@ def pauli_operators(modes: int = 2) -> Dict[str, JordanSchwingerOperator]:
         'I': jordan_schwinger_map(identity)
     }
 
-
-def higher_order_examples():
+def generate_all_js_operators(basis: List[np.ndarray], order: int) -> List[JordanSchwingerOperator]:
     """
-    Demonstrate higher-order Jordan-Schwinger mappings with examples.
+    Generate all possible Jordan-Schwinger operators of given order from a matrix basis.
+    
+    Args:
+        basis: List of Hermitian matrices to use as basis
+        order: Order of Jordan-Schwinger mapping (number of matrix factors)
+        
+    Returns:
+        List of all possible JordanSchwingerOperator instances
+        
+    Example:
+        >>> # Define a simple basis
+        >>> sigma_x = np.array([[0, 1], [1, 0]])
+        >>> sigma_z = np.array([[1, 0], [0, -1]]) 
+        >>> basis = [sigma_x, sigma_z]
+        >>> 
+        >>> # Generate all 2nd order JS operators
+        >>> operators = generate_all_js_operators(basis, order=2)
+        >>> print(f"Generated {len(operators)} operators")
+        Generated 4 operators
     """
-    print("Higher-Order Jordan-Schwinger Mapping Examples")
-    print("=" * 55)
+    if order <= 0:
+        raise ValueError("Order must be positive")
     
-    # Define some 2x2 matrices
-    sigma_x = np.array([[0, 1], [1, 0]], dtype=complex)
-    sigma_y = np.array([[0, -1j], [1j, 0]], dtype=complex)
-    sigma_z = np.array([[1, 0], [0, -1]], dtype=complex)
+    if not basis:
+        raise ValueError("Basis cannot be empty")
     
-    print("\nFirst Order (Standard):")
-    print("-" * 25)
-    js1 = jordan_schwinger_map(sigma_x)
-    print(f"σ_x: {js1.get_symbolic_form()}")
+    operators = []
     
-    print("\nSecond Order:")
-    print("-" * 15)
-    js2_xx = jordan_schwinger_map([sigma_x, sigma_x])
-    print(f"σ_x × σ_x: {js2_xx.get_symbolic_form()}")
-    
-    js2_xz = jordan_schwinger_map([sigma_x, sigma_z])
-    print(f"σ_x × σ_z: {js2_xz.get_symbolic_form()}")
-    
-    print("\nThird Order:")
-    print("-" * 14)
-    js3 = jordan_schwinger_map([sigma_x, sigma_y, sigma_z])
-    print(f"σ_x × σ_y × σ_z: {js3.get_symbolic_form()}")
-    
-    print(f"\nOperator properties:")
-    print(f"Order 1 - Order: {js1.get_order()}")
-    print(f"Order 2 - Order: {js2_xx.get_order()}")
-    print(f"Order 3 - Order: {js3.get_order()}")
-    
-    # Test matrix representation if basis is available
-    try:
-        from qoptcraft.basis import photon_basis
-        basis = photon_basis(2, 1)  # 2 modes, 1 photon
+    # Generate all possible combinations of matrices from basis
+    # For order k, we need k matrices (with repetition allowed)
+    for matrix_indices in itertools.product(range(len(basis)), repeat=order):
+        # Select the matrices for this combination
+        matrices = [basis[i] for i in matrix_indices]
         
-        print(f"\nMatrix representations in basis {basis}:")
-        
-        matrix1 = js1.to_matrix(basis)
-        print(f"Order 1 (σ_x):\n{np.round(matrix1, 3)}")
-        
-        matrix2 = js2_xx.to_matrix(basis)
-        print(f"Order 2 (σ_x × σ_x):\n{np.round(matrix2, 3)}")
-        
-        # Check Hermiticity
-        print(f"\nHermiticity check:")
-        print(f"Order 1: {js1.is_hermitian(basis)}")
-        print(f"Order 2: {js2_xx.is_hermitian(basis)}")
-        
-    except ImportError:
-        print("\nQOPTCRAFT basis functions not available for matrix representation")
+        # Create Jordan-Schwinger operator
+        js_operator = jordan_schwinger_map(matrices)
+        operators.append(js_operator)
+    
+    return operators
 
 
 # Export main functions
@@ -409,5 +394,5 @@ __all__ = [
     'JordanSchwingerOperator',
     'jordan_schwinger_map',
     'pauli_operators',
-    'higher_order_examples'
+    'generate_all_js_operators',
 ]
