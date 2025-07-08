@@ -95,6 +95,7 @@ try:
         jordan_schwinger_map,
         pauli_operators,
         generate_all_js_operators,
+        ObservableTensor
     )
     _JORDAN_SCHWINGER_AVAILABLE = True
 except ImportError as e:
@@ -153,9 +154,10 @@ if _QUANTUM_OPERATORS_AVAILABLE:
 if _JORDAN_SCHWINGER_AVAILABLE:
     __all__.extend([
         'JordanSchwingerOperator', 'jordan_schwinger_map',
-        'pauli_operators', 'su2_generators', 'coherent_state_displacement',
-        'validate_jordan_schwinger_properties'
-    ])
+        'pauli_operators', 
+        'generate_all_js_operators',
+        'ObservableTensor'
+        ])
 
 # Add operator arithmetic if available
 if _OPERATOR_ARITHMETIC_AVAILABLE:
