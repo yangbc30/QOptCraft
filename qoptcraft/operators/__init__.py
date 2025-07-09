@@ -93,8 +93,6 @@ try:
     from .jordan_schwinger import (
         JordanSchwingerOperator,
         jordan_schwinger_map,
-        pauli_operators,
-        generate_all_js_operators,
         ObservableTensor
     )
     _JORDAN_SCHWINGER_AVAILABLE = True
