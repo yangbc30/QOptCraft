@@ -11,3 +11,4 @@ from .norms import (
 )
 from .permanent import permanent
 from .random_matrices import haar_random_unitary, random_hermitian
+from .ggm_matrix import generate_ggm_matrices

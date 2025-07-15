@@ -3,6 +3,7 @@
 from collections.abc import Generator
 
 from numpy.typing import NDArray
+from numpy import isclose
 from scipy.sparse import spmatrix
 
 from .norms import hs_inner_product, hs_norm
@@ -30,9 +31,11 @@ def gram_schmidt(basis: list[spmatrix] | list[NDArray]) -> list[spmatrix] | list
     orth_basis = []
 
     for j in range(dim):
-        orth_basis.append(basis[j] / hs_norm(basis[j]))
+        norm = hs_norm(basis[j])
+        if not isclose(norm, 0):
+            orth_basis.append(basis[j] / norm)
         for k in range(j + 1, dim):
-            basis[k] = basis[k] - hs_inner_product(orth_basis[j], basis[k]) * orth_basis[j]
+            basis[k] = basis[k] - hs_inner_product(orth_basis[-1], basis[k]) * orth_basis[-1]
     return orth_basis
 
 

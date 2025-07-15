@@ -30,6 +30,7 @@ from itertools import product
 from typing import Callable
 from ..basis import photon_basis
 from ..state import State
+from ..math import gram_schmidt
 
 from .quantum_operators import (
     QuantumOperator,
@@ -335,7 +336,7 @@ class ObservableTensor:
     to avoid redundant computations while keeping the interface simple.
     """
 
-    def __init__(self, basis: List[np.ndarray], order: int):
+    def __init__(self, h_basis: List[np.ndarray], order: int):
         """
         Initialize Observable Tensor.
 
@@ -343,17 +344,17 @@ class ObservableTensor:
             basis: List of Hermitian matrices for JS mapping
             order: Order of Jordan-Schwinger mapping
         """
-        self.basis = basis
+        self.basis = h_basis
         self.order = order
-        self.modes = basis[0].shape[0]
+        self.modes = h_basis[0].shape[0]
 
         # Generate observable structure (unified for all orders)
-        n_basis = len(basis)
+        n_basis = len(h_basis)
         shape = (n_basis,) * order
         self.observables = np.empty(shape, dtype=object)
 
         for indices in product(range(n_basis), repeat=order):
-            matrices = [basis[i] for i in indices]
+            matrices = [h_basis[i] for i in indices]
             self.observables[indices] = jordan_schwinger_map(matrices)
 
         # Smart cache: {photons: {basis: photon_basis, matrices: matrix_tensor}}
@@ -373,6 +374,22 @@ class ObservableTensor:
             self._cache[photons] = self._compute_matrices(photons)
 
         return self._cache[photons]["matrices"]
+
+    def to_orthnorm_basis(self, photons: int) -> list[np.ndarray]:
+        matrix_lst = self.to_matrix(photons).flatten().tolist()
+        # size = matrix_lst[0].shape[0]
+        # eye = np.eye(size, dtype=complex)
+        # matrix_lst = [eye] + matrix_lst   
+        # orthnorm_basis = gram_schmidt(matrix_lst)[1:]
+        orthnorm_basis = gram_schmidt(matrix_lst)
+
+        return orthnorm_basis
+
+    def to_norm_basis(self, photons: int) -> list[np.ndarray]:
+        matrix_lst = self.to_matrix(photons).flatten().tolist()
+        norm_matrix = [matrix / np.linalg.norm(matrix) for matrix in matrix_lst]
+
+        return norm_matrix
 
     def _compute_matrices(self, photons: int) -> Dict[str, np.ndarray]:
         """Compute and cache matrices for given photon number."""
